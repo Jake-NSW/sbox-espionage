@@ -1,0 +1,35 @@
+{
+  "Title": "Espionage",
+  "Type": "game",
+  "Org": "woosh",
+  "Ident": "espionage",
+  "Tags": "",
+  "Schema": 1,
+  "HasAssets": true,
+  "AssetsPath": "",
+  "ResourcePaths": [],
+  "HasCode": true,
+  "CodePath": "/Code/",
+  "Metadata": {
+    "MaxPlayers": 10,
+    "MinPlayers": 1,
+    "GameNetworkType": "Multiplayer",
+    "MapSelect": "Unrestricted",
+    "MapList": [
+      "facepunch.flatgrass"
+    ],
+    "RankType": "None",
+    "PerMapRanking": false,
+    "LeaderboardType": "None",
+    "ProjectTemplate": null,
+    "GeneralExtensions": true,
+    "TargettedExtensions": false,
+    "ExtensionApiVersion": 1001,
+    "CsProjName": "Espionage",
+    "Compiler": {
+      "RootNamespace": "Woosh",
+      "DefineConstants": "SANDBOX;ADDON;DEBUG",
+      "NoWarn": "1701;1702;1591;"
+    }
+  }
+}
