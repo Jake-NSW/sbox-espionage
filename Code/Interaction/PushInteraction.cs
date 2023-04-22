@@ -8,7 +8,7 @@ public sealed class PushInteraction : EntityComponent, IPlayerInteraction
 	{
 		if ( Input.MouseWheel != 0 && hovering.Entity is IPushable pushable )
 		{
-			pushable.Push( Input.MouseWheel );
+			pushable.Push( Entity, Input.MouseWheel );
 		}
 	}
 }

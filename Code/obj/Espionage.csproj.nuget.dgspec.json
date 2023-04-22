@@ -4,12 +4,12 @@
     "E:\\Projects\\Woosh Crew\\Games\\Espionage\\Code\\Espionage.csproj": {}
   },
   "projects": {
-    "D:\\Programs\\Steam\\steamapps\\common\\sbox\\addons\\base\\code\\Base.csproj": {
+    "D:\\Programs\\Steam\\steamapps\\common\\sbox\\addons\\base\\code\\Base Library.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Programs\\Steam\\steamapps\\common\\sbox\\addons\\base\\code\\Base.csproj",
-        "projectName": "Base",
-        "projectPath": "D:\\Programs\\Steam\\steamapps\\common\\sbox\\addons\\base\\code\\Base.csproj",
+        "projectUniqueName": "D:\\Programs\\Steam\\steamapps\\common\\sbox\\addons\\base\\code\\Base Library.csproj",
+        "projectName": "Base Library",
+        "projectPath": "D:\\Programs\\Steam\\steamapps\\common\\sbox\\addons\\base\\code\\Base Library.csproj",
         "packagesPath": "C:\\Users\\jakek\\.nuget\\packages\\",
         "outputPath": "D:\\Programs\\Steam\\steamapps\\common\\sbox\\addons\\base\\code\\obj\\",
         "projectStyle": "PackageReference",
@@ -59,7 +59,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     },
@@ -91,8 +91,8 @@
           "net7.0": {
             "targetAlias": "net7.0",
             "projectReferences": {
-              "D:\\Programs\\Steam\\steamapps\\common\\sbox\\addons\\base\\code\\Base.csproj": {
-                "projectPath": "D:\\Programs\\Steam\\steamapps\\common\\sbox\\addons\\base\\code\\Base.csproj"
+              "D:\\Programs\\Steam\\steamapps\\common\\sbox\\addons\\base\\code\\Base Library.csproj": {
+                "projectPath": "D:\\Programs\\Steam\\steamapps\\common\\sbox\\addons\\base\\code\\Base Library.csproj"
               }
             }
           }
@@ -122,7 +122,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     }

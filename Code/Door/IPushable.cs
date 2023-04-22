@@ -1,6 +1,8 @@
-﻿namespace Woosh.Espionage;
+﻿using Sandbox;
+
+namespace Woosh.Espionage;
 
 public interface IPushable
 {
-	void Push( float amout );
+	void Push( Entity entity, float force );
 }

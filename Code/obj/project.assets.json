@@ -2,28 +2,28 @@
   "version": 3,
   "targets": {
     "net7.0": {
-      "Base/1.0.0": {
+      "Base Library/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v7.0",
         "compile": {
-          "bin/placeholder/Base.dll": {}
+          "bin/placeholder/Base Library.dll": {}
         },
         "runtime": {
-          "bin/placeholder/Base.dll": {}
+          "bin/placeholder/Base Library.dll": {}
         }
       }
     }
   },
   "libraries": {
-    "Base/1.0.0": {
+    "Base Library/1.0.0": {
       "type": "project",
-      "path": "D:\\Programs\\Steam\\steamapps\\common\\sbox\\addons\\base\\code\\Base.csproj",
-      "msbuildProject": "D:\\Programs\\Steam\\steamapps\\common\\sbox\\addons\\base\\code\\Base.csproj"
+      "path": "D:\\Programs\\Steam\\steamapps\\common\\sbox\\addons\\base\\code\\Base Library.csproj",
+      "msbuildProject": "D:\\Programs\\Steam\\steamapps\\common\\sbox\\addons\\base\\code\\Base Library.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net7.0": [
-      "Base >= 1.0.0"
+      "Base Library >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -58,8 +58,8 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "D:\\Programs\\Steam\\steamapps\\common\\sbox\\addons\\base\\code\\Base.csproj": {
-              "projectPath": "D:\\Programs\\Steam\\steamapps\\common\\sbox\\addons\\base\\code\\Base.csproj"
+            "D:\\Programs\\Steam\\steamapps\\common\\sbox\\addons\\base\\code\\Base Library.csproj": {
+              "projectPath": "D:\\Programs\\Steam\\steamapps\\common\\sbox\\addons\\base\\code\\Base Library.csproj"
             }
           }
         }
@@ -89,7 +89,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.102\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
       }
     }
   }

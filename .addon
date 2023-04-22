@@ -3,13 +3,15 @@
   "Type": "game",
   "Org": "woosh",
   "Ident": "espionage",
-  "Tags": "",
+  "Tags": "stealth fps",
   "Schema": 1,
   "HasAssets": true,
   "AssetsPath": "",
   "ResourcePaths": [],
   "HasCode": true,
   "CodePath": "/Code/",
+  "PackageReferences": [],
+  "EditorReferences": null,
   "Metadata": {
     "MaxPlayers": 10,
     "MinPlayers": 1,
@@ -29,7 +31,8 @@
     "Compiler": {
       "RootNamespace": "Woosh",
       "DefineConstants": "SANDBOX;ADDON;DEBUG",
-      "NoWarn": "1701;1702;1591;"
+      "NoWarn": "1701;1702;1591;",
+      "References": []
     }
   }
 }

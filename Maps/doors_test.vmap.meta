@@ -1,9 +1,26 @@
 {
-  "cloud_packages": [
-    "eurorp.door00_left_01#12550"
-  ],
-  "game_packages": [
-    "woosh.espionage"
-  ],
-  "addon_packages": []
+  "publish": {
+    "Enabled": false,
+    "ProjectConfig": {
+      "Title": null,
+      "Type": null,
+      "Org": null,
+      "Ident": null,
+      "Tags": null,
+      "Schema": 0,
+      "HasAssets": false,
+      "AssetsPath": null,
+      "ResourcePaths": null,
+      "HasCode": false,
+      "CodePath": null,
+      "PackageReferences": [],
+      "EditorReferences": [
+        "eurorp.door00_left_01#12550",
+        "woosh.espionage",
+        "eurorp.door01_right_01#12553",
+        "eurorp.door01_left_01#12552"
+      ],
+      "Metadata": {}
+    }
+  }
 }
