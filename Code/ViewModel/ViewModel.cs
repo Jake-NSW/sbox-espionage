@@ -4,6 +4,8 @@ using Sandbox;
 
 namespace Woosh.Espionage;
 
+[Category( "ViewModel" )]
+[Title( "View Model" ), Icon( "pan_tool" )]
 public sealed class ViewModel : AnimatedEntity
 {
 	private readonly static LinkedList<ViewModel> s_All;
@@ -14,7 +16,7 @@ public sealed class ViewModel : AnimatedEntity
 	}
 
 	[Event.Client.PostCamera]
-	private static void UpdateAllViewmodels()
+	private static void UpdateAllViewModels()
 	{
 		foreach ( var viewModel in s_All )
 		{
@@ -26,17 +28,21 @@ public sealed class ViewModel : AnimatedEntity
 
 	// Instance
 
+	private readonly IDispatchRegistryTable m_Table;
 	private readonly LinkedListNode<ViewModel> m_Node;
 
-	public ViewModel() : this( null ) { }
+	public ViewModel() : this( null, null ) { }
 
-	public ViewModel( IEnumerable<IViewModelEffect> effects )
+	public ViewModel( IDispatchRegistryTable table, IEnumerable<IViewModelEffect> effects )
 	{
 		Game.AssertClient();
+
+		m_Table = table;
 		m_Effects = effects != null ? new HashSet<IViewModelEffect>( effects ) : new HashSet<IViewModelEffect>( 8 );
 
 		m_Node = new LinkedListNode<ViewModel>( this );
 		s_All.AddLast( m_Node );
+
 		EnableViewmodelRendering = true;
 	}
 
@@ -67,6 +73,7 @@ public sealed class ViewModel : AnimatedEntity
 
 	public void Add( IViewModelEffect effect )
 	{
+		effect.Register( m_Table );
 		m_Effects.Add( effect );
 	}
 
@@ -76,5 +83,6 @@ public sealed class ViewModel : AnimatedEntity
 	public void Remove( IViewModelEffect effect )
 	{
 		m_Effects.Remove( effect );
+		effect.Unregister( m_Table );
 	}
 }

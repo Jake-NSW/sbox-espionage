@@ -30,7 +30,7 @@ partial class Pawn : AnimatedEntity
 
 		var viewModel = new ViewModel();
 		viewModel.Add( new ViewModelOffsetEffect( Vector3.Zero, default ) );
-		viewModel.Add( new ViewModelSwayEffect() );
+		viewModel.Add( new ViewModelSwayEffect() {});
 		viewModel.Add( new ViewModelMoveOffsetEffect( Vector3.One, 10 ) );
 		viewModel.Add( new ViewModelStrafeOffsetEffect() { Damping = 6, RollMultiplier = 1, AxisMultiplier = 8 } );
 		viewModel.Add( new ViewModelDeadzoneSwayEffect( new Vector2( 8, 8 ) ) { AimingOnly = true, AutoCenter = false, Damping = 8 } );
@@ -38,6 +38,8 @@ partial class Pawn : AnimatedEntity
 		viewModel.Add( new ViewModelPitchOffsetEffect() );
 		viewModel.Model = Model.Load( "weapons/mk23/v_espionage_mk23.vmdl" );
 		viewModel.SetAnimParameter( "bDeployed", true );
+		viewModel.SetBodyGroup("Muzzle", 1);
+		viewModel.SetBodyGroup("Module", 1);
 	}
 
 	// An example BuildInput method within a player's Pawn class.
