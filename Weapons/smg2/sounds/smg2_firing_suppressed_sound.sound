@@ -1,0 +1,19 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	data = 
+	{
+		UI = false
+		Volume = 1.0
+		VolumeRandom = 0.02
+		Pitch = 1.0
+		PitchRandom = 0.04
+		DistanceMax = 750.0
+		Sounds = 
+		[
+			"weapons/smg2/sounds/smg2_firing_suppressed_1.vsnd",
+			"weapons/smg2/sounds/smg2_firing_suppressed_2.vsnd",
+			"weapons/smg2/sounds/smg2_firing_suppressed_3.vsnd",
+		]
+		selectionmode = "3"
+	}
+}

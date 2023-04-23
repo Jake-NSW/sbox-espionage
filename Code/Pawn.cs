@@ -28,18 +28,27 @@ partial class Pawn : AnimatedEntity
 	{
 		base.ClientSpawn();
 
-		var viewModel = new ViewModel();
+		/*
+		var viewModel = new CompositedViewModel( null ) { Owner = this, Model = Model.Load( "weapons/mk23/v_espionage_mk23.vmdl" ) };
+
 		viewModel.Add( new ViewModelOffsetEffect( Vector3.Zero, default ) );
-		viewModel.Add( new ViewModelSwayEffect() {});
+		viewModel.Add( new ViewModelSwayEffect() { } );
 		viewModel.Add( new ViewModelMoveOffsetEffect( Vector3.One, 10 ) );
 		viewModel.Add( new ViewModelStrafeOffsetEffect() { Damping = 6, RollMultiplier = 1, AxisMultiplier = 8 } );
 		viewModel.Add( new ViewModelDeadzoneSwayEffect( new Vector2( 8, 8 ) ) { AimingOnly = true, AutoCenter = false, Damping = 8 } );
-		viewModel.Owner = this;
 		viewModel.Add( new ViewModelPitchOffsetEffect() );
-		viewModel.Model = Model.Load( "weapons/mk23/v_espionage_mk23.vmdl" );
+
 		viewModel.SetAnimParameter( "bDeployed", true );
-		viewModel.SetBodyGroup("Muzzle", 1);
-		viewModel.SetBodyGroup("Module", 1);
+		viewModel.SetBodyGroup( "Muzzle", 1 );
+		viewModel.SetBodyGroup( "Module", 1 );
+		*/
+
+		var viewModel2 = new CompositedViewModel( null ) { Owner = this, Model = Model.Load( "weapons/smg2/v_espionage_smg2.vmdl" ) };
+		viewModel2.SetAnimParameter( "bDeployed", true );
+		viewModel2.SetBodyGroup( "Muzzle", 1 );
+		viewModel2.Add( new ViewModelSwayEffect() { } );
+		viewModel2.Add( new ViewModelOffsetEffect(new Vector3(-2, 0, 0), Vector3.Zero) { } );
+		viewModel2.Add( new ViewModelDeadzoneSwayEffect(new Vector2(8)) { } );
 	}
 
 	// An example BuildInput method within a player's Pawn class.

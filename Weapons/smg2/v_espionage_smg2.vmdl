@@ -1,0 +1,1255 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:modeldoc29:version{3cec427c-1b0e-4d48-a90a-0436f33a6041} -->
+{
+	rootNode = 
+	{
+		_class = "RootNode"
+		children = 
+		[
+			{
+				_class = "MaterialGroupList"
+				children = 
+				[
+					{
+						_class = "DefaultMaterialGroup"
+						name = "Default"
+						remaps = 
+						[
+							{
+								from = "mat_arms_skin_buff.vmat"
+								to = "weapons/hands/materials/arms.vmat"
+							},
+							{
+								from = "tt_checker_4096x4096_uv_grid.vmat"
+								to = "weapons/smg2/materials/espionage_smg2.vmat"
+							},
+						]
+						use_global_default = false
+						global_default_material = "weapons/mk23/materials/espionage_mk23.vmat"
+					},
+				]
+			},
+			{
+				_class = "RenderMeshList"
+				children = 
+				[
+					{
+						_class = "RenderMeshFile"
+						name = "Body"
+						filename = "weapons/smg2/v_espionage_smg2.fbx"
+						import_translation = [ 0.0, 0.0, 0.0 ]
+						import_rotation = [ 0.0, 0.0, 0.0 ]
+						import_scale = 1.0
+						align_origin_x_type = "None"
+						align_origin_y_type = "None"
+						align_origin_z_type = "None"
+						parent_bone = ""
+						import_filter = 
+						{
+							exclude_by_default = false
+							exception_list = 
+							[
+								"arms_Buff_Full",
+								"Cylinder_018",
+								"Cube_068",
+								"Cylinder_061",
+							]
+						}
+					},
+					{
+						_class = "RenderMeshFile"
+						name = "Arms"
+						filename = "weapons/smg2/v_espionage_smg2.fbx"
+						import_translation = [ 0.0, 0.0, 0.0 ]
+						import_rotation = [ 0.0, 0.0, 0.0 ]
+						import_scale = 1.0
+						align_origin_x_type = "None"
+						align_origin_y_type = "None"
+						align_origin_z_type = "None"
+						parent_bone = ""
+						import_filter = 
+						{
+							exclude_by_default = false
+							exception_list = 
+							[
+								"Cylinder_018",
+								"Cube_068",
+								"Cube_042",
+								"Cube_081",
+								"wpn_mk23_magazine",
+								"Cube_069",
+								"Cube_067",
+								"Cube_085",
+								"highpoly_bullet_001",
+								"Cylinder_061",
+								"Cube_091",
+								"Cube_060",
+								"Cube_092",
+							]
+						}
+					},
+					{
+						_class = "RenderMeshFile"
+						name = "Suppressor"
+						filename = "weapons/smg2/v_espionage_smg2.fbx"
+						import_translation = [ 0.0, 0.0, 0.0 ]
+						import_rotation = [ 0.0, 0.0, 0.0 ]
+						import_scale = 1.0
+						align_origin_x_type = "None"
+						align_origin_y_type = "None"
+						align_origin_z_type = "None"
+						parent_bone = ""
+						import_filter = 
+						{
+							exclude_by_default = false
+							exception_list = 
+							[
+								"Cylinder_018",
+								"Cube_068",
+								"Cube_060",
+								"Cube_092",
+								"arms_Buff_Full",
+								"Cube_091",
+							]
+						}
+					},
+				]
+			},
+			{
+				_class = "AnimationList"
+				children = 
+				[
+					{
+						_class = "EmptyAnim"
+						name = "refPose"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						frame_count = 1
+						frame_rate = 30
+					},
+					{
+						_class = "AnimFile"
+						name = "idle"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = true
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "weapons/smg2/v_espionage_smg2.fbx"
+						start_frame = 0
+						end_frame = 30
+						framerate = -1.0
+						take = 18
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "deploy"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "weapons/smg2/v_espionage_smg2.fbx"
+						start_frame = 0
+						end_frame = 68
+						framerate = 37.0
+						take = 14
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "first_deploy"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "weapons/smg2/v_espionage_smg2.fbx"
+						start_frame = 0
+						end_frame = 68
+						framerate = 37.0
+						take = 14
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "holster"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "weapons/smg2/v_espionage_smg2.fbx"
+						start_frame = 0
+						end_frame = 44
+						framerate = 32.0
+						take = 22
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "grab"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "weapons/mk23/v_espionage_mk23.fbx"
+						start_frame = 0
+						end_frame = 31
+						framerate = -1.0
+						take = 15
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "vault"
+						children = 
+						[
+							{
+								_class = "AnimSubtract"
+								anim_name = "idle"
+								frame = 0
+							},
+						]
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "weapons/smg2/v_espionage_smg2.fbx"
+						start_frame = 0
+						end_frame = 40
+						framerate = -1.0
+						take = 29
+						reverse = false
+					},
+					{
+						_class = "Folder"
+						name = "Aim"
+						children = 
+						[
+							{
+								_class = "AnimFile"
+								name = "aim_idle"
+								activity_name = ""
+								activity_weight = 1
+								weight_list_name = ""
+								fade_in_time = 0.0
+								fade_out_time = 0.0
+								looping = false
+								delta = false
+								worldSpace = false
+								hidden = false
+								anim_markup_ordered = false
+								disable_compression = false
+								source_filename = "weapons/smg2/v_espionage_smg2.fbx"
+								start_frame = 0
+								end_frame = 1
+								framerate = -1.0
+								take = 3
+								reverse = false
+							},
+							{
+								_class = "AnimFile"
+								name = "aim_in"
+								activity_name = ""
+								activity_weight = 1
+								weight_list_name = ""
+								fade_in_time = 0.0
+								fade_out_time = 0.0
+								looping = false
+								delta = false
+								worldSpace = false
+								hidden = false
+								anim_markup_ordered = false
+								disable_compression = false
+								source_filename = "weapons/smg2/v_espionage_smg2.fbx"
+								start_frame = -1
+								end_frame = 9
+								framerate = -1.0
+								take = 4
+								reverse = false
+							},
+							{
+								_class = "AnimFile"
+								name = "aim_out"
+								activity_name = ""
+								activity_weight = 1
+								weight_list_name = ""
+								fade_in_time = 0.0
+								fade_out_time = 0.0
+								looping = false
+								delta = false
+								worldSpace = false
+								hidden = false
+								anim_markup_ordered = false
+								disable_compression = false
+								source_filename = "weapons/smg2/v_espionage_smg2.fbx"
+								start_frame = 0
+								end_frame = 16
+								framerate = -1.0
+								take = 5
+								reverse = false
+							},
+						]
+					},
+					{
+						_class = "Folder"
+						name = "Attachment"
+						children = 
+						[
+							{
+								_class = "AnimFile"
+								name = "attachment_idle"
+								activity_name = ""
+								activity_weight = 1
+								weight_list_name = ""
+								fade_in_time = 0.2
+								fade_out_time = 0.2
+								looping = true
+								delta = false
+								worldSpace = false
+								hidden = false
+								anim_markup_ordered = false
+								disable_compression = false
+								source_filename = "weapons/mk23/v_espionage_mk23.fbx"
+								start_frame = 0
+								end_frame = 31
+								framerate = -1.0
+								take = 5
+								reverse = false
+							},
+							{
+								_class = "AnimFile"
+								name = "attachment_in"
+								activity_name = ""
+								activity_weight = 1
+								weight_list_name = ""
+								fade_in_time = 0.2
+								fade_out_time = 0.2
+								looping = false
+								delta = false
+								worldSpace = false
+								hidden = false
+								anim_markup_ordered = false
+								disable_compression = false
+								source_filename = "weapons/mk23/v_espionage_mk23.fbx"
+								start_frame = 0
+								end_frame = 31
+								framerate = -1.0
+								take = 6
+								reverse = false
+							},
+							{
+								_class = "AnimFile"
+								name = "attachment_out"
+								activity_name = ""
+								activity_weight = 1
+								weight_list_name = ""
+								fade_in_time = 0.2
+								fade_out_time = 0.2
+								looping = false
+								delta = false
+								worldSpace = false
+								hidden = false
+								anim_markup_ordered = false
+								disable_compression = false
+								source_filename = "weapons/mk23/v_espionage_mk23.fbx"
+								start_frame = 0
+								end_frame = 31
+								framerate = -1.0
+								take = 7
+								reverse = false
+							},
+						]
+					},
+					{
+						_class = "Folder"
+						name = "Fire"
+						children = 
+						[
+							{
+								_class = "AnimFile"
+								name = "fire_hip1"
+								activity_name = ""
+								activity_weight = 1
+								weight_list_name = ""
+								fade_in_time = 0.2
+								fade_out_time = 0.2
+								looping = false
+								delta = false
+								worldSpace = false
+								hidden = false
+								anim_markup_ordered = false
+								disable_compression = false
+								source_filename = "weapons/smg2/v_espionage_smg2.fbx"
+								start_frame = 0
+								end_frame = 30
+								framerate = -1.0
+								take = 15
+								reverse = false
+							},
+							{
+								_class = "AnimFile"
+								name = "fire_hip2"
+								activity_name = ""
+								activity_weight = 1
+								weight_list_name = ""
+								fade_in_time = 0.2
+								fade_out_time = 0.2
+								looping = false
+								delta = false
+								worldSpace = false
+								hidden = false
+								anim_markup_ordered = false
+								disable_compression = false
+								source_filename = "weapons/smg2/v_espionage_smg2.fbx"
+								start_frame = 0
+								end_frame = 30
+								framerate = -1.0
+								take = 16
+								reverse = false
+							},
+							{
+								_class = "AnimFile"
+								name = "fire_hip3"
+								activity_name = ""
+								activity_weight = 1
+								weight_list_name = ""
+								fade_in_time = 0.2
+								fade_out_time = 0.2
+								looping = false
+								delta = false
+								worldSpace = false
+								hidden = false
+								anim_markup_ordered = false
+								disable_compression = false
+								source_filename = "weapons/smg2/v_espionage_smg2.fbx"
+								start_frame = 0
+								end_frame = 30
+								framerate = -1.0
+								take = 17
+								reverse = false
+							},
+							{
+								_class = "AnimFile"
+								name = "fire_last_hip"
+								activity_name = ""
+								activity_weight = 1
+								weight_list_name = ""
+								fade_in_time = 0.2
+								fade_out_time = 0.2
+								looping = false
+								delta = false
+								worldSpace = false
+								hidden = false
+								anim_markup_ordered = false
+								disable_compression = false
+								source_filename = "weapons/smg2/v_espionage_smg2.fbx"
+								start_frame = 0
+								end_frame = 30
+								framerate = -1.0
+								take = 15
+								reverse = false
+							},
+						]
+					},
+					{
+						_class = "Folder"
+						name = "Aim_Fire"
+						children = 
+						[
+							{
+								_class = "AnimFile"
+								name = "fire_aim1"
+								activity_name = ""
+								activity_weight = 1
+								weight_list_name = ""
+								fade_in_time = 0.2
+								fade_out_time = 0.2
+								looping = false
+								delta = false
+								worldSpace = false
+								hidden = false
+								anim_markup_ordered = false
+								disable_compression = false
+								source_filename = "weapons/smg2/v_espionage_smg2.fbx"
+								start_frame = 0
+								end_frame = 30
+								framerate = -1.0
+								take = 0
+								reverse = false
+							},
+							{
+								_class = "AnimFile"
+								name = "fire_aim2"
+								activity_name = ""
+								activity_weight = 1
+								weight_list_name = ""
+								fade_in_time = 0.2
+								fade_out_time = 0.2
+								looping = false
+								delta = false
+								worldSpace = false
+								hidden = false
+								anim_markup_ordered = false
+								disable_compression = false
+								source_filename = "weapons/smg2/v_espionage_smg2.fbx"
+								start_frame = 0
+								end_frame = 30
+								framerate = -1.0
+								take = 1
+								reverse = false
+							},
+							{
+								_class = "AnimFile"
+								name = "fire_aim3"
+								activity_name = ""
+								activity_weight = 1
+								weight_list_name = ""
+								fade_in_time = 0.2
+								fade_out_time = 0.2
+								looping = false
+								delta = false
+								worldSpace = false
+								hidden = false
+								anim_markup_ordered = false
+								disable_compression = false
+								source_filename = "weapons/smg2/v_espionage_smg2.fbx"
+								start_frame = 0
+								end_frame = 30
+								framerate = -1.0
+								take = 2
+								reverse = false
+							},
+							{
+								_class = "AnimFile"
+								name = "fire_last_aim"
+								activity_name = ""
+								activity_weight = 1
+								weight_list_name = ""
+								fade_in_time = 0.2
+								fade_out_time = 0.2
+								looping = false
+								delta = false
+								worldSpace = false
+								hidden = false
+								anim_markup_ordered = false
+								disable_compression = false
+								source_filename = "weapons/smg2/v_espionage_smg2.fbx"
+								start_frame = 0
+								end_frame = 30
+								framerate = -1.0
+								take = 0
+								reverse = false
+							},
+						]
+					},
+					{
+						_class = "Folder"
+						name = "Reloads"
+						children = 
+						[
+							{
+								_class = "AnimFile"
+								name = "reload"
+								activity_name = ""
+								activity_weight = 1
+								weight_list_name = ""
+								fade_in_time = 0.2
+								fade_out_time = 0.2
+								looping = false
+								delta = false
+								worldSpace = false
+								hidden = false
+								anim_markup_ordered = false
+								disable_compression = false
+								source_filename = "weapons/smg2/v_espionage_smg2.fbx"
+								start_frame = 0
+								end_frame = 95
+								framerate = 30.0
+								take = 20
+								reverse = false
+							},
+							{
+								_class = "AnimFile"
+								name = "reload_aim"
+								activity_name = ""
+								activity_weight = 1
+								weight_list_name = ""
+								fade_in_time = 0.2
+								fade_out_time = 0.2
+								looping = false
+								delta = false
+								worldSpace = false
+								hidden = false
+								anim_markup_ordered = false
+								disable_compression = false
+								source_filename = "weapons/smg2/v_espionage_smg2.fbx"
+								start_frame = 0
+								end_frame = 94
+								framerate = -1.0
+								take = 6
+								reverse = false
+							},
+							{
+								_class = "AnimFile"
+								name = "reload_empty"
+								activity_name = ""
+								activity_weight = 1
+								weight_list_name = ""
+								fade_in_time = 0.2
+								fade_out_time = 0.2
+								looping = false
+								delta = false
+								worldSpace = false
+								hidden = false
+								anim_markup_ordered = false
+								disable_compression = false
+								source_filename = "weapons/smg2/v_espionage_smg2.fbx"
+								start_frame = 0
+								end_frame = 114
+								framerate = -1.0
+								take = 21
+								reverse = false
+							},
+							{
+								_class = "AnimFile"
+								name = "reload_empty_aim"
+								activity_name = ""
+								activity_weight = 1
+								weight_list_name = ""
+								fade_in_time = 0.2
+								fade_out_time = 0.2
+								looping = false
+								delta = false
+								worldSpace = false
+								hidden = false
+								anim_markup_ordered = false
+								disable_compression = false
+								source_filename = "weapons/smg2/v_espionage_smg2.fbx"
+								start_frame = 0
+								end_frame = 101
+								framerate = -1.0
+								take = 7
+								reverse = false
+							},
+						]
+					},
+					{
+						_class = "Folder"
+						name = "Drop"
+						children = 
+						[
+							{
+								_class = "AnimFile"
+								name = "drop"
+								activity_name = ""
+								activity_weight = 1
+								weight_list_name = ""
+								fade_in_time = 0.2
+								fade_out_time = 0.2
+								looping = false
+								delta = false
+								worldSpace = false
+								hidden = false
+								anim_markup_ordered = false
+								disable_compression = false
+								source_filename = "weapons/smg2/v_espionage_smg2.fbx"
+								start_frame = 0
+								end_frame = 30
+								framerate = -1.0
+								take = 13
+								reverse = false
+							},
+							{
+								_class = "AnimFile"
+								name = "drop_aggressive"
+								activity_name = ""
+								activity_weight = 1
+								weight_list_name = ""
+								fade_in_time = 0.2
+								fade_out_time = 0.2
+								looping = false
+								delta = false
+								worldSpace = false
+								hidden = false
+								anim_markup_ordered = false
+								disable_compression = false
+								source_filename = "weapons/smg2/v_espionage_smg2.fbx"
+								start_frame = 0
+								end_frame = 30
+								framerate = -1.0
+								take = 13
+								reverse = false
+							},
+						]
+					},
+					{
+						_class = "Folder"
+						name = "Sprint"
+						children = 
+						[
+							{
+								_class = "AnimFile"
+								name = "sprint_in"
+								children = 
+								[
+									{
+										_class = "AnimSubtract"
+										anim_name = "idle"
+										frame = 0
+									},
+								]
+								activity_name = ""
+								activity_weight = 1
+								weight_list_name = ""
+								fade_in_time = 0.2
+								fade_out_time = 0.2
+								looping = false
+								delta = false
+								worldSpace = false
+								hidden = false
+								anim_markup_ordered = false
+								disable_compression = false
+								source_filename = "weapons/smg2/v_espionage_smg2.fbx"
+								start_frame = 0
+								end_frame = 35
+								framerate = -1.0
+								take = 26
+								reverse = false
+							},
+							{
+								_class = "AnimFile"
+								name = "sprint_loop"
+								children = 
+								[
+									{
+										_class = "AnimSubtract"
+										anim_name = "idle"
+										frame = 0
+									},
+								]
+								activity_name = ""
+								activity_weight = 1
+								weight_list_name = ""
+								fade_in_time = 0.2
+								fade_out_time = 0.2
+								looping = false
+								delta = false
+								worldSpace = false
+								hidden = false
+								anim_markup_ordered = false
+								disable_compression = false
+								source_filename = "weapons/smg2/v_espionage_smg2.fbx"
+								start_frame = 0
+								end_frame = 27
+								framerate = -1.0
+								take = 27
+								reverse = false
+							},
+							{
+								_class = "AnimFile"
+								name = "sprint_out"
+								children = 
+								[
+									{
+										_class = "AnimSubtract"
+										anim_name = "idle"
+										frame = 0
+									},
+								]
+								activity_name = ""
+								activity_weight = 1
+								weight_list_name = ""
+								fade_in_time = 0.2
+								fade_out_time = 0.2
+								looping = false
+								delta = false
+								worldSpace = false
+								hidden = false
+								anim_markup_ordered = false
+								disable_compression = false
+								source_filename = "weapons/smg2/v_espionage_smg2.fbx"
+								start_frame = 0
+								end_frame = 35
+								framerate = -1.0
+								take = 28
+								reverse = false
+							},
+						]
+					},
+					{
+						_class = "Folder"
+						name = "Jump"
+						children = 
+						[
+							{
+								_class = "AnimFile"
+								name = "jump"
+								children = 
+								[
+									{
+										_class = "AnimSubtract"
+										anim_name = "idle"
+										frame = 0
+									},
+								]
+								activity_name = ""
+								activity_weight = 1
+								weight_list_name = ""
+								fade_in_time = 0.0
+								fade_out_time = 0.0
+								looping = false
+								delta = false
+								worldSpace = false
+								hidden = false
+								anim_markup_ordered = false
+								disable_compression = false
+								source_filename = "weapons/smg2/v_espionage_smg2.fbx"
+								start_frame = 0
+								end_frame = 18
+								framerate = -1.0
+								take = 23
+								reverse = false
+							},
+							{
+								_class = "AnimFile"
+								name = "land"
+								children = 
+								[
+									{
+										_class = "AnimSubtract"
+										anim_name = "idle"
+										frame = 0
+									},
+								]
+								activity_name = ""
+								activity_weight = 1
+								weight_list_name = ""
+								fade_in_time = 0.0
+								fade_out_time = 0.0
+								looping = false
+								delta = false
+								worldSpace = false
+								hidden = false
+								anim_markup_ordered = false
+								disable_compression = false
+								source_filename = "weapons/smg2/v_espionage_smg2.fbx"
+								start_frame = 0
+								end_frame = 17
+								framerate = -1.0
+								take = 24
+								reverse = false
+							},
+						]
+					},
+					{
+						_class = "Folder"
+						name = "Crawl"
+						children = 
+						[
+							{
+								_class = "AnimFile"
+								name = "crawl_in"
+								children = 
+								[
+									{
+										_class = "AnimSubtract"
+										anim_name = "idle"
+										frame = 0
+									},
+								]
+								activity_name = ""
+								activity_weight = 1
+								weight_list_name = ""
+								fade_in_time = 0.2
+								fade_out_time = 0.2
+								looping = false
+								delta = false
+								worldSpace = false
+								hidden = false
+								anim_markup_ordered = false
+								disable_compression = false
+								source_filename = "weapons/smg2/v_espionage_smg2.fbx"
+								start_frame = 0
+								end_frame = 11
+								framerate = -1.0
+								take = 9
+								reverse = false
+							},
+							{
+								_class = "AnimFile"
+								name = "crawl_idle"
+								children = 
+								[
+									{
+										_class = "AnimSubtract"
+										anim_name = "idle"
+										frame = 0
+									},
+								]
+								activity_name = ""
+								activity_weight = 1
+								weight_list_name = ""
+								fade_in_time = 0.2
+								fade_out_time = 0.2
+								looping = false
+								delta = false
+								worldSpace = false
+								hidden = false
+								anim_markup_ordered = false
+								disable_compression = false
+								source_filename = "weapons/smg2/v_espionage_smg2.fbx"
+								start_frame = 0
+								end_frame = 52
+								framerate = -1.0
+								take = 10
+								reverse = false
+							},
+							{
+								_class = "AnimFile"
+								name = "crawl_out"
+								children = 
+								[
+									{
+										_class = "AnimSubtract"
+										anim_name = "idle"
+										frame = 0
+									},
+								]
+								activity_name = ""
+								activity_weight = 1
+								weight_list_name = ""
+								fade_in_time = 0.2
+								fade_out_time = 0.2
+								looping = false
+								delta = false
+								worldSpace = false
+								hidden = false
+								anim_markup_ordered = false
+								disable_compression = false
+								source_filename = "weapons/smg2/v_espionage_smg2.fbx"
+								start_frame = 0
+								end_frame = 52
+								framerate = -1.0
+								take = 11
+								reverse = false
+							},
+						]
+					},
+					{
+						_class = "AnimFile"
+						name = "ref"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/smg2/espionage_smg2.fbx"
+						start_frame = -1
+						end_frame = -1
+						framerate = -1.0
+						take = 0
+						reverse = false
+					},
+					{
+						_class = "Prefab"
+						target_file = "Weapons/hands/prefabs/hand_anims.vmdl_prefab"
+					},
+				]
+				default_root_bone_name = ""
+			},
+			{
+				_class = "AttachmentList"
+				children = 
+				[
+					{
+						_class = "Attachment"
+						name = "muzzle"
+						parent_bone = "Weapon_Body"
+						relative_origin = [ 0.022327, 1.986895, 11.199526 ]
+						relative_angles = [ -90.0, -90.0, 0.0 ]
+						weight = 1.0
+						ignore_rotation = false
+					},
+					{
+						_class = "Attachment"
+						name = "muzzle_suppressed"
+						parent_bone = "Weapon_Body"
+						relative_origin = [ 0.020167, 1.987977, 23.722136 ]
+						relative_angles = [ -90.0, -90.0, 0.0 ]
+						weight = 1.0
+						ignore_rotation = false
+					},
+					{
+						_class = "Attachment"
+						name = "camera_anim_target"
+						parent_bone = "Camera"
+						relative_origin = [ 0.0, 0.0, 0.0 ]
+						relative_angles = [ 0.0, 0.0, 0.0 ]
+						weight = 1.0
+						ignore_rotation = false
+					},
+					{
+						_class = "Attachment"
+						name = "casing_eject"
+						parent_bone = "Weapon_Body"
+						relative_origin = [ -0.710588, 2.085513, 3.10027 ]
+						relative_angles = [ 0.0, 135.000015, 179.999985 ]
+						weight = 1.0
+						ignore_rotation = false
+					},
+				]
+			},
+			{
+				_class = "WeightListList"
+				children = 
+				[
+					{
+						_class = "WeightList"
+						name = "hands_only"
+						default_weight = 0.0
+						weights = 
+						[
+							{
+								bone = "Camera"
+								weight = 1.0
+							},
+							{
+								bone = "Upperarm_L"
+								weight = 1.0
+							},
+							{
+								bone = "Upperarm_R"
+								weight = 0.0
+							},
+							{
+								bone = "Weapon_Body"
+								weight = 0.0
+							},
+						]
+						master_morph_weight = -1.0
+						morph_weights = [  ]
+					},
+				]
+			},
+			{
+				_class = "ModelModifierList"
+				children = 
+				[
+					{
+						_class = "ModelModifier_ScaleAndMirror"
+						scale = 0.12
+						mirror_x = false
+						mirror_y = false
+						mirror_z = false
+						flip_bone_forward = false
+						swap_left_and_right_bones = false
+					},
+				]
+			},
+			{
+				_class = "BodyGroupList"
+				children = 
+				[
+					{
+						_class = "BodyGroup"
+						name = "Body"
+						children = 
+						[
+							{
+								_class = "BodyGroupChoice"
+								meshes = 
+								[
+									"Body",
+								]
+							},
+						]
+						hidden_in_tools = false
+					},
+					{
+						_class = "BodyGroup"
+						name = "Muzzle"
+						children = 
+						[
+							{
+								_class = "BodyGroupChoice"
+								meshes = [  ]
+							},
+							{
+								_class = "BodyGroupChoice"
+								name = "Suppressor"
+								meshes = 
+								[
+									"Suppressor",
+								]
+							},
+						]
+						hidden_in_tools = false
+					},
+				]
+			},
+			{
+				_class = "GameDataList"
+				children = 
+				[
+					{
+						_class = "Folder"
+						name = "Espionage"
+						children = 
+						[
+							{
+								_class = "GenericGameData"
+								game_class = "espionage_viewmodel.field_of_view"
+								game_keys = 
+								{
+									field_of_view = 72.0
+								}
+							},
+							{
+								_class = "GenericGameData"
+								game_class = "espionage_viewmodel.simple_sway"
+								game_keys = 
+								{
+									multiplier = 1.0
+									aimmultiplier = 1.0
+								}
+							},
+							{
+								_class = "GenericGameData"
+								game_class = "espionage_viewmodel.deadzone_sway"
+								game_keys = 
+								{
+									aimingonly = true
+									damping = 8.0
+									multiplier = 1.0
+									autocenter = false
+									deadzone = [ 8.0, 8.0 ]
+								}
+							},
+							{
+								_class = "Folder"
+								name = "Offsets"
+								children = 
+								[
+									{
+										_class = "GenericGameData"
+										game_class = "espionage_viewmodel.lean_offset"
+										game_keys = 
+										{
+											absoluteleanstate = false
+											axismultiplier = [ 1.0, 1.0 ]
+										}
+									},
+									{
+										_class = "GenericGameData"
+										game_class = "espionage_viewmodel.crouch_offset"
+										game_keys = 
+										{
+											offset = [ -2.0, 0.0, 1.0 ]
+											angles = [ 0.0, 0.0, 0.0 ]
+										}
+									},
+									{
+										_class = "GenericGameData"
+										game_class = "espionage_viewmodel.jump_offset"
+										game_keys = 
+										{
+											positionmultiplier = 1.0
+											rotationmultiplier = 1.0
+										}
+									},
+									{
+										_class = "GenericGameData"
+										game_class = "espionage_viewmodel.move_offset"
+										game_keys = 
+										{
+											multiplier = [ 1.0, 1.0, 1.0 ]
+										}
+									},
+									{
+										_class = "GenericGameData"
+										game_class = "espionage_viewmodel.pitch_offset"
+										game_keys = 
+										{
+											damping = 15.0
+											axisoffset = 4.0
+											pitchoffset = 5.0
+										}
+									},
+									{
+										_class = "GenericGameData"
+										game_class = "espionage_viewmodel.strafe_offset"
+										game_keys = 
+										{
+											damping = 6.0
+											axismutliplier = 10.0
+											rollmutliplier = 1.0
+										}
+									},
+								]
+							},
+						]
+					},
+				]
+			},
+		]
+		model_archetype = ""
+		primary_associated_entity = ""
+		anim_graph_name = "Animgraphs/weapon_generic_viewmodel.vanmgrph"
+		base_model_name = ""
+	}
+}
