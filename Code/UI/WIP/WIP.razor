@@ -1,0 +1,46 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+
+@inherits Panel
+@namespace Woosh.Espionage
+
+<style>
+	WIP {
+		color: rgba(255, 255, 255, 1);
+		mix-blend-mode: lighten;
+		opacity: .35;
+		width: 100%;
+		height: 10%;
+		bottom:0;
+		position:absolute;
+		align-items: center;
+		justify-content: center;
+		font-family: Ra-Mono;
+		.container
+		{
+			bottom:10px;
+			height:100%;
+			width:100%;
+			flex-direction: column;
+			align-items: flex-start;
+			justify-content: center;
+			.text
+			{
+			margin-left: 2%;
+			font-size: 18px;
+			}
+		}
+	}
+</style>
+
+<root>
+	<div class="container">
+		<label class="text" text="@_Tile"></label>
+		<label class="text" text="WORK IN PROGRESS"></label>
+	</div>
+</root>
+
+@code
+{
+	public string _Tile { get; set; } = "<ESPIONAGE>";
+}

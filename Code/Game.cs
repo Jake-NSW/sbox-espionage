@@ -7,11 +7,18 @@ namespace Woosh.Espionage;
 
 public partial class MyGame : GameManager
 {
+	public HudRoot Hud { get; private set; }
 	public MyGame()
 	{
 		if ( Game.IsServer )
 		{
 			n_Gamemode = new GamemodeController();
+		}
+
+		if ( Game.IsClient )
+		{
+			Hud = new HudRoot();
+			Game.RootPanel = Hud;
 		}
 	}
 	
