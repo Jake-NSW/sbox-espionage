@@ -23,7 +23,6 @@ public sealed class Interactor : EntityComponent, ISingletonComponent
 		var ray = Trace.Ray( eyes.Position, eyes.Position + eyes.Forward * 48 ).Ignore( Entity ).EntitiesOnly();
 
 		var first = ray.Run();
-		DebugOverlay.TraceResult( first );
 		return first.Entity != null ? first : ray.Size( size ).Run();
 	}
 }
