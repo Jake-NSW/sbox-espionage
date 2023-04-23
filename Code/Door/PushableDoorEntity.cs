@@ -109,24 +109,25 @@ public sealed partial class PushableDoorEntity : AnimatedEntity, IPushable
 		if ( cloudBeClosed && MathF.Abs( m_Force ) < 4 && m_State != DoorStates.Closed )
 		{
 			// Close Door
-			Log.Info("Closing Door");
 			m_State = DoorStates.Closed;
+			PlayClientSound( DoorStates.Closed, m_Force / 1.4f );
+			
 			return;
 		}
 
 		if ( (int)MaxAngle.y == ClosedAngle && angle < ClosedAngle && m_State == DoorStates.Closed )
 		{
 			// Door is already closed, cant close it anymore
-			Log.Info("Cant Push door Further");
 			return;
 		}
 
 		if ( (angle > MaxAngle.x || angle < MaxAngle.y) && m_State != DoorStates.Closed )
 		{
 			// Door is now fully open
-			Log.Info( "Fully Open" );
 			m_Force = m_Force / 2 * -1;
 			m_State = DoorStates.FullyOpen;
+			PlayClientSound( DoorStates.FullyOpen, m_Force / 1.4f );
+
 			return;
 		}
 
@@ -134,9 +135,9 @@ public sealed partial class PushableDoorEntity : AnimatedEntity, IPushable
 		{
 			if ( m_State == DoorStates.Closed )
 			{
-				Log.Info( "Opening Door" );
+				PlayClientSound( DoorStates.Open, 1 );
 			}
-			
+
 			m_State = DoorStates.Open;
 		}
 	}
@@ -170,7 +171,7 @@ public sealed partial class PushableDoorEntity : AnimatedEntity, IPushable
 			_ => throw new ArgumentOutOfRangeException( nameof(state), state, null )
 		};
 
-		Log.Info( $"Playing {sound}, with volume {volume}" );
+		Log.Info( $"Playing {sound}, from state {state}, with volume {volume}" );
 		Sound.FromWorld( sound, Position ).SetVolume( volume );
 	}
 
