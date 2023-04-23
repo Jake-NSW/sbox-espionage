@@ -7,15 +7,15 @@ using ModelDoorSounds = Sandbox.DoorEntity.ModelDoorSounds;
 
 namespace Woosh.Espionage;
 
-[Library( "esp_door" ), HammerEntity, Category( "Gameplay" ), Icon( "door_front" ), Model]
-public sealed partial class PushableDoorEntity : AnimatedEntity, IPushable
+[Library( "esp_hinged_door" ), HammerEntity, Category( "Gameplay" ), Icon( "door_front" ), Model]
+public sealed partial class PushableHingedDoorEntity : AnimatedEntity, IPushable
 {
 	public enum DoorStates : byte
 	{
 		Closed,
 		Open,
-		FullyOpen,
-		Locked,
+		Bounced,
+		Locked
 	}
 
 	// Utility
@@ -31,10 +31,11 @@ public sealed partial class PushableDoorEntity : AnimatedEntity, IPushable
 
 	// Physics
 
+	[Property] public bool SleepWhenClosed { get; set; } = true;
 	[Property( Title = "Weight (kg)" )] public int Weight { get; set; } = 15;
 	[Property] public float Stiffness { get; set; } = 3.5f;
 
-	public PushableDoorEntity()
+	public PushableHingedDoorEntity()
 	{
 		Transmit = TransmitType.Pvs;
 	}
@@ -48,6 +49,10 @@ public sealed partial class PushableDoorEntity : AnimatedEntity, IPushable
 
 		EnableAllCollisions = true;
 		UsePhysicsCollision = true;
+
+		// Setup Rotation
+		if ( SpawnAngle != default )
+			RotateToRelativeAngle( Game.Random.Float( SpawnAngle.x, SpawnAngle.y ) * (Inverted ? 1 : -1) );
 	}
 
 	// Debug
@@ -63,8 +68,6 @@ public sealed partial class PushableDoorEntity : AnimatedEntity, IPushable
 	[Event.Tick.Server]
 	private void Tick()
 	{
-		Rotation target;
-
 		var maxRot = Initial.Rotation.RotateAroundAxis( Transform.NormalToLocal( Initial.Rotation.Up * (Inverted ? 1 : -1) ), MaxAngle.x );
 		var minRot = Initial.Rotation.RotateAroundAxis( Transform.NormalToLocal( Initial.Rotation.Up * (Inverted ? 1 : -1) ), MaxAngle.y );
 		var closedRot = Initial.Rotation.RotateAroundAxis( Transform.NormalToLocal( Initial.Rotation.Up * (Inverted ? 1 : -1) ), ClosedAngle );
@@ -87,28 +90,35 @@ public sealed partial class PushableDoorEntity : AnimatedEntity, IPushable
 
 		m_Force = !m_Force.AlmostEqual( 0, 0.005f ) ? m_Force.LerpTo( 0, weight / stiffness * Time.Delta ) : 0;
 
+		RotateToRelativeAngle( m_Force );
+	}
+
+	private void RotateToRelativeAngle( float force )
+	{
+		Game.AssertServer();
+
 		var axis = Transform.NormalToLocal( Initial.Rotation.Up );
-		var potential = Rotation.FromAxis( axis, m_Force );
+		var potential = Rotation.FromAxis( axis, force );
 		var dot = Vector3.Dot( Inverted ? (Rotation * potential).Forward : (Rotation * potential).Backward, Initial.Rotation.Left );
 
 		// Angle
 		var angle = Rotation.Difference( Rotation * potential, Initial.Rotation ).Angle();
 		angle *= dot < 0 ? -1 : 1;
 
-		target = Rotation * potential;
+		var target = Rotation * potential;
 
 		// Clamp to Axis
 		if ( angle > MaxAngle.y && angle < MaxAngle.x )
 			Rotation = target;
 
 		if ( s_DoorDebug )
-			DebugOverlay.Text( $"Force - {m_Force}\nAngle - {angle}\nDot - {dot}\nRotation - {Rotation.Angles()}\nState - {m_State}", Position );
+			DebugOverlay.Text( $"Force - {force}\nAngle - {angle}\nDot - {dot}\nRotation - {Rotation.Angles()}\nState - {m_State}", Position );
 
-		if ( m_Force == 0 )
+		if ( force == 0 )
 			return;
 
-		var cloudBeClosed = (int)MaxAngle.y == ClosedAngle && angle.AlmostEqual( ClosedAngle, 2f );
-		var absForce = MathF.Abs( m_Force );
+		var cloudBeClosed = (int)MaxAngle.y == ClosedAngle && (angle <= ClosedAngle || angle.AlmostEqual( ClosedAngle, 2 ));
+		var absForce = MathF.Abs( force );
 
 		if ( cloudBeClosed && absForce < 2 && m_State != DoorStates.Closed )
 		{
@@ -131,9 +141,9 @@ public sealed partial class PushableDoorEntity : AnimatedEntity, IPushable
 		if ( (angle > MaxAngle.x || angle < MaxAngle.y) && m_State != DoorStates.Closed )
 		{
 			// Door is now fully open
-			m_Force = m_Force / 2 * -1;
-			m_State = DoorStates.FullyOpen;
-			PlayClientEffect( DoorStates.FullyOpen, absForce / 1.4f );
+			m_Force = force / 2 * -1;
+			m_State = DoorStates.Bounced;
+			PlayClientEffect( DoorStates.Bounced, absForce / 1.4f );
 
 			return;
 		}
@@ -176,13 +186,12 @@ public sealed partial class PushableDoorEntity : AnimatedEntity, IPushable
 		{
 			DoorStates.Closed => m_Sounds.CloseSound,
 			DoorStates.Open => m_Sounds.OpenSound,
-			DoorStates.FullyOpen => m_Sounds.FullyOpenSound,
+			DoorStates.Bounced => m_Sounds.FullyOpenSound,
 			DoorStates.Locked => m_Sounds.LockedSound,
 			_ => throw new ArgumentOutOfRangeException( nameof(state), state, null )
 		};
 
 		Log.Info( $"Playing {sound}, from state {state}, with volume {volume}" );
-
 		Sound.FromWorld( sound, Position ).SetVolume( volume );
 	}
 
@@ -192,14 +201,12 @@ public sealed partial class PushableDoorEntity : AnimatedEntity, IPushable
 	{
 		base.TakeDamage( info );
 
-		if ( m_State == DoorStates.Closed )
+		if ( m_State == DoorStates.Closed && SleepWhenClosed )
 			return;
 
 		// Don't do anything if its closed
-		if ( info.Attacker.Position.Distance( Position ) <= 64 )
 		{
-			Log.Info("taking damage");
-			var force = info.Force.Length / 10;
+			var force = info.Force.Length / 500;
 			Push( info.Position, info.Attacker as Pawn, force );
 			LastAttackerWeapon = info.Weapon;
 		}
@@ -211,16 +218,16 @@ public sealed partial class PushableDoorEntity : AnimatedEntity, IPushable
 
 		// Don't do anything if its closed
 
-		if ( m_State == DoorStates.Closed )
+		if ( m_State == DoorStates.Closed && SleepWhenClosed )
 			return;
 
 		var mass = eventData.Other.PhysicsShape.Body.Mass;
 		var speed = eventData.Speed;
 
-		if ( mass < 10 || speed < 10 )
+		if ( mass < 20 )
 			return;
 
-		var force = speed / 80;
+		var force = speed / 200;
 		Push( eventData.Position, null, force );
 	}
 
@@ -232,7 +239,7 @@ public sealed partial class PushableDoorEntity : AnimatedEntity, IPushable
 		var direction = Vector3.Dot( (from - Position).Normal, Rotation.Left );
 		force *= (direction > 0 ? 1 : -1) * (Inverted ? 1 : -1);
 		m_Force += force;
-		
+
 		LastAttacker = invoker;
 		LastAttackerWeapon = null;
 	}
