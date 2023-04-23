@@ -47,6 +47,7 @@ partial class Pawn : AnimatedEntity
 		viewModel2.SetAnimParameter( "bDeployed", true );
 		viewModel2.SetBodyGroup( "Muzzle", 1 );
 		viewModel2.Add( new ViewModelSwayEffect() { } );
+		viewModel2.Add( new ViewModelPitchOffsetEffect(3, 2)  );
 		viewModel2.Add( new ViewModelOffsetEffect(new Vector3(-2, 0, 0), Vector3.Zero) { } );
 		viewModel2.Add( new ViewModelDeadzoneSwayEffect(new Vector2(8)) { } );
 	}
