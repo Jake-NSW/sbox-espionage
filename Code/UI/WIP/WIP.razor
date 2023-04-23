@@ -1,5 +1,6 @@
 ﻿@using Sandbox;
 @using Sandbox.UI;
+@using System;
 
 @inherits Panel
 @namespace Woosh.Espionage
@@ -10,7 +11,7 @@
 		mix-blend-mode: lighten;
 		opacity: .35;
 		width: 100%;
-		height: 10%;
+		height: 15%;
 		bottom:0;
 		position:absolute;
 		align-items: center;
@@ -24,6 +25,11 @@
 			flex-direction: column;
 			align-items: flex-start;
 			justify-content: center;
+			.spacer
+			{
+			margin-left: 2%;
+			font-size: 18px;
+			}
 			.text
 			{
 			margin-left: 2%;
@@ -37,10 +43,18 @@
 	<div class="container">
 		<label class="text" text="@_Tile"></label>
 		<label class="text" text="WORK IN PROGRESS"></label>
+		<label class="spacer"></label>
+		<label class="text" text="@Game.LocalClient.Name"></label>
+		<label class="text" text="@System.DateTime.Now"></label>
 	</div>
 </root>
 
 @code
 {
 	public string _Tile { get; set; } = "<ESPIONAGE>";
+
+	protected override int BuildHash()
+	{
+		return HashCode.Combine(System.DateTime.Now);
+	}
 }
