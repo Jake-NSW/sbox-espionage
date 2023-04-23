@@ -57,7 +57,7 @@ public sealed partial class PushableHingedDoorEntity : AnimatedEntity, IPushable
 
 	// Debug
 
-	[ConVar.Server( "esp_door_debug" )] private static bool s_DoorDebug { get; set; }
+	[ConVar.Server( "esp_door_debug" )] private static bool EnabledDoorDebug { get; set; }
 
 	// Physics
 
@@ -68,14 +68,14 @@ public sealed partial class PushableHingedDoorEntity : AnimatedEntity, IPushable
 	[Event.Tick.Server]
 	private void Tick()
 	{
-		var maxRot = Initial.Rotation.RotateAroundAxis( Transform.NormalToLocal( Initial.Rotation.Up * (Inverted ? 1 : -1) ), MaxAngle.x );
-		var minRot = Initial.Rotation.RotateAroundAxis( Transform.NormalToLocal( Initial.Rotation.Up * (Inverted ? 1 : -1) ), MaxAngle.y );
-		var closedRot = Initial.Rotation.RotateAroundAxis( Transform.NormalToLocal( Initial.Rotation.Up * (Inverted ? 1 : -1) ), ClosedAngle );
-
 		// Debug
 
-		if ( s_DoorDebug )
+		if ( EnabledDoorDebug )
 		{
+			var maxRot = Initial.Rotation.RotateAroundAxis( Transform.NormalToLocal( Initial.Rotation.Up * (Inverted ? 1 : -1) ), MaxAngle.x );
+			var minRot = Initial.Rotation.RotateAroundAxis( Transform.NormalToLocal( Initial.Rotation.Up * (Inverted ? 1 : -1) ), MaxAngle.y );
+			var closedRot = Initial.Rotation.RotateAroundAxis( Transform.NormalToLocal( Initial.Rotation.Up * (Inverted ? 1 : -1) ), ClosedAngle );
+
 			var bounds = CollisionBounds;
 			DebugOverlay.Box( Position, Initial.Rotation, bounds.Mins, bounds.Maxs, Color.Gray );
 			DebugOverlay.Box( Position, minRot, bounds.Mins, bounds.Maxs, Color.Orange );
@@ -111,7 +111,7 @@ public sealed partial class PushableHingedDoorEntity : AnimatedEntity, IPushable
 		if ( angle > MaxAngle.y && angle < MaxAngle.x )
 			Rotation = target;
 
-		if ( s_DoorDebug )
+		if ( EnabledDoorDebug )
 			DebugOverlay.Text( $"Force - {force}\nAngle - {angle}\nDot - {dot}\nRotation - {Rotation.Angles()}\nState - {m_State}", Position );
 
 		if ( force == 0 )
@@ -141,7 +141,7 @@ public sealed partial class PushableHingedDoorEntity : AnimatedEntity, IPushable
 		if ( (angle > MaxAngle.x || angle < MaxAngle.y) && m_State != DoorStates.Closed )
 		{
 			// Door is now fully open
-			m_Force = force / 2 * -1;
+			m_Force = force * -1;
 			m_State = DoorStates.Bounced;
 			PlayClientEffect( DoorStates.Bounced, absForce / 1.4f );
 
@@ -191,7 +191,9 @@ public sealed partial class PushableHingedDoorEntity : AnimatedEntity, IPushable
 			_ => throw new ArgumentOutOfRangeException( nameof(state), state, null )
 		};
 
-		Log.Info( $"Playing {sound}, from state {state}, with volume {volume}" );
+		if ( EnabledDoorDebug )
+			Log.Info( $"Playing {sound}, from state {state}, with volume {volume}" );
+
 		Sound.FromWorld( sound, Position ).SetVolume( volume );
 	}
 
