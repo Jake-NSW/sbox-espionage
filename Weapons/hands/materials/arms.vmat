@@ -1,0 +1,56 @@
+// THIS FILE IS AUTO-GENERATED
+
+Layer0
+{
+	shader "shaders/skin.shader_c"
+
+	//---- Ambient Occlusion ----
+	g_flAmbientOcclusionDirectDiffuse "0.000"
+	g_flAmbientOcclusionDirectSpecular "0.506"
+	g_vAmbientOcclusionColorBleed "[0.400000 0.149020 0.129412 0.000000]"
+	TextureAmbientOcclusion "materials/default/default_ao.tga"
+
+	//---- Color ----
+	g_flModelTintAmount "1.000"
+	g_vColorTint "[1.000000 1.000000 1.000000 0.396078]"
+	TextureColor "weapons/hands/materials/skin_tatt_col_ronin_right.png"
+
+	//---- Curvature ----
+	g_flCurvatureScale "1.000"
+
+	//---- Face Occlusion ----
+	g_flMouthInteriorBrightnessScale "1.000"
+	TextureInsideMouth "materials/default/default_black_mask.tga"
+
+	//---- Fog ----
+	g_bFogEnabled "1"
+
+	//---- Lookup Textures ----
+	g_vAmbientNormalSoftness "[0.670588 0.200000 0.000000 0.000000]"
+	TextureDiffuseFalloff "materials/default/default_skin_diffusewarp.tga"
+
+	//---- Normal ----
+	g_flDiffuseNormalBlur "0.500"
+	TextureNormal "weapons/hands/materials/skin_n_ghost.png"
+
+	//---- Roughness ----
+	TextureRoughness "weapons/hands/materials/skin_female_g3.png"
+
+	//---- Specular ----
+	g_flSecondSpecularLobeGlossiness "0.500"
+	g_flSecondSpecularLobeRatio "0.150"
+
+	//---- Texture Coordinates ----
+	g_vTexCoordOffset "[0.000 0.000]"
+	g_vTexCoordScale "[1.000 1.000]"
+
+	//---- Transmission ----
+	g_flTransmissionFalloff "0.508"
+	g_vTransmissionColor "[0.133333 0.035294 0.000000 0.000000]"
+	TextureTransmissiveMask "weapons/hands/materials/skin_female_g3.png"
+
+	SystemAttributes
+	{
+		PhysicsSurfaceProperties "flesh"
+	}
+}

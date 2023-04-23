@@ -1,0 +1,797 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:modeldoc29:version{3cec427c-1b0e-4d48-a90a-0436f33a6041} -->
+{
+	rootNode = 
+	{
+		_class = "RootNode"
+		children = 
+		[
+			{
+				_class = "Folder"
+				name = "Interaction"
+				children = 
+				[
+					{
+						_class = "AnimFile"
+						name = "interaction_in"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 11
+						framerate = -1.0
+						take = 29
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "interaction_out"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 21
+						framerate = -1.0
+						take = 30
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "interaction_idle"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 91
+						framerate = -1.0
+						take = 28
+						reverse = false
+					},
+				]
+			},
+			{
+				_class = "Folder"
+				name = "Crouch"
+				children = 
+				[
+					{
+						_class = "AnimFile"
+						name = "crouch_in"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 11
+						framerate = -1.0
+						take = 13
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "crouch_out"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 18
+						framerate = -1.0
+						take = 14
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "crouch_idle"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 161
+						framerate = -1.0
+						take = 12
+						reverse = false
+					},
+				]
+			},
+			{
+				_class = "AnimationList"
+				children = 
+				[
+					{
+						_class = "AnimFile"
+						name = "idle"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 161
+						framerate = -1.0
+						take = 27
+						reverse = false
+					},
+				]
+				default_root_bone_name = ""
+			},
+			{
+				_class = "Folder"
+				name = "Mantle"
+				children = 
+				[
+					{
+						_class = "AnimFile"
+						name = "mantle_climb"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 31
+						framerate = -1.0
+						take = 28
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "mantle_in"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 12
+						framerate = -1.0
+						take = 29
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "mantle_out"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 21
+						framerate = -1.0
+						take = 30
+						reverse = false
+					},
+				]
+			},
+			{
+				_class = "Folder"
+				name = "Gestures"
+				children = 
+				[
+					{
+						_class = "AnimFile"
+						name = "countdown"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 240
+						framerate = -1.0
+						take = 16
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "fuck_off"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 66
+						framerate = -1.0
+						take = 17
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "go"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 65
+						framerate = -1.0
+						take = 18
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "group_up"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 67
+						framerate = -1.0
+						take = 19
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "hold"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 86
+						framerate = -1.0
+						take = 20
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "peace"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 66
+						framerate = -1.0
+						take = 21
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "stop"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 66
+						framerate = -1.0
+						take = 24
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "point_1"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 66
+						framerate = -1.0
+						take = 22
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "point_2"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 66
+						framerate = -1.0
+						take = 23
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "thumbs_up"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 66
+						framerate = -1.0
+						take = 25
+						reverse = false
+					},
+				]
+			},
+			{
+				_class = "Folder"
+				name = "Attack"
+				children = 
+				[
+					{
+						_class = "AnimFile"
+						name = "chop_L_hit_1"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 39
+						framerate = -1.0
+						take = 0
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "chop_L_hit_2"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 41
+						framerate = -1.0
+						take = 1
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "chop_L_hit_3"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 40
+						framerate = -1.0
+						take = 2
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "chop_L_miss_1"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 41
+						framerate = -1.0
+						take = 3
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "chop_L_miss_2"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 40
+						framerate = -1.0
+						take = 4
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "chop_L_miss_3"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 41
+						framerate = -1.0
+						take = 5
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "chop_R_hit_1"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 41
+						framerate = -1.0
+						take = 6
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "chop_R_hit_2"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 41
+						framerate = -1.0
+						take = 7
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "chop_R_hit_3"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 41
+						framerate = -1.0
+						take = 8
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "chop_R_miss_1"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 41
+						framerate = -1.0
+						take = 9
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "chop_R_miss_2"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 41
+						framerate = -1.0
+						take = 10
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "chop_R_miss_3"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 41
+						framerate = -1.0
+						take = 11
+						reverse = false
+					},
+				]
+			},
+			{
+				_class = "Folder"
+				name = "Generic"
+				children = 
+				[
+					{
+						_class = "AnimFile"
+						name = "holster"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 14
+						framerate = -1.0
+						take = 26
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "vault"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 0
+						end_frame = 31
+						framerate = -1.0
+						take = 36
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "draw"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "Weapons/hands/v_espionage_hands.fbx"
+						start_frame = 2
+						end_frame = 21
+						framerate = -1.0
+						take = 15
+						reverse = false
+					},
+				]
+			},
+		]
+		model_archetype = ""
+		primary_associated_entity = ""
+		anim_graph_name = ""
+	}
+}

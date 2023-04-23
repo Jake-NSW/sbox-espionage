@@ -24,6 +24,22 @@ partial class Pawn : AnimatedEntity
 		EnableShadowInFirstPerson = true;
 	}
 
+	public override void ClientSpawn()
+	{
+		base.ClientSpawn();
+
+		var viewModel = new ViewModel();
+		viewModel.Add( new ViewModelOffsetEffect( Vector3.Zero, default ) );
+		viewModel.Add( new ViewModelSwayEffect() );
+		viewModel.Add( new ViewModelMoveOffsetEffect( Vector3.One, 10 ) );
+		viewModel.Add( new ViewModelStrafeOffsetEffect() { Damping = 6, RollMultiplier = 1, AxisMultiplier = 8 } );
+		viewModel.Add( new ViewModelDeadzoneSwayEffect( new Vector2( 8, 8 ) ) { AimingOnly = true, AutoCenter = false, Damping = 8 } );
+		viewModel.Owner = this;
+		viewModel.Add( new ViewModelPitchOffsetEffect() );
+		viewModel.Model = Model.Load( "weapons/mk23/v_espionage_mk23.vmdl" );
+		viewModel.SetAnimParameter( "bDeployed", true );
+	}
+
 	// An example BuildInput method within a player's Pawn class.
 	[ClientInput] public Vector3 InputDirection { get; protected set; }
 	[ClientInput] public Angles ViewAngles { get; set; }
@@ -45,8 +61,8 @@ partial class Pawn : AnimatedEntity
 	public override void Simulate( IClient cl )
 	{
 		base.Simulate( cl );
-		
-		Components.GetOrCreate<Interactor>().Simulate(cl);
+
+		Components.GetOrCreate<Interactor>().Simulate( cl );
 
 		Rotation = ViewAngles.ToRotation();
 

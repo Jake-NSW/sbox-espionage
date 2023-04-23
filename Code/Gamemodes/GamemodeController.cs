@@ -5,25 +5,6 @@ using Sandbox;
 
 namespace Woosh.Espionage;
 
-public sealed partial class TestGamemode : Entity, IGamemode
-{
-	public bool Requesting()
-	{
-		Log.Info( "Requesting to start gamemode" );
-		return true;
-	}
-
-	public void Started()
-	{
-		Log.Info( "Starting gamemode" );
-	}
-
-	public void Finished()
-	{
-		Log.Info( "Finished gamemode gamemode" );
-	}
-}
-
 public sealed partial class GamemodeController : BaseNetworkable
 {
 	public IGamemode Active => (IGamemode)n_Active;
