@@ -1,6 +1,6 @@
 ﻿using Sandbox;
 
-namespace Woosh.Espionage.Interaction;
+namespace Woosh.Espionage;
 
 public sealed class UseInteraction : EntityComponent, IPlayerInteraction
 {

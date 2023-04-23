@@ -1,7 +1,7 @@
 ﻿using Sandbox;
 using System;
 using System.Linq;
-using Woosh.Espionage.Interaction;
+using Woosh.Espionage;
 
 namespace Woosh.Espionage;
 
@@ -74,7 +74,7 @@ partial class Pawn : AnimatedEntity
 	{
 		base.Simulate( cl );
 
-		Components.GetOrCreate<Interactor>().Simulate( cl );
+		Components.GetOrCreate<InteractionHandler>().Simulate( cl );
 
 		Rotation = ViewAngles.ToRotation();
 

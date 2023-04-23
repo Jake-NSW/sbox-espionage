@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Sandbox;
-using Woosh.Espionage.Interaction;
+using Woosh.Espionage;
 
 namespace Woosh.Espionage;
 

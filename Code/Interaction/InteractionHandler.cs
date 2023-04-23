@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using Sandbox;
 
-namespace Woosh.Espionage.Interaction;
+namespace Woosh.Espionage;
 
-public sealed class Interactor : EntityComponent, ISingletonComponent
+public sealed class InteractionHandler : EntityComponent, ISingletonComponent
 {
 	public Entity Hovering { get; private set; }
 
