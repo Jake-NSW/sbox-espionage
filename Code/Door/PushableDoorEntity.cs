@@ -106,7 +106,7 @@ public sealed partial class PushableDoorEntity : AnimatedEntity, IPushable
 
 		var cloudBeClosed = (int)MaxAngle.y == ClosedAngle && angle.AlmostEqual( ClosedAngle, 4 );
 
-		if ( cloudBeClosed && MathF.Abs( m_Force ) < 4 && m_State != DoorStates.Closed )
+		if ( cloudBeClosed && MathF.Abs( m_Force ) < 2 && m_State != DoorStates.Closed )
 		{
 			// Close Door
 			m_State = DoorStates.Closed;
@@ -181,14 +181,25 @@ public sealed partial class PushableDoorEntity : AnimatedEntity, IPushable
 	{
 		base.TakeDamage( info );
 
-		/*
 		// Don't do anything if its closed
-		if ( info.Attacker.Position.Distance( Position ) <= 64 || !IsClosed )
+		if ( info.Attacker.Position.Distance( Position ) <= 64 || m_State != DoorStates.Closed )
 		{
 			var force = info.Force.Length / 10;
 			Push( info.Position, info.Attacker as Pawn, force );
 		}
-		*/
+	}
+
+	protected override void OnPhysicsCollision( CollisionEventData eventData )
+	{
+		base.OnPhysicsCollision( eventData );
+		
+		// Don't do anything if its closed
+		
+		if ( m_State != DoorStates.Closed )
+		{
+			var force = eventData.Velocity.Length / 40;
+			Push( eventData.Position, null, force );
+		}
 	}
 
 	public void Push( Vector3 from, Entity invoker, float force )

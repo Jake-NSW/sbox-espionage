@@ -72,7 +72,7 @@ partial class Pawn : AnimatedEntity
 		if ( Game.IsServer && Input.Pressed( InputButton.PrimaryAttack ) )
 		{
 			var ragdoll = new ModelEntity();
-			ragdoll.SetModel( "models/citizen/citizen.vmdl" );
+			ragdoll.SetModel( "models/sbox_props/wooden_crate/wooden_crate.vmdl" );
 			ragdoll.Position = Position + Rotation.Forward * 40;
 			ragdoll.Rotation = Rotation.LookAt( Vector3.Random.Normal );
 			ragdoll.SetupPhysicsFromModel( PhysicsMotionType.Dynamic, false );
