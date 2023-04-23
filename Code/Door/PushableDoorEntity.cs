@@ -1,6 +1,7 @@
 ﻿using System;
 using Editor;
 using Sandbox;
+using static Woosh.Espionage.PushableDoorEntity.DoorStates;
 using ModelDoorSounds = Sandbox.DoorEntity.ModelDoorSounds;
 
 namespace Woosh.Espionage;
@@ -106,39 +107,39 @@ public sealed partial class PushableDoorEntity : AnimatedEntity, IPushable
 
 		var cloudBeClosed = (int)MaxAngle.y == ClosedAngle && angle.AlmostEqual( ClosedAngle, 4 );
 
-		if ( cloudBeClosed && MathF.Abs( m_Force ) < 2 && m_State != DoorStates.Closed )
+		if ( cloudBeClosed && MathF.Abs( m_Force ) < 2 && m_State != Closed )
 		{
 			// Close Door
-			m_State = DoorStates.Closed;
-			PlayClientSound( DoorStates.Closed, m_Force / 1.4f );
+			m_State = Closed;
+			PlayClientSound( Closed, m_Force / 1.4f );
 			
 			return;
 		}
 
-		if ( (int)MaxAngle.y == ClosedAngle && angle < ClosedAngle && m_State == DoorStates.Closed )
+		if ( (int)MaxAngle.y == ClosedAngle && angle < ClosedAngle && m_State == Closed )
 		{
 			// Door is already closed, cant close it anymore
 			return;
 		}
 
-		if ( (angle > MaxAngle.x || angle < MaxAngle.y) && m_State != DoorStates.Closed )
+		if ( (angle > MaxAngle.x || angle < MaxAngle.y) && m_State != Closed )
 		{
 			// Door is now fully open
 			m_Force = m_Force / 2 * -1;
-			m_State = DoorStates.FullyOpen;
-			PlayClientSound( DoorStates.FullyOpen, m_Force / 1.4f );
+			m_State = FullyOpen;
+			PlayClientSound( FullyOpen, m_Force / 1.4f );
 
 			return;
 		}
 
-		if ( !cloudBeClosed && m_State != DoorStates.Open )
+		if ( !cloudBeClosed && m_State is not Open or FullyOpen )
 		{
-			if ( m_State == DoorStates.Closed )
+			if ( m_State == Closed )
 			{
-				PlayClientSound( DoorStates.Open, 1 );
+				PlayClientSound( Open, 1 );
 			}
 
-			m_State = DoorStates.Open;
+			m_State = Open;
 		}
 	}
 
@@ -164,10 +165,10 @@ public sealed partial class PushableDoorEntity : AnimatedEntity, IPushable
 	{
 		var sound = state switch
 		{
-			DoorStates.Closed => m_Sounds.CloseSound,
-			DoorStates.Open => m_Sounds.OpenSound,
-			DoorStates.FullyOpen => m_Sounds.FullyOpenSound,
-			DoorStates.Locked => m_Sounds.LockedSound,
+			Closed => m_Sounds.CloseSound,
+			Open => m_Sounds.OpenSound,
+			FullyOpen => m_Sounds.FullyOpenSound,
+			Locked => m_Sounds.LockedSound,
 			_ => throw new ArgumentOutOfRangeException( nameof(state), state, null )
 		};
 
@@ -182,7 +183,7 @@ public sealed partial class PushableDoorEntity : AnimatedEntity, IPushable
 		base.TakeDamage( info );
 
 		// Don't do anything if its closed
-		if ( info.Attacker.Position.Distance( Position ) <= 64 || m_State != DoorStates.Closed )
+		if ( info.Attacker.Position.Distance( Position ) <= 64 || m_State != Closed )
 		{
 			var force = info.Force.Length / 10;
 			Push( info.Position, info.Attacker as Pawn, force );
@@ -195,7 +196,7 @@ public sealed partial class PushableDoorEntity : AnimatedEntity, IPushable
 		
 		// Don't do anything if its closed
 		
-		if ( m_State != DoorStates.Closed )
+		if ( m_State != Closed )
 		{
 			var force = eventData.Velocity.Length / 40;
 			Push( eventData.Position, null, force );
