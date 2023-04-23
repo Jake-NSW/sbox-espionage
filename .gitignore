@@ -30,3 +30,6 @@ omnisharp.json
 config/espionage.fgd
 *.sbs
 *.blend1
+code/obj/*
+*.csproj
+*.cache
