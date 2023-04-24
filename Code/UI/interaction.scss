@@ -7,53 +7,48 @@ Interaction {
   font-family: $font__mono;
   color: $color__text;
 
-  text-transform: uppercase;
   flex-direction: column;
   align-items: flex-end;
 
   transition: opacity 0.2s ease-out;
-  transform: translateX(-40%) translateY(-15%);
+  transform: translateX(-8%) translateY(-20%);
 
   .action {
-    background-color: $color__panel;
     box-shadow: $shadow__box;
     font-size: 12px;
     padding: 4px 12px;
-    margin-bottom: 2px;
+  }
+
+  .bind {
+    padding: 4px 0 4px 12px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+    
+    color: rgba($color__text, 0.75);
+    box-shadow: $shadow__box;
+
+    text-align: center;
+    align-items: center;
+
+    font-size: 10px;
   }
 
   .container {
+    background-color: $color__faded-panel;
     flex-grow: 1;
     align-items: center;
     justify-content: center;
+    align-self: stretch;
     flex-direction: row;
+    margin-bottom: 2px;
   }
 
   .hovering {
     font-size: 16px;
     text-align: right;
-    align-self: stretch;
     align-items: center;
     padding: 6px 12px;
     background-color: $color__panel;
     box-shadow: $shadow__box;
-  }
-
-  .bind {
-    margin-right: 4px;
-    padding: 6px 12px;
-    flex-grow: 1;
-    flex-shrink: 0;
-
-    color: rgba($color__text, 0.75);
-
-    background-color: $color__faded-panel;
-    box-shadow: $shadow__box;
-
-    text-align: center;
-    align-self: stretch;
-    align-items: center;
-
-    font-size: 12px;
   }
 }
