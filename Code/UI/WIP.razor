@@ -7,7 +7,7 @@
 
 <style>
 	WIP {
-		font-family: Ra-Mono;
+		font-family: RaMono;
 		
 		opacity: 0.35;
 		color: white;
@@ -33,8 +33,7 @@
 
 <root>
 	<div class="container" style="position:absolute; top: 32px; left: 32px;">
-		<label class="text" text="@_Tile"></label>
-		<label class="text" text="WORK IN PROGRESS"></label>
+		<label class="text" text="Espionage / sbox"></label>
 	</div>
 	<div class="container" style="position:absolute; bottom: 32px; left: 32px;">
 		<label class="text" text="@Game.LocalClient.Name"></label>
@@ -44,10 +43,8 @@
 
 @code
 {
-	public string _Tile { get; set; } = "<ESPIONAGE>";
-
 	protected override int BuildHash()
 	{
-		return HashCode.Combine(System.DateTime.Now);
+		return HashCode.Combine(DateTime.Now);
 	}
 }

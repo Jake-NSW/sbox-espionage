@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Sandbox;
+using Sandbox.UI;
 
 namespace Woosh.Espionage;
 
@@ -22,7 +23,7 @@ public sealed class CompositedViewModel : AnimatedEntity
 		{
 			viewModel.Update( new Transform( Camera.Position, Camera.Rotation ) );
 		}
-
+		
 		Camera.Main.Attributes.Set( "viewModelFov", Camera.FieldOfView );
 	}
 

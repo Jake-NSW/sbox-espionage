@@ -1,33 +1,28 @@
 ﻿using System;
 using System.Linq;
 using Sandbox;
-using Woosh.Espionage;
 
 namespace Woosh.Espionage;
 
+public sealed class GameHud : HudEntity<HudRoot> { }
+
 public partial class MyGame : GameManager
 {
-	public HudRoot Hud { get; private set; }
 	public MyGame()
 	{
 		if ( Game.IsServer )
 		{
 			n_Gamemode = new GamemodeController();
-		}
-
-		if ( Game.IsClient )
-		{
-			Hud = new HudRoot();
-			Game.RootPanel = Hud;
+			_ = new GameHud();
 		}
 	}
-	
+
 	[Net] internal GamemodeController n_Gamemode { get; set; }
-	
+
 	public override void ClientJoined( IClient client )
 	{
 		base.ClientJoined( client );
-		
+
 		// Create a pawn for this client to play with
 		var pawn = new Pawn();
 		pawn.Components.Add( new PushInteraction() );

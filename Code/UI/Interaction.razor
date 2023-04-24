@@ -1,0 +1,58 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+
+@namespace Woosh.Espionage
+
+@inherits Panel;
+@attribute [StyleSheet("Code/UI/interaction.scss")]
+
+<root>
+    <div class="encapsulate" @ref="Encapsulate"></div>
+
+    <label class="action" text="@Action"></label>
+    <div class="container">
+        <label class="bind" text="@Bind"></label>
+        <label class="hovering" text="@Display"></label>
+    </div>
+</root>
+
+@code
+{
+    private string Display { get; set; }
+    private string Bind { get; set; }
+    private string Action { get; set; }
+
+    private Vector3 Last { get; set; }
+
+    private Panel Encapsulate { get; set; }
+
+    public override void Tick()
+    {
+        base.Tick();
+
+        Style.Opacity = 0;
+
+        if (Game.LocalPawn == null)
+            return;
+
+        if (Game.LocalPawn.Components.TryGet<InteractionHandler>(out var handler) && handler.Hovering != null)
+        {
+            var model = ((ModelEntity)handler.Hovering);
+
+            Display = "Melon";
+            Bind = "[E]";
+            Action = "Smash";
+
+            Last = model.WorldSpaceBounds.Center;
+            Style.Opacity = 1;
+        }
+        
+        this.ToWorld(Last);
+    }
+
+    protected override int BuildHash()
+    {
+        return Display?.GetHashCode() ?? 0;
+    }
+
+}
