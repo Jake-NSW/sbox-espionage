@@ -2,36 +2,25 @@
 
 namespace Woosh.Espionage;
 
-public partial class CarriableHandler : EntityComponent, IActive<Entity>
+public partial class CarriableHandler : EntityComponent, IActive<Entity>, IActive<ICarriable>, ISingletonComponent
 {
 	[Net, Local] public Entity Active { get; set; }
+	ICarriable IActive<ICarriable>.Active => Active as ICarriable;
 
 	// Active
 
+	[Net, Local] private Entity n_RealActive { get; set; }
 	[Predicted] private Entity m_LastActive { get; set; }
 
 	public void Simulate( IClient client )
 	{
 		// Constantly check if we have changed Active
-		if ( m_LastActive != Active )
+		if ( m_LastActive != n_RealActive )
 		{
-			(m_LastActive as ICarriable)?.OnHolster( n_IsDropping );
-			m_LastActive = Active;
-			(m_LastActive as ICarriable)?.OnDeploying();
+			(m_LastActive as ICarriable)?.Holstering( n_IsDropping );
+			m_LastActive = n_RealActive;
+			(m_LastActive as ICarriable)?.Deploying();
 		}
-
-		// Don't do anything if we're holstering
-		if ( n_IsHolstering )
-		{
-			if ( n_SinceHolsterStart >= n_Holster )
-			{
-				OnHolstered();
-			}
-
-			return;
-		}
-
-		Active?.Simulate( client );
 
 		// Wait for Deploying to Finish
 		if ( n_IsDeploying )
@@ -41,6 +30,18 @@ public partial class CarriableHandler : EntityComponent, IActive<Entity>
 				OnDeployed();
 			}
 		}
+
+		// Don't do anything if we're holstering
+		if ( n_IsHolstering )
+		{
+			if ( n_SinceHolsterStart >= n_Holster )
+			{
+				OnHolstered();
+			}
+		}
+
+		if ( !n_IsDeploying && !n_IsHolstering )
+			Active?.Simulate( client );
 	}
 
 	// Deploy
@@ -50,24 +51,35 @@ public partial class CarriableHandler : EntityComponent, IActive<Entity>
 	[Net, Local] private TimeSince n_SinceDeployStart { get; set; }
 	[Net, Local] private float n_Deploy { get; set; }
 
-	public void Deploy( Entity entity, float deployTime, float holsterTime )
+	public void Deploy( Entity entity, float deployTime = 0, float holsterTime = 0 )
 	{
+		// Only allow the server to deploy...
 		if ( !Game.IsServer )
 			return;
 
+		// Check if we have a valid entity
 		if ( !entity.IsValid() || Active == entity )
 			return;
 
+		// Check if we actually own the entity
 		if ( !Entity.IsAuthority || entity.Owner != Entity )
 			return;
 
+		// Check if we can actually hold this
+		if ( entity is ICarriable { Deployable: false } )
+			return;
+
+		// Save for when are ready to deploy
 		n_ToDeploy = entity;
-		n_Deploy = deployTime;
+		m_StoredDeploy = deployTime;
 		m_StoredHolster = holsterTime;
 
-		Log.Info( $"Preparing deploy - {n_ToDeploy}" );
+		if ( n_IsDeploying || n_IsHolstering )
+		{
+			return;
+		}
 
-		if ( Active != null && !n_IsDeploying )
+		if ( Active != null )
 		{
 			Holster( false );
 			return;
@@ -79,33 +91,31 @@ public partial class CarriableHandler : EntityComponent, IActive<Entity>
 		}
 	}
 
+	private float m_StoredDeploy;
 	private float m_StoredHolster;
 
 	private void OnReadyToDeploy()
 	{
-		if ( !Game.IsServer )
+		if ( n_ToDeploy == null || !Game.IsServer )
 			return;
 
 		// Call Active Start
-		Active = n_ToDeploy;
+		n_RealActive = n_ToDeploy;
+		Active = n_RealActive;
 		n_ToDeploy = null;
 
-		n_SinceDeployStart = 0;
-		n_IsDeploying = true;
+		n_Deploy = m_StoredDeploy;
+		n_Holster = m_StoredHolster;
 
-		Log.Info( $"Ready to deploy - {Active}" );
+		n_IsDeploying = true;
+		n_SinceDeployStart = 0;
 	}
 
 	private void OnDeployed()
 	{
-		if ( !Game.IsServer )
-			return;
-
 		n_IsDeploying = false;
-		n_Holster = m_StoredHolster;
 
-		Log.Info( $"Deployed - {Active} / {n_SinceDeployStart}" );
-		if ( n_ToDeploy != null )
+		if ( n_ToDeploy != null && Game.IsServer )
 		{
 			Holster( false );
 		}
@@ -120,12 +130,15 @@ public partial class CarriableHandler : EntityComponent, IActive<Entity>
 
 	public void Holster( bool dropping )
 	{
-		if ( !Game.IsServer )
+		Game.AssertServer();
+
+		if ( Active is ICarriable { Holsterable: false } )
+		{
+			n_ToDeploy = null;
 			return;
+		}
 
-		Log.Info( $"Holstering - {Active}" );
-
-		Active = null;
+		n_RealActive = null;
 		n_IsDropping = dropping;
 		n_IsHolstering = true;
 		n_SinceHolsterStart = 0;
@@ -133,13 +146,11 @@ public partial class CarriableHandler : EntityComponent, IActive<Entity>
 
 	private void OnHolstered()
 	{
-		if ( !Game.IsServer )
-			return;
-
-		Log.Info( $"Finished Holstering - {n_SinceHolsterStart}" );
-
 		n_IsHolstering = false;
 		n_IsDropping = false;
+
+		(Active as ICarriable)?.OnHolstered();
+		Active = null;
 
 		if ( n_ToDeploy != null )
 		{

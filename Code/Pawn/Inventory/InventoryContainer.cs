@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Sandbox;
 
 namespace Woosh.Espionage;
 
 public partial class InventoryContainer : EntityComponent, IEntityInventory
 {
+	public event Action<Entity> Added;
 	public IEnumerable<Entity> All => n_Bucket;
 
 	[Net, Local] private IList<Entity> n_Bucket { get; set; }
@@ -29,6 +31,8 @@ public partial class InventoryContainer : EntityComponent, IEntityInventory
 
 		// Callback for Entity
 		(ent as IPickup)?.OnPickup( Entity );
+		
+		Added?.Invoke(ent);
 
 		return true;
 	}

@@ -1,7 +1,15 @@
-﻿namespace Woosh.Espionage;
+﻿using Sandbox;
 
-public interface ICarriable
+namespace Woosh.Espionage;
+
+public interface ICarriable : IEntity
 {
-	void OnDeploying();
-	void OnHolster( bool drop );
+	bool Deployable => true;
+	bool Holsterable => true;
+
+	void Deploying();
+	void OnDeployed() { }
+	
+	void Holstering( bool drop );
+	void OnHolstered() { }
 }

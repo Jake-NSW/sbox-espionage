@@ -29,7 +29,7 @@ public partial class MyGame : GameManager
 			var handler = cl.Pawn.Components.Get<CarriableHandler>();
 			var inv = cl.Pawn.Components.Get<IEntityInventory>();
 
-			handler.Deploy(inv.Get<Mark23Weapon>(), 1, 1);
+			handler.Deploy(inv.Get<Mark23Weapon>(), 1, 0.6f);
 		}
 		
 		if ( Input.Pressed( InputButton.Slot2 ) )
@@ -38,7 +38,7 @@ public partial class MyGame : GameManager
 			var handler = cl.Pawn.Components.Get<CarriableHandler>();
 			var inv = cl.Pawn.Components.Get<IEntityInventory>();
 
-			handler.Deploy(inv.Get<Smg2Weapon>(), 1, 1);
+			handler.Deploy(inv.Get<Smg2Weapon>(), 1.5f, 1.3f);
 		}
 	}
 
