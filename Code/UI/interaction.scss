@@ -1,5 +1,7 @@
 ﻿@import "Code/UI/styles.scss";
 
+$gap__panel: 2px;
+
 Interaction {
   position: absolute;
 
@@ -7,11 +9,24 @@ Interaction {
   font-family: $font__mono;
   color: $color__text;
 
-  flex-direction: column;
-  align-items: flex-end;
+  flex-direction: row;
+  align-items: flex-start;
 
   transition: opacity 0.2s ease-out;
-  transform: translateX(-8%) translateY(-20%);
+
+  //transform: translateY(-120%);
+
+  .icon {
+    background-color: $color__panel;
+    box-shadow: $shadow__box;
+    margin-right: $gap__panel;
+    font-family: 'Material Icons';
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    font-size: 38px;
+    aspect-ratio: 1;
+  }
 
   .action {
     box-shadow: $shadow__box;
@@ -23,7 +38,7 @@ Interaction {
     padding: 4px 0 4px 12px;
     text-transform: uppercase;
     flex-shrink: 0;
-    
+
     color: rgba($color__text, 0.75);
     box-shadow: $shadow__box;
 
@@ -35,19 +50,18 @@ Interaction {
 
   .container {
     background-color: $color__faded-panel;
-    flex-grow: 1;
     align-items: center;
-    justify-content: center;
-    align-self: stretch;
+    justify-content: flex-start;
     flex-direction: row;
-    margin-bottom: 2px;
+    margin-top: $gap__panel;
   }
 
   .hovering {
     font-size: 16px;
-    text-align: right;
+    text-align: left;
     align-items: center;
-    padding: 6px 12px;
+    justify-content: center;
+    padding: 4px 12px;
     background-color: $color__panel;
     box-shadow: $shadow__box;
   }

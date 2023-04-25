@@ -4,14 +4,14 @@ namespace Woosh.Espionage;
 
 public sealed class ViewModelRecoilEffect : IViewModelEffect
 {
-	public float RecoilSnap { get; init; }
-	public float RecoilReturnSpeed { get; init; }
-	public float RecoilViewAnglesMultiplier { get; init; }
-	public float RecoilRotationMultiplier { get; init; }
-	public float RecoilCameraRotationMultiplier { get; init; }
+	public float RecoilSnap { get; init; } = 25;
+	public float RecoilReturnSpeed { get; init; } = 20;
+	public float RecoilViewAnglesMultiplier { get; init; } = 6f;
+	public float RecoilRotationMultiplier { get; init; } = 1;
+	public float RecoilCameraRotationMultiplier { get; init; } = 0;
 
-	public float KickbackSnap { get; init; }
-	public float KickbackReturnSpeed { get; init; }
+	public float KickbackSnap { get; init; } = 25;
+	public float KickbackReturnSpeed { get; init; } = 12;
 
 	public ViewModelRecoilEffect() { }
 
@@ -56,9 +56,16 @@ public sealed class ViewModelRecoilEffect : IViewModelEffect
 
 	public void Register( IDispatchRegistryTable table )
 	{
+		table.Register(
+			( in WeaponFireEvent evt ) =>
+			{
+				var rand = Game.Random;
+				m_RecoilTargetRotation += new Vector3( evt.Recoil.x, rand.Float( -evt.Recoil.y, evt.Recoil.y ), Game.Random.Float( -evt.Recoil.z, evt.Recoil.z ) ) * Time.Delta;
+				m_KickbackTargetPosition += new Vector3( evt.Kickback.x, rand.Float( -evt.Kickback.y, evt.Kickback.y ), Game.Random.Float( -evt.Kickback.z, evt.Kickback.z ) ) * Time.Delta;
+			}
+		);
+
 		// OnShoot( Vector3 recoilIntensity, Vector3 kickbackIntensity )
-		// m_RecoilTargetRotation += new Vector3( recoilIntensity.x, Rand.Float( -recoilIntensity.y, recoilIntensity.y ), Game.Random.Float( -recoilIntensity.z, recoilIntensity.z ) ) * Time.Delta;
-		// m_KickbackTargetPosition += new Vector3( kickbackIntensity.x, Rand.Float( -kickbackIntensity.y, kickbackIntensity.y ), Game.Random.Float( -kickbackIntensity.z, kickbackIntensity.z ) ) * Time.Delta;
 	}
 
 	public void Unregister( IDispatchRegistryTable table ) { }

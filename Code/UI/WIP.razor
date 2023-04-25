@@ -32,19 +32,23 @@
 </style>
 
 <root>
-	<div class="container" style="position:absolute; top: 32px; left: 32px;">
-		<label class="text" text="Espionage / sbox"></label>
-	</div>
-	<div class="container" style="position:absolute; bottom: 32px; left: 32px;">
-		<label class="text" text="@Game.LocalClient.Name"></label>
-		<label class="text" text="@DateTime.Now"></label>
-	</div>
+    <div class="container" style="position:absolute; top: 32px; left: 32px;">
+        <label class="text" text="Espionage / sbox"></label>
+    </div>
+    <div class="container" style="position:absolute; bottom: 32px; left: 32px;">
+        <label class="text" text="@Game.LocalClient.Name"></label>
+	    <label class="text" text="@DateTime.Now"></label>
+	    <div style="border-bottom: 1px solid white; height: 2px; margin: 12px 0; flex-grow: 1; align-self: stretch;"></div>
+        <label class="text" text="@Weapon"></label>
+    </div>
 </root>
 
 @code
 {
-	protected override int BuildHash()
-	{
-		return HashCode.Combine(DateTime.Now);
-	}
+    public string Weapon => Game.LocalPawn.Components.Get<CarriableHandler>().Active.Name;
+
+    protected override int BuildHash()
+    {
+        return HashCode.Combine(DateTime.Now);
+    }
 }

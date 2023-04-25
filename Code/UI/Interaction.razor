@@ -1,5 +1,6 @@
 ﻿@using Sandbox;
 @using Sandbox.UI;
+@using Woosh.Data
 
 @namespace Woosh.Espionage
 
@@ -7,21 +8,40 @@
 @attribute [StyleSheet("Code/UI/interaction.scss")]
 
 <root>
-    <div class="container">
-        <label class="bind" text="@Bind"></label>
-        <label class="action" text="@Action"></label>
+    @if (!string.IsNullOrEmpty(Icon) && !string.IsNullOrEmpty(Action) && !string.IsNullOrEmpty(Display))
+    {
+        <div class="icon">
+            <label text="@Icon"></label>
+        </div>
+    }
+    <div style="flex-direction: column; align-items: flex-start;">
+        @if (!string.IsNullOrEmpty(Display))
+        {
+            <label class="hovering" text="@Display"></label>
+        }
+        
+        @if (!string.IsNullOrEmpty(Action))
+        {
+            <div style="flex-direction: column; align-items: flex-start">
+                <!-- Create another thing for each Interaction Opportunity -->
+                <div class="container">
+                    <label class="bind" text="@Bind"></label>
+                    <label class="action" text="@Action"></label>
+                </div>
+            </div>
+        }
     </div>
-
-    <label class="hovering" text="@Display"></label>
 </root>
 
 @code
 {
+    private string Icon { get; set; }
     private string Display { get; set; }
     private string Bind { get; set; }
     private string Action { get; set; }
 
-    private Vector3 Last { get; set; }
+    private Vector3 m_Last;
+    private Entity m_Target;
 
     public override void Tick()
     {
@@ -34,21 +54,41 @@
         if (Game.LocalPawn.Components.TryGet<InteractionHandler>(out var handler) && handler.Hovering.IsValid())
         {
             var model = (ModelEntity)handler.Hovering;
+            Profile? profile = null;
 
-            Display = "Door";
-            Bind = "[Scroll]";
-            Action = "Push & Pull";
+            if (model is IProfiled profiled)
+            {
+                profile = profiled.Profile;
+            }
+            else if (model is IPickup)
+            {
+                profile = new Profile(model.Name) { Brief = "Pickup", Binding = "E" };
+            }
+            else if (model is IUse)
+            {
+                profile = new Profile(model.Name) { Brief = "Use", Binding = "E" };
+            }
 
-            Last = model.WorldSpaceBounds.Center;
+            Icon = profile?.Icon ?? TypeLibrary.GetType(model.GetType()).Icon;
+            Display = profile?.Display;
+            Bind = $"[{profile?.Binding}]";
+            Action = profile?.Brief;
+
+            var handle = model.GetBoneTransform("handle");
+            m_Last = handle == Transform.Zero ? model.WorldSpaceBounds.Center : handle.Position;
+
+
+            m_Target = model;
+
             Style.Opacity = 1;
         }
 
-        this.ToWorld(Last);
+        this.ToWorld(m_Last);
     }
 
     protected override int BuildHash()
     {
-        return Display?.GetHashCode() ?? 0 ^ Action?.GetHashCode() ?? 0;
+        return m_Target?.GetHashCode() ?? 0;
     }
 
 }

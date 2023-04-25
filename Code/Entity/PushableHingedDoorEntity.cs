@@ -1,6 +1,7 @@
 ﻿using System;
 using Editor;
 using Sandbox;
+using Woosh.Data;
 
 // Nice Syntax
 using ModelDoorSounds = Sandbox.DoorEntity.ModelDoorSounds;
@@ -8,7 +9,7 @@ using ModelDoorSounds = Sandbox.DoorEntity.ModelDoorSounds;
 namespace Woosh.Espionage;
 
 [Library( "esp_hinged_door" ), HammerEntity, Category( "Gameplay" ), Icon( "door_front" ), Model]
-public sealed partial class PushableHingedDoorEntity : AnimatedEntity, IPushable
+public sealed partial class PushableHingedDoorEntity : AnimatedEntity, IPushable, IProfiled
 {
 	public enum DoorStates : byte
 	{
@@ -17,6 +18,8 @@ public sealed partial class PushableHingedDoorEntity : AnimatedEntity, IPushable
 		Bounced,
 		Locked
 	}
+
+	public Profile? Profile { get; }
 
 	// Utility
 
@@ -35,9 +38,14 @@ public sealed partial class PushableHingedDoorEntity : AnimatedEntity, IPushable
 	[Property( Title = "Weight (kg)" )] public int Weight { get; set; } = 15;
 	[Property] public float Stiffness { get; set; } = 3.5f;
 
+	// Profile
+
+	[Property] private string Display { get; set; } = "Door";
+	
 	public PushableHingedDoorEntity()
 	{
 		Transmit = TransmitType.Pvs;
+		Profile = new Profile( Display ) { Brief = "Push & Pull", Binding = "Scroll" };
 	}
 
 	public override void Spawn()
@@ -247,5 +255,4 @@ public sealed partial class PushableHingedDoorEntity : AnimatedEntity, IPushable
 	}
 
 	public void Push( Entity entity, float force ) => Push( entity.Position, entity, force );
-
 }
