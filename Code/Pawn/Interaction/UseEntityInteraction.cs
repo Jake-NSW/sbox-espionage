@@ -2,7 +2,7 @@
 
 namespace Woosh.Espionage;
 
-public sealed class UseInteraction : EntityComponent, IPlayerInteraction
+public sealed class UseEntityInteraction : EntityComponent, IEntityInteraction, ISingletonComponent
 {
 	public void Simulate( TraceResult hovering, IClient client )
 	{

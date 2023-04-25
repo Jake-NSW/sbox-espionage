@@ -5,6 +5,14 @@ using Sandbox.UI;
 
 namespace Woosh.Espionage;
 
+public static class ComponentUtility
+{
+	public static bool Has<T>( this IComponentSystem components ) where T : IComponent
+	{
+		return components.Get<T>() != null;
+	}
+}
+
 public static class PanelUtility
 {
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]

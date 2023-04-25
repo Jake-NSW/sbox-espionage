@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Sandbox;
+﻿using Sandbox;
 
 namespace Woosh.Espionage;
 
@@ -11,7 +10,7 @@ public sealed class InteractionHandler : EntityComponent, ISingletonComponent
 	{
 		var result = Scan();
 		Hovering = result.Entity;
-		foreach ( var interaction in Entity.Components.GetAll<EntityComponent>().OfType<IPlayerInteraction>() )
+		foreach ( var interaction in Entity.Components.GetAll<IEntityInteraction>() )
 		{
 			interaction.Simulate( result, client );
 		}

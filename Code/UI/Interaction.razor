@@ -33,7 +33,7 @@
 
         if (Game.LocalPawn.Components.TryGet<InteractionHandler>(out var handler) && handler.Hovering.IsValid())
         {
-            var model = ((ModelEntity)handler.Hovering);
+            var model = (ModelEntity)handler.Hovering;
 
             Display = "Door";
             Bind = "[Scroll]";

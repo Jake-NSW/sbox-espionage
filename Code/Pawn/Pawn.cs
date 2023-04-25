@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using System.Linq;
+using Sandbox;
 
 namespace Woosh.Espionage;
 
@@ -14,40 +15,6 @@ public partial class Pawn : AnimatedEntity
 		EnableDrawing = true;
 		EnableHideInFirstPerson = true;
 		EnableShadowInFirstPerson = true;
-	}
-
-	public override void OnClientActive( IClient client )
-	{
-		base.OnClientActive( client );
-		Log.Info(client.Name);
-	}
-	
-	public override void ClientSpawn()
-	{
-		base.ClientSpawn();
-
-		/*
-		var viewModel = new CompositedViewModel( null ) { Owner = this, Model = Model.Load( "weapons/mk23/v_espionage_mk23.vmdl" ) };
-
-		viewModel.Add( new ViewModelOffsetEffect( Vector3.Zero, default ) );
-		viewModel.Add( new ViewModelSwayEffect() );
-		viewModel.Add( new ViewModelMoveOffsetEffect( Vector3.One, 10 ) );
-		viewModel.Add( new ViewModelStrafeOffsetEffect() { Damping = 6, RollMultiplier = 1, AxisMultiplier = 8 } );
-		viewModel.Add( new ViewModelDeadzoneSwayEffect( new Vector2( 8, 8 ) ) { AimingOnly = true, AutoCenter = false, Damping = 8 } );
-		viewModel.Add( new ViewModelPitchOffsetEffect() );
-
-		viewModel.SetAnimParameter( "bDeployed", true );
-		viewModel.SetBodyGroup( "Muzzle", 1 );
-		viewModel.SetBodyGroup( "Module", 1 );
-		*/
-
-		var viewModel2 = new CompositedViewModel( null ) { Owner = this, Model = Model.Load( "weapons/smg2/v_espionage_smg2.vmdl" ) };
-		viewModel2.SetAnimParameter( "bDeployed", true );
-		// viewModel2.SetBodyGroup( "Muzzle", 1 );
-		viewModel2.Add( new ViewModelSwayEffect() { } );
-		viewModel2.Add( new ViewModelPitchOffsetEffect(3, 2)  );
-		viewModel2.Add( new ViewModelOffsetEffect(new Vector3(-2, 0, 0), Vector3.Zero) { } );
-		viewModel2.Add( new ViewModelDeadzoneSwayEffect(new Vector2(8)) { } );
 	}
 
 	// An example BuildInput method within a player's Pawn class.
@@ -84,6 +51,14 @@ public partial class Pawn : AnimatedEntity
 
 		// apply some speed to it
 		Velocity *= Input.Down( InputButton.Run ) ? 1000 : 200;
+
+		if ( Game.IsServer && Input.Down( InputButton.Drop ) )
+		{
+			var inv = Components.Get<IEntityInventory>();
+			inv.Drop( inv.All.FirstOrDefault() );
+		}
+		
+		Components.GetOrCreate<CarriableHandler>().Simulate(cl);
 
 		// apply it to our position using MoveHelper, which handles collision
 		// detection and sliding across surfaces for us

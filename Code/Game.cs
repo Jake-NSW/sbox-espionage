@@ -19,14 +19,49 @@ public partial class MyGame : GameManager
 
 	[Net] internal GamemodeController n_Gamemode { get; set; }
 
+	public override void Simulate( IClient cl )
+	{
+		base.Simulate( cl );
+
+		if ( Input.Pressed( InputButton.Slot1 ) )
+		{
+			// Deploy Pistol
+			var handler = cl.Pawn.Components.Get<CarriableHandler>();
+			var inv = cl.Pawn.Components.Get<IEntityInventory>();
+
+			handler.Deploy(inv.Get<Mark23Weapon>(), 1, 1);
+		}
+		
+		if ( Input.Pressed( InputButton.Slot2 ) )
+		{
+			// Deploy Pistol
+			var handler = cl.Pawn.Components.Get<CarriableHandler>();
+			var inv = cl.Pawn.Components.Get<IEntityInventory>();
+
+			handler.Deploy(inv.Get<Smg2Weapon>(), 1, 1);
+		}
+	}
+
 	public override void ClientJoined( IClient client )
 	{
 		base.ClientJoined( client );
 
 		// Create a pawn for this client to play with
 		var pawn = new Pawn();
-		pawn.Components.Add( new PushInteraction() );
-		pawn.Components.Add( new UseInteraction() );
+		pawn.Components.Create<PushEntityInteraction>();
+		pawn.Components.Create<UseEntityInteraction>();
+		pawn.Components.Create<PickupEntityInteraction>();
+		var inventory = pawn.Components.Create<InventoryContainer>();
+
+		var gun1 = new Mark23Weapon();
+		inventory.Add( gun1 );
+
+		var gun2 = new Smg2Weapon();
+		inventory.Add( gun2 );
+		
+		var handler = pawn.Components.Create<CarriableHandler>();
+		handler.Deploy(gun1, 1, 1);
+
 		client.Pawn = pawn;
 
 		// Get all of the spawnpoints
