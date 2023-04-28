@@ -12,6 +12,13 @@ public sealed class Smg2Weapon : AnimatedEntity, ICarriable
 		Events = new StructEventDispatcher();
 	}
 
+	public override void Spawn()
+	{
+		base.Spawn();
+
+		Model = Model.Load( "weapons/smg2/espionage_smg2.vmdl" );
+	}
+
 	void ICarriable.Deploying()
 	{
 		if ( IsLocalPawn && m_View == null )
@@ -31,8 +38,8 @@ public sealed class Smg2Weapon : AnimatedEntity, ICarriable
 		if ( m_View != null )
 		{
 			m_View?.SetAnimParameter( "bDeployed", true );
-		if ( m_View != null )
-			m_View.EnableDrawing = true;
+			if ( m_View != null )
+				m_View.EnableDrawing = true;
 		}
 	}
 
@@ -40,11 +47,11 @@ public sealed class Smg2Weapon : AnimatedEntity, ICarriable
 	{
 		base.Simulate( cl );
 
-		if ( Input.Pressed( InputButton.PrimaryAttack ) )
+		if ( Input.Pressed( "shoot" ) )
 		{
 			// Shoot
 			Events.Run( new WeaponFireEvent( new Vector3( -7, 0.2f, 0.2f ) * 15, new Vector3( -8, 0.02f, 0.02f ) * 20 ) );
-			m_View?.SetAnimParameter("bFire", true);
+			m_View?.SetAnimParameter( "bFire", true );
 		}
 	}
 

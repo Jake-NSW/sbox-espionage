@@ -3,7 +3,6 @@ using Editor;
 using Sandbox;
 using Woosh.Data;
 
-// Nice Syntax
 using ModelDoorSounds = Sandbox.DoorEntity.ModelDoorSounds;
 
 namespace Woosh.Espionage;

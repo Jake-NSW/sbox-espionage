@@ -8,16 +8,16 @@ namespace Woosh.Espionage;
 public sealed partial class PinKeypadEntity : AnimatedEntity, IUse, IProfiled
 {
 	public Profile? Profile { get; } = new Profile( "Keypad" ) { Icon = "pin", Brief = "Use", Binding = "E" };
-	
+
 	public override void Spawn()
 	{
 		base.Spawn();
-		
-		SetupPhysicsFromModel( PhysicsMotionType.Static );
+		SetupPhysicsFromModel( PhysicsMotionType.Keyframed );
 	}
 
 	public bool OnUse( Entity user )
 	{
+		Log.Info("Using");
 		return false;
 	}
 

@@ -23,22 +23,22 @@ public partial class MyGame : GameManager
 	{
 		base.Simulate( cl );
 
-		if ( Input.Pressed( InputButton.Slot1 ) )
+		if ( Input.Pressed( "slot3" ) )
 		{
 			// Deploy Pistol
 			var handler = cl.Pawn.Components.Get<CarriableHandler>();
 			var inv = cl.Pawn.Components.Get<IEntityInventory>();
 
-			handler.Deploy(inv.Get<Mark23Weapon>(), 1, 0.6f);
+			handler.Deploy( inv.Get<Mark23Weapon>(), 1, 0.6f );
 		}
-		
-		if ( Input.Pressed( InputButton.Slot2 ) )
+
+		if ( Input.Pressed( "slot1" ) )
 		{
 			// Deploy Pistol
 			var handler = cl.Pawn.Components.Get<CarriableHandler>();
 			var inv = cl.Pawn.Components.Get<IEntityInventory>();
 
-			handler.Deploy(inv.Get<Smg2Weapon>(), 1.5f, 1.3f);
+			handler.Deploy( inv.Get<Smg2Weapon>(), 1.5f, 1.3f );
 		}
 	}
 
@@ -58,9 +58,9 @@ public partial class MyGame : GameManager
 
 		var gun2 = new Smg2Weapon();
 		inventory.Add( gun2 );
-		
+
 		var handler = pawn.Components.Create<CarriableHandler>();
-		handler.Deploy(gun1, 1, 1);
+		handler.Deploy( gun1, 1, 1 );
 
 		client.Pawn = pawn;
 

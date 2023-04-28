@@ -52,11 +52,11 @@ public sealed class Mark23Weapon : AnimatedEntity, ICarriable, IPickup
 	{
 		base.Simulate( cl );
 
-		if ( Input.Pressed( InputButton.PrimaryAttack ) )
+		if ( Input.Pressed( "shoot" ) )
 		{
 			// Shoot
 			Events.Run( new WeaponFireEvent( new Vector3( -7, 0.2f, 0.2f ) * 15, new Vector3( -8, 0.02f, 0.02f ) * 20 ) );
-			m_View?.SetAnimParameter("bFire", true);
+			m_View?.SetAnimParameter( "bFire", true );
 		}
 	}
 

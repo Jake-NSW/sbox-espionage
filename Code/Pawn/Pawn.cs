@@ -5,9 +5,6 @@ namespace Woosh.Espionage;
 
 public partial class Pawn : AnimatedEntity
 {
-	/// <summary>
-	/// Called when the entity is first created 
-	/// </summary>
 	public override void Spawn()
 	{
 		Model = Model.Load( "models/sbox_props/watermelon/watermelon.vmdl" );
@@ -57,8 +54,8 @@ public partial class Pawn : AnimatedEntity
 			var inv = Components.Get<IEntityInventory>();
 			inv.Drop( inv.All.FirstOrDefault() );
 		}
-		
-		Components.GetOrCreate<CarriableHandler>().Simulate(cl);
+
+		Components.GetOrCreate<CarriableHandler>().Simulate( cl );
 
 		// apply it to our position using MoveHelper, which handles collision
 		// detection and sliding across surfaces for us
@@ -70,14 +67,14 @@ public partial class Pawn : AnimatedEntity
 		}
 
 		// If we're running serverside and Attack1 was just pressed, spawn a ragdoll
-		if ( Game.IsServer && Input.Pressed( InputButton.PrimaryAttack ) )
+		if ( Game.IsServer && Input.Pressed( "shoot" ) )
 		{
 			var ragdoll = new Prop();
 			ragdoll.Model = Model.Load( "models/sbox_props/watermelon/watermelon.vmdl" );
 			ragdoll.Position = Position + Rotation.Forward * 40;
 			ragdoll.Rotation = Rotation.LookAt( Vector3.Random.Normal );
+			ragdoll.Scale = 0.4f;
 			ragdoll.PhysicsGroup.Velocity = Rotation.Forward * 1000;
-			ragdoll.SetupPhysicsFromModel( PhysicsMotionType.Dynamic, false );
 		}
 	}
 
