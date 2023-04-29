@@ -12,7 +12,7 @@ public sealed class Mark23Weapon : Weapon
 	}
 }
 
-public abstract class Weapon : AnimatedEntity, ICarriable, IPickup
+public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 {
 	public AnimatedEntity Effects => IsLocalPawn ? m_Viewmodel : this;
 
@@ -33,13 +33,19 @@ public abstract class Weapon : AnimatedEntity, ICarriable, IPickup
 		{
 			// shoot!!
 			Events.Run( new WeaponFireEvent( new Vector3( -7, 0.2f, 0.2f ) * 15, new Vector3( -8, 0.02f, 0.02f ) * 20 ) );
-			Effects?.SetAnimParameter("bFire", true);
+			Effects?.SetAnimParameter( "bFire", true );
 
-			if ( Game.IsClient )
+			if ( Game.IsServer && Prediction.FirstTime )
 			{
-				Particles.Create( "particles/weapons/muzzle_flash/muzzle_sup/muzzleflash_base.vpcf", Effects, "muzzle" );
+				PlayClientEffects();
 			}
 		}
+	}
+
+	[ClientRpc]
+	public void PlayClientEffects()
+	{
+		Particles.Create( "particles/weapons/muzzle_flash/muzzle_sup/muzzleflash_base.vpcf", Effects, "muzzle" );
 	}
 
 	void IPickup.OnPickup( Entity carrier )
@@ -66,8 +72,8 @@ public abstract class Weapon : AnimatedEntity, ICarriable, IPickup
 			view.Add( new ViewModelDeadzoneSwayEffect( new Vector2( 8, 8 ) ) { AimingOnly = true, AutoCenter = false, Damping = 8 } );
 			view.Add( new ViewModelPitchOffsetEffect() );
 			view.Add( new ViewModelRecoilEffect() );
-			
-			view.SetBodyGroup("muzzle", 1);
+
+			view.SetBodyGroup( "muzzle", 1 );
 
 			m_Viewmodel = view;
 		}

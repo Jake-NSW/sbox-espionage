@@ -9,33 +9,31 @@ public sealed class CompositedCameraBuilder
 	public CompositedCameraBuilder( SceneCamera camera )
 	{
 		Game.AssertClient();
-
 		m_Camera = camera;
-		Event.Register( this );
 	}
 
-	~CompositedCameraBuilder()
-	{
-		Event.Unregister( this );
-	}
-
+	// Setup
+	
 	public ICameraController Override { get; set; }
 
 	public void Update( ICameraController controller = null )
 	{
-		var setup = new CameraSetup( m_Camera );
+		var setup = new CameraSetup( m_Camera ) { FieldOfView = Screen.CreateVerticalFieldOfView( Game.Preferences.FieldOfView ) };
 
 		Build( ref setup, controller ?? Override );
 
+		// Mutate
+
 		m_Camera.Position = setup.Position;
 		m_Camera.Rotation = setup.Rotation;
-
 		m_Camera.Size = setup.Viewport;
 		m_Camera.FirstPersonViewer = setup.Viewer;
-
 		m_Camera.FieldOfView = setup.FieldOfView;
 	}
 
+	// Active
+
+	public ICameraController Active => m_Last;
 	private ICameraController m_Last;
 
 	private void Build( ref CameraSetup setup, ICameraController controller )
@@ -59,8 +57,8 @@ public sealed class CompositedCameraBuilder
 		if ( Game.LocalPawn is IActive<ICameraController> pawn )
 			return pawn.Active;
 
-		if ( Game.LocalPawn.Components.UnrestrictedGet<IActive<ICameraController>>() is { } component )
-			return component.Active;
+		if ( Game.LocalPawn.Components.Get<EntityCameraController>() is { } component )
+			return component;
 
 		return null;
 	}

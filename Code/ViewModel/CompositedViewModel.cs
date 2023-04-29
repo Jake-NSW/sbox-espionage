@@ -22,7 +22,7 @@ public sealed class CompositedViewModel : AnimatedEntity
 		{
 			viewModel.Update( new Transform( Camera.Position, Camera.Rotation ) );
 		}
-		
+
 		Camera.Main.Attributes.Set( "viewModelFov", Camera.FieldOfView );
 	}
 

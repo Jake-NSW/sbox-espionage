@@ -18,6 +18,7 @@ public ref struct CameraSetup
 	public Rotation Rotation;
 
 	public Vector2 Viewport;
+
 	public float FieldOfView;
 
 	public Entity Viewer;
