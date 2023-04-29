@@ -10,6 +10,14 @@ public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 	{
 		Events = new StructEventDispatcher();
 	}
+	
+	[ClientInput] public Vector3 Muzzle { get; set; } 
+
+	[GameEvent.Client.BuildInput]
+	public void BuildInput()
+	{
+		Muzzle = Effects?.GetAttachment( "muzzle" )?.Position ?? Vector3.Zero;
+	}
 
 	private float m_LastAim;
 
@@ -34,14 +42,14 @@ public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 	public void aim()
 	{
 		var aiming = Input.Down( "aim" );
-		m_LastAim = m_LastAim.LerpTo( aiming ? 1 : 0, 5 * Time.Delta );
+		m_LastAim = m_LastAim.LerpTo( aiming ? 1 : 0, 8 * Time.Delta );
 		Effects?.SetAnimParameter("fAimBlend", m_LastAim);
 	}
 
 	[ClientRpc]
 	public void PlayClientEffects()
 	{
-		Particles.Create( "particles/weapons/muzzle_flash/muzzle_sup/muzzleflash_base.vpcf", Effects, "muzzle" );
+		Particles.Create( "particles/weapons/muzzle_flash/muzzleflash_base.vpcf", Effects, "muzzle" );
 	}
 
 	// Pickup

@@ -38,7 +38,7 @@ public sealed partial class ConfigurableWeapon : Weapon, IHave<DisplayInfo>
 	{
 		var view = new CompositedViewModel( Events ) { Owner = Owner, Model = Model.Load( Asset.ViewModel ) };
 		view.Add( new ViewModelOffsetEffect( Vector3.Zero, default ) );
-		view.Add( new ViewModelSwayEffect( 1, 1.6f )  );
+		view.Add( new ViewModelSwayEffect( 1, 1.3f )  );
 		view.Add( new ViewModelMoveOffsetEffect( Vector3.One, 10 ) );
 		view.Add( new ViewModelStrafeOffsetEffect() { Damping = 6, RollMultiplier = 1, AxisMultiplier = 10 } );
 		view.Add( new ViewModelDeadzoneSwayEffect( new Vector2( 10, 10 ) ) { AimingOnly = true, AutoCenter = false, Damping = 8 } );

@@ -13,6 +13,7 @@ public partial class Pawn : AnimatedEntity
 		EnableShadowInFirstPerson = true;
 
 		Components.Create<FirstPersonEntityCamera>();
+		Components.Create<FlyPawnController>();
 	}
 
 	// Input
@@ -24,7 +25,7 @@ public partial class Pawn : AnimatedEntity
 	{
 		InputDirection = Input.AnalogMove;
 		ViewAngles = (ViewAngles + Input.AnalogLook).Normal;
-		
+
 		Components.Get<FirstPersonEntityCamera>()?.Feed( new InputContext( ViewAngles ) );
 	}
 
@@ -34,28 +35,11 @@ public partial class Pawn : AnimatedEntity
 	{
 		base.Simulate( cl );
 
-		Components.GetOrCreate<InteractionHandler>().Simulate( cl );
-		Components.GetOrCreate<CarriableHandler>().Simulate( cl );
-
 		Rotation = ViewAngles.ToRotation();
 
-		// build movement from the input values
-		var movement = InputDirection.Normal;
-
-		// rotate it to the direction we're facing
-		Velocity = Rotation * movement;
-
-		// apply some speed to it
-		Velocity *= Input.Down( "run" ) ? 1000 : 200;
-
-		// apply it to our position using MoveHelper, which handles collision
-		// detection and sliding across surfaces for us
-		MoveHelper helper = new MoveHelper( Position, Velocity );
-		helper.Trace = helper.Trace.Size( 16 );
-		if ( helper.TryMove( Time.Delta ) > 0 )
-		{
-			Position = helper.Position;
-		}
+		Components.Get<InteractionHandler>()?.Simulate( cl );
+		Components.Get<CarriableHandler>()?.Simulate( cl );
+		Components.Get<PawnController>()?.Simulate( cl );
 
 		// If we're running serverside and Attack1 was just pressed, spawn a ragdoll
 		if ( Game.IsServer && Input.Pressed( "shoot" ) )

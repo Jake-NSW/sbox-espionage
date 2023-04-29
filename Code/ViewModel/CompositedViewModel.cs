@@ -58,9 +58,12 @@ public sealed class CompositedViewModel : AnimatedEntity
 	{
 		var setup = new ViewModelSetup( Owner, origin, GetAnimParameterFloat( "fAimBlend" ) );
 
-		foreach ( var effect in m_Effects )
+		if ( !Mouse.Visible )
 		{
-			effect.Update( ref setup );
+			foreach ( var effect in m_Effects )
+			{
+				effect.Update( ref setup );
+			}
 		}
 
 		// Update Self
