@@ -28,6 +28,7 @@ public partial class InventoryContainer : EntityComponent, IEntityInventory
 		// Apply things to Entity
 		ent.SetParent( Entity, "weapon_attach", Transform.Zero );
 		ent.Owner = Entity;
+		ent.EnableDrawing = false;
 
 		// Callback for Entity
 		(ent as IPickup)?.OnPickup( Entity );

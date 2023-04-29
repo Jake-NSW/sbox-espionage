@@ -7,6 +7,11 @@ namespace Woosh.Espionage;
 
 public static class ComponentUtility
 {
+	public static T UnrestrictedGet<T>( this IComponentSystem components ) where T : class
+	{
+		return (T)components.GetAll<IComponent>().FirstOrDefault( e => e is T );
+	}
+
 	public static bool Has<T>( this IComponentSystem components ) where T : IComponent
 	{
 		return components.Get<T>() != null;
@@ -20,7 +25,7 @@ public static class PanelUtility
 	{
 		if ( !entity.IsValid() )
 			return;
-		
+
 		Rect rect = default;
 		var bounds = entity.CollisionBounds;
 		bounds = bounds.Translate( entity.Position );

@@ -45,7 +45,7 @@
 
 @code
 {
-    public string Weapon => Game.LocalPawn.Components.Get<CarriableHandler>().Active.Name;
+    public string Weapon => Game.LocalPawn.Components.Get<CarriableHandler>()?.Active?.Name;
 
     protected override int BuildHash()
     {

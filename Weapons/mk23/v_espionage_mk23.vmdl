@@ -1186,63 +1186,11 @@
 					{
 						_class = "Attachment"
 						name = "muzzle"
-						parent_bone = "Weapon_Body"
-						relative_origin = [ 0.006095, 3.358355, 9.996771 ]
-						relative_angles = [ -90.0, -90.0, 0.0 ]
+						parent_bone = "Weapon_Barrel_end"
+						relative_origin = [ -0.101638, 128.641724, -1.583671 ]
+						relative_angles = [ -0.0, 90.000099, -180.0 ]
 						weight = 1.0
 						ignore_rotation = false
-					},
-					{
-						_class = "Attachment"
-						name = "muzzle_suppressed"
-						parent_bone = "Weapon_Body"
-						relative_origin = [ 0.002927, 3.372435, 19.635542 ]
-						relative_angles = [ -90.0, -90.0, 0.0 ]
-						weight = 1.0
-						ignore_rotation = false
-					},
-					{
-						_class = "Attachment"
-						name = "camera_anim_target"
-						parent_bone = "Camera"
-						relative_origin = [ 0.0, 0.0, 0.0 ]
-						relative_angles = [ 0.0, 0.0, 0.0 ]
-						weight = 1.0
-						ignore_rotation = false
-					},
-					{
-						_class = "Attachment"
-						name = "casing_eject"
-						parent_bone = "Weapon_Body"
-						relative_origin = [ -0.614541, 3.708422, 3.41593 ]
-						relative_angles = [ -0.000021, 135.000015, -179.999985 ]
-						weight = 1.0
-						ignore_rotation = false
-					},
-					{
-						_class = "Folder"
-						name = "Attachment_Points"
-						children = 
-						[
-							{
-								_class = "Attachment"
-								name = "ui_point_module"
-								parent_bone = "Weapon_Body"
-								relative_origin = [ 8.0, 24.0, 40.0009 ]
-								relative_angles = [ 0.0, 0.0, 0.0 ]
-								weight = 1.0
-								ignore_rotation = false
-							},
-							{
-								_class = "Attachment"
-								name = "ui_point_muzzle"
-								parent_bone = "Weapon_Body"
-								relative_origin = [ 8.0, 42.0, 90.0 ]
-								relative_angles = [ 0.0, 0.0, 0.0 ]
-								weight = 1.0
-								ignore_rotation = false
-							},
-						]
 					},
 				]
 			},

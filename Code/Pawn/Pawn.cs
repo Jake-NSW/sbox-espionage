@@ -38,6 +38,12 @@ public partial class Pawn : AnimatedEntity
 
 		Components.GetOrCreate<InteractionHandler>().Simulate( cl );
 
+		if ( Input.Pressed( "slot3" ) )
+		{
+			var inv = Components.Get<InventoryContainer>();
+			Components.GetOrCreate<CarriableHandler>().Deploy( inv.Get<Mark23Weapon>(), 1, 0.6f );
+		}
+
 		Rotation = ViewAngles.ToRotation();
 
 		// build movement from the input values
