@@ -3,6 +3,12 @@
 The stealth oriented tactical shooter experience.
 
 ## Cloning
+You should know the drill...
+
+## Code Conventions
+Most of our code base follows the normal sbox .editorconfig, except for a few things.
+
+### Private Members
 
 ## Asset Conventions
 

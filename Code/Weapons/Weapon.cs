@@ -2,28 +2,16 @@
 
 namespace Woosh.Espionage;
 
-public sealed class Mark23Weapon : Weapon
-{
-	public override void Spawn()
-	{
-		base.Spawn();
-		Model = Model.Load( "weapons/mk23/espionage_mk23.vmdl" );
-		EnableAllCollisions = true;
-	}
-}
-
 public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 {
-	public AnimatedEntity Effects => IsLocalPawn ? m_Viewmodel : this;
-
 	public StructEventDispatcher Events { get; }
-
-	private AnimatedEntity m_Viewmodel;
 
 	public Weapon()
 	{
 		Events = new StructEventDispatcher();
 	}
+
+	private float m_LastAim;
 
 	public override void Simulate( IClient cl )
 	{
@@ -42,11 +30,21 @@ public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 		}
 	}
 
+	[Event.Client.Frame]
+	public void aim()
+	{
+		var aiming = Input.Down( "aim" );
+		m_LastAim = m_LastAim.LerpTo( aiming ? 1 : 0, 5 * Time.Delta );
+		Effects?.SetAnimParameter("fAimBlend", m_LastAim);
+	}
+
 	[ClientRpc]
 	public void PlayClientEffects()
 	{
 		Particles.Create( "particles/weapons/muzzle_flash/muzzle_sup/muzzleflash_base.vpcf", Effects, "muzzle" );
 	}
+
+	// Pickup
 
 	void IPickup.OnPickup( Entity carrier )
 	{
@@ -60,22 +58,29 @@ public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 		EnableHideInFirstPerson = false;
 	}
 
+	// Carriable
+
+	public AnimatedEntity Effects => IsLocalPawn ? m_Viewmodel : this;
+	private AnimatedEntity m_Viewmodel;
+
+	protected virtual AnimatedEntity OnRequestViewmodel()
+	{
+		var view = new CompositedViewModel( Events ) { Owner = Owner, Model = Model.Load( "weapons/mk23/v_espionage_mk23.vmdl" ) };
+		view.Add( new ViewModelOffsetEffect( Vector3.Zero, default ) );
+		view.Add( new ViewModelSwayEffect() );
+		view.Add( new ViewModelMoveOffsetEffect( Vector3.One, 10 ) );
+		view.Add( new ViewModelStrafeOffsetEffect() { Damping = 6, RollMultiplier = 1, AxisMultiplier = 8 } );
+		view.Add( new ViewModelDeadzoneSwayEffect( new Vector2( 8, 8 ) ) { AimingOnly = true, AutoCenter = false, Damping = 8 } );
+		view.Add( new ViewModelPitchOffsetEffect() );
+		view.Add( new ViewModelRecoilEffect() );
+		return view;
+	}
+
 	void ICarriable.Deploying()
 	{
 		if ( IsLocalPawn && m_Viewmodel == null )
 		{
-			var view = new CompositedViewModel( Events ) { Owner = Owner, Model = Model.Load( "weapons/mk23/v_espionage_mk23.vmdl" ) };
-			view.Add( new ViewModelOffsetEffect( Vector3.Zero, default ) );
-			view.Add( new ViewModelSwayEffect() );
-			view.Add( new ViewModelMoveOffsetEffect( Vector3.One, 10 ) );
-			view.Add( new ViewModelStrafeOffsetEffect() { Damping = 6, RollMultiplier = 1, AxisMultiplier = 8 } );
-			view.Add( new ViewModelDeadzoneSwayEffect( new Vector2( 8, 8 ) ) { AimingOnly = true, AutoCenter = false, Damping = 8 } );
-			view.Add( new ViewModelPitchOffsetEffect() );
-			view.Add( new ViewModelRecoilEffect() );
-
-			view.SetBodyGroup( "muzzle", 1 );
-
-			m_Viewmodel = view;
+			m_Viewmodel = OnRequestViewmodel();
 		}
 
 		// Create Viewmodel
@@ -92,5 +97,6 @@ public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 	void ICarriable.OnHolstered()
 	{
 		Effects.EnableDrawing = false;
+		m_Viewmodel?.Delete();
 	}
 }

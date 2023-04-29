@@ -56,7 +56,7 @@ public sealed class CompositedViewModel : AnimatedEntity
 
 	private void Update( Transform origin )
 	{
-		var setup = new ViewModelSetup( Owner, origin, 0 );
+		var setup = new ViewModelSetup( Owner, origin, GetAnimParameterFloat( "fAimBlend" ) );
 
 		foreach ( var effect in m_Effects )
 		{

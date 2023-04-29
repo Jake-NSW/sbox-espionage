@@ -1,0 +1,5 @@
+{
+  "Display": "SMG2",
+  "WorldModel": "weapons/smg2/espionage_smg2.vmdl",
+  "ViewModel": "weapons/smg2/v_espionage_smg2.vmdl"
+}

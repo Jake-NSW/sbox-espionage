@@ -23,19 +23,27 @@ public partial class Project : GameManager
 	public override void FrameSimulate( IClient cl )
 	{
 		base.FrameSimulate( cl );
-		
+
 		Camera?.Update();
+	}
+
+	public override void Simulate( IClient cl )
+	{
+		base.Simulate( cl );
 	}
 
 	public override void ClientJoined( IClient client )
 	{
 		base.ClientJoined( client );
-		
+
 		var spawn = All.OfType<SpawnPoint>().MinBy( _ => Guid.NewGuid() ).Transform;
 		spawn.Position += Vector3.Up * 72;
 
-		var pistol = new Mark23Weapon();
+		var pistol = new ConfigurableWeapon { Asset = ResourceLibrary.Get<WeaponDataAsset>( "weapons/mk23/mark23.weapon" ) };
+		// var smg = new ConfigurableWeapon { Asset = ResourceLibrary.Get<WeaponDataAsset>( "weapons/smg2/smg2.weapon" ) };
+
 		var pawn = client.Possess<Operator>( spawn );
+		
 		pawn.Inventory.Add( pistol );
 		pawn.Hands.Deploy( pistol );
 	}

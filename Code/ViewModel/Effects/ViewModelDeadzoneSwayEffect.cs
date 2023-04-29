@@ -22,14 +22,14 @@ public sealed class ViewModelDeadzoneSwayEffect : IViewModelEffect
 
 	public bool Update( ref ViewModelSetup setup )
 	{
-		var isAiming = setup.Aim > 0.1;
+		var isAiming = setup.Aim > 0.1f;
 		var rot = setup.Initial.Rotation;
 		DeadzoneAxis( ref setup, m_Deadzone );
 
-		if ( AutoCenter || (AimingOnly && isAiming) )
+		if ( AutoCenter || (AimingOnly && !isAiming) )
 			m_SavedDeadzoneAxis.x = m_SavedDeadzoneAxis.x.LerpTo( 0, 2f * Time.Delta );
 
-		if ( AutoCenter || (AimingOnly && isAiming) )
+		if ( AutoCenter || (AimingOnly && !isAiming) )
 			m_SavedDeadzoneAxis.y = m_SavedDeadzoneAxis.y.LerpTo( 0, 2f * Time.Delta );
 
 		var axis = Rotation.From( m_SavedDeadzoneAxis.x, m_SavedDeadzoneAxis.y, 0 );
@@ -38,7 +38,7 @@ public sealed class ViewModelDeadzoneSwayEffect : IViewModelEffect
 		setup.Rotation *= m_LastDeadzoneRotation;
 
 		var eular = m_LastDeadzoneRotation.Angles();
-		setup.Position += rot.Up * (eular.pitch / 20) + rot.Right * (eular.yaw / 20);
+		// setup.Position += rot.Up * (eular.pitch / 20) + rot.Right * (eular.yaw / 20);
 		// setup.Position += rot.Up *  m_LastDeadzoneRotation.x + rot.Right * m_LastDeadzoneRotation.y;
 
 		return false;
@@ -54,7 +54,7 @@ public sealed class ViewModelDeadzoneSwayEffect : IViewModelEffect
 
 		if ( AimingOnly )
 		{
-			m_SavedDeadzoneAxis *= 1 - setup.Aim;
+			m_SavedDeadzoneAxis *= setup.Aim;
 		}
 	}
 
