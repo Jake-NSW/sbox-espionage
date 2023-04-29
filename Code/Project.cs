@@ -23,6 +23,7 @@ public partial class Project : GameManager
 	public override void FrameSimulate( IClient cl )
 	{
 		base.FrameSimulate( cl );
+		
 		Camera?.Update();
 	}
 
