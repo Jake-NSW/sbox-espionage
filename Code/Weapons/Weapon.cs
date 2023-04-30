@@ -31,7 +31,26 @@ public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 			{
 				PlayClientEffects();
 			}
+
+			if ( Game.IsClient && Prediction.FirstTime )
+			{
+				var muzzle = Effects?.GetAttachment( "muzzle" );
+				CmdShoot( NetworkIdent, muzzle?.Position ?? Position, muzzle?.Rotation ?? Rotation );
+			}
 		}
+	}
+
+	[ConCmd.Server]
+	private static void CmdShoot( int entity, Vector3 pos, Rotation rot )
+	{
+		_ = new Prop
+		{
+			Model = Model.Load( "models/sbox_props/watermelon/watermelon.vmdl" ),
+			Position = pos + rot.Forward * 24,
+			Rotation = Rotation.LookAt( Vector3.Random.Normal ),
+			Scale = 0.4f,
+			PhysicsGroup = { Velocity = rot.Forward * 1000 }
+		};
 	}
 
 	[Event.Client.Frame]

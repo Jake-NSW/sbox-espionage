@@ -40,18 +40,5 @@ public partial class Pawn : AnimatedEntity
 		Components.Get<InteractionHandler>()?.Simulate( cl );
 		Components.Get<CarriableHandler>()?.Simulate( cl );
 		Components.Get<PawnController>()?.Simulate( cl );
-
-		// If we're running serverside and Attack1 was just pressed, spawn a ragdoll
-		if ( Game.IsServer && Input.Pressed( "shoot" ) )
-		{
-			_ = new Prop
-			{
-				Model = Model.Load( "models/sbox_props/watermelon/watermelon.vmdl" ),
-				Position = Position + Rotation.Forward * 40,
-				Rotation = Rotation.LookAt( Vector3.Random.Normal ),
-				Scale = 0.4f,
-				PhysicsGroup = { Velocity = Rotation.Forward * 1000 }
-			};
-		}
 	}
 }
