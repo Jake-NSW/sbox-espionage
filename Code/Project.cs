@@ -30,6 +30,24 @@ public partial class Project : GameManager
 	public override void Simulate( IClient cl )
 	{
 		base.Simulate( cl );
+
+		if ( Input.Pressed( "slot_primary" ) )
+		{
+			var pawn = cl.Pawn as Operator;
+			pawn?.Slots.Deploy(1);
+		}
+		
+		if ( Input.Pressed( "slot_secondary" ) )
+		{
+			var pawn = cl.Pawn as Operator;
+			pawn?.Slots.Deploy(2);
+		}
+		
+		if ( Input.Pressed( "slot_holster" ) )
+		{
+			var pawn = cl.Pawn as Operator;
+			pawn?.Slots.Deploy(3);
+		}
 	}
 
 	public override void ClientJoined( IClient client )
@@ -40,11 +58,15 @@ public partial class Project : GameManager
 		spawn.Position += Vector3.Up * 72;
 
 		var pistol = new ConfigurableWeapon { Asset = ResourceLibrary.Get<WeaponDataAsset>( "weapons/mk23/mark23.weapon" ) };
-		// var smg = new ConfigurableWeapon { Asset = ResourceLibrary.Get<WeaponDataAsset>( "weapons/smg2/smg2.weapon" ) };
+		var smg = new ConfigurableWeapon { Asset = ResourceLibrary.Get<WeaponDataAsset>( "weapons/smg2/smg2.weapon" ) };
 
 		var pawn = client.Possess<Operator>( spawn );
-		
+
 		pawn.Inventory.Add( pistol );
-		pawn.Hands.Deploy( pistol );
+		pawn.Inventory.Add( smg );
+
+		pawn.Slots.Assign( 3, pistol );
+		pawn.Slots.Assign( 1, smg );
+		pawn.Slots.Deploy( 1 );
 	}
 }

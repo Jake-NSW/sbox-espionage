@@ -8,6 +8,7 @@ namespace Woosh.Espionage;
 public interface IReadOnlyEntityInventory
 {
 	event Action<Entity> Added;
+	event Action<Entity> Removed;
 	
 	IEnumerable<Entity> All { get; }
 	bool Contains( Entity entity );

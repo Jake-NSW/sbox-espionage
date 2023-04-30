@@ -1,6 +1,9 @@
-﻿using Sandbox;
+﻿using System;
+using Sandbox;
 
 namespace Woosh.Espionage;
+
+public delegate void EntityComponentCallback( Entity from );
 
 public partial class CarriableHandler : EntityComponent, IActive<Entity>, IActive<ICarriable>, ISingletonComponent
 {
@@ -51,11 +54,12 @@ public partial class CarriableHandler : EntityComponent, IActive<Entity>, IActiv
 	[Net, Local] private TimeSince n_SinceDeployStart { get; set; }
 	[Net, Local] private float n_Deploy { get; set; }
 
-	public void Deploy( Entity entity, float deployTime = 0, float holsterTime = 0 )
+	private EntityComponentCallback m_OnDeployed;
+
+	public void Deploy( Entity entity, float deployTime = 0, float holsterTime = 0, EntityComponentCallback onDeployed = null )
 	{
 		// Only allow the server to deploy...
-		if ( !Game.IsServer )
-			return;
+		Game.AssertServer();
 
 		// Check if we have a valid entity
 		if ( !entity.IsValid() || Active == entity )
@@ -70,6 +74,7 @@ public partial class CarriableHandler : EntityComponent, IActive<Entity>, IActiv
 			return;
 
 		// Save for when are ready to deploy
+		m_OnDeployed = onDeployed;
 		n_ToDeploy = entity;
 		m_StoredDeploy = deployTime;
 		m_StoredHolster = holsterTime;
@@ -114,6 +119,9 @@ public partial class CarriableHandler : EntityComponent, IActive<Entity>, IActiv
 	private void OnDeployed()
 	{
 		n_IsDeploying = false;
+		
+		m_OnDeployed?.Invoke(Entity);
+		m_OnDeployed = null;
 
 		if ( n_ToDeploy != null && Game.IsServer )
 		{
@@ -127,8 +135,10 @@ public partial class CarriableHandler : EntityComponent, IActive<Entity>, IActiv
 	[Net, Local] private bool n_IsHolstering { get; set; }
 	[Net, Local] private TimeSince n_SinceHolsterStart { get; set; }
 	[Net, Local] private float n_Holster { get; set; }
+	
+	private EntityComponentCallback m_OnHolstered;
 
-	public void Holster( bool dropping )
+	public void Holster( bool dropping, EntityComponentCallback onHolstered = null )
 	{
 		Game.AssertServer();
 
@@ -138,6 +148,7 @@ public partial class CarriableHandler : EntityComponent, IActive<Entity>, IActiv
 			return;
 		}
 
+		m_OnHolstered = onHolstered;
 		n_RealActive = null;
 		n_IsDropping = dropping;
 		n_IsHolstering = true;
@@ -151,6 +162,9 @@ public partial class CarriableHandler : EntityComponent, IActive<Entity>, IActiv
 
 		(Active as ICarriable)?.OnHolstered();
 		Active = null;
+
+		m_OnHolstered?.Invoke(Entity);
+		m_OnHolstered = null;
 
 		if ( n_ToDeploy != null )
 		{

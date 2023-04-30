@@ -7,6 +7,8 @@ namespace Woosh.Espionage;
 public partial class InventoryContainer : EntityComponent, IEntityInventory
 {
 	public event Action<Entity> Added;
+	public event Action<Entity> Removed;
+	
 	public IEnumerable<Entity> All => n_Bucket;
 
 	[Net, Local] private IList<Entity> n_Bucket { get; set; }
@@ -52,6 +54,8 @@ public partial class InventoryContainer : EntityComponent, IEntityInventory
 		ent.SetParent( null );
 		ent.EnableDrawing = true;
 
+		Removed?.Invoke(ent);
+		
 		// Execute Callback
 		(ent as IPickup)?.OnDrop();
 

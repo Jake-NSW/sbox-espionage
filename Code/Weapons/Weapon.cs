@@ -2,6 +2,10 @@
 
 namespace Woosh.Espionage;
 
+// Aimming might be a good idea as a component (Maybe?)
+//
+// Implement a basic state machine for weapon? (Maybe?)
+
 public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 {
 	public StructEventDispatcher Events { get; }
@@ -11,14 +15,6 @@ public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 		Events = new StructEventDispatcher();
 	}
 	
-	[ClientInput] public Vector3 Muzzle { get; set; } 
-
-	[GameEvent.Client.BuildInput]
-	public void BuildInput()
-	{
-		Muzzle = Effects?.GetAttachment( "muzzle" )?.Position ?? Vector3.Zero;
-	}
-
 	private float m_LastAim;
 
 	public override void Simulate( IClient cl )
@@ -105,6 +101,8 @@ public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 	void ICarriable.OnHolstered()
 	{
 		Effects.EnableDrawing = false;
+		
 		m_Viewmodel?.Delete();
+		m_Viewmodel = null;
 	}
 }
