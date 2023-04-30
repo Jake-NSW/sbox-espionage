@@ -53,7 +53,7 @@ public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 		_ = new Prop
 		{
 			Model = Model.Load( "models/sbox_props/watermelon/watermelon.vmdl" ),
-			Position = pos + rot.Forward * 24,
+			Position = pos + rot.Forward,
 			Rotation = Rotation.LookAt( Vector3.Random.Normal ),
 			Scale = 0.4f,
 			PhysicsGroup = { Velocity = rot.Forward * 1000 }

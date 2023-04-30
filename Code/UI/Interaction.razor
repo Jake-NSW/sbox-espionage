@@ -1,6 +1,5 @@
 ﻿@using Sandbox;
 @using Sandbox.UI;
-@using Woosh.Data
 
 @namespace Woosh.Espionage
 
@@ -54,25 +53,12 @@
         if (Game.LocalPawn.Components.TryGet<InteractionHandler>(out var handler) && handler.Hovering.IsValid())
         {
             var model = (ModelEntity)handler.Hovering;
-            Profile? profile = null;
+            var info = (model as IHave<DisplayInfo>)?.Item ?? DisplayInfo.ForType(model.GetType());
 
-            if (model is IProfiled profiled)
-            {
-                profile = profiled.Profile;
-            }
-            else if (model is IPickup)
-            {
-                profile = new Profile(model.Name) { Brief = "Pickup", Binding = "E" };
-            }
-            else if (model is IUse)
-            {
-                profile = new Profile(model.Name) { Brief = "Use", Binding = "E" };
-            }
-
-            Icon = profile?.Icon ?? TypeLibrary.GetType(model.GetType()).Icon;
-            Display = profile?.Display;
-            Bind = $"[{profile?.Binding}]";
-            Action = profile?.Brief;
+            Display = info.Name;
+            Bind = $"[Bind]";
+            Action = "Do Something";
+            Icon = info.Icon;
 
             var handle = model.GetBoneTransform("handle");
             m_Last = handle == Transform.Zero ? model.WorldSpaceBounds.Center : handle.Position;

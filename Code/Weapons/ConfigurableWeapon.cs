@@ -1,12 +1,11 @@
 ﻿using Sandbox;
-using Woosh.Data;
 
 namespace Woosh.Espionage;
 
 [GameResource( "Espionage Weapon Asset", "weapon", "Used for describing a Weapon item type in Espionage" )]
 public sealed class WeaponDataAsset : GameResource
 {
-	public string Display { get; set; }
+	[Category( "Info" )] public string Display { get; set; }
 
 	[ResourceType( "vmdl" ), Category( "Visuals" )]
 	public string WorldModel { get; set; }
@@ -17,13 +16,13 @@ public sealed class WeaponDataAsset : GameResource
 	public DrawTime Draw { get; set; }
 }
 
-public sealed partial class ConfigurableWeapon : Weapon, IProfiled
+public sealed partial class ConfigurableWeapon : Weapon, IHave<DisplayInfo>
 {
 	public WeaponDataAsset Asset { get => n_Asset; init => OnAssetChanged( value ); }
 
 	// Meta
 
-	public Profile? Profile => new Profile(Asset.Display);
+	public DisplayInfo Item => new DisplayInfo() { Name = Asset.Display };
 
 	// Asset
 
@@ -50,6 +49,7 @@ public sealed partial class ConfigurableWeapon : Weapon, IProfiled
 		view.Add( new ViewModelDeadzoneSwayEffect( new Vector2( 10, 10 ) ) { AimingOnly = true, AutoCenter = false, Damping = 8 } );
 		view.Add( new ViewModelPitchOffsetEffect( 5, 4 ) { Damping = 15 } );
 		view.Add( new ViewModelRecoilEffect() );
+		view.Add( new ViewModelTuckEffect() );
 
 		view.SetBodyGroup( "module", 1 );
 		// view.SetBodyGroup( "muzzle", 1 );

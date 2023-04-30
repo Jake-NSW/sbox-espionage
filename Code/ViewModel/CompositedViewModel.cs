@@ -5,7 +5,7 @@ using Sandbox;
 namespace Woosh.Espionage;
 
 [Category( "ViewModel" )]
-[Title( "View Model" ), Icon( "pan_tool" )]
+[Title( "View Model" ), Icon( "pan_tool" ), Prefab]
 public sealed class CompositedViewModel : AnimatedEntity
 {
 	private readonly static LinkedList<CompositedViewModel> s_All;
@@ -23,7 +23,8 @@ public sealed class CompositedViewModel : AnimatedEntity
 			viewModel.Update( new Transform( Camera.Position, Camera.Rotation ) );
 		}
 
-		Camera.Main.Attributes.Set( "viewModelFov", Camera.FieldOfView );
+		var fov = Screen.CreateVerticalFieldOfView( 65 );
+		Camera.Main.Attributes.Set( "viewModelFov", fov );
 	}
 
 	// Instance
@@ -56,7 +57,7 @@ public sealed class CompositedViewModel : AnimatedEntity
 
 	private void Update( Transform origin )
 	{
-		var setup = new ViewModelSetup( Owner, origin, GetAnimParameterFloat( "fAimBlend" ) );
+		var setup = new ViewModelSetup( this, Owner, origin, GetAnimParameterFloat( "fAimBlend" ) );
 
 		foreach ( var effect in m_Effects )
 		{
