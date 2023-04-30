@@ -36,7 +36,7 @@ public sealed class DeployableSlotHandler : EntityComponent, ISingletonComponent
 		WriteNetworkData();
 	}
 
-	public void Deploy( int slot )
+	public void Deploy( int slot, DrawTime? timing = null)
 	{
 		if ( Game.IsClient )
 			return;
@@ -51,7 +51,7 @@ public sealed class DeployableSlotHandler : EntityComponent, ISingletonComponent
 		if ( !Inventory.Contains( ent ) )
 			return;
 
-		Handler.Deploy( ent );
+		Handler.Deploy( ent, timing );
 	}
 
 	public void Drop( int slot )

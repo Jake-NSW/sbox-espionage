@@ -14,7 +14,7 @@ public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 	{
 		Events = new StructEventDispatcher();
 	}
-	
+
 	private float m_LastAim;
 
 	public override void Simulate( IClient cl )
@@ -39,7 +39,7 @@ public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 	{
 		var aiming = Input.Down( "aim" );
 		m_LastAim = m_LastAim.LerpTo( aiming ? 1 : 0, 8 * Time.Delta );
-		Effects?.SetAnimParameter("fAimBlend", m_LastAim);
+		Effects?.SetAnimParameter( "fAimBlend", m_LastAim );
 	}
 
 	[ClientRpc]
@@ -80,6 +80,8 @@ public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 		return view;
 	}
 
+	public virtual DrawTime Draw => new DrawTime( 1, 1 );
+
 	void ICarriable.Deploying()
 	{
 		if ( IsLocalPawn && m_Viewmodel == null )
@@ -101,7 +103,7 @@ public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 	void ICarriable.OnHolstered()
 	{
 		Effects.EnableDrawing = false;
-		
+
 		m_Viewmodel?.Delete();
 		m_Viewmodel = null;
 	}

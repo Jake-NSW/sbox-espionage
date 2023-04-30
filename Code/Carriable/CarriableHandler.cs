@@ -1,5 +1,4 @@
-﻿using System;
-using Sandbox;
+﻿using Sandbox;
 
 namespace Woosh.Espionage;
 
@@ -56,7 +55,7 @@ public partial class CarriableHandler : EntityComponent, IActive<Entity>, IActiv
 
 	private EntityComponentCallback m_OnDeployed;
 
-	public void Deploy( Entity entity, float deployTime = 0, float holsterTime = 0, EntityComponentCallback onDeployed = null )
+	public void Deploy( Entity entity, DrawTime? timings = null, EntityComponentCallback onDeployed = null )
 	{
 		// Only allow the server to deploy...
 		Game.AssertServer();
@@ -76,8 +75,7 @@ public partial class CarriableHandler : EntityComponent, IActive<Entity>, IActiv
 		// Save for when are ready to deploy
 		m_OnDeployed = onDeployed;
 		n_ToDeploy = entity;
-		m_StoredDeploy = deployTime;
-		m_StoredHolster = holsterTime;
+		m_StoredDelay = timings ?? (entity as ICarriable)?.Draw ?? default;
 
 		if ( n_IsDeploying || n_IsHolstering )
 		{
@@ -96,8 +94,7 @@ public partial class CarriableHandler : EntityComponent, IActive<Entity>, IActiv
 		}
 	}
 
-	private float m_StoredDeploy;
-	private float m_StoredHolster;
+	private DrawTime m_StoredDelay;
 
 	private void OnReadyToDeploy()
 	{
@@ -109,8 +106,8 @@ public partial class CarriableHandler : EntityComponent, IActive<Entity>, IActiv
 		Active = n_RealActive;
 		n_ToDeploy = null;
 
-		n_Deploy = m_StoredDeploy;
-		n_Holster = m_StoredHolster;
+		n_Deploy = m_StoredDelay.Deploy;
+		n_Holster = m_StoredDelay.Holster;
 
 		n_IsDeploying = true;
 		n_SinceDeployStart = 0;
