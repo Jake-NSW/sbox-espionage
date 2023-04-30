@@ -1187,7 +1187,7 @@
 						_class = "Attachment"
 						name = "muzzle"
 						parent_bone = "Weapon_Barrel_end"
-						relative_origin = [ -0.101638, 128.641724, -1.583671 ]
+						relative_origin = [ -0.090752, 46.81506, -1.575909 ]
 						relative_angles = [ -0.0, 90.000099, -180.0 ]
 						weight = 1.0
 						ignore_rotation = false

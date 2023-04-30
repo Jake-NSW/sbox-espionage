@@ -24,7 +24,7 @@ public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 		if ( Input.Pressed( "shoot" ) )
 		{
 			// shoot!!
-			Events.Run( new WeaponFireEvent( new Vector3( -7, 0.2f, 0.2f ) * 15, new Vector3( -8, 0.02f, 0.02f ) * 20 ) );
+			Events.Run( new WeaponFireEvent( (new Vector3( -7, 0.2f, 0.2f ) * 15), (new Vector3( -8, 0.02f, 0.02f ) * 20) ) );
 			Effects?.SetAnimParameter( "bFire", true );
 
 			if ( Game.IsServer && Prediction.FirstTime )
@@ -121,7 +121,8 @@ public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 
 	void ICarriable.OnHolstered()
 	{
-		Effects.EnableDrawing = false;
+		if ( Effects != null )
+			Effects.EnableDrawing = false;
 
 		m_Viewmodel?.Delete();
 		m_Viewmodel = null;
