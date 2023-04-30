@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using Woosh.Data;
 
 namespace Woosh.Espionage;
 
@@ -16,13 +17,13 @@ public sealed class WeaponDataAsset : GameResource
 	public DrawTime Draw { get; set; }
 }
 
-public sealed partial class ConfigurableWeapon : Weapon, IHave<DisplayInfo>
+public sealed partial class ConfigurableWeapon : Weapon, IProfiled
 {
 	public WeaponDataAsset Asset { get => n_Asset; init => OnAssetChanged( value ); }
 
 	// Meta
 
-	DisplayInfo IHave<DisplayInfo>.Item { get; }
+	public Profile? Profile => new Profile(Asset.Display);
 
 	// Asset
 
@@ -32,6 +33,7 @@ public sealed partial class ConfigurableWeapon : Weapon, IHave<DisplayInfo>
 	{
 		n_Asset = asset;
 		Model = Model.Load( Asset.WorldModel );
+		SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
 	}
 
 	// Weapon

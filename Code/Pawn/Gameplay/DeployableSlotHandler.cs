@@ -36,7 +36,18 @@ public sealed class DeployableSlotHandler : EntityComponent, ISingletonComponent
 		WriteNetworkData();
 	}
 
-	public void Deploy( int slot, DrawTime? timing = null)
+	public int SlotOfEntity( Entity entity )
+	{
+		for ( int i = 0; i < n_Slots.Length; i++ )
+		{
+			if ( entity == n_Slots[i] )
+				return i + 1;
+		}
+
+		return -1;
+	}
+
+	public void Deploy( int slot, DrawTime? timing = null )
 	{
 		if ( Game.IsClient )
 			return;
@@ -49,7 +60,10 @@ public sealed class DeployableSlotHandler : EntityComponent, ISingletonComponent
 
 		var ent = n_Slots[slot];
 		if ( !Inventory.Contains( ent ) )
+		{
+			Assign( slot + 1, null );
 			return;
+		}
 
 		Handler.Deploy( ent, timing );
 	}
@@ -58,7 +72,7 @@ public sealed class DeployableSlotHandler : EntityComponent, ISingletonComponent
 	{
 		if ( Game.IsClient )
 			return;
-		
+
 		slot -= 1;
 		Handler.Holster( true, ent => ent.Components.Get<IEntityInventory>().Drop( n_Slots[slot] ) );
 	}
@@ -67,7 +81,7 @@ public sealed class DeployableSlotHandler : EntityComponent, ISingletonComponent
 	{
 		if ( Game.IsClient )
 			return;
-		
+
 		Handler.Holster( false );
 	}
 

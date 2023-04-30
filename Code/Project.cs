@@ -16,6 +16,11 @@ public partial class Project : GameManager
 		{
 			Camera = new CompositedCameraBuilder( Sandbox.Camera.Main );
 		}
+
+		if ( Game.IsServer )
+		{
+			_ = new GameHud();
+		}
 	}
 
 	private CompositedCameraBuilder Camera { get; }
@@ -23,31 +28,7 @@ public partial class Project : GameManager
 	public override void FrameSimulate( IClient cl )
 	{
 		base.FrameSimulate( cl );
-
 		Camera?.Update();
-	}
-
-	public override void Simulate( IClient cl )
-	{
-		base.Simulate( cl );
-
-		if ( Input.Pressed( "slot_primary" ) )
-		{
-			var pawn = cl.Pawn as Operator;
-			pawn?.Slots.Deploy(1);
-		}
-		
-		if ( Input.Pressed( "slot_secondary" ) )
-		{
-			var pawn = cl.Pawn as Operator;
-			pawn?.Slots.Deploy(2);
-		}
-		
-		if ( Input.Pressed( "slot_holster" ) )
-		{
-			var pawn = cl.Pawn as Operator;
-			pawn?.Slots.Deploy(3);
-		}
 	}
 
 	public override void ClientJoined( IClient client )
