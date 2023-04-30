@@ -11,6 +11,9 @@ public sealed class Operator : Pawn
 	public override void Spawn()
 	{
 		base.Spawn();
+		
+		// Gameplay
+		Components.Create<PawnLeaning>();
 
 		// Interaction
 		Components.Create<InteractionHandler>();
@@ -47,5 +50,7 @@ public sealed class Operator : Pawn
 		{
 			Slots.Drop( Slots.SlotOfEntity( Hands.Active ) );
 		}
+		
+		Components.Get<PawnLeaning>()?.Simulate(cl);
 	}
 }

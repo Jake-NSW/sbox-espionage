@@ -27,9 +27,9 @@ public sealed class ViewModelSwayEffect : IViewModelEffect
 		var mouse = Mouse.Delta;
 		mouse *= MathX.Lerp( m_Multiplier, m_AimMultiplier, setup.Aim );
 
-		var targetRot = Rotation.From( mouse.y.Clamp( -5, 5 ) * AngleMultiplier.pitch, (-mouse.x * 2) * AngleMultiplier.yaw, mouse.x * AngleMultiplier.roll );
+		var targetRot = Rotation.From( mouse.y * AngleMultiplier.pitch, (-mouse.x * 2) * AngleMultiplier.yaw, mouse.x * AngleMultiplier.roll );
 		m_LastSwayRot = Rotation.Slerp( m_LastSwayRot, targetRot, Damping * Time.Delta );
-		m_LastSwayPos = m_LastSwayPos.LerpTo( (rot.Up * (mouse.y.Clamp( -5, 5 ) / 2) * AxisMultiplier.x) + (rot.Left * (mouse.x / 2) * AxisMultiplier.y), Damping * Time.Delta );
+		m_LastSwayPos = m_LastSwayPos.LerpTo( (rot.Up * (mouse.y / 2) * AxisMultiplier.x) + (rot.Left * (mouse.x / 2) * AxisMultiplier.y), Damping * Time.Delta );
 
 		setup.Rotation *= m_LastSwayRot;
 		setup.Position += m_LastSwayPos;

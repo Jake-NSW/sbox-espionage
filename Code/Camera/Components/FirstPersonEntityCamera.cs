@@ -37,6 +37,8 @@ public sealed class FirstPersonEntityCamera : EntityCameraController
 		setup.Viewer = Entity;
 		setup.Rotation = m_ViewAngles.ToRotation();
 		setup.Position = Entity.Position;
+		
+		Entity.Components.Get<PawnLeaning>()?.OnCameraSetup(ref setup);
 	}
 
 	private Angles m_ViewAngles;

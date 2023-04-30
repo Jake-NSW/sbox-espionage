@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using Sandbox;
 
 namespace Woosh.Espionage;
 
-[Category( "ViewModel" )]
-[Title( "View Model" ), Icon( "pan_tool" ), Prefab]
+[Title( "View Model" ), Category( "ViewModel" ), Icon( "pan_tool" )]
 public sealed class CompositedViewModel : AnimatedEntity
 {
 	private readonly static LinkedList<CompositedViewModel> s_All;
@@ -15,16 +13,15 @@ public sealed class CompositedViewModel : AnimatedEntity
 		s_All = new LinkedList<CompositedViewModel>();
 	}
 
-	[Event.Client.PostCamera]
-	private static void UpdateAllViewModels()
+	public static void UpdateAllViewModels( SceneCamera camera )
 	{
 		foreach ( var viewModel in s_All )
 		{
-			viewModel.Update( new Transform( Camera.Position, Camera.Rotation ) );
+			viewModel.Update( new Transform( camera.Position, camera.Rotation ) );
 		}
 
 		var fov = Screen.CreateVerticalFieldOfView( 65 );
-		Camera.Main.Attributes.Set( "viewModelFov", fov );
+		camera.Attributes.Set( "viewModelFov", fov );
 	}
 
 	// Instance
@@ -32,22 +29,20 @@ public sealed class CompositedViewModel : AnimatedEntity
 	private readonly IDispatchRegistryTable m_Table;
 	private readonly LinkedListNode<CompositedViewModel> m_Node;
 
-	public CompositedViewModel( IDispatchRegistryTable table, IEnumerable<IViewModelEffect> effects = null )
+	public CompositedViewModel( IDispatchRegistryTable table )
 	{
 		Game.AssertClient();
 
-		m_Table = table;
-		m_Effects = effects != null ? new HashSet<IViewModelEffect>( effects ) : new HashSet<IViewModelEffect>( 8 );
-
-		m_Node = new LinkedListNode<CompositedViewModel>( this );
-		s_All.AddLast( m_Node );
-
 		EnableViewmodelRendering = true;
+
+		s_All.AddLast( m_Node = new LinkedListNode<CompositedViewModel>( this ) );
+
+		m_Table = table;
+		m_Effects = new HashSet<IViewModelEffect>( 8 );
 	}
 
 	protected override void OnDestroy()
 	{
-		base.OnDestroy();
 		s_All.Remove( m_Node );
 	}
 
@@ -57,14 +52,15 @@ public sealed class CompositedViewModel : AnimatedEntity
 
 	private void Update( Transform origin )
 	{
+		Position = origin.Position;
+		Rotation = origin.Rotation;
+
 		var setup = new ViewModelSetup( this, Owner, origin, GetAnimParameterFloat( "fAimBlend" ) );
 
 		foreach ( var effect in m_Effects )
 		{
 			effect.Update( ref setup );
 		}
-
-		// Update Self
 
 		Position = setup.Position;
 		Rotation = setup.Rotation;
@@ -74,14 +70,5 @@ public sealed class CompositedViewModel : AnimatedEntity
 	{
 		effect.Register( m_Table );
 		m_Effects.Add( effect );
-	}
-
-	[MethodImpl( MethodImplOptions.AggressiveInlining )]
-	public void Add<T>() where T : IViewModelEffect, new() => Add( new T() );
-
-	public void Remove( IViewModelEffect effect )
-	{
-		m_Effects.Remove( effect );
-		effect.Unregister( m_Table );
 	}
 }

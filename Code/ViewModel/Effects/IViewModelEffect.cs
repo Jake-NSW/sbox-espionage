@@ -4,6 +4,6 @@ public interface IViewModelEffect
 {
 	bool Update( ref ViewModelSetup setup );
 
-	void Register( IDispatchRegistryTable table );
-	void Unregister( IDispatchRegistryTable table );
+	void Register( IDispatchRegistryTable table ) { }
+	void Unregister( IDispatchRegistryTable table ) { }
 }

@@ -6,6 +6,13 @@ namespace Woosh.Espionage;
 //
 // Implement a basic state machine for weapon? (Maybe?)
 
+public enum WeaponClientEffects
+{
+	Shoot,
+	Reload,
+	Aim
+}
+
 public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 {
 	public StructEventDispatcher Events { get; }
@@ -36,7 +43,7 @@ public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 
 			if ( Game.IsServer && Prediction.FirstTime )
 			{
-				PlayClientEffects();
+				PlayClientEffects( WeaponClientEffects.Shoot );
 			}
 
 			if ( Game.IsClient && Prediction.FirstTime )
@@ -60,10 +67,15 @@ public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 		};
 	}
 
+	// Client Effects
+
+	public virtual SoundBank<WeaponClientEffects> Sounds { get; }
+
 	[ClientRpc]
-	public void PlayClientEffects()
+	public void PlayClientEffects( WeaponClientEffects effects )
 	{
 		Particles.Create( "particles/weapons/muzzle_flash/muzzleflash_base.vpcf", Effects, "muzzle" );
+		Sounds.Play( effects );
 	}
 
 	// Pickup

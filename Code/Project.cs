@@ -28,7 +28,9 @@ public partial class Project : GameManager
 	public override void FrameSimulate( IClient cl )
 	{
 		base.FrameSimulate( cl );
-		Camera?.Update();
+
+		Camera.Update();
+		CompositedViewModel.UpdateAllViewModels( Camera.Target );
 	}
 
 	public override void ClientJoined( IClient client )

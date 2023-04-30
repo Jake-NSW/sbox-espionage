@@ -4,31 +4,30 @@ namespace Woosh.Espionage;
 
 public sealed class CompositedCameraBuilder
 {
-	private readonly SceneCamera m_Camera;
+	public SceneCamera Target { get; }
 
 	public CompositedCameraBuilder( SceneCamera camera )
 	{
 		Game.AssertClient();
-		m_Camera = camera;
+		Target = camera;
 	}
 
 	// Setup
-	
+
 	public ICameraController Override { get; set; }
 
 	public void Update( ICameraController controller = null )
 	{
-		var setup = new CameraSetup( m_Camera ) { FieldOfView = Screen.CreateVerticalFieldOfView( Game.Preferences.FieldOfView ) };
+		var setup = new CameraSetup( Target ) { FieldOfView = Screen.CreateVerticalFieldOfView( Game.Preferences.FieldOfView ) };
 
 		Build( ref setup, controller ?? Override );
 
 		// Mutate
 
-		m_Camera.Position = setup.Position;
-		m_Camera.Rotation = setup.Rotation;
-		m_Camera.Size = setup.Viewport;
-		m_Camera.FirstPersonViewer = setup.Viewer;
-		m_Camera.FieldOfView = setup.FieldOfView;
+		Target.Position = setup.Position;
+		Target.Rotation = setup.Rotation;
+		Target.FirstPersonViewer = setup.Viewer;
+		Target.FieldOfView = setup.FieldOfView;
 	}
 
 	// Active

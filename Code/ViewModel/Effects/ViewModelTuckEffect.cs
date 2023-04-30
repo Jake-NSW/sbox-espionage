@@ -4,11 +4,15 @@ namespace Woosh.Espionage;
 
 public sealed class ViewModelTuckEffect : IViewModelEffect
 {
-	private float m_LastTuck;
+	public float Damping { get; set; } = 14;
+
+	// Logic
+
+	private float m_Offset;
 
 	public bool Update( ref ViewModelSetup setup )
 	{
-		string name = "muzzle";
+		const string name = "muzzle";
 
 		// Get the muzzle attachment
 		var attachment = setup.Entity.GetAttachment( name );
@@ -16,26 +20,20 @@ public sealed class ViewModelTuckEffect : IViewModelEffect
 			return false;
 
 		var muzzle = attachment.Value;
+		var distance = muzzle.Position.Distance( setup.Entity.Position );
 
-		// Get girth
-		const float girth = 32;
-
-		// Start Guntuck
-		var start = muzzle.Position + muzzle.Rotation.Backward * Vector3.DistanceBetween( setup.Initial.Position - muzzle.Rotation.Backward / 4, muzzle.Position ) - (setup.Initial.Rotation.Backward * girth / 2.25f);
-		var end = muzzle.Position + (muzzle.Rotation.Forward * 4);
-
-		var tr = Trace.Ray( start, end )
-			.Ignore( setup.Owner )
+		var start = muzzle.Position - (muzzle.Rotation.Forward * distance);
+		var end = start + (muzzle.Rotation.Forward * (distance * 2));
+		var info = Trace.Ray( start, end )
 			.Ignore( setup.Entity )
-			.Size( 1 )
+			.Ignore( setup.Owner )
+			.Size( 2 )
 			.Run();
 
-		var offset = tr.Distance - Vector3.DistanceBetween( start, end );
-		m_LastTuck = m_LastTuck.LerpTo( offset, 8 * Time.Delta );
+		m_Offset = m_Offset.LerpTo( info.Hit && info.Distance < distance ? info.Distance - distance : 0, Damping * Time.Delta );
+		// var normal = MathF.Abs(m_Offset / distance);
 
-		// Finish Guntuck
-		setup.Position += setup.Initial.Rotation.Backward * -m_LastTuck;
-		setup.Position += setup.Initial.Rotation.Down * -m_LastTuck / 4;
+		setup.Position += setup.Rotation * new Vector3( m_Offset, 0, m_Offset / 4f );
 		return false;
 	}
 
