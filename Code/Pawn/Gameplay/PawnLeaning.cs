@@ -2,7 +2,7 @@
 
 namespace Woosh.Espionage;
 
-public partial class PawnLeaning : EntityComponent<Pawn>
+public sealed partial class PawnLeaning : EntityComponent<Pawn>
 {
 	public void Simulate( IClient cl )
 	{
@@ -58,7 +58,7 @@ public partial class PawnLeaning : EntityComponent<Pawn>
 		// setup.Viewmodel.Offset += setup.Rotation.Down() * (m_Distance * 0.02f * Distance);
 	}
 
-	protected virtual float DistanceFromEyes( int direction, BBox bounds )
+	protected float DistanceFromEyes( int direction, BBox bounds )
 	{
 		var girth = bounds.Size.x * 2;
 		var info = Trace.Ray( Entity.AimRay.Position, Entity.AimRay.Position + Entity.Rotation.Right * direction * girth )
