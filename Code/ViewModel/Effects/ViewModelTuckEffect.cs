@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using System;
+using Sandbox;
 
 namespace Woosh.Espionage;
 
@@ -33,7 +34,7 @@ public sealed class ViewModelTuckEffect : IViewModelEffect
 		m_Offset = m_Offset.LerpTo( info.Hit && info.Distance < distance ? info.Distance - distance : 0, Damping * Time.Delta );
 		// var normal = MathF.Abs(m_Offset / distance);
 
-		setup.Position += setup.Rotation * new Vector3( m_Offset, 0, m_Offset / 4f );
+		setup.Position += setup.Rotation * new Vector3( m_Offset, 0, (m_Offset / 4f) * (1 - setup.Aim) );
 		return false;
 	}
 

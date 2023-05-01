@@ -23,7 +23,6 @@ public sealed class ViewModelDeadzoneSwayEffect : IViewModelEffect
 	public bool Update( ref ViewModelSetup setup )
 	{
 		var isAiming = setup.Aim > 0.1f;
-		var rot = setup.Initial.Rotation;
 		DeadzoneAxis( ref setup, m_Deadzone );
 
 		if ( AutoCenter || (AimingOnly && !isAiming) )
@@ -58,6 +57,19 @@ public sealed class ViewModelDeadzoneSwayEffect : IViewModelEffect
 		}
 	}
 
-	public void Register( IDispatchRegistryTable table ) { }
+	public void Register( IDispatchRegistryTable table )
+	{
+		table.Register(
+			( in WeaponFireEvent evt ) =>
+			{
+				var recoil = evt.Recoil.Abs() / 4;
+				var x = Game.Random.Float( -recoil.x, recoil.x ) / 24;
+
+				m_SavedDeadzoneAxis.x -= recoil.y;
+				m_SavedDeadzoneAxis.y -= x;
+			}
+		);
+	}
+
 	public void Unregister( IDispatchRegistryTable table ) { }
 }

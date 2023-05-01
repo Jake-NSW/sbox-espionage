@@ -54,6 +54,16 @@ public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 		}
 	}
 
+	private float m_LastAim;
+
+	[Event.Client.Frame]
+	public void aim()
+	{
+		var aiming = Input.Down( "aim" );
+		m_LastAim = m_LastAim.LerpTo( aiming ? 1 : 0, 8 * Time.Delta );
+		Effects?.SetAnimParameter( "fAimBlend", m_LastAim );
+	}
+
 	[ConCmd.Server]
 	private static void CmdShoot( int entity, Vector3 pos, Rotation rot )
 	{
