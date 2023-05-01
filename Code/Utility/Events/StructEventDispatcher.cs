@@ -4,6 +4,8 @@ using System.Runtime.CompilerServices;
 
 namespace Woosh.Espionage;
 
+public delegate void StructCallback<T>( in T evt ) where T : struct;
+
 public sealed class StructEventDispatcher : IDispatchRegistryTable, IDispatchExecutor
 {
 	public StructEventDispatcher()
@@ -23,7 +25,7 @@ public sealed class StructEventDispatcher : IDispatchRegistryTable, IDispatchExe
 		foreach ( var evt in stack )
 		{
 			(evt as Action)?.Invoke();
-			(evt as Callback<T>)?.Invoke( item );
+			(evt as StructCallback<T>)?.Invoke( item );
 		}
 	}
 
@@ -34,11 +36,11 @@ public sealed class StructEventDispatcher : IDispatchRegistryTable, IDispatchExe
 
 	private readonly Dictionary<Type, HashSet<Delegate>> m_Registry;
 
-	public void Register<T>( Callback<T> callback ) where T : struct, IEvent => Inject<T>( callback );
+	public void Register<T>( StructCallback<T> callback ) where T : struct, IEvent => Inject<T>( callback );
 	public void Register<T>( Action callback ) where T : struct, IEvent => Inject<T>( callback );
 
 	public void Unregister<T>( Action callback ) where T : struct, IEvent => Erase<T>( callback );
-	public void Unregister<T>( Callback<T> callback ) where T : struct, IEvent => Erase<T>( callback );
+	public void Unregister<T>( StructCallback<T> callback ) where T : struct, IEvent => Erase<T>( callback );
 
 	private void Erase<T>( Delegate callback ) where T : struct, IEvent
 	{

@@ -4,6 +4,8 @@ namespace Woosh.Espionage;
 
 public sealed class PickupEntityInteraction : EntityComponent, IEntityInteraction
 {
+	public InteractionIndicator[] Interaction => new[] { new InteractionIndicator( "Pickup", "F", 0 ) };
+	
 	public void Simulate( TraceResult hovering, IClient client )
 	{
 		if ( Game.IsClient )

@@ -29,7 +29,7 @@ public static class EnumValues<T> where T : Enum
 	}
 }
 
-public struct SoundBank<T> where T : Enum
+public readonly struct SoundBank<T> where T : Enum
 {
 	// Add support for flags!! - was the whole point of it!!!
 	

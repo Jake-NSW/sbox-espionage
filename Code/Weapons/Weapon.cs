@@ -1,13 +1,20 @@
-﻿using Sandbox;
+﻿using System.Collections.Generic;
+using Sandbox;
 
 namespace Woosh.Espionage;
 
-public enum WeaponClientEffects
+public enum WeaponSound
 {
 	Shoot,
-	Reload,
-	Aim
+	Reload
 }
+
+// Accurarcy
+// Range
+// Mobility
+// Damge
+// Firerate
+// Control
 
 public struct WeaponSetup
 {
@@ -32,7 +39,7 @@ public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 		EnableHideInFirstPerson = true;
 		EnableShadowInFirstPerson = true;
 
-		n_Setup = new WeaponSetup() { IsAutomatic = true, Firerate = 60 };
+		n_Setup = new WeaponSetup { IsAutomatic = true, Firerate = 13 };
 	}
 
 	public override void Simulate( IClient cl )
@@ -44,11 +51,6 @@ public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 			// Shoot!
 			Shoot();
 		}
-
-		if ( Input.Pressed( "reload" ) )
-		{
-			// Reload!
-		}
 	}
 
 	public WeaponSetup Setup => n_Setup;
@@ -56,7 +58,9 @@ public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 
 	// Shoot
 
-	[Net, Predicted, Local] protected TimeSince SinceLastShoot { get; set; }
+	public virtual SoundBank<WeaponSound> Sounds { get; } = new SoundBank<WeaponSound>( new Dictionary<WeaponSound, string> { { WeaponSound.Shoot, "smg2_firing_suppressed_sound" } } );
+
+	[Net, Predicted, Local] private TimeSince n_SinceLastShot { get; set; }
 
 	bool IsFireable( bool checkInput = false )
 	{
@@ -68,18 +72,20 @@ public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 				return false;
 		}
 
-		return SinceLastShoot >= 1 / Setup.Firerate;
+		return n_SinceLastShot >= 1 / Setup.Firerate;
 	}
 
 	public void Shoot()
 	{
-		if ( !IsFireable( false ) )
+		if ( !IsFireable() )
 			return;
 
-		SinceLastShoot = 0;
+		n_SinceLastShot = 0;
 
 		if ( !Prediction.FirstTime )
 			return;
+
+		Events.Run( new WeaponFireEvent( new Vector3( -3, 0.2f, 0.2f ) * 35, new Vector3( -1, 0.2f, 0.2f ) * 35 ) );
 
 		// Play Effects
 		PlayClientEffects();
@@ -99,11 +105,15 @@ public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 	[ClientRpc]
 	private void PlayClientEffects()
 	{
-		Events.Run( new WeaponFireEvent() );
+		if ( Prediction.CurrentHost == null )
+			Events.Run( new WeaponFireEvent( new Vector3( -3, 0.2f, 0.2f ) * 35, new Vector3( -1, 0.2f, 0.2f ) * 35 ) );
+
+		Effects?.SetAnimParameter( "bFire", true );
+		Sounds.Play( WeaponSound.Shoot, Effects.Position );
 	}
 
 	[ConCmd.Server]
-	private static void CmdReceivedShootRequest( int entity, Vector3 pos, Vector3 forward )
+	private static void CmdReceivedShootRequest( int index, Vector3 pos, Vector3 forward )
 	{
 		_ = new Prop
 		{

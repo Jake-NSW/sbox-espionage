@@ -4,6 +4,8 @@ namespace Woosh.Espionage;
 
 public sealed class UseEntityInteraction : EntityComponent, IEntityInteraction, ISingletonComponent
 {
+	public InteractionIndicator[] Interaction => new[] { new InteractionIndicator( "Use", "F", 0 ) };
+
 	public void Simulate( TraceResult hovering, IClient client )
 	{
 		if ( Game.IsClient )

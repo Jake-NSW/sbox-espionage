@@ -2,12 +2,14 @@
 
 namespace Woosh.Espionage;
 
+public interface IPushable
+{
+	void Push( Entity entity, float force );
+}
+
 public sealed class PushEntityInteraction : EntityComponent, IEntityInteraction, ISingletonComponent
 {
-	public bool TryInteract( Entity ent )
-	{
-		return ent is IPushable;
-	}
+	public InteractionIndicator[] Interaction => new[] { new InteractionIndicator( "Push & Pull", "Scroll", 0 ) };
 
 	public void Simulate( TraceResult hovering, IClient client )
 	{
