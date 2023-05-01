@@ -2,10 +2,6 @@
 
 namespace Woosh.Espionage;
 
-// Aimming might be a good idea as a component (Maybe?)
-//
-// Implement a basic state machine for weapon? (Maybe?)
-
 public enum WeaponClientEffects
 {
 	Shoot,
@@ -37,47 +33,14 @@ public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 
 		if ( Input.Pressed( "shoot" ) )
 		{
-			// shoot!!
-			Events.Run( new WeaponFireEvent( (new Vector3( -7, 0.2f, 0.2f ) * 15), (new Vector3( -8, 0.02f, 0.02f ) * 20) ) );
-			Effects?.SetAnimParameter( "bFire", true );
+			// Shoot!
+		}
 
-			if ( Game.IsServer && Prediction.FirstTime )
-			{
-				PlayClientEffects( WeaponClientEffects.Shoot );
-			}
-
-			if ( Game.IsClient && Prediction.FirstTime )
-			{
-				var muzzle = Effects?.GetAttachment( "muzzle" );
-				CmdShoot( NetworkIdent, muzzle?.Position ?? Position, muzzle?.Rotation ?? Rotation );
-			}
+		if ( Input.Pressed( "reload" ) )
+		{
+			// Reload!
 		}
 	}
-
-	private float m_LastAim;
-
-	[Event.Client.Frame]
-	public void aim()
-	{
-		var aiming = Input.Down( "aim" );
-		m_LastAim = m_LastAim.LerpTo( aiming ? 1 : 0, 8 * Time.Delta );
-		Effects?.SetAnimParameter( "fAimBlend", m_LastAim );
-	}
-
-	[ConCmd.Server]
-	private static void CmdShoot( int entity, Vector3 pos, Rotation rot )
-	{
-		_ = new Prop
-		{
-			Model = Model.Load( "models/sbox_props/watermelon/watermelon.vmdl" ),
-			Position = pos + rot.Forward,
-			Rotation = Rotation.LookAt( Vector3.Random.Normal ),
-			Scale = 0.4f,
-			PhysicsGroup = { Velocity = rot.Forward * 1000 }
-		};
-	}
-
-	// Client Effects
 
 	public virtual SoundBank<WeaponClientEffects> Sounds { get; }
 

@@ -1,9 +1,58 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Sandbox;
 
 namespace Woosh.Espionage;
 
-public sealed class DeployableSlotHandler : EntityComponent, ISingletonComponent, INetworkSerializer
+public sealed class DeployableSlotHandler<TSlot> : DeployableSlotHandler where TSlot : Enum
+{
+	private readonly static TSlot[] s_Values;
+
+	private static int IndexOf( TSlot input )
+	{
+		var compare = EqualityComparer<TSlot>.Default;
+
+		for ( var i = 0; i < s_Values.Length; i++ )
+		{
+			if ( compare.Equals( s_Values[i], input ) )
+				return i + 1;
+		}
+
+		throw new InvalidOperationException( "What the fuck" );
+	}
+
+	static DeployableSlotHandler()
+	{
+		s_Values = (TSlot[])typeof(TSlot).GetEnumValuesAsUnderlyingType();
+	}
+
+	public DeployableSlotHandler() : base()
+	{
+		Game.AssertClient();
+	}
+
+	public DeployableSlotHandler( IEntityInventory inventory, CarriableHandler handler ) : base( s_Values.Length, inventory, handler )
+	{
+		Game.AssertServer();
+	}
+
+	public void Assign( TSlot slot, Entity ent )
+	{
+		base.Assign( IndexOf( slot ), ent );
+	}
+
+	public void Deploy( TSlot slot, DrawTime? time )
+	{
+		base.Deploy( IndexOf( slot ), time );
+	}
+
+	public void Drop( TSlot slot )
+	{
+		base.Drop( IndexOf( slot ) );
+	}
+}
+
+public class DeployableSlotHandler : EntityComponent, ISingletonComponent, INetworkSerializer
 {
 	private IEntityInventory Inventory { get; }
 	private CarriableHandler Handler { get; }
@@ -74,7 +123,14 @@ public sealed class DeployableSlotHandler : EntityComponent, ISingletonComponent
 			return;
 
 		slot -= 1;
-		Handler.Holster( true, ent => ent.Components.Get<IEntityInventory>().Drop( n_Slots[slot] ) );
+
+		if ( SlotOfEntity( Handler.Active ) == slot )
+		{
+			Handler.Holster( true, ent => ent.Components.Get<IEntityInventory>().Drop( n_Slots[slot] ) );
+			return;
+		}
+
+		Inventory.Drop( n_Slots[slot] );
 	}
 
 	public void Holster()

@@ -5,13 +5,19 @@ namespace Woosh.Espionage;
 [GameResource( "Espionage Weapon Asset", "weapon", "Used for describing a Weapon item type in Espionage" )]
 public sealed class WeaponDataAsset : GameResource
 {
+	// Meta Data
+	
 	[Category( "Info" )] public string Display { get; set; }
+	
+	// Visuals
 
 	[ResourceType( "vmdl" ), Category( "Visuals" )]
 	public string WorldModel { get; set; }
 
 	[ResourceType( "vmdl" ), Category( "Visuals" )]
 	public string ViewModel { get; set; }
+	
+	// Gameplay
 
 	public DrawTime Draw { get; set; }
 }
