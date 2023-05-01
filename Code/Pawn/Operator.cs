@@ -4,6 +4,11 @@ namespace Woosh.Espionage;
 
 public sealed class Operator : Pawn
 {
+	public enum CarrySlot
+	{
+		Front, Back, Holster
+	}
+
 	public IEntityInventory Inventory => Components.Get<IEntityInventory>();
 	public CarriableHandler Hands => Components.Get<CarriableHandler>();
 	public DeployableSlotHandler Slots => Components.Get<DeployableSlotHandler>();
@@ -11,7 +16,7 @@ public sealed class Operator : Pawn
 	public override void Spawn()
 	{
 		base.Spawn();
-		
+
 		// Gameplay
 		Components.Create<PawnLeaning>();
 
@@ -33,24 +38,24 @@ public sealed class Operator : Pawn
 
 		if ( Input.Pressed( "slot_primary" ) )
 		{
-			Slots.Deploy( 1 );
+			Slots.Deploy( CarrySlot.Front );
 		}
 
 		if ( Input.Pressed( "slot_secondary" ) )
 		{
-			Slots.Deploy( 2 );
+			Slots.Deploy( CarrySlot.Back );
 		}
 
 		if ( Input.Pressed( "slot_holster" ) )
 		{
-			Slots.Deploy( 3 );
+			Slots.Deploy( CarrySlot.Holster );
 		}
 
 		if ( Input.Pressed( "drop" ) )
 		{
 			Slots.Drop( Slots.SlotOfEntity( Hands.Active ) );
 		}
-		
-		Components.Get<PawnLeaning>()?.Simulate(cl);
+
+		Components.Get<PawnLeaning>()?.Simulate( cl );
 	}
 }

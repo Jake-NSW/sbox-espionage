@@ -171,10 +171,10 @@
 						anim_markup_ordered = false
 						disable_compression = false
 						source_filename = "weapons/smg2/v_espionage_smg2.fbx"
-						start_frame = 0
-						end_frame = 68
+						start_frame = -1
+						end_frame = -1
 						framerate = 37.0
-						take = 14
+						take = 12
 						reverse = false
 					},
 					{

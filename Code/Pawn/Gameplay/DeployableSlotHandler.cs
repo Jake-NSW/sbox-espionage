@@ -4,54 +4,6 @@ using Sandbox;
 
 namespace Woosh.Espionage;
 
-public sealed class DeployableSlotHandler<TSlot> : DeployableSlotHandler where TSlot : Enum
-{
-	private readonly static TSlot[] s_Values;
-
-	private static int IndexOf( TSlot input )
-	{
-		var compare = EqualityComparer<TSlot>.Default;
-
-		for ( var i = 0; i < s_Values.Length; i++ )
-		{
-			if ( compare.Equals( s_Values[i], input ) )
-				return i + 1;
-		}
-
-		throw new InvalidOperationException( "What the fuck" );
-	}
-
-	static DeployableSlotHandler()
-	{
-		s_Values = (TSlot[])typeof(TSlot).GetEnumValuesAsUnderlyingType();
-	}
-
-	public DeployableSlotHandler() : base()
-	{
-		Game.AssertClient();
-	}
-
-	public DeployableSlotHandler( IEntityInventory inventory, CarriableHandler handler ) : base( s_Values.Length, inventory, handler )
-	{
-		Game.AssertServer();
-	}
-
-	public void Assign( TSlot slot, Entity ent )
-	{
-		base.Assign( IndexOf( slot ), ent );
-	}
-
-	public void Deploy( TSlot slot, DrawTime? time )
-	{
-		base.Deploy( IndexOf( slot ), time );
-	}
-
-	public void Drop( TSlot slot )
-	{
-		base.Drop( IndexOf( slot ) );
-	}
-}
-
 public class DeployableSlotHandler : EntityComponent, ISingletonComponent, INetworkSerializer
 {
 	private IEntityInventory Inventory { get; }
@@ -122,14 +74,15 @@ public class DeployableSlotHandler : EntityComponent, ISingletonComponent, INetw
 		if ( Game.IsClient )
 			return;
 
-		slot -= 1;
 
 		if ( SlotOfEntity( Handler.Active ) == slot )
 		{
+			slot -= 1;
 			Handler.Holster( true, ent => ent.Components.Get<IEntityInventory>().Drop( n_Slots[slot] ) );
 			return;
 		}
 
+		slot -= 1;
 		Inventory.Drop( n_Slots[slot] );
 	}
 
@@ -168,5 +121,46 @@ public class DeployableSlotHandler : EntityComponent, ISingletonComponent, INetw
 		{
 			write.Write( ent?.NetworkIdent ?? 0 );
 		}
+	}
+}
+
+public static class DeployableSlotHandlerUtility
+{
+	private static class EnumValues<TSlot> where TSlot : Enum
+	{
+		private readonly static TSlot[] s_Values;
+
+		public static int IndexOf( TSlot input )
+		{
+			var compare = EqualityComparer<TSlot>.Default;
+
+			for ( var i = 0; i < s_Values.Length; i++ )
+			{
+				if ( compare.Equals( s_Values[i], input ) )
+					return i + 1;
+			}
+
+			throw new InvalidOperationException( "What the fuck" );
+		}
+
+		static EnumValues()
+		{
+			s_Values = (TSlot[])typeof(TSlot).GetEnumValues();
+		}
+	}
+
+	public static void Assign<TSlot>( this DeployableSlotHandler handler, TSlot slot, Entity ent ) where TSlot : Enum
+	{
+		handler.Assign( EnumValues<TSlot>.IndexOf( slot ), ent );
+	}
+
+	public static void Deploy<TSlot>( this DeployableSlotHandler handler, TSlot slot, DrawTime? time = null ) where TSlot : Enum
+	{
+		handler.Deploy( EnumValues<TSlot>.IndexOf( slot ), time );
+	}
+
+	public static void Drop<TSlot>( this DeployableSlotHandler handler, TSlot slot ) where TSlot : Enum
+	{
+		handler.Drop( EnumValues<TSlot>.IndexOf( slot ) );
 	}
 }
