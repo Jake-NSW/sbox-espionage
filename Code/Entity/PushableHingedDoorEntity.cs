@@ -67,6 +67,32 @@ public sealed partial class PushableHingedDoorEntity : AnimatedEntity, IPushable
 
 	// Debug
 
+	public static void DrawGizmos( EditorContext context )
+	{
+		if ( !context.IsSelected )
+			return;
+
+		// Get some key values from the entity
+		var model = context.Target.GetProperty( "model" ).GetValue<string>();
+		var distance = context.Target.GetProperty( nameof(MaxAngle) ).GetValue<Vector2>();
+		var inverted = context.Target.GetProperty( nameof(Inverted) ).GetValue<bool>();
+
+		// Animate the distance
+		if ( !distance.x.AlmostEqual( 0 ) )
+		{
+			var angle = distance.x * (!inverted ? -1 : 1);
+			Gizmo.Draw.Color = Color.Green.WithAlpha( 0.6f );
+			Gizmo.Draw.Model( model, new Transform( default, Rotation.FromYaw( angle ) ) );
+		}
+
+		if ( !distance.y.AlmostEqual( 0 ) )
+		{
+			var angle = distance.y * (!inverted ? -1 : 1);
+			Gizmo.Draw.Color = Color.Blue.WithAlpha( 0.6f );
+			Gizmo.Draw.Model( model, new Transform( default, Rotation.FromYaw( angle ) ) );
+		}
+	}
+
 	[ConVar.Server( "esp_door_debug" )] private static bool EnabledDoorDebug { get; set; }
 
 	// Physics

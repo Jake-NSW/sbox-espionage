@@ -14,6 +14,11 @@ public struct DrawTime
 	public float Holster { get; set; }
 }
 
+public interface ISlotted
+{
+	int Slot { get; }
+}
+
 public interface ICarriable : IEntity
 {
 	DrawTime Draw { get; }

@@ -40,7 +40,7 @@ public partial class Project : GameManager
 		var spawn = All.OfType<SpawnPoint>().MinBy( _ => Guid.NewGuid() ).Transform;
 		spawn.Position += Vector3.Up * 72;
 
-		var pistol = new ConfigurableWeapon { Asset = ResourceLibrary.Get<WeaponDataAsset>( "weapons/mk23/mark23.weapon" ) };
+		var pistol = new Mk23Firearm();
 		var smg = new ConfigurableWeapon { Asset = ResourceLibrary.Get<WeaponDataAsset>( "weapons/smg2/smg2.weapon" ) };
 
 		var pawn = client.Possess<Operator>( spawn );

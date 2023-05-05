@@ -17,6 +17,10 @@ public struct InteractionIndicator
 	public float Held { get; }
 }
 
+/// <summary>
+/// An Entity Interaction is a Component that is attached to possessing pawn that gives it the ability
+/// to define new interaction logic, where the heavy lifting is done by the <see cref="InteractionHandler"/>
+/// </summary>
 public interface IEntityInteraction : IComponent
 {
 	/// <summary>
@@ -25,7 +29,7 @@ public interface IEntityInteraction : IComponent
 	/// about it to provide context to the player.
 	/// </summary>
 	public InteractionIndicator Indicator { get; }
-	
+
 	/// <summary>
 	/// Is Interactable is called when the currently hovering item is changed on the Interaction
 	/// handler. This allows us to inject more interaction logic into the handler. This controls
@@ -34,7 +38,7 @@ public interface IEntityInteraction : IComponent
 	/// <returns> True if we should be simulating. </returns>
 	/// </summary>
 	bool IsInteractable( Entity entity );
-	
+
 	/// <summary>
 	/// Called every simulate if the currently hovering entity is able to be interacted. Which is
 	/// defined by the <see cref="IsInteractable"/> function.

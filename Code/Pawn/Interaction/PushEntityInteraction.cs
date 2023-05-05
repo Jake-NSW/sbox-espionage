@@ -10,15 +10,14 @@ public interface IPushable
 
 public sealed class PushEntityInteraction : EntityComponent, IEntityInteraction, ISingletonComponent
 {
-	public InteractionIndicator Indicator => new InteractionIndicator( "Push", "Scroll", MathF.Abs(Input.MouseWheel) / 14 );
+	public InteractionIndicator Indicator => new InteractionIndicator( "Push & Pull", "Scroll", MathF.Abs( Input.MouseWheel ) / 14 );
 
-	public bool IsInteractable( Entity entity )
-	{
-		return entity is IPushable;
-	}
+	public bool IsInteractable( Entity entity ) => entity is IPushable;
 
 	public void Simulate( in TraceResult hovering, IClient client )
 	{
+		using var _ = Prediction.Off();
+
 		if ( Input.MouseWheel != 0 && hovering.Entity is IPushable pushable )
 		{
 			pushable.Push( Entity, Input.MouseWheel );

@@ -21,9 +21,31 @@ public class DeployableSlotHandler : EntityComponent, ISingletonComponent, INetw
 		n_Slots = new Entity[slots];
 		Inventory = inventory;
 		Handler = handler;
+
+		Inventory.Added += ( ent ) =>
+		{
+			Log.Info( "Adding" );
+
+			if ( ent is ISlotted slotted )
+			{
+				Log.Info( "was slotted" );
+				var wasActive = Active == slotted.Slot;
+
+				Drop( slotted.Slot );
+				Assign( slotted.Slot, ent );
+
+				if ( wasActive )
+				{
+					Log.Info( "Deploying" );
+					Deploy( slotted.Slot );
+				}
+			}
+		};
 	}
 
 	// Slots
+
+	public int Active => SlotOfEntity( Handler.Active );
 
 	public IReadOnlyList<Entity> Slots => n_Slots;
 	private Entity[] n_Slots;
@@ -53,6 +75,9 @@ public class DeployableSlotHandler : EntityComponent, ISingletonComponent, INetw
 		if ( Game.IsClient )
 			return;
 
+		if ( slot < 0 )
+			return;
+
 		slot -= 1;
 
 		// Deploy to Slot
@@ -74,16 +99,17 @@ public class DeployableSlotHandler : EntityComponent, ISingletonComponent, INetw
 		if ( Game.IsClient )
 			return;
 
+		if ( slot < 0 )
+			return;
 
+		var entity = n_Slots[slot - 1];
 		if ( SlotOfEntity( Handler.Active ) == slot )
 		{
-			slot -= 1;
-			Handler.Holster( true, ent => ent.Components.Get<IEntityInventory>().Drop( n_Slots[slot] ) );
+			Handler.Holster( true, ent => ent.Components.Get<IEntityInventory>().Drop( entity ) );
 			return;
 		}
 
-		slot -= 1;
-		Inventory.Drop( n_Slots[slot] );
+		Inventory.Drop( entity );
 	}
 
 	public void Holster()
