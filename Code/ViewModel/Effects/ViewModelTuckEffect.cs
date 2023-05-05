@@ -32,9 +32,15 @@ public sealed class ViewModelTuckEffect : IViewModelEffect
 			.Run();
 
 		m_Offset = m_Offset.LerpTo( info.Hit && info.Distance < distance ? info.Distance - distance : 0, Damping * Time.Delta );
-		// var normal = MathF.Abs(m_Offset / distance);
+		var normal = MathF.Abs( m_Offset / distance );
 
-		setup.Position += setup.Rotation * new Vector3( m_Offset, 0, (m_Offset / 4f) * (1 - setup.Aim) );
+		// Push Back
+		setup.Position += setup.Rotation * new Vector3( m_Offset, (normal * 3), (-normal * 8) * (1 - setup.Aim) );
+		setup.Rotation *= Rotation.FromAxis( Vector3.Forward, -(normal * 65) );
+		
+		// Rotate Hug
+		// setup.Rotation *= Rotation.FromAxis( Vector3.Up, normal * 90 );
+		// setup.Position += setup.Rotation * new Vector3( m_Offset, 0, 0 );
 		return false;
 	}
 

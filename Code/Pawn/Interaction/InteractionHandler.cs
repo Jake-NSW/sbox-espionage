@@ -27,7 +27,7 @@ public sealed class InteractionHandler : EntityComponent, ISingletonComponent
 	{
 		var result = Scan();
 		var hovering = result.Entity;
-
+		
 		if ( p_Last != hovering )
 		{
 			var last = p_Last;

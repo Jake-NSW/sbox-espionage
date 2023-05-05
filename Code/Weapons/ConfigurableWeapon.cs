@@ -57,8 +57,8 @@ public sealed partial class ConfigurableWeapon : Weapon, IHave<DisplayInfo>
 		view.Add( new ViewModelRecoilEffect() );
 		view.Add( new ViewModelTuckEffect() );
 
-		// view.SetBodyGroup( "module", 1 );
-		view.SetBodyGroup( "muzzle", 1 );
+		view.SetBodyGroup( "module", 1 );
+		// view.SetBodyGroup( "muzzle", 1 );
 
 		return view;
 	}
