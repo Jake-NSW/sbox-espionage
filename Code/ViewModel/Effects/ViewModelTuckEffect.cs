@@ -3,9 +3,17 @@ using Sandbox;
 
 namespace Woosh.Espionage;
 
+public enum TuckType
+{
+	Push,
+	Rotate,
+	Hug,
+}
+
 public sealed class ViewModelTuckEffect : IViewModelEffect
 {
 	public float Damping { get; set; } = 14;
+	public TuckType Variant { get; set; }
 
 	// Logic
 
@@ -34,13 +42,25 @@ public sealed class ViewModelTuckEffect : IViewModelEffect
 		m_Offset = m_Offset.LerpTo( info.Hit && info.Distance < distance ? info.Distance - distance : 0, Damping * Time.Delta );
 		var normal = MathF.Abs( m_Offset / distance );
 
-		// Push Back
-		setup.Position += setup.Rotation * new Vector3( m_Offset, (normal * 3), (-normal * 8) * (1 - setup.Aim) );
-		setup.Rotation *= Rotation.FromAxis( Vector3.Forward, -(normal * 65) );
-		
-		// Rotate Hug
-		// setup.Rotation *= Rotation.FromAxis( Vector3.Up, normal * 90 );
-		// setup.Position += setup.Rotation * new Vector3( m_Offset, 0, 0 );
+		switch ( Variant )
+		{
+			case TuckType.Push :
+				setup.Position += setup.Rotation * new Vector3( m_Offset, (normal * 3), (-normal * 8) * (1 - setup.Aim) );
+				setup.Rotation *= Rotation.FromAxis( Vector3.Forward, -(normal * 65) );
+				break;
+			case TuckType.Rotate :
+				setup.Position += setup.Rotation * new Vector3( -m_Offset / 6, 0, 0 );
+				setup.Rotation *= Rotation.FromAxis( Vector3.Left, -normal * 90 );
+				setup.Position += setup.Rotation * new Vector3( m_Offset / 1, 0, 0 );
+				break;
+			case TuckType.Hug :
+				setup.Rotation *= Rotation.FromAxis( Vector3.Up, normal * 90 );
+				setup.Position += setup.Rotation * new Vector3( m_Offset, 0, 0 );
+				break;
+			default :
+				throw new ArgumentOutOfRangeException();
+		}
+
 		return false;
 	}
 
