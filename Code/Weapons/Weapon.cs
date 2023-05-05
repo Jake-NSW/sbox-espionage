@@ -164,9 +164,7 @@ public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 	void ICarriable.Deploying()
 	{
 		if ( IsLocalPawn && m_Viewmodel == null )
-		{
 			m_Viewmodel = OnRequestViewmodel();
-		}
 
 		// Create Viewmodel
 		Effects.SetAnimParameter( "bDeployed", true );

@@ -1,4 +1,5 @@
-﻿@using Sandbox;
+﻿@using System
+@using Sandbox;
 @using Sandbox.UI;
 
 @namespace Woosh.Espionage
@@ -7,7 +8,7 @@
 @attribute [StyleSheet("Code/UI/interaction.scss")]
 
 <root>
-    @if (!string.IsNullOrEmpty(Icon) && !string.IsNullOrEmpty(Action) && !string.IsNullOrEmpty(Display))
+    @if (!string.IsNullOrEmpty(Icon) && !string.IsNullOrEmpty(Display))
     {
         <div class="icon">
             <label text="@Icon"></label>
@@ -18,17 +19,17 @@
         {
             <label class="hovering" text="@Display"></label>
         }
-        
-        @if (!string.IsNullOrEmpty(Action))
-        {
-            <div style="flex-direction: column; align-items: flex-start">
-                <!-- Create another thing for each Interaction Opportunity -->
+
+        <div style="flex-direction: column; align-items: flex-start">
+            <!-- Create another thing for each Interaction Opportunity -->
+            @foreach (var item in m_Handler?.Interactions ?? Array.Empty<IEntityInteraction>())
+            {
                 <div class="container">
-                    <label class="bind" text="@Bind"></label>
-                    <label class="action" text="@Action"></label>
+                    <label class="bind" text="@($"[{item.Indicator.Bind}]")"></label>
+                    <label class="action" text="@item.Indicator.Action"></label>
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
 </root>
 
@@ -36,8 +37,6 @@
 {
     private string Icon { get; set; }
     private string Display { get; set; }
-    private string Bind { get; set; }
-    private string Action { get; set; }
 
     private Vector3 m_Last;
     private Entity m_Target;
@@ -51,30 +50,51 @@
             return;
 
         var components = Game.LocalPawn.Components;
-
         if (components.TryGet<InteractionHandler>(out var handler) && handler.Interactions.Count > 0)
         {
+            if (handler != m_Handler)
+                Rebind(handler);
+
+            // Get Info
             var model = (ModelEntity)handler.Hovering;
             var info = (model as IHave<DisplayInfo>)?.Item ?? DisplayInfo.ForType(model.GetType());
 
             Display = info.Name;
-            Bind = $"[Bind]";
-            Action = "Do Something";
             Icon = info.Icon;
 
-            var handle = model.GetBoneTransform("handle");
-            m_Last = handle == Transform.Zero ? model.WorldSpaceBounds.Center : handle.Position;
-
-            m_Target = model;
+            m_Last = model.WorldSpaceBounds.Center;
             Style.Opacity = 1;
         }
 
         this.ToWorld(m_Last);
     }
 
-    protected override int BuildHash()
+    private void OnEntityChanged(in ValueChangedEvent<Entity> evt)
     {
-        return m_Target?.GetHashCode() ?? 0;
+        // We want the UI to nicely fade out...
+        if (evt.New == null)
+            return;
+
+        // Rebuild UI based on Interactions...
+        m_Target = evt.New;
     }
 
+    // Binding
+
+    private InteractionHandler m_Handler;
+
+    public void Rebind(InteractionHandler handler)
+    {
+        m_Handler?.Events.Unregister<ValueChangedEvent<Entity>>(OnEntityChanged);
+        m_Handler = handler;
+        m_Handler?.Events.OnValueChanged<Entity>(OnEntityChanged);
+    }
+
+    // Hash
+
+    protected override int BuildHash()
+    {
+    // This is dumb
+        return (Display?.GetHashCode() ?? 0) ^ (m_Target?.GetHashCode() ?? 0);
+    }
 }

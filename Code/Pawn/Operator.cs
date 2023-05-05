@@ -25,6 +25,7 @@ public sealed class Operator : Pawn
 		Components.Create<PushEntityInteraction>();
 		Components.Create<UseEntityInteraction>();
 		Components.Create<PickupEntityInteraction>();
+		Components.Create<EquipEntityInteraction>();
 
 		// Inventory
 		Components.Create<CarriableHandler>();

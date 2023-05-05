@@ -7,7 +7,7 @@ public sealed class EquipEntityInteraction : EntityComponent, IEntityInteraction
 	public InteractionIndicator Indicator => new InteractionIndicator( "Equip", $"{Input.GetButtonOrigin( KEYCODE )} Hold", 0.5f /* replace this with time since.. */ );
 
 	private const string KEYCODE = "use";
-	private const float EQUIP_DELAY = 1.5f;
+	private const float EQUIP_DELAY = 0.55f;
 
 	public bool IsInteractable( Entity entity )
 	{
@@ -25,12 +25,16 @@ public sealed class EquipEntityInteraction : EntityComponent, IEntityInteraction
 
 		if ( Input.Pressed( KEYCODE ) )
 		{
+			// Start Hold
 			m_SincePressed = 0;
 		}
 
-		if ( m_SincePressed >= EQUIP_DELAY )
+		if ( m_SincePressed >= EQUIP_DELAY && Input.Down( KEYCODE ) )
 		{
 			// go and equip da gun....
+			Log.Info( "Equip Gun" );
+			Entity.Components.Get<IEntityInventory>().Add( result.Entity );
+			Entity.Components.Get<CarriableHandler>().Deploy( result.Entity );
 			return;
 		}
 
@@ -53,6 +57,8 @@ public sealed class PickupEntityInteraction : EntityComponent, IEntityInteractio
 		return entity is IPickup;
 	}
 
+	private RealTimeSince m_HeldTime;
+
 	public void Simulate( in TraceResult hovering, IClient client )
 	{
 		if ( Game.IsClient )
@@ -60,8 +66,14 @@ public sealed class PickupEntityInteraction : EntityComponent, IEntityInteractio
 
 		using var _ = Prediction.Off();
 
-		if ( Input.Released( KEYCODE ) )
+		if ( Input.Pressed( KEYCODE ) )
 		{
+			m_HeldTime = 0;
+		}
+
+		if ( Input.Released( KEYCODE ) && m_HeldTime <= 0.2f )
+		{
+			Log.Info( "Picking Up" );
 			Entity.Components.Get<IEntityInventory>().Add( hovering.Entity );
 		}
 	}
