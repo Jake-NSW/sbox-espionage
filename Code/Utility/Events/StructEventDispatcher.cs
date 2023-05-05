@@ -6,6 +6,33 @@ namespace Woosh.Espionage;
 
 public delegate void StructCallback<T>( in T evt ) where T : struct;
 
+public readonly struct ValueChangedEvent<T> : IEvent
+{
+	public ValueChangedEvent( T value, T old )
+	{
+		New = value;
+		Old = old;
+	}
+
+	public T New { get; }
+	public T Old { get; }
+}
+
+public static class StructEventDispatcherUtility
+{
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public static void Notify<T>( this IDispatchExecutor executor, T value, T old = default )
+	{
+		executor.Run( new ValueChangedEvent<T>( value, old ) );
+	}
+
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public static void OnValueChanged<T>( this IDispatchRegistryTable table, StructCallback<ValueChangedEvent<T>> cb )
+	{
+		table.Register( cb );
+	}
+}
+
 public sealed class StructEventDispatcher : IDispatchRegistryTable, IDispatchExecutor
 {
 	public StructEventDispatcher()

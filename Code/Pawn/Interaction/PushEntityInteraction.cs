@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using System;
+using Sandbox;
 
 namespace Woosh.Espionage;
 
@@ -9,9 +10,14 @@ public interface IPushable
 
 public sealed class PushEntityInteraction : EntityComponent, IEntityInteraction, ISingletonComponent
 {
-	public InteractionIndicator[] Interaction => new[] { new InteractionIndicator( "Push & Pull", "Scroll", 0 ) };
+	public InteractionIndicator Indicator => new InteractionIndicator( "Push", "Scroll", MathF.Abs(Input.MouseWheel) / 14 );
 
-	public void Simulate( TraceResult hovering, IClient client )
+	public bool IsInteractable( Entity entity )
+	{
+		return entity is IPushable;
+	}
+
+	public void Simulate( in TraceResult hovering, IClient client )
 	{
 		if ( Input.MouseWheel != 0 && hovering.Entity is IPushable pushable )
 		{

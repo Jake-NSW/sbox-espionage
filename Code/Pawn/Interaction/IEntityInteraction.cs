@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using System;
+using Sandbox;
 
 namespace Woosh.Espionage;
 
@@ -8,7 +9,7 @@ public struct InteractionIndicator
 	{
 		Action = action;
 		Bind = bind;
-		Held = held;
+		Held = MathF.Min( 1, held );
 	}
 
 	public string Action { get; }
@@ -18,6 +19,27 @@ public struct InteractionIndicator
 
 public interface IEntityInteraction : IComponent
 {
-	InteractionIndicator[] Interaction { get; }
-	void Simulate( TraceResult hovering, IClient client );
+	/// <summary>
+	/// Used by the UI to indicate some sort of interaction. Is meant to tell the UI how long this
+	/// interaction  has been used, the keybinding required to invoke it and any action details
+	/// about it to provide context to the player.
+	/// </summary>
+	public InteractionIndicator Indicator { get; }
+	
+	/// <summary>
+	/// Is Interactable is called when the currently hovering item is changed on the Interaction
+	/// handler. This allows us to inject more interaction logic into the handler. This controls
+	/// whether or not we should simulate the component or not...
+	/// <param name="entity"> The currently hovering entity. </param>
+	/// <returns> True if we should be simulating. </returns>
+	/// </summary>
+	bool IsInteractable( Entity entity );
+	
+	/// <summary>
+	/// Called every simulate if the currently hovering entity is able to be interacted. Which is
+	/// defined by the <see cref="IsInteractable"/> function.
+	/// <param name="result"> The last Trace performed from the handler. </param>
+	/// <param name="client"> The current simulating client </param>
+	/// </summary>
+	void Simulate( in TraceResult result, IClient client );
 }

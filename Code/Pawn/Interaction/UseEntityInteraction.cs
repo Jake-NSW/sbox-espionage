@@ -4,22 +4,27 @@ namespace Woosh.Espionage;
 
 public sealed class UseEntityInteraction : EntityComponent, IEntityInteraction, ISingletonComponent
 {
-	public InteractionIndicator[] Interaction => new[] { new InteractionIndicator( "Use", "F", 0 ) };
+	public InteractionIndicator Indicator => new InteractionIndicator( "Use", Input.GetButtonOrigin( "use" ), 0 );
 
-	public void Simulate( TraceResult hovering, IClient client )
+	public bool IsInteractable( Entity entity )
+	{
+		return entity is IUse;
+	}
+
+	public void Simulate( in TraceResult context, IClient client )
 	{
 		if ( Game.IsClient )
 			return;
 
 		using var _ = Prediction.Off();
 
-		if ( Input.Pressed( InputButton.Use ) )
-			Start( hovering );
+		if ( Input.Pressed( "use" ) )
+			Start( context );
 
 		if ( Using == null )
 			return;
 
-		if ( !Input.Down( InputButton.Use ) )
+		if ( !Input.Down( "use" ) )
 			Stop();
 
 		if ( Vector3.Dot( Entity.Rotation.Forward, m_UsedPosition - Entity.Position ) < 0.3f || m_UsedPosition.Distance( Entity.Position ) > 64f )
@@ -30,7 +35,6 @@ public sealed class UseEntityInteraction : EntityComponent, IEntityInteraction, 
 
 		if ( Using.OnUse( Entity ) )
 		{
-			Log.Info("On Use");
 			return;
 		}
 
@@ -40,16 +44,16 @@ public sealed class UseEntityInteraction : EntityComponent, IEntityInteraction, 
 	public IUse Using { get; private set; }
 	private Vector3 m_UsedPosition;
 
-	private void Start( TraceResult result )
+	private void Start( TraceResult context )
 	{
-		var ent = result.Entity;
+		var ent = context.Entity;
 		if ( ent is not IUse use || !use.IsUsable( Entity ) )
 		{
 			Failed();
 			return;
 		}
 
-		m_UsedPosition = result.EndPosition;
+		m_UsedPosition = context.EndPosition;
 		Using = use;
 	}
 

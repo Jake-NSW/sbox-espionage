@@ -4,7 +4,7 @@ using Sandbox;
 
 namespace Woosh.Espionage;
 
-public partial class InventoryContainer : EntityComponent, IEntityInventory
+public partial class InventoryContainer : EntityComponent, IEntityInventory, ISingletonComponent
 {
 	public event Action<Entity> Added;
 	public event Action<Entity> Removed;

@@ -1,4 +1,7 @@
-﻿using Sandbox;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Sandbox;
 
 namespace Woosh.Espionage;
 
@@ -9,7 +12,13 @@ public sealed class InteractionHandler : EntityComponent, ISingletonComponent
 	public InteractionHandler()
 	{
 		Events = new StructEventDispatcher();
+		m_Interactions = Array.Empty<IEntityInteraction>();
 	}
+
+	// State
+
+	public IReadOnlyList<IEntityInteraction> Interactions => m_Interactions;
+	private IEntityInteraction[] m_Interactions;
 
 	public Entity Hovering => p_Last;
 	[Predicted] private Entity p_Last { get; set; }
@@ -17,9 +26,17 @@ public sealed class InteractionHandler : EntityComponent, ISingletonComponent
 	public void Simulate( IClient client )
 	{
 		var result = Scan();
-		p_Last = result.Entity;
-		
-		foreach ( var interaction in Entity.Components.GetAll<IEntityInteraction>() )
+		var hovering = result.Entity;
+
+		if ( p_Last != hovering )
+		{
+			var last = p_Last;
+			p_Last = hovering;
+			m_Interactions = p_Last == null ? Array.Empty<IEntityInteraction>() : Entity.Components.GetAll<IEntityInteraction>().Where( e => e.IsInteractable( p_Last ) ).ToArray();
+			Events.Notify(p_Last, last);
+		}
+
+		foreach ( var interaction in Interactions )
 		{
 			interaction.Simulate( result, client );
 		}

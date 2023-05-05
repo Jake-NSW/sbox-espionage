@@ -50,7 +50,9 @@
         if (Game.LocalPawn == null)
             return;
 
-        if (Game.LocalPawn.Components.TryGet<InteractionHandler>(out var handler) && handler.Hovering.IsValid())
+        var components = Game.LocalPawn.Components;
+
+        if (components.TryGet<InteractionHandler>(out var handler) && handler.Interactions.Count > 0)
         {
             var model = (ModelEntity)handler.Hovering;
             var info = (model as IHave<DisplayInfo>)?.Item ?? DisplayInfo.ForType(model.GetType());
@@ -63,9 +65,7 @@
             var handle = model.GetBoneTransform("handle");
             m_Last = handle == Transform.Zero ? model.WorldSpaceBounds.Center : handle.Position;
 
-
             m_Target = model;
-
             Style.Opacity = 1;
         }
 
