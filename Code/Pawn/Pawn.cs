@@ -36,9 +36,6 @@ public partial class Pawn : AnimatedEntity
 		base.Simulate( cl );
 
 		Rotation = ViewAngles.ToRotation();
-
-		Components.Get<InteractionHandler>()?.Simulate( cl );
-		Components.Get<CarriableHandler>()?.Simulate( cl );
 		Components.Get<PawnController>()?.Simulate( cl );
 	}
 }

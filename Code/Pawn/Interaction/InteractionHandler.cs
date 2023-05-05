@@ -1,18 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Sandbox;
+﻿using Sandbox;
 
 namespace Woosh.Espionage;
-
-public readonly struct ValueChangedEvent<T>
-{
-	public ValueChangedEvent( T value )
-	{
-		Value = value;
-	}
-
-	public T Value { get; }
-}
 
 public sealed class InteractionHandler : EntityComponent, ISingletonComponent
 {
@@ -29,26 +17,12 @@ public sealed class InteractionHandler : EntityComponent, ISingletonComponent
 	public void Simulate( IClient client )
 	{
 		var result = Scan();
-		var hovering = result.Entity;
-
-		if ( p_Last != hovering )
-		{
-			p_Last = hovering;
-			OnChange( p_Last );
-		}
-
+		p_Last = result.Entity;
+		
 		foreach ( var interaction in Entity.Components.GetAll<IEntityInteraction>() )
 		{
 			interaction.Simulate( result, client );
 		}
-	}
-
-	private void OnChange( Entity value )
-	{
-		if ( value == null )
-			return;
-
-		// Collect Contexts?
 	}
 
 	private TraceResult Scan( float size = 8 )
