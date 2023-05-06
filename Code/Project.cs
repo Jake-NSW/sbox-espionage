@@ -48,8 +48,8 @@ public partial class Project : GameManager
 		pawn.Inventory.Add( pistol );
 		pawn.Inventory.Add( smg );
 
-		pawn.Slots.Assign( Operator.CarrySlot.Holster, pistol );
-		pawn.Slots.Assign( Operator.CarrySlot.Front, smg );
-		pawn.Slots.Deploy( Operator.CarrySlot.Holster );
+		pawn.Hands.Assign( Operator.CarrySlot.Holster, pistol );
+		pawn.Hands.Assign( Operator.CarrySlot.Front, smg );
+		pawn.Hands.Deploy( Operator.CarrySlot.Holster );
 	}
 }

@@ -24,7 +24,7 @@ public sealed class ViewModelRecoilEffect : IViewModelEffect
 		return false;
 	}
 
-	private Rotation m_RecoilCurrentRotation;
+	private Rotation m_RecoilCurrentRotation = Rotation.Identity;
 	private Vector3 m_RecoilTargetRotation;
 
 	private void RecoilUpdate( ref ViewModelSetup setup )

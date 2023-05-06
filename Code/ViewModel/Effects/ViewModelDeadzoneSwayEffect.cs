@@ -18,7 +18,7 @@ public sealed class ViewModelDeadzoneSwayEffect : IViewModelEffect
 	}
 
 	private Vector2 m_SavedDeadzoneAxis;
-	private Rotation m_LastDeadzoneRotation;
+	private Rotation m_LastDeadzoneRotation = Rotation.Identity;
 
 	public bool Update( ref ViewModelSetup setup )
 	{

@@ -15,7 +15,7 @@ public sealed class ViewModelPitchOffsetEffect : IViewModelEffect
 		m_YawOffset = yawOffset;
 	}
 
-	private Rotation m_LastOffsetRot;
+	private Rotation m_LastOffsetRot = Rotation.Identity;
 	private Vector3 m_LastOffsetPos;
 
 	public bool Update( ref ViewModelSetup setup )

@@ -71,7 +71,7 @@ public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 			if ( Setup.IsAutomatic ? !Input.Down( "shoot" ) : !Input.Pressed( "shoot" ) )
 				return false;
 		}
-
+		
 		return n_SinceLastShot >= 1 / Setup.Firerate;
 	}
 
@@ -175,8 +175,6 @@ public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 	{
 		Effects.SetAnimParameter( "bDropped", drop );
 		Effects.SetAnimParameter( "bDeployed", false );
-		
-		Log.Info($"Start Holstering - {GetType().Name}");
 	}
 
 	void ICarriable.OnHolstered()

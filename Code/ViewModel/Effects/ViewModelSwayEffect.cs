@@ -17,7 +17,7 @@ public sealed class ViewModelSwayEffect : IViewModelEffect
 		m_AimMultiplier = aimMultiplier;
 	}
 
-	private Rotation m_LastSwayRot;
+	private Rotation m_LastSwayRot = Rotation.Identity;
 	private Vector3 m_LastSwayPos;
 
 	public bool Update( ref ViewModelSetup setup )

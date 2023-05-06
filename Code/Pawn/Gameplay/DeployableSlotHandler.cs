@@ -31,8 +31,6 @@ public class DeployableSlotHandler : EntityComponent, ISingletonComponent, INetw
 
 	private void OnInventoryAdded( Entity ent )
 	{
-		Log.Info( "Adding" );
-
 		if ( ent is not ISlotted slotted )
 		{
 			// Don't do anything, as we can't slot...

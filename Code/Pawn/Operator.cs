@@ -10,8 +10,7 @@ public sealed class Operator : Pawn
 	}
 
 	public IEntityInventory Inventory => Components.Get<IEntityInventory>();
-	public CarriableHandler Hands => Components.Get<CarriableHandler>();
-	public DeployableSlotHandler Slots => Components.Get<DeployableSlotHandler>();
+	public DeployableSlotHandler Hands => Components.Get<DeployableSlotHandler>();
 
 	public override void Spawn()
 	{
@@ -33,32 +32,47 @@ public sealed class Operator : Pawn
 		Components.Add( new DeployableSlotHandler( 3 ) );
 	}
 
+	[GameEvent.Tick.Client]
+	private void Tick()
+	{
+		for ( var index = 0; index < Hands.Slots.Count; index++ )
+		{
+			var item = Hands.Slots[index];
+			var active = index == Hands.Active - 1;
+
+			if ( active ) // Stupid
+				DebugOverlay.ScreenText( $"{index} - {item?.GetType().Name ?? "Nothing"} - [Active]", index );
+			else
+				DebugOverlay.ScreenText( $"{index} - {item?.GetType().Name ?? "Nothing"}", index );
+		}
+	}
+
 	public override void Simulate( IClient cl )
 	{
 		base.Simulate( cl );
-		
+
 		Components.Get<InteractionHandler>()?.Simulate( cl );
 		Components.Get<CarriableHandler>()?.Simulate( cl );
 		Components.Get<PawnLeaning>()?.Simulate( cl );
 
 		if ( Input.Pressed( "slot_primary" ) )
 		{
-			Slots.Deploy( CarrySlot.Front );
+			Hands.Deploy( CarrySlot.Front );
 		}
 
 		if ( Input.Pressed( "slot_secondary" ) )
 		{
-			Slots.Deploy( CarrySlot.Back );
+			Hands.Deploy( CarrySlot.Back );
 		}
 
 		if ( Input.Pressed( "slot_holster" ) )
 		{
-			Slots.Deploy( CarrySlot.Holster );
+			Hands.Deploy( CarrySlot.Holster );
 		}
 
 		if ( Input.Pressed( "drop" ) )
 		{
-			Slots.Drop( Slots.SlotOfEntity( Hands.Active ) );
+			Hands.Drop( Hands.Active );
 		}
 	}
 }

@@ -24,6 +24,8 @@ public sealed class RustPistolFirearm : Weapon, IHave<DisplayInfo>, ISlotted
 	
 	protected override AnimatedEntity OnRequestViewmodel()
 	{
+		using var _ = Log.Measure();
+		
 		var view = new CompositedViewModel( Events ) { Owner = Owner, Model = Model.Load( VIEW_MODEL ) };
 
 		view.Add( new ViewModelOffsetEffect( Vector3.Zero, default ) );
