@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using System;
+using Sandbox;
 
 namespace Woosh.Espionage;
 
@@ -20,23 +21,20 @@ public sealed class ViewModelSwayEffect : IViewModelEffect
 	private Rotation m_LastSwayRot = Rotation.Identity;
 	private Vector3 m_LastSwayPos;
 
-	public bool Update( ref ViewModelSetup setup )
+	public void OnPostCameraSetup( ref CameraSetup setup )
 	{
-		var rot = setup.Initial.Rotation;
+		var rot = setup.Rotation;
 
 		var mouse = Mouse.Delta;
-		mouse *= MathX.Lerp( m_Multiplier, m_AimMultiplier, setup.Aim );
+		mouse *= MathX.Lerp( m_Multiplier, m_AimMultiplier, setup.Hands.Aim );
 
 		var targetRot = Rotation.From( mouse.y * AngleMultiplier.pitch, (-mouse.x * 2) * AngleMultiplier.yaw, mouse.x * AngleMultiplier.roll );
 		m_LastSwayRot = Rotation.Slerp( m_LastSwayRot, targetRot, Damping * Time.Delta );
-		m_LastSwayPos = m_LastSwayPos.LerpTo( (rot.Up * (mouse.y / 2) * AxisMultiplier.x) + (rot.Left * (mouse.x / 2) * AxisMultiplier.y), Damping * Time.Delta );
 
-		setup.Rotation *= m_LastSwayRot;
-		setup.Position += m_LastSwayPos;
+		var targetPos = rot * new Vector3( 0, (mouse.x / 2) * AxisMultiplier.y, (mouse.y / 2) * AxisMultiplier.x );
+		m_LastSwayPos = m_LastSwayPos.LerpTo( targetPos, Damping * Time.Delta );
 
-		return false;
+		setup.Hands.Angles *= m_LastSwayRot;
+		setup.Hands.Offset += m_LastSwayPos;
 	}
-
-	public void Register( IDispatchRegistryTable table ) { }
-	public void Unregister( IDispatchRegistryTable table ) { }
 }

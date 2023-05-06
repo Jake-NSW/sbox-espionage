@@ -13,14 +13,14 @@ public sealed class CompositedViewModel : AnimatedEntity
 		s_All = new LinkedList<CompositedViewModel>();
 	}
 
-	public static void UpdateAllViewModels( SceneCamera camera )
+	public static void UpdateAllViewModels( ref CameraSetup setup, SceneCamera camera )
 	{
 		foreach ( var viewModel in s_All )
 		{
-			viewModel.Update( new Transform( camera.Position, camera.Rotation ) );
+			viewModel.Update(ref setup);
 		}
 
-		var fov = Screen.CreateVerticalFieldOfView( 65 );
+		var fov = Screen.CreateVerticalFieldOfView( 64 );
 		camera.Attributes.Set( "viewModelFov", fov );
 	}
 
@@ -50,25 +50,21 @@ public sealed class CompositedViewModel : AnimatedEntity
 
 	private readonly HashSet<IViewModelEffect> m_Effects;
 
-	private void Update( Transform origin )
+	private void Update( ref CameraSetup setup )
 	{
-		Position = origin.Position;
-		Rotation = origin.Rotation;
-
-		var setup = new ViewModelSetup( this, Owner, origin, GetAnimParameterFloat( "fAimBlend" ) );
-
 		foreach ( var effect in m_Effects )
 		{
-			effect.Update( ref setup );
+			effect.OnPostCameraSetup( ref setup );
 		}
 
-		Position = setup.Position;
-		Rotation = setup.Rotation;
+		// Append Effects
+		Position = setup.Position + setup.Hands.Offset;
+		Rotation = setup.Rotation * setup.Hands.Angles;
 	}
 
 	public void Add( IViewModelEffect effect )
 	{
-		effect.Register( m_Table );
+		effect.Register( this, m_Table );
 		m_Effects.Add( effect );
 	}
 }

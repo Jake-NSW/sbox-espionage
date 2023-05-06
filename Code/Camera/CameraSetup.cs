@@ -17,6 +17,9 @@ public ref struct CameraSetup
 	public Entity Viewer;
 	public float FieldOfView;
 
+	public Transform Transform => new Transform( Position, Rotation );
 	public Vector3 Position;
 	public Rotation Rotation;
+
+	public ViewModelSetup Hands;
 }

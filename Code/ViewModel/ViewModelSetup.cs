@@ -4,28 +4,23 @@ namespace Woosh.Espionage;
 
 public ref struct ViewModelSetup
 {
-	internal ViewModelSetup( AnimatedEntity entity, Entity owner, Transform initial, float aim )
+	internal ViewModelSetup(  Entity owner )
 	{
-		Entity = entity;
-		Owner = owner;
-		Initial = initial;
-		Aim = aim;
-		Position = Initial.Position;
-		Rotation = Initial.Rotation;
+		m_Owner = owner;
+		Aim = 0;
+		Offset = Vector3.Zero;
+		Angles = Rotation.Identity;
 	}
 
 	// Read Only
 
-	public float Aim { get; }
-	
-	public AnimatedEntity Entity { get; }
-	public Entity Owner { get; }
-	
-	public Transform Initial { get; }
-	public Vector3 Velocity => Owner.Velocity;
+	public float Aim;
+
+	private readonly Entity m_Owner;
+	public Vector3 Velocity => m_Owner.Velocity;
 
 	// Mutable
 
-	public Vector3 Position;
-	public Rotation Rotation;
+	public Vector3 Offset;
+	public Rotation Angles;
 }

@@ -22,7 +22,7 @@ public sealed class WeaponDataAsset : GameResource
 	public DrawTime Draw { get; set; }
 }
 
-public sealed partial class ConfigurableWeapon : Weapon, IHave<DisplayInfo>
+public sealed partial class ConfigurableFirearm : Firearm, IHave<DisplayInfo>
 {
 	public WeaponDataAsset Asset { get => n_Asset; init => OnAssetChanged( value ); }
 

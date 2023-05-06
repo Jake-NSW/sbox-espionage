@@ -6,7 +6,7 @@ namespace Woosh.Espionage;
 
 public sealed class GameHud : HudEntity<HudRoot> { }
 
-public partial class Project : GameManager
+public partial class Project : GameManager, IMutateCameraSetup
 {
 	public static Project Current => GameManager.Current as Project;
 
@@ -28,9 +28,13 @@ public partial class Project : GameManager
 	public override void FrameSimulate( IClient cl )
 	{
 		base.FrameSimulate( cl );
+		Camera.Update( mutate: this );
+	}
 
-		Camera.Update();
-		CompositedViewModel.UpdateAllViewModels( Camera.Target );
+	public void OnPostCameraSetup( ref CameraSetup setup )
+	{
+		(Game.LocalPawn as IMutateCameraSetup)?.OnPostCameraSetup( ref setup );
+		CompositedViewModel.UpdateAllViewModels( ref setup, Camera.Target );
 	}
 
 	public override void ClientJoined( IClient client )
@@ -41,7 +45,7 @@ public partial class Project : GameManager
 		spawn.Position += Vector3.Up * 72;
 
 		var pistol = new Mk23Firearm();
-		var smg = new ConfigurableWeapon { Asset = ResourceLibrary.Get<WeaponDataAsset>( "weapons/smg2/smg2.weapon" ) };
+		var smg = new ConfigurableFirearm { Asset = ResourceLibrary.Get<WeaponDataAsset>( "weapons/smg2/smg2.weapon" ) };
 
 		var pawn = client.Possess<Operator>( spawn );
 

@@ -18,20 +18,15 @@ public sealed class ViewModelPitchOffsetEffect : IViewModelEffect
 	private Rotation m_LastOffsetRot = Rotation.Identity;
 	private Vector3 m_LastOffsetPos;
 
-	public bool Update( ref ViewModelSetup setup )
+	public void OnPostCameraSetup( ref CameraSetup setup )
 	{
 		var offset = Camera.Rotation.Pitch().Remap( -90, 90, -1, 1 );
-		var rot = setup.Initial.Rotation;
+		var rot = setup.Rotation;
 
-		m_LastOffsetRot = Rotation.Slerp( m_LastOffsetRot, Rotation.Lerp( Rotation.From( offset * m_PitchOffset, 0, 0 ), Rotation.Identity, setup.Aim ), Damping * Time.Delta );
-		m_LastOffsetPos = m_LastOffsetPos.LerpTo( Vector3.Lerp( rot.Up * offset * m_YawOffset, Vector3.Zero, setup.Aim ), Damping * Time.Delta );
+		m_LastOffsetRot = Rotation.Slerp( m_LastOffsetRot, Rotation.Lerp( Rotation.From( offset * m_PitchOffset, 0, 0 ), Rotation.Identity, setup.Hands.Aim ), Damping * Time.Delta );
+		m_LastOffsetPos = m_LastOffsetPos.LerpTo( Vector3.Lerp( rot.Up * offset * m_YawOffset, Vector3.Zero, setup.Hands.Aim ), Damping * Time.Delta );
 
-		setup.Rotation *= m_LastOffsetRot;
-		setup.Position += m_LastOffsetPos;
-
-		return false;
+		setup.Hands.Angles *= m_LastOffsetRot;
+		setup.Hands.Offset += m_LastOffsetPos;
 	}
-
-	public void Register( IDispatchRegistryTable table ) { }
-	public void Unregister( IDispatchRegistryTable table ) { }
 }

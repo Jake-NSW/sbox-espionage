@@ -11,15 +11,10 @@ public sealed class ViewModelOffsetEffect : IViewModelEffect
 		m_Aim = aim;
 	}
 
-	public bool Update( ref ViewModelSetup setup )
+	public void OnPostCameraSetup( ref CameraSetup setup )
 	{
-		var target = Vector3.Lerp( m_Hip, m_Aim, setup.Aim );
-		var rot = setup.Initial.Rotation;
-		setup.Position += target.x * rot.Forward + target.y * rot.Left + target.z * rot.Up;
-
-		return false;
+		var target = Vector3.Lerp( m_Hip, m_Aim, setup.Hands.Aim );
+		var rot = setup.Rotation;
+		setup.Hands.Offset += target.x * rot.Forward + target.y * rot.Left + target.z * rot.Up;
 	}
-
-	void IViewModelEffect.Register( IDispatchRegistryTable table ) { }
-	void IViewModelEffect.Unregister( IDispatchRegistryTable table ) { }
 }

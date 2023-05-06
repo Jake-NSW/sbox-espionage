@@ -4,7 +4,7 @@ using Sandbox;
 namespace Woosh.Espionage;
 
 [Library("esp_rust_pistol"), HammerEntity, EditorModel(WORLD_MODEL)]
-public sealed class RustPistolFirearm : Weapon, IHave<DisplayInfo>, ISlotted
+public sealed class RustPistolFirearm : Firearm, IHave<DisplayInfo>, ISlotted
 {
 	DisplayInfo IHave<DisplayInfo>.Item => new DisplayInfo() { Name = "Rust Pistol" };
 	
@@ -42,7 +42,7 @@ public sealed class RustPistolFirearm : Weapon, IHave<DisplayInfo>, ISlotted
 }
 
 [Library( "esp_mk23_firearm" ), HammerEntity, EditorModel( WORLD_MODEL )]
-public sealed class Mk23Firearm : Weapon, IHave<DisplayInfo>, ISlotted
+public sealed class Mk23Firearm : Firearm, IHave<DisplayInfo>, ISlotted
 {
 	DisplayInfo IHave<DisplayInfo>.Item => new DisplayInfo() { Name = "Mark23" };
 

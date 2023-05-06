@@ -9,24 +9,21 @@ public enum WeaponSound
 	Reload
 }
 
-// Accurarcy
-// Range
-// Mobility
-// Damge
-// Firerate
-// Control
-
-public struct WeaponSetup
+public struct FirearmSetup
 {
 	public bool IsAutomatic;
-	public float Firerate;
+	public float RateOfFire; // RPM
+	public float Control;
+	public float Mobility;
+	public float Range;
+	public float Accuracy;
 }
 
-public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
+public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup
 {
 	public StructEventDispatcher Events { get; }
 
-	public Weapon()
+	public Firearm()
 	{
 		Events = new StructEventDispatcher();
 	}
@@ -39,7 +36,7 @@ public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 		EnableHideInFirstPerson = true;
 		EnableShadowInFirstPerson = true;
 
-		n_Setup = new WeaponSetup { IsAutomatic = true, Firerate = 13 };
+		n_Setup = new FirearmSetup { IsAutomatic = true, RateOfFire = 900 };
 	}
 
 	public override void Simulate( IClient cl )
@@ -53,8 +50,8 @@ public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 		}
 	}
 
-	public WeaponSetup Setup => n_Setup;
-	[Net] private WeaponSetup n_Setup { get; set; }
+	public FirearmSetup Setup => n_Setup;
+	[Net] private FirearmSetup n_Setup { get; set; }
 
 	// Shoot
 
@@ -72,7 +69,7 @@ public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 				return false;
 		}
 		
-		return n_SinceLastShot >= 1 / Setup.Firerate;
+		return n_SinceLastShot >= 60 / Setup.RateOfFire;
 	}
 
 	public void Shoot()

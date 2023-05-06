@@ -1,9 +1,9 @@
-﻿namespace Woosh.Espionage;
+﻿using Sandbox;
 
-public interface IViewModelEffect
+namespace Woosh.Espionage;
+
+public interface IViewModelEffect : IMutateCameraSetup
 {
-	bool Update( ref ViewModelSetup setup );
-
-	void Register( IDispatchRegistryTable table ) { }
+	void Register( AnimatedEntity model, IDispatchRegistryTable table ) { }
 	void Unregister( IDispatchRegistryTable table ) { }
 }
