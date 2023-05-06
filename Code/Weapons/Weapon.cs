@@ -175,6 +175,8 @@ public abstract partial class Weapon : AnimatedEntity, ICarriable, IPickup
 	{
 		Effects.SetAnimParameter( "bDropped", drop );
 		Effects.SetAnimParameter( "bDeployed", false );
+		
+		Log.Info($"Start Holstering - {GetType().Name}");
 	}
 
 	void ICarriable.OnHolstered()

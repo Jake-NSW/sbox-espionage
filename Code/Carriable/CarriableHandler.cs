@@ -22,6 +22,12 @@ public partial class CarriableHandler : EntityComponent, IActive<Entity>, IActiv
 			(m_LastActive as ICarriable)?.Holstering( n_IsDropping );
 			m_LastActive = n_RealActive;
 			(m_LastActive as ICarriable)?.Deploying();
+
+			if ( n_Holster.AlmostEqual( 0 ) )
+			{
+				// Just Holster straight away if we have no holster time
+				OnHolstered();
+			}
 		}
 
 		// Wait for Deploying to Finish
@@ -38,6 +44,7 @@ public partial class CarriableHandler : EntityComponent, IActive<Entity>, IActiv
 		{
 			if ( n_SinceHolsterStart >= n_Holster )
 			{
+				Log.Info("Holstering");
 				OnHolstered();
 			}
 		}

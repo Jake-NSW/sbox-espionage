@@ -30,12 +30,16 @@ public sealed class Operator : Pawn
 		// Inventory
 		Components.Create<CarriableHandler>();
 		Components.Create<InventoryContainer>();
-		Components.Add( new DeployableSlotHandler( 3, Inventory, Hands ) );
+		Components.Add( new DeployableSlotHandler( 3 ) );
 	}
 
 	public override void Simulate( IClient cl )
 	{
 		base.Simulate( cl );
+		
+		Components.Get<InteractionHandler>()?.Simulate( cl );
+		Components.Get<CarriableHandler>()?.Simulate( cl );
+		Components.Get<PawnLeaning>()?.Simulate( cl );
 
 		if ( Input.Pressed( "slot_primary" ) )
 		{
@@ -56,9 +60,5 @@ public sealed class Operator : Pawn
 		{
 			Slots.Drop( Slots.SlotOfEntity( Hands.Active ) );
 		}
-		
-		Components.Get<InteractionHandler>()?.Simulate( cl );
-		Components.Get<CarriableHandler>()?.Simulate( cl );
-		Components.Get<PawnLeaning>()?.Simulate( cl );
 	}
 }

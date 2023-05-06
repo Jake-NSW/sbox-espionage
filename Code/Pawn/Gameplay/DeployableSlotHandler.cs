@@ -6,41 +6,48 @@ namespace Woosh.Espionage;
 
 public class DeployableSlotHandler : EntityComponent, ISingletonComponent, INetworkSerializer
 {
-	private IEntityInventory Inventory { get; }
-	private CarriableHandler Handler { get; }
+	private IEntityInventory Inventory => Entity.Components.Get<IEntityInventory>();
+	private CarriableHandler Handler => Entity.Components.Get<CarriableHandler>();
 
-	public DeployableSlotHandler()
-	{
-		Game.AssertClient();
-	}
+	public DeployableSlotHandler() => Game.AssertClient();
 
-	public DeployableSlotHandler( int slots, IEntityInventory inventory, CarriableHandler handler )
+	public DeployableSlotHandler( int slots )
 	{
 		Game.AssertServer();
-
 		n_Slots = new Entity[slots];
-		Inventory = inventory;
-		Handler = handler;
+	}
 
-		Inventory.Added += ( ent ) =>
+	protected override void OnActivate()
+	{
+		base.OnActivate();
+		Inventory.Added += OnInventoryAdded;
+	}
+
+	protected override void OnDeactivate()
+	{
+		base.OnDeactivate();
+		Inventory.Added -= OnInventoryAdded;
+	}
+
+	private void OnInventoryAdded( Entity ent )
+	{
+		Log.Info( "Adding" );
+
+		if ( ent is not ISlotted slotted )
 		{
-			Log.Info( "Adding" );
+			// Don't do anything, as we can't slot...
+			return;
+		}
 
-			if ( ent is ISlotted slotted )
-			{
-				Log.Info( "was slotted" );
-				var wasActive = Active == slotted.Slot;
+		var wasActive = Active == slotted.Slot;
 
-				Drop( slotted.Slot );
-				Assign( slotted.Slot, ent );
+		Drop( slotted.Slot );
+		Assign( slotted.Slot, ent );
 
-				if ( wasActive )
-				{
-					Log.Info( "Deploying" );
-					Deploy( slotted.Slot );
-				}
-			}
-		};
+		if ( wasActive )
+		{
+			Deploy( slotted.Slot );
+		}
 	}
 
 	// Slots
