@@ -3,44 +3,6 @@ using Sandbox;
 
 namespace Woosh.Espionage;
 
-[Library("esp_rust_pistol"), HammerEntity, EditorModel(WORLD_MODEL)]
-public sealed class RustPistolFirearm : Firearm, IHave<DisplayInfo>, ISlotted
-{
-	DisplayInfo IHave<DisplayInfo>.Item => new DisplayInfo() { Name = "Rust Pistol" };
-	
-	private const string VIEW_MODEL = "weapons/rust_pistol/v_rust_pistol.vmdl";
-	private const string WORLD_MODEL = "weapons/rust_pistol/rust_pistol.vmdl";
-
-	public override void Spawn()
-	{
-		base.Spawn();
-		
-		Model = Model.Load( WORLD_MODEL );
-		SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
-	}
-
-	public int Slot => Operator.CarrySlot.Holster.Index();
-	public override DrawTime Draw => new DrawTime( 1, 0.2f );
-	
-	protected override AnimatedEntity OnRequestViewmodel()
-	{
-		using var _ = Log.Measure();
-		
-		var view = new CompositedViewModel( Events ) { Owner = Owner, Model = Model.Load( VIEW_MODEL ) };
-
-		view.Add( new ViewModelOffsetEffect( Vector3.Zero, default ) );
-		view.Add( new ViewModelSwayEffect( 1, 1.3f ) );
-		view.Add( new ViewModelMoveOffsetEffect( Vector3.One, 10 ) );
-		view.Add( new ViewModelStrafeOffsetEffect() { Damping = 6, RollMultiplier = 1, AxisMultiplier = 10 } );
-		view.Add( new ViewModelDeadzoneSwayEffect( new Vector2( 10, 10 ) ) { AimingOnly = true, AutoCenter = false, Damping = 8 } );
-		view.Add( new ViewModelPitchOffsetEffect( 5, 4 ) { Damping = 15 } );
-		view.Add( new ViewModelRecoilEffect() );
-		view.Add( new ViewModelTuckEffect() );
-
-		return view;
-	}
-}
-
 [Library( "esp_mk23_firearm" ), HammerEntity, EditorModel( WORLD_MODEL )]
 public sealed class Mk23Firearm : Firearm, IHave<DisplayInfo>, ISlotted
 {
@@ -63,18 +25,10 @@ public sealed class Mk23Firearm : Firearm, IHave<DisplayInfo>, ISlotted
 	protected override AnimatedEntity OnRequestViewmodel()
 	{
 		var view = new CompositedViewModel( Events ) { Owner = Owner, Model = Model.Load( VIEW_MODEL ) };
-
-		view.Add( new ViewModelOffsetEffect( Vector3.Zero, default ) );
-		view.Add( new ViewModelSwayEffect( 1, 1.3f ) );
-		view.Add( new ViewModelMoveOffsetEffect( Vector3.One, 10 ) );
-		view.Add( new ViewModelStrafeOffsetEffect() { Damping = 6, RollMultiplier = 1, AxisMultiplier = 10 } );
-		view.Add( new ViewModelDeadzoneSwayEffect( new Vector2( 10, 10 ) ) { AimingOnly = true, AutoCenter = false, Damping = 8 } );
-		view.Add( new ViewModelPitchOffsetEffect( 5, 4 ) { Damping = 15 } );
-		view.Add( new ViewModelRecoilEffect() );
-		view.Add( new ViewModelTuckEffect() );
-
-		view.SetBodyGroup( "module", 1 );
-		// view.SetBodyGroup( "muzzle", 1 );
+		view.ImportFrom<EspEffectStack>();
+			
+		// view.SetBodyGroup( "module", 1 );
+		view.SetBodyGroup( "muzzle", 1 );
 
 		return view;
 	}

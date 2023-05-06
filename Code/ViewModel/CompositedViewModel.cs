@@ -17,7 +17,7 @@ public sealed class CompositedViewModel : AnimatedEntity
 	{
 		foreach ( var viewModel in s_All )
 		{
-			viewModel.Update(ref setup);
+			viewModel.Update( ref setup );
 		}
 
 		var fov = Screen.CreateVerticalFieldOfView( 64 );
@@ -33,7 +33,7 @@ public sealed class CompositedViewModel : AnimatedEntity
 	{
 		Game.AssertClient();
 
-		// EnableViewmodelRendering = true;
+		EnableViewmodelRendering = true;
 
 		s_All.AddLast( m_Node = new LinkedListNode<CompositedViewModel>( this ) );
 
@@ -53,10 +53,10 @@ public sealed class CompositedViewModel : AnimatedEntity
 	private void Update( ref CameraSetup setup )
 	{
 		// Apply Twice
-		
+
 		Position = setup.Position + setup.Hands.Offset;
 		Rotation = setup.Rotation * setup.Hands.Angles;
-		
+
 		foreach ( var effect in m_Effects )
 		{
 			effect.OnPostCameraSetup( ref setup );
@@ -65,6 +65,11 @@ public sealed class CompositedViewModel : AnimatedEntity
 		// Append Effects
 		Position = setup.Position + setup.Hands.Offset;
 		Rotation = setup.Rotation * setup.Hands.Angles;
+	}
+
+	public void ImportFrom<T>() where T :struct, ITemplate<CompositedViewModel>
+	{
+		new T().Generate(this);
 	}
 
 	public void Add( IViewModelEffect effect )
