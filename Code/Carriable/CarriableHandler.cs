@@ -22,12 +22,6 @@ public partial class CarriableHandler : EntityComponent, IActive<Entity>, IActiv
 			(m_LastActive as ICarriable)?.Holstering( n_IsDropping );
 			m_LastActive = n_RealActive;
 			(m_LastActive as ICarriable)?.Deploying();
-
-			if ( n_Holster.AlmostEqual( 0 ) )
-			{
-				// Just Holster straight away if we have no holster time
-				OnHolstered();
-			}
 		}
 
 		// Wait for Deploying to Finish
@@ -44,7 +38,6 @@ public partial class CarriableHandler : EntityComponent, IActive<Entity>, IActiv
 		{
 			if ( n_SinceHolsterStart >= n_Holster )
 			{
-				Log.Info("Holstering");
 				OnHolstered();
 			}
 		}
@@ -123,8 +116,8 @@ public partial class CarriableHandler : EntityComponent, IActive<Entity>, IActiv
 	private void OnDeployed()
 	{
 		n_IsDeploying = false;
-		
-		m_OnDeployed?.Invoke(Entity);
+
+		m_OnDeployed?.Invoke( Entity );
 		m_OnDeployed = null;
 
 		if ( n_ToDeploy != null && Game.IsServer )
@@ -139,7 +132,7 @@ public partial class CarriableHandler : EntityComponent, IActive<Entity>, IActiv
 	[Net, Local] private bool n_IsHolstering { get; set; }
 	[Net, Local] private TimeSince n_SinceHolsterStart { get; set; }
 	[Net, Local] private float n_Holster { get; set; }
-	
+
 	private EntityComponentCallback m_OnHolstered;
 
 	public void Holster( bool dropping, EntityComponentCallback onHolstered = null )
@@ -167,7 +160,7 @@ public partial class CarriableHandler : EntityComponent, IActive<Entity>, IActiv
 		(Active as ICarriable)?.OnHolstered();
 		Active = null;
 
-		m_OnHolstered?.Invoke(Entity);
+		m_OnHolstered?.Invoke( Entity );
 		m_OnHolstered = null;
 
 		if ( n_ToDeploy != null )

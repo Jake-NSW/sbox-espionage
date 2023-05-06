@@ -20,7 +20,7 @@ public sealed class RustPistolFirearm : Weapon, IHave<DisplayInfo>, ISlotted
 	}
 
 	public int Slot => Operator.CarrySlot.Holster.Index();
-	public override DrawTime Draw => new DrawTime( 1, 0 );
+	public override DrawTime Draw => new DrawTime( 1, 0.2f );
 	
 	protected override AnimatedEntity OnRequestViewmodel()
 	{
