@@ -4,7 +4,7 @@ namespace Woosh.Espionage;
 
 public ref struct ViewModelSetup
 {
-	internal ViewModelSetup(  Entity owner )
+	internal ViewModelSetup( Entity owner )
 	{
 		m_Owner = owner;
 		Aim = 0;
@@ -12,14 +12,12 @@ public ref struct ViewModelSetup
 		Angles = Rotation.Identity;
 	}
 
-	// Read Only
-
-	public float Aim;
-
 	private readonly Entity m_Owner;
 	public Vector3 Velocity => m_Owner.Velocity;
 
 	// Mutable
+
+	public float Aim;
 
 	public Vector3 Offset;
 	public Rotation Angles;

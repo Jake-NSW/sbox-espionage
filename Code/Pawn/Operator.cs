@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using System.Linq;
+using Sandbox;
 
 namespace Woosh.Espionage;
 
@@ -37,6 +38,11 @@ public sealed class Operator : Pawn, IMutateCameraSetup
 	{
 		setup.Hands = new ViewModelSetup( this );
 		(Active as IMutateCameraSetup)?.OnPostCameraSetup( ref setup );
+
+		foreach ( var component in Components.All().OfType<IMutateCameraSetup>() )
+		{
+			component.OnPostCameraSetup(ref setup);
+		}
 	}
 
 	[GameEvent.Tick.Client]

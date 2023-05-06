@@ -20,13 +20,17 @@ public class DeployableSlotHandler : EntityComponent, ISingletonComponent, INetw
 	protected override void OnActivate()
 	{
 		base.OnActivate();
-		Inventory.Added += OnInventoryAdded;
+
+		if ( Inventory != null )
+			Inventory.Added += OnInventoryAdded;
 	}
 
 	protected override void OnDeactivate()
 	{
 		base.OnDeactivate();
-		Inventory.Added -= OnInventoryAdded;
+
+		if ( Inventory != null )
+			Inventory.Added -= OnInventoryAdded;
 	}
 
 	private void OnInventoryAdded( Entity ent )

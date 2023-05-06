@@ -33,7 +33,7 @@ public sealed class CompositedViewModel : AnimatedEntity
 	{
 		Game.AssertClient();
 
-		EnableViewmodelRendering = true;
+		// EnableViewmodelRendering = true;
 
 		s_All.AddLast( m_Node = new LinkedListNode<CompositedViewModel>( this ) );
 
@@ -52,6 +52,11 @@ public sealed class CompositedViewModel : AnimatedEntity
 
 	private void Update( ref CameraSetup setup )
 	{
+		// Apply Twice
+		
+		Position = setup.Position + setup.Hands.Offset;
+		Rotation = setup.Rotation * setup.Hands.Angles;
+		
 		foreach ( var effect in m_Effects )
 		{
 			effect.OnPostCameraSetup( ref setup );

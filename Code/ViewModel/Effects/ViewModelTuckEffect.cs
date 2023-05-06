@@ -12,8 +12,8 @@ public enum TuckType
 
 public sealed class ViewModelTuckEffect : IViewModelEffect
 {
-	public float Damping { get; set; } = 14;
-	public TuckType Variant { get; set; }
+	public float Damping { get; init; } = 14;
+	public TuckType Variant { get; init; }
 
 	private AnimatedEntity m_Model;
 
@@ -36,13 +36,13 @@ public sealed class ViewModelTuckEffect : IViewModelEffect
 			return;
 
 		var muzzle = attachment.Value;
-		var distance = muzzle.Position.Distance( setup.Position );
+		var distance = muzzle.Position.Distance( m_Model.Position );
 
 		var start = muzzle.Position - (muzzle.Rotation.Forward * distance);
 		var end = start + (muzzle.Rotation.Forward * (distance * 2));
 		var info = Trace.Ray( start, end )
 			.Ignore( Game.LocalPawn )
-			.Size( 2 )
+			.Size( 3 )
 			.Run();
 
 		m_Offset = m_Offset.LerpTo( info.Hit && info.Distance < distance ? info.Distance - distance : 0, Damping * Time.Delta );
