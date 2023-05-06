@@ -45,7 +45,7 @@ public partial class Project : GameManager, IMutateCameraSetup
 		spawn.Position += Vector3.Up * 72;
 
 		var pistol = new Mk23Firearm();
-		var smg = new ConfigurableFirearm { Asset = ResourceLibrary.Get<WeaponDataAsset>( "weapons/smg2/smg2.weapon" ) };
+		var smg = new Smg2Firearm();
 
 		var pawn = client.Possess<Operator>( spawn );
 
