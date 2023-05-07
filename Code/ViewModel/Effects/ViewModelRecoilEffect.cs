@@ -53,7 +53,7 @@ public sealed class ViewModelRecoilEffect : IViewModelEffect
 
 	public void Register( AnimatedEntity entity, IDispatchRegistryTable table )
 	{
-		table.Register(
+		table?.Register(
 			( in WeaponFireEvent evt ) =>
 			{
 				var rand = Game.Random;

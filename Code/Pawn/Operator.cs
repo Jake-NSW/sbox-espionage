@@ -29,7 +29,7 @@ public sealed class Operator : Pawn, IMutateCameraSetup
 		Components.Create<EquipEntityInteraction>();
 
 		// Inventory
-		Components.Create<CarriableHandler>();
+		Components.Add( new CarriableHandler( new PlayerHands() { Owner = this } ) );
 		Components.Create<InventoryContainer>();
 		Components.Add( new DeployableSlotHandler( 3 ) );
 	}
@@ -41,7 +41,7 @@ public sealed class Operator : Pawn, IMutateCameraSetup
 
 		foreach ( var component in Components.All().OfType<IMutateCameraSetup>() )
 		{
-			component.OnPostCameraSetup(ref setup);
+			component.OnPostCameraSetup( ref setup );
 		}
 	}
 

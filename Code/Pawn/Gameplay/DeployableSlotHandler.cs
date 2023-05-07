@@ -22,7 +22,10 @@ public class DeployableSlotHandler : EntityComponent, ISingletonComponent, INetw
 		base.OnActivate();
 
 		if ( Inventory != null )
+		{
 			Inventory.Added += OnInventoryAdded;
+			Inventory.Removed += OnInventoryRemoved;
+		}
 	}
 
 	protected override void OnDeactivate()
@@ -30,7 +33,25 @@ public class DeployableSlotHandler : EntityComponent, ISingletonComponent, INetw
 		base.OnDeactivate();
 
 		if ( Inventory != null )
+		{
 			Inventory.Added -= OnInventoryAdded;
+			Inventory.Removed -= OnInventoryRemoved;
+		}
+	}
+
+	private void OnInventoryRemoved( Entity ent )
+	{
+		var slot = SlotOfEntity( ent );
+
+		if ( slot == -1 )
+			return;
+
+		if ( Active == slot )
+		{
+			Handler.Deploy( null );
+		}
+
+		Assign( slot, null );
 	}
 
 	private void OnInventoryAdded( Entity ent )
@@ -97,6 +118,7 @@ public class DeployableSlotHandler : EntityComponent, ISingletonComponent, INetw
 		if ( !Inventory.Contains( ent ) )
 		{
 			Assign( slot + 1, null );
+			Handler.Deploy( null );
 			return;
 		}
 
@@ -112,7 +134,7 @@ public class DeployableSlotHandler : EntityComponent, ISingletonComponent, INetw
 			return;
 
 		var entity = n_Slots[slot - 1];
-		if ( SlotOfEntity( Handler.Active ) == slot )
+		if ( Active == slot )
 		{
 			Handler.Holster( true, ent => ent.Components.Get<IEntityInventory>().Drop( entity ) );
 			return;

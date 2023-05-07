@@ -54,6 +54,5 @@ public partial class Project : GameManager, IMutateCameraSetup
 
 		pawn.Hands.Assign( Operator.CarrySlot.Holster, pistol );
 		pawn.Hands.Assign( Operator.CarrySlot.Front, smg );
-		pawn.Hands.Deploy( Operator.CarrySlot.Holster );
 	}
 }
