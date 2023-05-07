@@ -46,7 +46,7 @@ public class DeployableSlotHandler : EntityComponent, ISingletonComponent, INetw
 		if ( slot == -1 )
 			return;
 
-		if ( Active == slot )
+		if ( Active - 1 == slot )
 		{
 			Handler.Deploy( null );
 		}
@@ -91,10 +91,15 @@ public class DeployableSlotHandler : EntityComponent, ISingletonComponent, INetw
 
 	public int SlotOfEntity( Entity entity )
 	{
+		if ( entity == null )
+			return -1;
+
 		for ( int i = 0; i < n_Slots.Length; i++ )
 		{
 			if ( entity == n_Slots[i] )
+			{
 				return i + 1;
+			}
 		}
 
 		return -1;

@@ -20,6 +20,16 @@ public partial class CarriableHandler : EntityComponent, IActive<Entity>, IActiv
 
 	private readonly Entity m_Fallback;
 
+	protected override void OnActivate()
+	{
+		base.OnActivate();
+
+		if ( Active == null && m_Fallback != null )
+		{
+			Deploy( m_Fallback );
+		}
+	}
+
 	[Net, Local] private Entity n_RealActive { get; set; }
 	[Predicted] private Entity m_LastActive { get; set; }
 
@@ -68,7 +78,6 @@ public partial class CarriableHandler : EntityComponent, IActive<Entity>, IActiv
 	{
 		// Only allow the server to deploy...
 		Game.AssertServer();
-
 		entity ??= m_Fallback;
 
 		// Check if we have a valid entity
@@ -153,7 +162,7 @@ public partial class CarriableHandler : EntityComponent, IActive<Entity>, IActiv
 		if ( Active is ICarriable { Holsterable: false } )
 		{
 			// Deploy Fallback
-			n_ToDeploy = m_Fallback;
+			n_ToDeploy = null;
 			return;
 		}
 
@@ -174,6 +183,8 @@ public partial class CarriableHandler : EntityComponent, IActive<Entity>, IActiv
 
 		m_OnHolstered?.Invoke( Entity );
 		m_OnHolstered = null;
+
+		n_ToDeploy ??= m_Fallback;
 
 		if ( n_ToDeploy != null )
 		{
