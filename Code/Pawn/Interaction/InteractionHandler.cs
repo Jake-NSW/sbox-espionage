@@ -23,23 +23,33 @@ public sealed class InteractionHandler : EntityComponent, ISingletonComponent
 	public Entity Hovering => p_Last;
 	[Predicted] private Entity p_Last { get; set; }
 
+	private int m_Length;
+	
 	public void Simulate( IClient client )
 	{
 		var result = Scan();
 		var hovering = result.Entity;
-		
-		if ( p_Last != hovering )
+
+		if ( p_Last != hovering || m_Length != Entity.Components.Count)
 		{
-			var last = p_Last;
+			m_Length = Entity.Components.Count;
+			
+			var old = p_Last;
 			p_Last = hovering;
-			m_Interactions = p_Last == null ? Array.Empty<IEntityInteraction>() : Entity.Components.GetAll<IEntityInteraction>().Where( e => e.IsInteractable( p_Last ) ).ToArray();
-			Events.Notify(p_Last, last);
+			Rebuild();
+			
+			Events.Notify( p_Last, old );
 		}
 
 		foreach ( var interaction in Interactions )
 		{
 			interaction.Simulate( result, client );
 		}
+	}
+
+	public void Rebuild()
+	{
+		m_Interactions = p_Last == null ? Array.Empty<IEntityInteraction>() : Entity.Components.GetAll<IEntityInteraction>().Where( e => e.IsInteractable( p_Last ) ).ToArray();
 	}
 
 	private TraceResult Scan( float size = 8 )

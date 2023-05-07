@@ -5,8 +5,8 @@ using ModelDoorSounds = Sandbox.DoorEntity.ModelDoorSounds;
 
 namespace Woosh.Espionage;
 
-[Library( "esp_hinged_door" ), HammerEntity, Category( "Gameplay" ), Icon( "door_front" ), Model]
-public sealed partial class PushableHingedDoorEntity : AnimatedEntity, IPushable, IHave<DisplayInfo>
+[Library( "esp_hinged_door" ), HammerEntity, Title( "Door" ), Category( "Gameplay" ), Icon( "door_front" ), Model]
+public sealed partial class PushableHingedDoorEntity : AnimatedEntity, IPushable
 {
 	public enum DoorStates : byte
 	{
@@ -15,10 +15,6 @@ public sealed partial class PushableHingedDoorEntity : AnimatedEntity, IPushable
 		Bounced,
 		Locked
 	}
-
-	DisplayInfo IHave<DisplayInfo>.Item => Info;
-
-	public DisplayInfo Info { get; }
 
 	// Utility
 
@@ -37,17 +33,9 @@ public sealed partial class PushableHingedDoorEntity : AnimatedEntity, IPushable
 	[Property( Title = "Weight (kg)" )] public int Weight { get; set; } = 15;
 	[Property] public float Stiffness { get; set; } = 3.5f;
 
-	// Profile
-
-	[Property] private string Display { get; set; } = "Door";
-
 	public PushableHingedDoorEntity()
 	{
 		Transmit = TransmitType.Pvs;
-
-		var info = DisplayInfo.ForType( typeof(PushableHingedDoorEntity) );
-		info.Name = Display;
-		Info = info;
 	}
 
 	public override void Spawn()

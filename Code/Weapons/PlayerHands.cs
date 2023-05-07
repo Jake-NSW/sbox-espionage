@@ -2,20 +2,8 @@
 
 namespace Woosh.Espionage;
 
-public sealed partial class PlayerHands : AnimatedEntity, ICarriable, IHave<DisplayInfo>
+public sealed partial class PlayerHands : AnimatedEntity, ICarriable
 {
-	public DisplayInfo Item => new DisplayInfo() { Name = "Hands" };
-
-	public override void Simulate( IClient cl )
-	{
-		base.Simulate( cl );
-
-		if ( Input.Pressed( "shoot" ) && n_SinceAttack > 0.4f )
-		{
-			Attack();
-		}
-	}
-
 	// Attack
 
 	public void OnSwingStart() { }

@@ -57,7 +57,7 @@
 
             // Get Info
             var model = (ModelEntity)handler.Hovering;
-            var info = (model as IHave<DisplayInfo>)?.Item ?? DisplayInfo.ForType(model.GetType());
+            var info = model.Info();
 
             Display = info.Name;
             Icon = info.Icon;
@@ -94,7 +94,7 @@
 
     protected override int BuildHash()
     {
-        // This is dumb
+    // This is dumb
         return (Display?.GetHashCode() ?? 0) ^ (m_Target?.GetHashCode() ?? 0) ^ (m_Handler?.Interactions.Count ?? 0);
     }
 }
