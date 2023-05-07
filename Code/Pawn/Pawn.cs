@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using System.Linq;
+using Sandbox;
 
 namespace Woosh.Espionage;
 
@@ -21,13 +22,22 @@ public partial class Pawn : AnimatedEntity
 	[ClientInput] public Vector3 InputDirection { get; protected set; }
 	[ClientInput] public Angles ViewAngles { get; set; }
 
-	public override void BuildInput()
+	public override sealed void BuildInput()
 	{
-		InputDirection = Input.AnalogMove;
-		ViewAngles = (ViewAngles + Input.AnalogLook).Normal;
+		var context = new InputContext() { InputDirection = Input.AnalogMove, ViewAngles = (ViewAngles + Input.AnalogLook).Normal };
+		OnPostInputBuild( ref context );
 
-		Components.Get<FirstPersonEntityCamera>()?.Feed( new InputContext( ViewAngles ) );
+		foreach ( var input in Components.All().OfType<IMutateInputContext>() )
+		{
+			// Post Build Input
+			input.OnPostInputBuild( ref context );
+		}
+
+		InputDirection = context.InputDirection;
+		ViewAngles = context.ViewAngles;
 	}
+
+	protected virtual void OnPostInputBuild( ref InputContext context ) { }
 
 	// Simulate
 

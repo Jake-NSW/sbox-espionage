@@ -5,7 +5,7 @@ namespace Woosh.Espionage;
 public sealed class ViewModelRecoilEffect : IViewModelEffect
 {
 	public float RecoilSnap { get; init; } = 25;
-	public float RecoilReturnSpeed { get; init; } = 20;
+	public float RecoilReturnSpeed { get; init; } = 5;
 	public float RecoilViewAnglesMultiplier { get; init; } = 6f;
 	public float RecoilRotationMultiplier { get; init; } = 1;
 	public float RecoilCameraRotationMultiplier { get; init; } = 1;
@@ -13,18 +13,16 @@ public sealed class ViewModelRecoilEffect : IViewModelEffect
 	public float KickbackSnap { get; init; } = 25;
 	public float KickbackReturnSpeed { get; init; } = 12;
 
-	public ViewModelRecoilEffect() { }
-
 	public void OnPostCameraSetup( ref CameraSetup setup )
 	{
-		RecoilUpdate( ref setup );
-		KickbackUpdate( ref setup );
+		ApplyRecoil( ref setup );
+		ApplyKickback( ref setup );
 	}
 
 	private Rotation m_RecoilCurrentRotation = Rotation.Identity;
 	private Vector3 m_RecoilTargetRotation;
 
-	private void RecoilUpdate( ref CameraSetup setup )
+	private void ApplyRecoil( ref CameraSetup setup )
 	{
 		var rot = setup.Rotation;
 
@@ -35,13 +33,13 @@ public sealed class ViewModelRecoilEffect : IViewModelEffect
 		setup.Hands.Offset += (rot.Forward * (m_RecoilCurrentRotation.Pitch()) / 2) + (rot.Left * m_RecoilCurrentRotation.Yaw() / 2);
 
 		// add this back when I support it...
-		setup.Rotation *= Rotation.From( m_RecoilCurrentRotation.Angles() / 1.5f ) * RecoilCameraRotationMultiplier;
+		setup.Rotation *= Rotation.From( m_RecoilCurrentRotation.Angles() ) * RecoilCameraRotationMultiplier;
 	}
 
 	private Vector3 m_KickbackCurrentPosition;
 	private Vector3 m_KickbackTargetPosition;
 
-	public void KickbackUpdate( ref CameraSetup setup )
+	public void ApplyKickback( ref CameraSetup setup )
 	{
 		var rot = setup.Rotation;
 
@@ -61,9 +59,5 @@ public sealed class ViewModelRecoilEffect : IViewModelEffect
 				m_KickbackTargetPosition += new Vector3( evt.Kickback.x, rand.Float( -evt.Kickback.y, evt.Kickback.y ), Game.Random.Float( -evt.Kickback.z, evt.Kickback.z ) ) * Time.Delta;
 			}
 		);
-
-		// OnShoot( Vector3 recoilIntensity, Vector3 kickbackIntensity )
 	}
-
-	public void Unregister( IDispatchRegistryTable table ) { }
 }

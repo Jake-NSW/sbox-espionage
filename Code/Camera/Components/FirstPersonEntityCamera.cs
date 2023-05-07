@@ -30,7 +30,7 @@ public sealed class FirstPersonCamera : ICameraController
 	public void Disabled() { }
 }
 
-public sealed class FirstPersonEntityCamera : EntityCameraController
+public sealed class FirstPersonEntityCamera : EntityCameraController, IMutateInputContext
 {
 	public override void Update( ref CameraSetup setup )
 	{
@@ -41,7 +41,7 @@ public sealed class FirstPersonEntityCamera : EntityCameraController
 
 	private Angles m_ViewAngles;
 
-	public void Feed( in InputContext context )
+	public void OnPostInputBuild( ref InputContext context )
 	{
 		m_ViewAngles = context.ViewAngles;
 	}

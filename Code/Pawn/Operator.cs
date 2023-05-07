@@ -45,6 +45,11 @@ public sealed class Operator : Pawn, IMutateCameraSetup
 		}
 	}
 
+	protected override void OnPostInputBuild( ref InputContext context )
+	{
+		(Active as IMutateInputContext)?.OnPostInputBuild( ref context );
+	}
+
 	[GameEvent.Tick.Client]
 	private void Tick()
 	{

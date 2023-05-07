@@ -2,16 +2,6 @@
 
 namespace Woosh.Espionage;
 
-public readonly ref struct InputContext
-{
-	public Angles ViewAngles { get; }
-
-	public InputContext( Angles viewAngles )
-	{
-		ViewAngles = viewAngles;
-	}
-}
-
 // Controller
 
 public abstract class EntityCameraController : EntityComponent, ICameraController, ISingletonComponent
