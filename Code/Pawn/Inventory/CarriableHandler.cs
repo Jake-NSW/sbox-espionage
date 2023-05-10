@@ -138,8 +138,8 @@ public partial class CarriableHandler : ObservableEntityComponent<Pawn>, IActive
 	{
 		n_IsDeploying = false;
 
-		m_OnDeployed?.Invoke( Entity );
-		Events.Run( new EntityDeployed( Entity ) );
+		m_OnDeployed?.Invoke( Active );
+		Events.Run( new EntityDeployed( Active ) );
 		m_OnDeployed = null;
 
 		if ( n_ToDeploy != null && Game.IsServer )
