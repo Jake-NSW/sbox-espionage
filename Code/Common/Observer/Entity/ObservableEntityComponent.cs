@@ -4,72 +4,74 @@ using Sandbox;
 
 namespace Woosh.Common;
 
-public abstract class ObservableEntityComponent<T> : EntityComponent<T> where T : Entity, IObservableEntity
+public abstract class ObservableEntityComponent<T, TSelf> : EntityComponent<T>
+	where T : Entity, IObservableEntity
+	where TSelf : ObservableEntityComponent<T, TSelf>
 {
 	[AttributeUsage( AttributeTargets.Method )]
 	protected sealed class AutoAttribute : Attribute
 	{
-		public bool KeepAlive { get; set; }
+		public Type Override { get; set; }
 	}
 
 	private struct EventNode
 	{
 		public readonly Type Type;
-		public readonly Delegate Delegate;
+		public readonly Action<object, object> Delegate;
 
-		public EventNode( Type type, Delegate evt )
+		public EventNode( Type type, Action<object, object> evt )
 		{
 			Type = type;
 			Delegate = evt;
 		}
 	}
 
-	protected Dispatcher Events => Entity.Events;
-	
-	private EventNode[] m_Nodes;
+	private readonly static EventNode[] m_Nodes;
 
-	protected override void OnActivate()
+	static ObservableEntityComponent()
 	{
-		// Auto Register Events from Attribute
-
-		if ( m_Nodes != null )
-		{
-			foreach ( var node in m_Nodes )
-			{
-				Events.Inject( node.Type, node.Delegate );
-			}
-
-			return;
-		}
-
 		var methods = TypeLibrary.GetMethodsWithAttribute<AutoAttribute>().ToArray();
 		m_Nodes = new EventNode[methods.Length];
 
 		for ( var index = 0; index < methods.Length; index++ )
 		{
-			var pair = methods[index];
-
-			var method = pair.Method;
+			var (method, attribute) = methods[index];
 
 			var type = TryFindArgument( method );
-			var cb = new DynamicCallback( e => method.Invoke( this, new[] { e } ) );
+			var cb = new Action<object, object>( ( target, evt ) => method.Invoke( target, new[] { evt } ) );
 
-			Events.Inject( type, cb );
-			m_Nodes[index] = new EventNode( type, cb );
+			m_Nodes[index] = new EventNode( attribute.Override ?? type, cb );
 		}
 	}
 
-	private Type TryFindArgument( MethodDescription description )
+	private static Type TryFindArgument( MethodDescription description )
 	{
 		var parameters = description.Parameters;
 
-		if ( parameters.Length != 1 )
-			return null;
+		// if ( parameters.Length != 1 )
+		return null;
 
+		/*
 		if ( parameters[0].ParameterType.GenericTypeArguments.Length != 1 )
 			return null;
 
 		return parameters[0].ParameterType.GenericTypeArguments[0];
+		*/
+	}
+
+	protected Dispatcher Events => Entity.Events;
+
+	protected override void OnActivate()
+	{
+		if ( m_Nodes == null )
+		{
+			return;
+		}
+
+		foreach ( var node in m_Nodes )
+		{
+			Events.Inject( node.Type, new DynamicCallback( obj => node.Delegate.Invoke( this, obj ) ) );
+		}
 	}
 
 	protected override void OnDeactivate()
@@ -77,7 +79,7 @@ public abstract class ObservableEntityComponent<T> : EntityComponent<T> where T 
 		// Auto Unregister Events from Attribute
 		foreach ( var node in m_Nodes )
 		{
-			Events.Erase( node.Type, node.Delegate );
+			// Events.Erase( node.Type, (DynamicCallback)Invoke );
 		}
 	}
 }

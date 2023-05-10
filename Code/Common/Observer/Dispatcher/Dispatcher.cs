@@ -28,6 +28,7 @@ public sealed class Dispatcher : IDispatchRegistryTable, IDispatchExecutor
 		{
 			(evt as Action)?.Invoke();
 			(evt as StructCallback<T>)?.Invoke( new Event<T>( item, from ) );
+			(evt as DynamicCallback)?.Invoke( new Event<T>( item, from ) );
 		}
 	}
 

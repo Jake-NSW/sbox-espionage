@@ -5,7 +5,7 @@ using Woosh.Common;
 
 namespace Woosh.Espionage;
 
-public class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISingletonComponent, INetworkSerializer
+public class DeployableSlotHandler : ObservableEntityComponent<Pawn, DeployableSlotHandler>, ISingletonComponent, INetworkSerializer
 {
 	public DeployableSlotHandler()
 	{
@@ -18,10 +18,25 @@ public class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISingleton
 		n_Slots = new Entity[slots];
 	}
 
+	protected override void OnActivate()
+	{
+		base.OnActivate();
+
+		Events.Register<InventoryAdded>( OnInventoryAdded );
+		Events.Register<InventoryRemoved>( OnInventoryRemoved );
+	}
+
+	protected override void OnDeactivate()
+	{
+		base.OnDeactivate();
+
+		Events.Unregister<InventoryAdded>( OnInventoryAdded );
+		Events.Unregister<InventoryRemoved>( OnInventoryRemoved );
+	}
+
 	private IEntityInventory Inventory => this.Get<IEntityInventory>();
 	private CarriableHandler Handler => this.Get<CarriableHandler>();
 
-	[Auto]
 	private void OnInventoryRemoved( in Event<InventoryRemoved> evt )
 	{
 		var ent = evt.Data.Entity;
@@ -38,7 +53,6 @@ public class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISingleton
 		Assign( slot, null );
 	}
 
-	[Auto]
 	private void OnInventoryAdded( in Event<InventoryAdded> evt )
 	{
 		var ent = evt.Data.Entity;

@@ -3,7 +3,7 @@ using Woosh.Common;
 
 namespace Woosh.Espionage;
 
-public sealed class ViewEffectsComponent : ObservableEntityComponent<ObservableAnimatedEntity>
+public sealed class ViewEffectsComponent : ObservableEntityComponent<ObservableAnimatedEntity, ViewEffectsComponent>
 {
 	public AnimatedEntity Effects => Entity;
 

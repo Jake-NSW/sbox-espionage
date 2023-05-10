@@ -5,7 +5,7 @@ namespace Woosh.Espionage;
 
 public delegate void EntityComponentCallback( Entity from );
 
-public partial class CarriableHandler : ObservableEntityComponent<Pawn>, IActive<Entity>, IActive<ICarriable>, ISingletonComponent
+public partial class CarriableHandler : ObservableEntityComponent<Pawn, CarriableHandler>, IActive<Entity>, IActive<ICarriable>, ISingletonComponent
 {
 	[Net, Local] public Entity Active { get; set; }
 	ICarriable IActive<ICarriable>.Active => Active as ICarriable;
@@ -184,7 +184,7 @@ public partial class CarriableHandler : ObservableEntityComponent<Pawn>, IActive
 
 		n_IsDropping = false;
 
-		m_OnHolstered?.Invoke( Active );
+		m_OnHolstered?.Invoke( Entity );
 		m_OnHolstered = null;
 		
 		Active = null;

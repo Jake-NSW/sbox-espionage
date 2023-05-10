@@ -13,7 +13,7 @@ public readonly struct LeanDirectionChanged : IEventData
 	}
 }
 
-public sealed partial class PawnLeaning : ObservableEntityComponent<Pawn>, IMutateCameraSetup
+public sealed partial class PawnLeaning : ObservableEntityComponent<Pawn, PawnLeaning>, IMutateCameraSetup
 {
 	public void Simulate( IClient cl )
 	{

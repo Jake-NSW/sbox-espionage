@@ -4,7 +4,7 @@ using Woosh.Common;
 
 namespace Woosh.Espionage;
 
-public partial class InventoryContainer : ObservableEntityComponent<Pawn>, IEntityInventory, ISingletonComponent
+public partial class InventoryContainer : ObservableEntityComponent<Pawn, InventoryContainer>, IEntityInventory, ISingletonComponent
 {
 	public IEnumerable<Entity> All => n_Bucket;
 
@@ -41,7 +41,10 @@ public partial class InventoryContainer : ObservableEntityComponent<Pawn>, IEnti
 		Game.AssertServer();
 
 		if ( !Contains( ent ) || ent.Owner != Entity )
+		{
+			Log.Error($"Failed to drop - {ent}");
 			return;
+		}
 
 		// Remove from Bucket
 		n_Bucket.Remove( ent );
