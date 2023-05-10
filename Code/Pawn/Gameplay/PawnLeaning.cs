@@ -1,8 +1,19 @@
 ﻿using Sandbox;
+using Woosh.Common;
 
 namespace Woosh.Espionage;
 
-public sealed partial class PawnLeaning : EntityComponent<Pawn>, IMutateCameraSetup
+public readonly struct LeanDirectionChanged : IEventData
+{
+	public int Direction { get; }
+
+	public LeanDirectionChanged( int direction )
+	{
+		Direction = direction;
+	}
+}
+
+public sealed partial class PawnLeaning : ObservableEntityComponent<Pawn>, IMutateCameraSetup
 {
 	public void Simulate( IClient cl )
 	{
@@ -35,6 +46,7 @@ public sealed partial class PawnLeaning : EntityComponent<Pawn>, IMutateCameraSe
 		}
 
 		n_Direction = (n_Direction + direction).Clamp( -1, 1 );
+		Events.Run( new LeanDirectionChanged( n_Direction ) );
 	}
 
 	// Camera
@@ -59,7 +71,7 @@ public sealed partial class PawnLeaning : EntityComponent<Pawn>, IMutateCameraSe
 		setup.Hands.Offset += setup.Rotation.Down * (m_Distance * 0.02f * Distance);
 	}
 
-	protected float DistanceFromEyes( int direction, BBox bounds )
+	private float DistanceFromEyes( int direction, BBox bounds )
 	{
 		var girth = bounds.Size.x * 2;
 		var info = Trace.Ray( Entity.AimRay.Position, Entity.AimRay.Position + Entity.Rotation.Right * direction * girth )

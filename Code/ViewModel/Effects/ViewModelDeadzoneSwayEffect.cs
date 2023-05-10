@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using Woosh.Common;
 
 namespace Woosh.Espionage;
 
@@ -53,9 +54,9 @@ public sealed class ViewModelDeadzoneSwayEffect : IViewModelEffect
 	public void Register( IDispatchRegistryTable table )
 	{
 		table.Register(
-			( in WeaponFireEvent evt ) =>
+			( in Event<WeaponFireEvent> evt ) =>
 			{
-				var recoil = evt.Recoil.Abs() / 4;
+				var recoil = evt.Data.Recoil.Abs() / 4;
 				var x = Game.Random.Float( -recoil.x, recoil.x ) / 24;
 
 				m_SavedDeadzoneAxis.x -= recoil.y;

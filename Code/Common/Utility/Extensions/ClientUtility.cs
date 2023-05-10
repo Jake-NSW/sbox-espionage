@@ -1,6 +1,6 @@
 ﻿using Sandbox;
 
-namespace Woosh.Espionage;
+namespace Woosh.Common;
 
 public static class ClientUtility
 {

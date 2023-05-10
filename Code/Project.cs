@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Sandbox;
+using Woosh.Common;
 
 namespace Woosh.Espionage;
 
@@ -10,8 +11,12 @@ public partial class Project : GameManager, IMutateCameraSetup
 {
 	public static Project Current => GameManager.Current as Project;
 
+	public IDispatchExecutor Events { get; }
+
 	public Project()
 	{
+		Events = new GlobalEventDispatcher();
+
 		if ( Game.IsClient )
 		{
 			Camera = new CompositedCameraBuilder( Sandbox.Camera.Main );
@@ -29,6 +34,8 @@ public partial class Project : GameManager, IMutateCameraSetup
 	{
 		base.FrameSimulate( cl );
 		Camera.Update( mutate: this );
+
+		Events.Run( new FrameUpdate( Time.Delta ) );
 	}
 
 	public void OnPostCameraSetup( ref CameraSetup setup )
@@ -36,7 +43,7 @@ public partial class Project : GameManager, IMutateCameraSetup
 		(Game.LocalPawn as IMutateCameraSetup)?.OnPostCameraSetup( ref setup );
 		CompositedViewModel.UpdateAllViewModels( ref setup, Camera.Target );
 	}
-
+	
 	public override void ClientJoined( IClient client )
 	{
 		base.ClientJoined( client );

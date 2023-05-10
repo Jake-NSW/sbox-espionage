@@ -1,9 +1,10 @@
 ﻿using System.Linq;
 using Sandbox;
+using Woosh.Common;
 
 namespace Woosh.Espionage;
 
-public partial class Pawn : AnimatedEntity
+public partial class Pawn : ObservableAnimatedEntity
 {
 	public override void Spawn()
 	{

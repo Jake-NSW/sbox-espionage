@@ -1,4 +1,6 @@
-﻿namespace Woosh.Espionage;
+﻿using Woosh.Common;
+
+namespace Woosh.Espionage;
 
 public readonly struct EspEffectStack : ITemplate<CompositedViewModel>
 {

@@ -1,6 +1,8 @@
-﻿namespace Woosh.Espionage;
+﻿using Woosh.Common;
 
-public readonly struct WeaponFireEvent : IEvent
+namespace Woosh.Espionage;
+
+public readonly struct WeaponFireEvent : IEventData
 {
 	public Vector3 Recoil { get; }
 	public Vector3 Kickback { get; }

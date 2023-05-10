@@ -1,4 +1,4 @@
-﻿namespace Woosh.Espionage;
+﻿namespace Woosh.Common;
 
 public interface IHave<out T>
 {

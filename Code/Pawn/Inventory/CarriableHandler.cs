@@ -1,10 +1,11 @@
 ﻿using Sandbox;
+using Woosh.Common;
 
 namespace Woosh.Espionage;
 
 public delegate void EntityComponentCallback( Entity from );
 
-public partial class CarriableHandler : EntityComponent, IActive<Entity>, IActive<ICarriable>, ISingletonComponent
+public partial class CarriableHandler : ObservableEntityComponent<Pawn>, IActive<Entity>, IActive<ICarriable>, ISingletonComponent
 {
 	[Net, Local] public Entity Active { get; set; }
 	ICarriable IActive<ICarriable>.Active => Active as ICarriable;
@@ -138,6 +139,7 @@ public partial class CarriableHandler : EntityComponent, IActive<Entity>, IActiv
 		n_IsDeploying = false;
 
 		m_OnDeployed?.Invoke( Entity );
+		Events.Run( new EntityDeployed( Entity ) );
 		m_OnDeployed = null;
 
 		if ( n_ToDeploy != null && Game.IsServer )
@@ -176,13 +178,17 @@ public partial class CarriableHandler : EntityComponent, IActive<Entity>, IActiv
 	private void OnHolstered()
 	{
 		n_IsHolstering = false;
-		n_IsDropping = false;
 
 		(Active as ICarriable)?.OnHolstered();
+		Events.Run( new EntityHolstered( Entity, n_IsDropping ) );
+
+		n_IsDropping = false;
+
 		Active = null;
 
 		m_OnHolstered?.Invoke( Entity );
 		m_OnHolstered = null;
+
 
 		n_ToDeploy ??= m_Fallback;
 

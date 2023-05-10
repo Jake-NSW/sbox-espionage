@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using Sandbox;
+using Woosh.Common;
 
 namespace Woosh.Espionage;
 
 public sealed class InteractionHandler : EntityComponent, ISingletonComponent
 {
-	public StructEventDispatcher Events { get; }
+	public Dispatcher Events { get; }
 
 	public InteractionHandler()
 	{
-		Events = new StructEventDispatcher();
+		Events = new Dispatcher();
 		m_Interactions = Array.Empty<IEntityInteraction>();
 	}
 

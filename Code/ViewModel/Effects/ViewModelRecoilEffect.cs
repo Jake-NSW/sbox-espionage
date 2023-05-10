@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using Woosh.Common;
 
 namespace Woosh.Espionage;
 
@@ -52,11 +53,14 @@ public sealed class ViewModelRecoilEffect : IViewModelEffect
 	public void Register( AnimatedEntity entity, IDispatchRegistryTable table )
 	{
 		table?.Register(
-			( in WeaponFireEvent evt ) =>
+			( in Event<WeaponFireEvent> evt ) =>
 			{
 				var rand = Game.Random;
-				m_RecoilTargetRotation += new Vector3( evt.Recoil.x, rand.Float( -evt.Recoil.y, evt.Recoil.y ), Game.Random.Float( -evt.Recoil.z, evt.Recoil.z ) ) * Time.Delta;
-				m_KickbackTargetPosition += new Vector3( evt.Kickback.x, rand.Float( -evt.Kickback.y, evt.Kickback.y ), Game.Random.Float( -evt.Kickback.z, evt.Kickback.z ) ) * Time.Delta;
+				var recoil = evt.Data.Recoil;
+				var kickback = evt.Data.Kickback;
+				
+				m_RecoilTargetRotation += new Vector3( recoil.x, rand.Float( -recoil.y, recoil.y ), Game.Random.Float( -recoil.z, recoil.z ) ) * Time.Delta;
+				m_KickbackTargetPosition += new Vector3( kickback.x, rand.Float( -kickback.y, kickback.y ), Game.Random.Float( -kickback.z, kickback.z ) ) * Time.Delta;
 			}
 		);
 	}

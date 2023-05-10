@@ -1,4 +1,4 @@
-﻿namespace Woosh.Espionage;
+﻿namespace Woosh.Common;
 
 public interface ITemplate<in T> where T : class
 {

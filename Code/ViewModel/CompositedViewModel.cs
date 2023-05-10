@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using Sandbox;
+using Woosh.Common;
 
 namespace Woosh.Espionage;
 
 [Title( "View Model" ), Category( "ViewModel" ), Icon( "pan_tool" )]
-public sealed class CompositedViewModel : AnimatedEntity
+public sealed class CompositedViewModel : ObservableAnimatedEntity
 {
 	private readonly static LinkedList<CompositedViewModel> s_All;
 

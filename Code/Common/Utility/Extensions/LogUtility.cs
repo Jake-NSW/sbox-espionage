@@ -3,10 +3,16 @@ using System.Runtime.CompilerServices;
 using Sandbox;
 using Sandbox.Diagnostics;
 
-namespace Woosh.Espionage;
+namespace Woosh.Common;
 
 public static class LogUtility
 {
+
+	public static TimedScope Measure( this Logger logger, [CallerMemberName] string message = null )
+	{
+		return new TimedScope( message );
+	}
+
 	public readonly struct TimedScope : IDisposable
 	{
 		private readonly string m_Message;
@@ -22,10 +28,5 @@ public static class LogUtility
 		{
 			Log.Info( $"{m_Message} | {m_Since}" );
 		}
-	}
-
-	public static TimedScope Measure( this Logger logger, [CallerMemberName] string message = null)
-	{
-		return new TimedScope( message );
 	}
 }

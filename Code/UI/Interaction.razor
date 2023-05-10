@@ -1,6 +1,7 @@
 ﻿@using System
 @using Sandbox;
 @using Sandbox.UI;
+@using Woosh.Common
 
 @namespace Woosh.Espionage
 
@@ -69,14 +70,14 @@
         this.ToWorld(m_Last);
     }
 
-    private void OnEntityChanged(in ValueChangedEvent<Entity> evt)
+    private void OnEntityChanged(in Event<ValueChanged<Entity>> evt)
     {
         // We want the UI to nicely fade out...
-        if (evt.New == null)
+        if (evt.Data.New == null)
             return;
 
         // Rebuild UI based on Interactions...
-        m_Target = evt.New;
+        m_Target = evt.Data.New;
     }
 
     // Binding
@@ -85,7 +86,7 @@
 
     public void Rebind(InteractionHandler handler)
     {
-        m_Handler?.Events.Unregister<ValueChangedEvent<Entity>>(OnEntityChanged);
+        m_Handler?.Events.Unregister<ValueChanged<Entity>>(OnEntityChanged);
         m_Handler = handler;
         m_Handler?.Events.OnValueChanged<Entity>(OnEntityChanged);
     }

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using Sandbox;
 
-namespace Woosh.Espionage;
+namespace Woosh.Common;
 
 public readonly struct SoundBank<T> where T : Enum
 {
 	// Add support for flags!! - was the whole point of it!!!
-	
+
 	private readonly string[] m_Sounds;
 
 	public SoundBank()

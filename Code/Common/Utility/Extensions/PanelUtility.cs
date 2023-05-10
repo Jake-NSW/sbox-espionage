@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using Sandbox;
 using Sandbox.UI;
 
-namespace Woosh.Espionage;
+namespace Woosh.Common;
 
 public static class PanelUtility
 {
@@ -11,7 +11,9 @@ public static class PanelUtility
 	public static void ToEntity( this Panel panel, ModelEntity entity, int padding = 0 )
 	{
 		if ( !entity.IsValid() )
+		{
 			return;
+		}
 
 		Rect rect = default;
 		var bounds = entity.CollisionBounds;
@@ -32,7 +34,9 @@ public static class PanelUtility
 		}
 
 		if ( padding != 0 )
+		{
 			rect = rect.Shrink( padding / Screen.Width, padding / Screen.Height );
+		}
 
 		panel.Style.Left = Length.Fraction( rect.Left );
 		panel.Style.Top = Length.Fraction( rect.Top );
@@ -66,7 +70,9 @@ public static class PanelUtility
 		}
 
 		if ( padding != 0 )
+		{
 			rect = rect.Shrink( padding / Screen.Width, padding / Screen.Height );
+		}
 
 		panel.Style.Left = Length.Fraction( rect.Left );
 		panel.Style.Top = Length.Fraction( rect.Top );
@@ -81,7 +87,9 @@ public static class PanelUtility
 		var screen = pos.ToScreen();
 
 		if ( screen.z < 0 )
+		{
 			return;
+		}
 
 		panel.Style.Left = Length.Fraction( screen.x );
 		panel.Style.Top = Length.Fraction( screen.y );

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Sandbox;
+using Woosh.Common;
 
 namespace Woosh.Espionage;
 
@@ -19,15 +20,8 @@ public struct FirearmSetup
 	public float Accuracy;
 }
 
-public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup
+public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IPickup
 {
-	public StructEventDispatcher Events { get; }
-
-	public Firearm()
-	{
-		Events = new StructEventDispatcher();
-	}
-
 	public override void Spawn()
 	{
 		base.Spawn();

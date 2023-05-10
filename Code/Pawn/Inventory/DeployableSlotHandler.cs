@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using Sandbox;
+using Woosh.Common;
 
 namespace Woosh.Espionage;
 
-public class DeployableSlotHandler : EntityComponent, ISingletonComponent, INetworkSerializer
+public class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISingletonComponent, INetworkSerializer
 {
-	private IEntityInventory Inventory => Entity.Components.Get<IEntityInventory>();
-	private CarriableHandler Handler => Entity.Components.Get<CarriableHandler>();
-
-	public DeployableSlotHandler() => Game.AssertClient();
+	public DeployableSlotHandler()
+	{
+		Game.AssertClient();
+	}
 
 	public DeployableSlotHandler( int slots )
 	{
@@ -21,26 +22,24 @@ public class DeployableSlotHandler : EntityComponent, ISingletonComponent, INetw
 	{
 		base.OnActivate();
 
-		if ( Inventory != null )
-		{
-			Inventory.Added += OnInventoryAdded;
-			Inventory.Removed += OnInventoryRemoved;
-		}
+		Events.Register<InventoryAdded>( OnInventoryAdded );
+		Events.Register<InventoryRemoved>( OnInventoryRemoved );
 	}
 
 	protected override void OnDeactivate()
 	{
 		base.OnDeactivate();
 
-		if ( Inventory != null )
-		{
-			Inventory.Added -= OnInventoryAdded;
-			Inventory.Removed -= OnInventoryRemoved;
-		}
+		Events.Unregister<InventoryAdded>( OnInventoryAdded );
+		Events.Unregister<InventoryRemoved>( OnInventoryRemoved );
 	}
 
-	private void OnInventoryRemoved( Entity ent )
+	private IEntityInventory Inventory => this.Get<IEntityInventory>();
+	private CarriableHandler Handler => this.Get<CarriableHandler>();
+
+	private void OnInventoryRemoved( in Event<InventoryRemoved> evt )
 	{
+		var ent = evt.Data.Entity;
 		var slot = SlotOfEntity( ent );
 
 		if ( slot == -1 )
@@ -54,8 +53,9 @@ public class DeployableSlotHandler : EntityComponent, ISingletonComponent, INetw
 		Assign( slot, null );
 	}
 
-	private void OnInventoryAdded( Entity ent )
+	private void OnInventoryAdded( in Event<InventoryAdded> evt )
 	{
+		var ent = evt.Data.Entity;
 		if ( ent is not ISlotted slotted )
 		{
 			// Don't do anything, as we can't slot...
@@ -86,6 +86,8 @@ public class DeployableSlotHandler : EntityComponent, ISingletonComponent, INetw
 
 		Game.AssertServer();
 		n_Slots[slot] = ent;
+		Events.Run( new SlotChanged( slot + 1, ent ) );
+
 		WriteNetworkData();
 	}
 
@@ -120,6 +122,8 @@ public class DeployableSlotHandler : EntityComponent, ISingletonComponent, INetw
 			return;
 
 		var ent = n_Slots[slot];
+		Events.Run( new SlotDeploying( slot + 1, ent ), this );
+
 		if ( !Inventory.Contains( ent ) )
 		{
 			Assign( slot + 1, null );
@@ -138,14 +142,16 @@ public class DeployableSlotHandler : EntityComponent, ISingletonComponent, INetw
 		if ( slot < 0 )
 			return;
 
-		var entity = n_Slots[slot - 1];
+		var ent = n_Slots[slot - 1];
+		Events.Run( new SlotDropping( slot + 1, ent ), this );
+
 		if ( Active == slot )
 		{
-			Handler.Holster( true, ent => ent.Components.Get<IEntityInventory>().Drop( entity ) );
+			Handler.Holster( true, ent => ent.Components.Get<IEntityInventory>().Drop( ent ) );
 			return;
 		}
 
-		Inventory.Drop( entity );
+		Inventory.Drop( ent );
 	}
 
 	public void Holster()
@@ -166,7 +172,7 @@ public class DeployableSlotHandler : EntityComponent, ISingletonComponent, INetw
 		for ( var i = 0; i < length; i++ )
 		{
 			var id = read.Read<int>();
-			n_Slots[i] = id == 0 ? null : Entity.FindByIndex<Entity>( id );
+			n_Slots[i] = id == 0 ? null : global::Sandbox.Entity.FindByIndex<Entity>( id );
 		}
 	}
 
@@ -188,29 +194,6 @@ public class DeployableSlotHandler : EntityComponent, ISingletonComponent, INetw
 
 public static class DeployableSlotHandlerUtility
 {
-	private static class EnumValues<TSlot> where TSlot : Enum
-	{
-		private readonly static TSlot[] s_Values;
-
-		public static int IndexOf( TSlot input )
-		{
-			var compare = EqualityComparer<TSlot>.Default;
-
-			for ( var i = 0; i < s_Values.Length; i++ )
-			{
-				if ( compare.Equals( s_Values[i], input ) )
-					return i + 1;
-			}
-
-			throw new InvalidOperationException( "What the fuck" );
-		}
-
-		static EnumValues()
-		{
-			s_Values = (TSlot[])typeof(TSlot).GetEnumValues();
-		}
-	}
-
 	public static void Assign<TSlot>( this DeployableSlotHandler handler, TSlot slot, Entity ent ) where TSlot : Enum
 	{
 		handler.Assign( EnumValues<TSlot>.IndexOf( slot ), ent );
