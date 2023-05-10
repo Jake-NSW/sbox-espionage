@@ -33,22 +33,22 @@ public sealed class Dispatcher : IDispatchRegistryTable, IDispatchExecutor
 
 	public void Register<T>( StructCallback<T> callback ) where T : struct, IEventData
 	{
-		Inject<T>( callback );
+		Inject( typeof(T), callback );
 	}
 
 	public void Register<T>( Action callback ) where T : struct, IEventData
 	{
-		Inject<T>( callback );
+		Inject( typeof(T), callback );
 	}
 
 	public void Unregister<T>( Action callback ) where T : struct, IEventData
 	{
-		Erase<T>( callback );
+		Erase( typeof(T), callback );
 	}
 
 	public void Unregister<T>( StructCallback<T> callback ) where T : struct, IEventData
 	{
-		Erase<T>( callback );
+		Erase( typeof(T), callback );
 	}
 
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]
@@ -57,22 +57,22 @@ public sealed class Dispatcher : IDispatchRegistryTable, IDispatchExecutor
 		Run( new T() );
 	}
 
-	private void Erase<T>( Delegate callback ) where T : struct, IEventData
+	internal void Erase( Type type, Delegate callback )
 	{
-		if ( m_Registry.TryGetValue( typeof(T), out var stack ) )
+		if ( m_Registry.TryGetValue( type, out var stack ) )
 		{
 			stack.Remove( callback );
 		}
 	}
 
-	private void Inject<T>( Delegate callback ) where T : struct, IEventData
+	internal void Inject( Type type, Delegate callback )
 	{
-		if ( m_Registry.TryGetValue( typeof(T), out var data ) )
+		if ( m_Registry.TryGetValue( type, out var data ) )
 		{
 			data.Add( callback );
 			return;
 		}
 
-		m_Registry.Add( typeof(T), new HashSet<Delegate> { callback } );
+		m_Registry.Add( type, new HashSet<Delegate> { callback } );
 	}
 }

@@ -139,7 +139,7 @@ public partial class CarriableHandler : ObservableEntityComponent<Pawn>, IActive
 		n_IsDeploying = false;
 
 		m_OnDeployed?.Invoke( Active );
-		Events.Run( new EntityDeployed( Active ) );
+		Events.Run( new DeployedEntity( Active ) );
 		m_OnDeployed = null;
 
 		if ( n_ToDeploy != null && Game.IsServer )
@@ -180,15 +180,14 @@ public partial class CarriableHandler : ObservableEntityComponent<Pawn>, IActive
 		n_IsHolstering = false;
 
 		(Active as ICarriable)?.OnHolstered();
-		Events.Run( new EntityHolstered( Entity, n_IsDropping ) );
+		Events.Run( new HolsteredEntity( Active ) );
 
 		n_IsDropping = false;
 
-		Active = null;
-
-		m_OnHolstered?.Invoke( Entity );
+		m_OnHolstered?.Invoke( Active );
 		m_OnHolstered = null;
-
+		
+		Active = null;
 
 		n_ToDeploy ??= m_Fallback;
 

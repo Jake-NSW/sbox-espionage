@@ -62,7 +62,7 @@ public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IP
 			if ( Setup.IsAutomatic ? !Input.Down( "shoot" ) : !Input.Pressed( "shoot" ) )
 				return false;
 		}
-		
+
 		return n_SinceLastShot >= 60 / Setup.RateOfFire;
 	}
 
@@ -154,6 +154,8 @@ public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IP
 
 	void ICarriable.Deploying()
 	{
+		Events.Run( new DeployingEntity( this ), this );
+
 		if ( IsLocalPawn && m_Viewmodel == null )
 			m_Viewmodel = OnRequestViewmodel();
 
@@ -164,12 +166,16 @@ public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IP
 
 	void ICarriable.Holstering( bool drop )
 	{
+		Events.Run( new HolsteringEntity( this, drop ), this );
+
 		Effects.SetAnimParameter( "bDropped", drop );
 		Effects.SetAnimParameter( "bDeployed", false );
 	}
 
 	void ICarriable.OnHolstered()
 	{
+		Events.Run( new HolsteredEntity( this ), this );
+
 		if ( Effects != null )
 			Effects.EnableDrawing = false;
 

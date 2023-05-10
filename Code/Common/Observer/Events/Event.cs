@@ -8,7 +8,6 @@ public readonly struct Event<T> where T : struct, IEventData
 	public T Data { get; }
 
 	public object From { get; }
-	public DateTime TimeStamp { get; }
 
 	public bool IsServer => Game.IsServer;
 	public bool IsClient => Game.IsClient;
@@ -16,11 +15,10 @@ public readonly struct Event<T> where T : struct, IEventData
 
 	internal Event( T data, object from )
 	{
+		IsPredicted = Prediction.Enabled && Prediction.CurrentHost != null;
+		
 		From = from;
 		Data = data;
-
-		IsPredicted = Prediction.Enabled && Prediction.CurrentHost != null;
-		TimeStamp = DateTime.Now;
 	}
 
 	public static implicit operator T( Event<T> evt )
