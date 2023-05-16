@@ -32,7 +32,7 @@ public partial class InventoryContainer : ObservableEntityComponent<Pawn>, IEnti
 		// Callback for Entity
 		(ent as IPickup)?.OnPickup( Entity );
 
-		Events.Run( new InventoryAdded( Entity ) );
+		Events.Run( new InventoryAdded( ent ) );
 		return true;
 	}
 
@@ -58,8 +58,9 @@ public partial class InventoryContainer : ObservableEntityComponent<Pawn>, IEnti
 		// Apply things to Entity
 		ent.SetParent( null );
 		ent.EnableDrawing = true;
+		Log.Info("Enable Drawing from Inventory");
 
-		Events.Run( new InventoryRemoved( Entity ) );
+		Events.Run( new InventoryRemoved( ent ) );
 
 		// Execute Callback
 		(ent as IPickup)?.OnDrop();
@@ -72,3 +73,4 @@ public partial class InventoryContainer : ObservableEntityComponent<Pawn>, IEnti
 		return n_Bucket.Contains( entity );
 	}
 }
+

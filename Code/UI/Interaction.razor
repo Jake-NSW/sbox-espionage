@@ -66,13 +66,12 @@
 
     private void OnInteractionChanged(in Event<InteractionTargetChanged> evt)
     {
-        // We want the UI to nicely fade out...
-        if (evt.Data.Hovering == null)
-            return;
-
         // Rebuild UI based on Interactions...
         m_Target = evt.Data.Hovering;
         m_Interactions = evt.Data.Interactions;
+        
+        if (evt.Data.Hovering == null)
+            return;
         
         // Get Info
         var info = m_Target.Info();

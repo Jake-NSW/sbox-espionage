@@ -18,13 +18,9 @@ public sealed class RustPistolFirearm : Firearm, IHave<DisplayInfo>, ISlotted
 
 		Model = Model.Load( WORLD_MODEL );
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
-	}
 
-	public override void ClientSpawn()
-	{
-		base.ClientSpawn();
-
-		Components.Add( new ViewportEffectsComponent( VIEW_MODEL ) );
+		Components.Add( new CarriableEffectsComponent( Model.Load(VIEW_MODEL) ) );
+		Components.Create<RustFirearmViewmodelAnimator>();
 	}
 
 	public int Slot => Operator.CarrySlot.Holster.Index();

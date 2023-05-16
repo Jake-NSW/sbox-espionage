@@ -3,15 +3,20 @@ using Woosh.Common;
 
 namespace Woosh.Espionage;
 
-public sealed class ViewportEffectsComponent : ObservableEntityComponent<Firearm>, IEntityEffects
+public sealed partial class CarriableEffectsComponent : ObservableEntityComponent<ICarriable>, IEntityEffects
 {
-	private readonly string m_Viewmodel;
-	public ModelEntity Target => Entity.IsFirstPersonMode ? m_Model : Entity;
+	[Net] private Model n_Viewmodel { get; set; }
+	public ModelEntity Target => UnderlyingEntity.IsFirstPersonMode ? m_Model : UnderlyingEntity as ModelEntity;
 
-	public ViewportEffectsComponent( string viewmodel )
+	public CarriableEffectsComponent()
 	{
 		Game.AssertClient();
-		m_Viewmodel = viewmodel;
+	}
+
+	public CarriableEffectsComponent( Model viewmodel )
+	{
+		Game.AssertServer();
+		n_Viewmodel = viewmodel;
 	}
 
 	protected override void OnActivate()
@@ -29,13 +34,18 @@ public sealed class ViewportEffectsComponent : ObservableEntityComponent<Firearm
 
 		Events.Unregister<DeployingEntity>( OnDeploying );
 		Events.Unregister<HolsteredEntity>( OnHolstered );
+
+		// Remove Viewmodel
+		
+		m_Model?.Delete();
+		m_Model = null;
 	}
 
 	private AnimatedEntity m_Model;
 
 	private AnimatedEntity OnRequestViewmodel()
 	{
-		var view = new CompositedViewModel( Events ) { Owner = Entity.Owner, Model = Model.Load( m_Viewmodel ) };
+		var view = new CompositedViewModel( Events ) { Owner = Entity.Owner as Entity, Model = n_Viewmodel };
 		view.ImportFrom<EspEffectStack>();
 		return view;
 	}
@@ -44,7 +54,7 @@ public sealed class ViewportEffectsComponent : ObservableEntityComponent<Firearm
 
 	private void OnDeploying( in Event<DeployingEntity> evt )
 	{
-		if ( Entity.IsLocalPawn && m_Model == null )
+		if ( UnderlyingEntity.IsLocalPawn && m_Model == null )
 			m_Model = OnRequestViewmodel();
 
 		// Create Viewmodel

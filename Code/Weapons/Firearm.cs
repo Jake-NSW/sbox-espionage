@@ -142,7 +142,9 @@ public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IOb
 	void ICarriable.Deploying()
 	{
 		Events.Run( new DeployingEntity( this ), this );
-		EnableDrawing = true;
+
+		if ( Game.IsServer )
+			EnableDrawing = true;
 	}
 
 	void ICarriable.Holstering( bool drop )
@@ -153,6 +155,8 @@ public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IOb
 	void ICarriable.OnHolstered()
 	{
 		Events.Run( new HolsteredEntity( this ), this );
-		EnableDrawing = false;
+
+		if ( Game.IsServer )
+			EnableDrawing = false;
 	}
 }

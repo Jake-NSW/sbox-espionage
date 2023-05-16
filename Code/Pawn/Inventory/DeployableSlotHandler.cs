@@ -54,6 +54,7 @@ public sealed class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISi
 	private void OnInventoryAdded( in Event<InventoryAdded> evt )
 	{
 		var ent = evt.Data.Entity;
+		
 		if ( ent is not ISlotted slotted )
 		{
 			// Don't do anything, as we can't slot...
@@ -141,6 +142,10 @@ public sealed class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISi
 			return;
 
 		var ent = n_Slots[slot - 1];
+
+		if ( ent == null )
+			return;
+		
 		Events.Run( new SlotDropping( slot, ent ), this );
 
 		if ( Active == slot )

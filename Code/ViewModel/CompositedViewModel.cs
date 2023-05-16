@@ -5,7 +5,7 @@ using Woosh.Common;
 namespace Woosh.Espionage;
 
 [Title( "View Model" ), Category( "ViewModel" ), Icon( "pan_tool" )]
-public sealed class CompositedViewModel : AnimatedEntity
+public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity
 {
 	private readonly static LinkedList<CompositedViewModel> s_All;
 
@@ -26,6 +26,8 @@ public sealed class CompositedViewModel : AnimatedEntity
 	}
 
 	// Instance
+
+	public Dispatcher Events { get; }
 
 	private readonly IDispatchRegistryTable m_Table;
 	private readonly LinkedListNode<CompositedViewModel> m_Node;

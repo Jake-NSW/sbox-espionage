@@ -16,13 +16,9 @@ public sealed class Smg2Firearm : Firearm, ISlotted
 
 		Model = Model.Load( WORLD_MODEL );
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
-	}
-
-	public override void ClientSpawn()
-	{
-		base.ClientSpawn();
-
-		Components.Add( new ViewportEffectsComponent( VIEW_MODEL ) );
+		
+		Components.Add( new CarriableEffectsComponent( Model.Load(VIEW_MODEL) ) );
+		Components.Create<GenericFirearmViewmodelAnimator>();
 	}
 
 	public int Slot => Operator.CarrySlot.Front.Index();
