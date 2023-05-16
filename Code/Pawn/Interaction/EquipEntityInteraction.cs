@@ -42,10 +42,10 @@ public sealed class EquipEntityInteraction : EntityComponent, IEntityInteraction
 		{
 			// go and equip da gun....
 			Log.Info("Equip Entity");
-			
-			var slotted = result.Entity as ISlotted;
+
+			var entity = (ISlotted)result.Entity;
 			Inventory.Add( result.Entity );
-			Handler.Deploy( slotted.Slot );
+			Handler.Deploy( entity.Slot );
 			
 			return;
 		}

@@ -5,6 +5,12 @@ namespace Woosh.Espionage;
 [Library, Title("Hands"), Icon("pan_tool")]
 public sealed partial class PlayerHands : AnimatedEntity, ICarriable
 {
+	public override void Spawn()
+	{
+		base.Spawn();
+		Transmit = TransmitType.Owner;
+	}
+
 	// Attack
 
 	public void OnSwingStart() { }

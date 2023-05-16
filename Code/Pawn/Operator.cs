@@ -30,7 +30,7 @@ public sealed class Operator : Pawn, IMutateCameraSetup
 		Components.Create<EquipEntityInteraction>();
 
 		// Inventory
-		Components.Add( new CarriableHandler( new PlayerHands() { Owner = this } ) );
+		Components.Add( new CarriableHandler( new PlayerHands() { Owner = this, Parent = this } ) );
 		Components.Create<InventoryContainer>();
 		Components.Add( new DeployableSlotHandler( 3 ) );
 	}

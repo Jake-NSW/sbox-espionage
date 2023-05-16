@@ -4,11 +4,9 @@ using Woosh.Common;
 
 namespace Woosh.Espionage;
 
-[Library( "esp_mk23_firearm" ), HammerEntity, EditorModel( WORLD_MODEL )]
-public sealed class Mk23Firearm : Firearm, IHave<DisplayInfo>, ISlotted
+[Library( "esp_mk23_firearm" ), Title( "Mark 23" ), Icon( "gavel" ), HammerEntity, EditorModel( WORLD_MODEL )]
+public sealed class Mk23Firearm : Firearm, ISlotted
 {
-	DisplayInfo IHave<DisplayInfo>.Item => new DisplayInfo() { Name = "Mark23", Icon = "gavel" };
-
 	private const string VIEW_MODEL = "weapons/mk23/v_espionage_mk23.vmdl";
 	private const string WORLD_MODEL = "weapons/mk23/espionage_mk23.vmdl";
 

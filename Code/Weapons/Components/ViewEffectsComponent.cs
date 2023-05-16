@@ -9,7 +9,6 @@ public sealed class ViewEffectsComponent : ObservableEntityComponent<ObservableA
 
 	private AnimatedEntity m_Viewmodel;
 
-	[Auto]
 	private void OnHolstered( in Event<HolsteredEntity> evt )
 	{
 		m_Viewmodel?.Delete();
@@ -19,7 +18,6 @@ public sealed class ViewEffectsComponent : ObservableEntityComponent<ObservableA
 		Effects.EnableDrawing = false;
 	}
 
-	[Auto]
 	private void Deploying( in Event<DeployingEntity> evt )
 	{
 		if ( Entity.IsLocalPawn )
