@@ -2,6 +2,7 @@
 
 namespace Woosh.Espionage;
 
+[Library, Title("Hands"), Icon("pan_tool")]
 public sealed partial class PlayerHands : AnimatedEntity, ICarriable
 {
 	// Attack

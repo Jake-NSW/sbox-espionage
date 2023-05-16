@@ -4,7 +4,7 @@ using Woosh.Common;
 
 namespace Woosh.Espionage;
 
-public partial class InventoryContainer : ObservableEntityComponent<Pawn, InventoryContainer>, IEntityInventory, ISingletonComponent
+public partial class InventoryContainer : ObservableEntityComponent<Pawn>, IEntityInventory, ISingletonComponent
 {
 	public IEnumerable<Entity> All => n_Bucket;
 
@@ -40,9 +40,15 @@ public partial class InventoryContainer : ObservableEntityComponent<Pawn, Invent
 	{
 		Game.AssertServer();
 
-		if ( !Contains( ent ) || ent.Owner != Entity )
+		if ( ent.Owner != Entity )
 		{
-			Log.Error($"Failed to drop - {ent}");
+			Log.Error( $"Failed to drop - {ent}, Owner didn't match item Owner" );
+			return;
+		}
+
+		if ( !Contains( ent ) )
+		{
+			Log.Error( $"Failed to drop - {ent}, Entity wasn't in bucket" );
 			return;
 		}
 

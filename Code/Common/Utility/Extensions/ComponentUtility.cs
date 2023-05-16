@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Sandbox;
@@ -14,6 +15,25 @@ public static class ComponentUtility
 	public static IEnumerable<IComponent> All( this IComponentSystem system )
 	{
 		return system.GetAll<IComponent>();
+	}
+
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public static IComponent GetAny( this IComponentSystem components, Type type )
+	{
+		return components.GetAll<IComponent>().FirstOrDefault( e => e.GetType() == type );
+	}
+
+	public static IComponent GetOrCreateAny( this IComponentSystem system, Type type )
+	{
+		if ( system.GetAny( type ) is { } component )
+			return component;
+
+		if ( TypeLibrary.GetType( type ).IsInterface )
+			return null;
+
+		component = TypeLibrary.Create<IComponent>( type );
+		system.Add( component );
+		return component;
 	}
 
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]

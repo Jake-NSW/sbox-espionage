@@ -1,12 +1,43 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Sandbox;
 
 namespace Woosh.Common;
 
-public abstract class ObservableEntityComponent<T, TSelf> : EntityComponent<T>
+public abstract class ObservableEntityComponent<T, TComponents> : ObservableEntityComponent<T> where T : Entity, IObservableEntity where TComponents : struct, ITuple
+{
+	protected override void OnActivate()
+	{
+		base.OnActivate();
+
+		if ( Game.IsServer )
+			_ = Components;
+	}
+	
+	public TComponents Components
+	{
+		get
+		{
+			Log.Info(TypeLibrary.GetType<TComponents>());
+			var types = TypeLibrary.GetType<TComponents>().GenericArguments;
+			Log.Info(types);
+			
+			var args = new object[types.Length];
+
+			for ( int i = 0; i < args.Length; i++ )
+			{
+				args[i] = Entity.Components.GetOrCreateAny( types[i] );
+			}
+
+			var value = TypeLibrary.Create<TComponents>( typeof(TComponents), args );
+			return value;
+		}
+	}
+}
+
+public abstract class ObservableEntityComponent<T> : EntityComponent<T>
 	where T : Entity, IObservableEntity
-	where TSelf : ObservableEntityComponent<T, TSelf>
 {
 	[AttributeUsage( AttributeTargets.Method )]
 	protected sealed class AutoAttribute : Attribute
@@ -30,6 +61,7 @@ public abstract class ObservableEntityComponent<T, TSelf> : EntityComponent<T>
 
 	static ObservableEntityComponent()
 	{
+		/*
 		var methods = TypeLibrary.GetMethodsWithAttribute<AutoAttribute>().ToArray();
 		m_Nodes = new EventNode[methods.Length];
 
@@ -42,6 +74,7 @@ public abstract class ObservableEntityComponent<T, TSelf> : EntityComponent<T>
 
 			m_Nodes[index] = new EventNode( attribute.Override ?? type, cb );
 		}
+		*/
 	}
 
 	private static Type TryFindArgument( MethodDescription description )
@@ -63,6 +96,7 @@ public abstract class ObservableEntityComponent<T, TSelf> : EntityComponent<T>
 
 	protected override void OnActivate()
 	{
+		/*
 		if ( m_Nodes == null )
 		{
 			return;
@@ -72,14 +106,17 @@ public abstract class ObservableEntityComponent<T, TSelf> : EntityComponent<T>
 		{
 			Events.Inject( node.Type, new DynamicCallback( obj => node.Delegate.Invoke( this, obj ) ) );
 		}
+		*/
 	}
 
 	protected override void OnDeactivate()
 	{
+		/*
 		// Auto Unregister Events from Attribute
 		foreach ( var node in m_Nodes )
 		{
 			// Events.Erase( node.Type, (DynamicCallback)Invoke );
 		}
+		*/
 	}
 }

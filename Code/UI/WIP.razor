@@ -51,11 +51,7 @@
         get
         {
             var active = Game.LocalPawn.Components.Get<CarriableHandler>()?.Active;
-
-	        if (active == null)
-                return null;
-
-	        return (active as IHave<DisplayInfo>)?.Item.Name ?? DisplayInfo.For(active.GetType()).Name;
+	        return active?.Info().Name;
         }
     }
 

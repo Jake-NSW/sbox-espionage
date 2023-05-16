@@ -5,7 +5,7 @@ using Woosh.Common;
 
 namespace Woosh.Espionage;
 
-public class DeployableSlotHandler : ObservableEntityComponent<Pawn, DeployableSlotHandler>, ISingletonComponent, INetworkSerializer
+public sealed class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISingletonComponent, INetworkSerializer
 {
 	public DeployableSlotHandler()
 	{
@@ -46,9 +46,7 @@ public class DeployableSlotHandler : ObservableEntityComponent<Pawn, DeployableS
 			return;
 
 		if ( Active - 1 == slot )
-		{
 			Handler.Deploy( null );
-		}
 
 		Assign( slot, null );
 	}
@@ -143,23 +141,15 @@ public class DeployableSlotHandler : ObservableEntityComponent<Pawn, DeployableS
 			return;
 
 		var ent = n_Slots[slot - 1];
-		Events.Run( new SlotDropping( slot + 1, ent ), this );
+		Events.Run( new SlotDropping( slot, ent ), this );
 
 		if ( Active == slot )
 		{
-			Handler.Holster( true, ent => ent.Components.Get<IEntityInventory>().Drop( ent ) );
+			Handler.Holster( true, pawn => pawn.Components.Get<IEntityInventory>().Drop( ent ) );
 			return;
 		}
 
 		Inventory.Drop( ent );
-	}
-
-	public void Holster()
-	{
-		if ( Game.IsClient )
-			return;
-
-		Handler.Holster( false );
 	}
 
 	// Networking

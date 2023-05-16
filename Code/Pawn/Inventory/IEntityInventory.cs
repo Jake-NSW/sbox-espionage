@@ -24,6 +24,13 @@ public static class EntityInventoryUtility
 		return inv.All.OfType<T>().FirstOrDefault();
 	}
 
+	public static T Create<T>( this IEntityInventory inventory ) where T : Entity, new()
+	{
+		var item = new T();
+		inventory.Add( item );
+		return item;
+	}
+
 	public static T DropAny<T>( this IEntityInventory inventory ) where T : Entity
 	{
 		var item = inventory.GetAny<T>();
