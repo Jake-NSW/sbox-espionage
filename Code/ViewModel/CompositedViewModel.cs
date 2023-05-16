@@ -5,7 +5,7 @@ using Woosh.Common;
 namespace Woosh.Espionage;
 
 [Title( "View Model" ), Category( "ViewModel" ), Icon( "pan_tool" )]
-public sealed class CompositedViewModel : ObservableAnimatedEntity
+public sealed class CompositedViewModel : AnimatedEntity
 {
 	private readonly static LinkedList<CompositedViewModel> s_All;
 

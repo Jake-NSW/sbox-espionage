@@ -18,14 +18,13 @@ public sealed class Smg2Firearm : Firearm, ISlotted
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
 	}
 
+	public override void ClientSpawn()
+	{
+		base.ClientSpawn();
+
+		Components.Add( new ViewportEffectsComponent( VIEW_MODEL ) );
+	}
+
 	public int Slot => Operator.CarrySlot.Front.Index();
 	public override DrawTime Draw => new DrawTime( 1.5f, 1.3f );
-
-	protected override AnimatedEntity OnRequestViewmodel()
-	{
-		var view = new CompositedViewModel( Events ) { Owner = Owner, Model = Model.Load( VIEW_MODEL ) };
-		view.ImportFrom<EspEffectStack>();
-		view.SetBodyGroup( "muzzle", 1 );
-		return view;
-	}
 }

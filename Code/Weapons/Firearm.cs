@@ -20,8 +20,12 @@ public struct FirearmSetup
 	public float Accuracy;
 }
 
-public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IPickup
+public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IObservableEntity
 {
+	public Dispatcher Events { get; } = new Dispatcher();
+
+	public IEntityEffects Effects => Components.Get<IEntityEffects>();
+
 	public override void Spawn()
 	{
 		base.Spawn();
@@ -84,7 +88,7 @@ public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IP
 		// Owner, Shoot from View Model
 		if ( IsLocalPawn )
 		{
-			var muzzle = Effects?.GetAttachment( "muzzle" ) ?? Owner.Transform;
+			var muzzle = Effects?.Target?.GetAttachment( "muzzle" ) ?? Owner.Transform;
 			CmdReceivedShootRequest( NetworkIdent, muzzle.Position, muzzle.Rotation.Forward );
 			return;
 		}
@@ -99,8 +103,7 @@ public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IP
 		if ( Prediction.CurrentHost == null )
 			Events.Run( new WeaponFireEvent( new Vector3( -3, 0.2f, 0.2f ) * 35, new Vector3( -1, 0.2f, 0.2f ) * 35 ) );
 
-		Effects?.SetAnimParameter( "bFire", true );
-		Sounds.Play( WeaponSound.Shoot, Effects.Position );
+		Sounds.Play( WeaponSound.Shoot, Owner?.AimRay.Position ?? Position );
 	}
 
 	[ConCmd.Server]
@@ -134,52 +137,22 @@ public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IP
 
 	// Carriable
 
-	public AnimatedEntity Effects => IsLocalPawn ? m_Viewmodel : this;
-	private AnimatedEntity m_Viewmodel;
-
-	protected virtual AnimatedEntity OnRequestViewmodel()
-	{
-		var view = new CompositedViewModel( Events ) { Owner = Owner, Model = Model.Load( "weapons/mk23/v_espionage_mk23.vmdl" ) };
-		view.Add( new ViewModelOffsetEffect( Vector3.Zero, default ) );
-		view.Add( new ViewModelSwayEffect() );
-		view.Add( new ViewModelMoveOffsetEffect( Vector3.One, 10 ) );
-		view.Add( new ViewModelStrafeOffsetEffect() { Damping = 6, RollMultiplier = 1, AxisMultiplier = 8 } );
-		view.Add( new ViewModelDeadzoneSwayEffect( new Vector2( 8, 8 ) ) { AimingOnly = true, AutoCenter = false, Damping = 8 } );
-		view.Add( new ViewModelPitchOffsetEffect() );
-		view.Add( new ViewModelRecoilEffect() );
-		return view;
-	}
-
 	public virtual DrawTime Draw => new DrawTime( 1, 1 );
 
 	void ICarriable.Deploying()
 	{
 		Events.Run( new DeployingEntity( this ), this );
-
-		if ( IsLocalPawn && m_Viewmodel == null )
-			m_Viewmodel = OnRequestViewmodel();
-
-		// Create Viewmodel
-		Effects.SetAnimParameter( "bDeployed", true );
-		Effects.EnableDrawing = true;
+		EnableDrawing = true;
 	}
 
 	void ICarriable.Holstering( bool drop )
 	{
 		Events.Run( new HolsteringEntity( this, drop ), this );
-
-		Effects.SetAnimParameter( "bDropped", drop );
-		Effects.SetAnimParameter( "bDeployed", false );
 	}
 
 	void ICarriable.OnHolstered()
 	{
 		Events.Run( new HolsteredEntity( this ), this );
-
-		if ( Effects != null )
-			Effects.EnableDrawing = false;
-
-		m_Viewmodel?.Delete();
-		m_Viewmodel = null;
+		EnableDrawing = false;
 	}
 }

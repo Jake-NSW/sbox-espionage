@@ -1,10 +1,13 @@
 ﻿using Sandbox;
+using Woosh.Common;
 
 namespace Woosh.Espionage;
 
 [Library, Title("Hands"), Icon("pan_tool")]
-public sealed partial class PlayerHands : AnimatedEntity, ICarriable
+public sealed partial class PlayerHands : AnimatedEntity, ICarriable, IObservableEntity
 {
+	public Dispatcher Events { get; } = new Dispatcher();
+	
 	public override void Spawn()
 	{
 		base.Spawn();

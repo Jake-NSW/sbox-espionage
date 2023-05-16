@@ -20,13 +20,13 @@ public sealed class RustPistolFirearm : Firearm, IHave<DisplayInfo>, ISlotted
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
 	}
 
+	public override void ClientSpawn()
+	{
+		base.ClientSpawn();
+
+		Components.Add( new ViewportEffectsComponent( VIEW_MODEL ) );
+	}
+
 	public int Slot => Operator.CarrySlot.Holster.Index();
 	public override DrawTime Draw => new DrawTime( 1, 0.2f );
-
-	protected override AnimatedEntity OnRequestViewmodel()
-	{
-		var view = new CompositedViewModel( Events ) { Owner = Owner, Model = Model.Load( VIEW_MODEL ) };
-		view.ImportFrom<EspEffectStack>();
-		return view;
-	}
 }

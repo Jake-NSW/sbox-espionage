@@ -6,13 +6,22 @@ using Woosh.Common;
 
 namespace Woosh.Espionage;
 
-public sealed class InteractionHandler : EntityComponent, ISingletonComponent
+public readonly struct InteractionTargetChanged : IEventData
 {
-	public Dispatcher Events { get; }
+	public Entity Hovering { get; }
+	public IReadOnlyList<IEntityInteraction> Interactions { get; }
 
+	public InteractionTargetChanged( Entity hovering, IReadOnlyList<IEntityInteraction> interactions )
+	{
+		Hovering = hovering;
+		Interactions = interactions;
+	}
+}
+
+public sealed class InteractionHandler : ObservableEntityComponent<Pawn>, ISingletonComponent
+{
 	public InteractionHandler()
 	{
-		Events = new Dispatcher();
 		m_Interactions = Array.Empty<IEntityInteraction>();
 	}
 
@@ -21,25 +30,18 @@ public sealed class InteractionHandler : EntityComponent, ISingletonComponent
 	public IReadOnlyList<IEntityInteraction> Interactions => m_Interactions;
 	private IEntityInteraction[] m_Interactions;
 
-	public Entity Hovering => p_Last;
-	[Predicted] private Entity p_Last { get; set; }
+	public Entity Hovering => p_Hovering;
+	[Predicted] private Entity p_Hovering { get; set; }
 
-	private int m_Length;
-	
 	public void Simulate( IClient client )
 	{
 		var result = Scan();
 		var hovering = result.Entity;
 
-		if ( p_Last != hovering || m_Length != Entity.Components.Count)
+		if ( p_Hovering != hovering )
 		{
-			m_Length = Entity.Components.Count;
-			
-			var old = p_Last;
-			p_Last = hovering;
+			p_Hovering = hovering;
 			Rebuild();
-			
-			Events.Notify( p_Last, old );
 		}
 
 		foreach ( var interaction in Interactions )
@@ -50,7 +52,8 @@ public sealed class InteractionHandler : EntityComponent, ISingletonComponent
 
 	public void Rebuild()
 	{
-		m_Interactions = p_Last == null ? Array.Empty<IEntityInteraction>() : Entity.Components.GetAll<IEntityInteraction>().Where( e => e.IsInteractable( p_Last ) ).ToArray();
+		m_Interactions = p_Hovering == null ? Array.Empty<IEntityInteraction>() : Entity.Components.GetAll<IEntityInteraction>().Where( e => e.IsInteractable( p_Hovering ) ).ToArray();
+		Events.Run( new InteractionTargetChanged( p_Hovering, m_Interactions ) );
 	}
 
 	private TraceResult Scan( float size = 8 )

@@ -1,4 +1,5 @@
 ﻿@using System
+@using System.Collections.Generic
 @using Sandbox;
 @using Sandbox.UI;
 @using Woosh.Common
@@ -23,7 +24,7 @@
 
         <div style="flex-direction: column; align-items: flex-start">
             <!-- Create another thing for each Interaction Opportunity -->
-            @foreach (var item in m_Handler?.Interactions ?? Array.Empty<IEntityInteraction>())
+            @foreach (var item in m_Interactions ?? Array.Empty<IEntityInteraction>())
             {
                 <div class="container">
                     <label class="bind" text="@($"[{item.Indicator.Bind}]")"></label>
@@ -40,6 +41,7 @@
     private string Display { get; set; }
 
     private Vector3 m_Last;
+
     private Entity m_Target;
 
     public override void Tick()
@@ -50,52 +52,50 @@
         if (Game.LocalPawn == null)
             return;
 
-        var components = Game.LocalPawn.Components;
-        if (components.TryGet<InteractionHandler>(out var handler) && handler.Interactions.Count > 0)
+        if (Game.LocalPawn != m_Handler)
+            Rebind(Game.LocalPawn as IObservableEntity);
+
+        if (m_Interactions.Count > 0 && m_Target != null)
         {
-            if (handler != m_Handler)
-                Rebind(handler);
-
-            // Get Info
-            var model = (ModelEntity)handler.Hovering;
-            var info = model.Info();
-
-            Display = info.Name;
-            Icon = info.Icon;
-
-            m_Last = model.WorldSpaceBounds.Center;
+            m_Last = m_Target.WorldSpaceBounds.Center;
             Style.Opacity = 1;
         }
 
         this.ToWorld(m_Last);
     }
 
-    private void OnEntityChanged(in Event<ValueChanged<Entity>> evt)
+    private void OnInteractionChanged(in Event<InteractionTargetChanged> evt)
     {
         // We want the UI to nicely fade out...
-        if (evt.Data.New == null)
+        if (evt.Data.Hovering == null)
             return;
 
         // Rebuild UI based on Interactions...
-        m_Target = evt.Data.New;
+        m_Target = evt.Data.Hovering;
+        m_Interactions = evt.Data.Interactions;
+        
+        // Get Info
+        var info = m_Target.Info();
+        Display = info.Name;
+        Icon = info.Icon;
     }
 
     // Binding
 
-    private InteractionHandler m_Handler;
+    private IReadOnlyList<IEntityInteraction> m_Interactions = Array.Empty<IEntityInteraction>();
+    private IObservableEntity m_Handler;
 
-    public void Rebind(InteractionHandler handler)
+    public void Rebind(IObservableEntity handler)
     {
-        m_Handler?.Events.Unregister<ValueChanged<Entity>>(OnEntityChanged);
+        m_Handler?.Events.Unregister<InteractionTargetChanged>(OnInteractionChanged);
         m_Handler = handler;
-        m_Handler?.Events.OnValueChanged<Entity>(OnEntityChanged);
+        m_Handler?.Events.Register<InteractionTargetChanged>(OnInteractionChanged);
     }
 
     // Hash
 
     protected override int BuildHash()
     {
-    // This is dumb
-        return (Display?.GetHashCode() ?? 0) ^ (m_Target?.GetHashCode() ?? 0) ^ (m_Handler?.Interactions.Count ?? 0);
+        return m_Interactions?.GetHashCode() ?? 0 ^ m_Target?.GetHashCode()?? 0;
     }
 }
