@@ -58,7 +58,6 @@ public partial class InventoryContainer : ObservableEntityComponent<Pawn>, IEnti
 		// Apply things to Entity
 		ent.SetParent( null );
 		ent.EnableDrawing = true;
-		Log.Info("Enable Drawing from Inventory");
 
 		Events.Run( new InventoryRemoved( ent ) );
 
