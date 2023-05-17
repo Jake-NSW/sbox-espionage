@@ -22,11 +22,12 @@
             <label class="hovering" text="@Display"></label>
         }
 
-        <div style="flex-direction: column; align-items: flex-start">
+        <div @ref=Container style="flex-direction: column; align-items: flex-start">
             <!-- Create another thing for each Interaction Opportunity -->
             @foreach (var item in m_Interactions ?? Array.Empty<IEntityInteraction>())
             {
                 <div class="container">
+                    <div style="position: absolute; height: 100%; background-color: red;"></div>
                     <label class="bind" text="@($"[{item.Indicator.Bind}]")"></label>
                     <label class="action" text="@item.Indicator.Action"></label>
                 </div>
@@ -37,6 +38,8 @@
 
 @code
 {
+    private Panel Container { get; set; }
+    
     private string Icon { get; set; }
     private string Display { get; set; }
 
@@ -61,10 +64,17 @@
             Style.Opacity = 1;
         }
 
+        for (int i = 0; i < m_Interactions.Count; i++)
+        {
+            var interaction = m_Interactions[i];
+            var child  = Container.GetChild(i).GetChild(0);
+            child.Style.Width = Length.Percent(interaction.Indicator.Held * 100);
+        }
+
         this.ToWorld(m_Last);
     }
 
-    private void OnInteractionChanged(in Event<InteractionTargetChanged> evt)
+    private void OnInteractionChanged(Event<InteractionTargetChanged> evt)
     {
         // Rebuild UI based on Interactions...
         m_Target = evt.Data.Hovering;

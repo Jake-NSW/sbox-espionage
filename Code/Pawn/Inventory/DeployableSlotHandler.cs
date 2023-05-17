@@ -37,10 +37,10 @@ public sealed class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISi
 	private IEntityInventory Inventory => this.Get<IEntityInventory>();
 	private CarriableHandler Handler => this.Get<CarriableHandler>();
 
-	private void OnInventoryRemoved( in Event<InventoryRemoved> evt )
+	private void OnInventoryRemoved( Event<InventoryRemoved> evt )
 	{
-		var ent = evt.Data.Entity;
-		var slot = SlotOfEntity( ent );
+		var item = evt.Data.Item;
+		var slot = SlotOfEntity( item );
 
 		if ( slot == -1 )
 			return;
@@ -51,11 +51,11 @@ public sealed class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISi
 		Assign( slot, null );
 	}
 
-	private void OnInventoryAdded( in Event<InventoryAdded> evt )
+	private void OnInventoryAdded( Event<InventoryAdded> evt )
 	{
-		var ent = evt.Data.Entity;
+		var item = evt.Data.Item;
 		
-		if ( ent is not ISlotted slotted )
+		if ( item is not ISlotted slotted )
 		{
 			// Don't do anything, as we can't slot...
 			return;
@@ -64,7 +64,7 @@ public sealed class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISi
 		var wasActive = Active == slotted.Slot;
 
 		Drop( slotted.Slot );
-		Assign( slotted.Slot, ent );
+		Assign( slotted.Slot, item );
 
 		if ( wasActive )
 		{

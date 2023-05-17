@@ -3,16 +3,6 @@ using Woosh.Common;
 
 namespace Woosh.Espionage;
 
-public readonly struct LeanDirectionChanged : IEventData
-{
-	public int Direction { get; }
-
-	public LeanDirectionChanged( int direction )
-	{
-		Direction = direction;
-	}
-}
-
 public sealed partial class PawnLeaning : ObservableEntityComponent<Pawn>, IMutateCameraSetup
 {
 	public void Simulate( IClient cl )

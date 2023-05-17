@@ -3,15 +3,26 @@ using Woosh.Common;
 
 namespace Woosh.Espionage;
 
-[Library, Title("Hands"), Icon("pan_tool")]
+[Library, Title( "Hands" ), Icon( "pan_tool" )]
 public sealed partial class PlayerHands : AnimatedEntity, ICarriable, IObservableEntity
 {
 	public Dispatcher Events { get; } = new Dispatcher();
-	
+
+	public PlayerHands()
+	{
+		Events.Register<CreateViewModel>(
+			evt =>
+			{
+				var view = evt.Data.ViewModel;
+				view.Model = Model.Load( "weapons/hands/v_espionage_hands.vmdl" );
+			}
+		);
+	}
+
 	public override void Spawn()
 	{
 		Transmit = TransmitType.Owner;
-		Components.Add( new CarriableEffectsComponent( Model.Load(  "weapons/hands/v_espionage_hands.vmdl"  ) ) );
+		Components.Create<CarriableEffectsComponent>();
 	}
 
 	// ICarriable
@@ -21,7 +32,9 @@ public sealed partial class PlayerHands : AnimatedEntity, ICarriable, IObservabl
 	void ICarriable.Deploying()
 	{
 		Events.Run( new DeployingEntity( this ), this );
-		EnableDrawing = true;
+
+		if ( Game.IsServer )
+			EnableDrawing = true;
 	}
 
 	void ICarriable.Holstering( bool drop )
@@ -32,7 +45,9 @@ public sealed partial class PlayerHands : AnimatedEntity, ICarriable, IObservabl
 	void ICarriable.OnHolstered()
 	{
 		Events.Run( new HolsteredEntity( this ), this );
-		EnableDrawing = false;
+
+		if ( Game.IsServer )
+			EnableDrawing = false;
 	}
 
 }

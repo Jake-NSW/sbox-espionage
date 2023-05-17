@@ -29,10 +29,9 @@ public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity
 
 	public Dispatcher Events { get; }
 
-	private readonly IDispatchRegistryTable m_Table;
 	private readonly LinkedListNode<CompositedViewModel> m_Node;
 
-	public CompositedViewModel( IDispatchRegistryTable table )
+	public CompositedViewModel( IObservableEntity table )
 	{
 		Game.AssertClient();
 
@@ -40,7 +39,7 @@ public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity
 
 		s_All.AddLast( m_Node = new LinkedListNode<CompositedViewModel>( this ) );
 
-		m_Table = table;
+		Events = table.Events;
 		m_Effects = new HashSet<IViewModelEffect>( 8 );
 	}
 
@@ -77,7 +76,7 @@ public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity
 
 	public void Add( IViewModelEffect effect )
 	{
-		effect.Register( this, m_Table );
+		effect.Register( this, Events );
 		m_Effects.Add( effect );
 	}
 }

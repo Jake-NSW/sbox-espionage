@@ -6,15 +6,10 @@ namespace Woosh.Espionage;
 
 public sealed class Operator : Pawn, IMutateCameraSetup
 {
-	public enum CarrySlot
-	{
-		Front, Back, Holster
-	}
-
 	public Entity Active => Components.Get<CarriableHandler>().Active;
 	public IEntityInventory Inventory => Components.Get<IEntityInventory>();
 	public DeployableSlotHandler Hands => Components.Get<DeployableSlotHandler>();
-
+	
 	public override void Spawn()
 	{
 		base.Spawn();
@@ -30,7 +25,7 @@ public sealed class Operator : Pawn, IMutateCameraSetup
 		Components.Create<EquipEntityInteraction>();
 
 		// Inventory
-		Components.Add( new CarriableHandler( new PlayerHands() { Owner = this, Parent = this } ) );
+		Components.Create<CarriableHandler>();
 		Components.Create<InventoryContainer>();
 		Components.Add( new DeployableSlotHandler( 3 ) );
 	}

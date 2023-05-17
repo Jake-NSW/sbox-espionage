@@ -12,24 +12,7 @@ public partial class CarriableHandler : ObservableEntityComponent<Pawn>, IActive
 
 	public CarriableHandler() { }
 
-	public CarriableHandler( Entity fallback )
-	{
-		m_Fallback = fallback;
-	}
-
 	// Active
-
-	private readonly Entity m_Fallback;
-
-	protected override void OnActivate()
-	{
-		base.OnActivate();
-
-		if ( Active == null && m_Fallback != null )
-		{
-			Deploy( m_Fallback );
-		}
-	}
 
 	[Net, Local] private Entity n_RealActive { get; set; }
 	[Predicted] private Entity m_LastActive { get; set; }
@@ -79,7 +62,6 @@ public partial class CarriableHandler : ObservableEntityComponent<Pawn>, IActive
 	{
 		// Only allow the server to deploy...
 		Game.AssertServer();
-		entity ??= m_Fallback;
 
 		// Check if we have a valid entity
 		if ( !entity.IsValid() || Active == entity )
@@ -188,8 +170,6 @@ public partial class CarriableHandler : ObservableEntityComponent<Pawn>, IActive
 		m_OnHolstered = null;
 		
 		Active = null;
-
-		n_ToDeploy ??= m_Fallback;
 
 		if ( n_ToDeploy != null )
 		{

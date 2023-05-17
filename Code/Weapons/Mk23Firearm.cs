@@ -10,6 +10,18 @@ public sealed class Mk23Firearm : Firearm, ISlotted
 	private const string VIEW_MODEL = "weapons/mk23/v_espionage_mk23.vmdl";
 	private const string WORLD_MODEL = "weapons/mk23/espionage_mk23.vmdl";
 
+	public Mk23Firearm()
+	{
+		Events.Register<CreateViewModel>(
+			evt =>
+			{
+				var view = evt.Data.ViewModel;
+				view.Model = Model.Load( VIEW_MODEL );
+				view.ImportFrom<EspEffectStack>();
+			}
+		);
+	}
+
 	public override void Spawn()
 	{
 		base.Spawn();
@@ -17,10 +29,10 @@ public sealed class Mk23Firearm : Firearm, ISlotted
 		Model = Model.Load( WORLD_MODEL );
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
 
-		Components.Add( new CarriableEffectsComponent( Model.Load( VIEW_MODEL ) ) );
+		Components.Create<CarriableEffectsComponent>();
 		Components.Create<GenericFirearmViewmodelAnimator>();
 	}
 
-	public int Slot => Operator.CarrySlot.Holster.Index();
+	public int Slot => CarrySlot.Holster.Index();
 	public override DrawTime Draw => new DrawTime( 1, 0.6f );
 }

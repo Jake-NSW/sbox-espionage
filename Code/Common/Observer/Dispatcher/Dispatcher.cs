@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace Woosh.Common;
 
-public sealed class Dispatcher : IDispatchRegistryTable, IDispatchExecutor
+public sealed class Dispatcher : IDisposable, IDispatchRegistryTable, IDispatchExecutor
 {
 	// Registry
 
@@ -15,6 +15,11 @@ public sealed class Dispatcher : IDispatchRegistryTable, IDispatchExecutor
 		m_Registry = new Dictionary<Type, HashSet<Delegate>>();
 	}
 
+	public void Dispose()
+	{
+		m_Registry.Clear();
+	}
+	
 	// Dispatch
 
 	public void Run<T>( T item, object from = null ) where T : struct, IEventData

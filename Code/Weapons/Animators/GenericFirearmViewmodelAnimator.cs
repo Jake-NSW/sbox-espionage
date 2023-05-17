@@ -7,12 +7,12 @@ public sealed class GenericFirearmViewmodelAnimator : ObservableEntityComponent<
 {
 	protected override void OnActivate()
 	{
-		Events.Register<WeaponFireEvent>( OnShoot );
+		Events.Register<WeaponFired>( OnShoot );
 	}
 
 	protected override void OnDeactivate()
 	{
-		Events.Unregister<WeaponFireEvent>( OnShoot );
+		Events.Unregister<WeaponFired>( OnShoot );
 	}
 
 	private void OnShoot()

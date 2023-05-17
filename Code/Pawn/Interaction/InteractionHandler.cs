@@ -6,18 +6,6 @@ using Woosh.Common;
 
 namespace Woosh.Espionage;
 
-public readonly struct InteractionTargetChanged : IEventData
-{
-	public Entity Hovering { get; }
-	public IReadOnlyList<IEntityInteraction> Interactions { get; }
-
-	public InteractionTargetChanged( Entity hovering, IReadOnlyList<IEntityInteraction> interactions )
-	{
-		Hovering = hovering;
-		Interactions = interactions;
-	}
-}
-
 public sealed class InteractionHandler : ObservableEntityComponent<Pawn>, ISingletonComponent
 {
 	public InteractionHandler()

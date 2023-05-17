@@ -80,7 +80,7 @@ public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IOb
 		if ( !Prediction.FirstTime )
 			return;
 
-		Events.Run( new WeaponFireEvent( new Vector3( -3, 0.2f, 0.2f ) * 35, new Vector3( -1, 0.2f, 0.2f ) * 35 ) );
+		Events.Run( new WeaponFired( new Vector3( -3, 0.2f, 0.2f ) * 35, new Vector3( -1, 0.2f, 0.2f ) * 35 ) );
 
 		// Play Effects
 		PlayClientEffects();
@@ -101,13 +101,13 @@ public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IOb
 	private void PlayClientEffects()
 	{
 		if ( Prediction.CurrentHost == null )
-			Events.Run( new WeaponFireEvent( new Vector3( -3, 0.2f, 0.2f ) * 35, new Vector3( -1, 0.2f, 0.2f ) * 35 ) );
+			Events.Run( new WeaponFired( new Vector3( -3, 0.2f, 0.2f ) * 35, new Vector3( -1, 0.2f, 0.2f ) * 35 ) );
 
 		Sounds.Play( WeaponSound.Shoot, Owner?.AimRay.Position ?? Position );
 	}
 
 	[ConCmd.Server]
-	private static void CmdReceivedShootRequest( int index, Vector3 pos, Vector3 forward )
+	private static void CmdReceivedShootRequest( int indent, Vector3 pos, Vector3 forward )
 	{
 		_ = new Prop
 		{

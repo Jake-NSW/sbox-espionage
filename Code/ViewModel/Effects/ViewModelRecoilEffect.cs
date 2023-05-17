@@ -52,13 +52,13 @@ public sealed class ViewModelRecoilEffect : IViewModelEffect
 
 	public void Register( AnimatedEntity entity, IDispatchRegistryTable table )
 	{
-		table?.Register(
-			( in Event<WeaponFireEvent> evt ) =>
+		table?.Register<WeaponFired>(
+			evt =>
 			{
 				var rand = Game.Random;
 				var recoil = evt.Data.Recoil;
 				var kickback = evt.Data.Kickback;
-				
+
 				m_RecoilTargetRotation += new Vector3( recoil.x, rand.Float( -recoil.y, recoil.y ), Game.Random.Float( -recoil.z, recoil.z ) ) * Time.Delta;
 				m_KickbackTargetPosition += new Vector3( kickback.x, rand.Float( -kickback.y, kickback.y ), Game.Random.Float( -kickback.z, kickback.z ) ) * Time.Delta;
 			}

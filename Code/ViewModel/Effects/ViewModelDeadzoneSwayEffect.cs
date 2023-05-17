@@ -53,8 +53,8 @@ public sealed class ViewModelDeadzoneSwayEffect : IViewModelEffect
 
 	public void Register( IDispatchRegistryTable table )
 	{
-		table.Register(
-			( in Event<WeaponFireEvent> evt ) =>
+		table.Register<WeaponFired>(
+			evt =>
 			{
 				var recoil = evt.Data.Recoil.Abs() / 4;
 				var x = Game.Random.Float( -recoil.x, recoil.x ) / 24;

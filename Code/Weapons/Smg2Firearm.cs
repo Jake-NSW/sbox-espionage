@@ -10,6 +10,18 @@ public sealed class Smg2Firearm : Firearm, ISlotted
 	private const string VIEW_MODEL = "weapons/smg2/v_espionage_smg2.vmdl";
 	private const string WORLD_MODEL = "weapons/smg2/espionage_smg2.vmdl";
 
+	public Smg2Firearm()
+	{
+		Events.Register<CreateViewModel>(
+			evt =>
+			{
+				var view = evt.Data.ViewModel;
+				view.Model = Model.Load( VIEW_MODEL );
+				view.ImportFrom<EspEffectStack>();
+			}
+		);
+	}
+
 	public override void Spawn()
 	{
 		base.Spawn();
@@ -17,10 +29,10 @@ public sealed class Smg2Firearm : Firearm, ISlotted
 		Model = Model.Load( WORLD_MODEL );
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
 		
-		Components.Add( new CarriableEffectsComponent( Model.Load(VIEW_MODEL) ) );
+		Components.Create<CarriableEffectsComponent>();
 		Components.Create<GenericFirearmViewmodelAnimator>();
 	}
 
-	public int Slot => Operator.CarrySlot.Front.Index();
+	public int Slot => CarrySlot.Front.Index();
 	public override DrawTime Draw => new DrawTime( 1.5f, 1.3f );
 }
