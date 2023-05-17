@@ -2,7 +2,7 @@
 
 namespace Woosh.Common;
 
-public readonly struct Event<T> where T : struct, IEventData
+public readonly ref struct Event<T> where T : struct, IEventData
 {
 	public T Data { get; }
 

@@ -3,7 +3,7 @@ using Woosh.Common;
 
 namespace Woosh.Espionage;
 
-public sealed partial class CarriableEffectsComponent : ObservableEntityComponent<ICarriable>, IEntityEffects
+public sealed class CarriableEffectsComponent : ObservableEntityComponent<ICarriable>, IEntityEffects
 {
 	public ModelEntity Target => UnderlyingEntity.IsFirstPersonMode ? m_Model : UnderlyingEntity as ModelEntity;
 

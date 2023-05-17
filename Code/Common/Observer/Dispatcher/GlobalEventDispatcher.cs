@@ -11,6 +11,6 @@ public class GlobalEventDispatcher : IDispatchExecutor
 {
 	public void Run<T>( T item, object from = null ) where T : struct, IEventData
 	{
-		Event.Run( typeof(T).FullName, new Event<T>( item, from ) );
+		Event.Run( typeof(T).FullName, item );
 	}
 }

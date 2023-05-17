@@ -31,21 +31,14 @@ public sealed partial class PlayerHands : AnimatedEntity, ICarriable, IObservabl
 
 	void ICarriable.Deploying()
 	{
-		Events.Run( new DeployingEntity( this ), this );
-
 		if ( Game.IsServer )
 			EnableDrawing = true;
 	}
 
-	void ICarriable.Holstering( bool drop )
-	{
-		Events.Run( new HolsteringEntity( this, drop ), this );
-	}
+	void ICarriable.Holstering( bool drop ) { }
 
 	void ICarriable.OnHolstered()
 	{
-		Events.Run( new HolsteredEntity( this ), this );
-
 		if ( Game.IsServer )
 			EnableDrawing = false;
 	}

@@ -22,9 +22,9 @@ public partial class CarriableHandler : ObservableEntityComponent<Pawn>, IActive
 		// Constantly check if we have changed Active
 		if ( m_LastActive != n_RealActive )
 		{
-			(m_LastActive as ICarriable)?.Holstering( n_IsDropping );
+			SimulatedHolstering();
 			m_LastActive = n_RealActive;
-			(m_LastActive as ICarriable)?.Deploying();
+			SimulatedDeploying();
 		}
 
 		// Wait for Deploying to Finish
@@ -47,6 +47,20 @@ public partial class CarriableHandler : ObservableEntityComponent<Pawn>, IActive
 
 		if ( !n_IsDeploying && !n_IsHolstering )
 			Active?.Simulate( client );
+	}
+
+	private void SimulatedHolstering()
+	{
+		(m_LastActive as ICarriable)?.Holstering( n_IsDropping );
+		Events.Run( new HolsteringEntity( m_LastActive, n_IsDropping ), this );
+		(m_LastActive as IObservableEntity)?.Events.Run( new HolsteringEntity( m_LastActive, n_IsDropping ), this );
+	}
+
+	private void SimulatedDeploying()
+	{
+		(m_LastActive as ICarriable)?.Deploying();
+		Events.Run( new DeployingEntity( m_LastActive ), this );
+		(m_LastActive as IObservableEntity)?.Events.Run( new DeployingEntity( m_LastActive ), this );
 	}
 
 	// Deploy
@@ -121,7 +135,10 @@ public partial class CarriableHandler : ObservableEntityComponent<Pawn>, IActive
 		n_IsDeploying = false;
 
 		m_OnDeployed?.Invoke( Active );
-		Events.Run( new DeployedEntity( Active ) );
+
+		Events.Run( new DeployedEntity( Active ), this );
+		(Active as IObservableEntity)?.Events.Run( new DeployedEntity( Active ), this );
+
 		m_OnDeployed = null;
 
 		if ( n_ToDeploy != null && Game.IsServer )
@@ -163,12 +180,13 @@ public partial class CarriableHandler : ObservableEntityComponent<Pawn>, IActive
 
 		(Active as ICarriable)?.OnHolstered();
 		Events.Run( new HolsteredEntity( Active ) );
+		(Active as IObservableEntity)?.Events.Run( new HolsteredEntity( Active ), this );
 
 		n_IsDropping = false;
 
 		m_OnHolstered?.Invoke( Entity );
 		m_OnHolstered = null;
-		
+
 		Active = null;
 
 		if ( n_ToDeploy != null )
