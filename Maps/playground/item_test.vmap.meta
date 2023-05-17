@@ -16,7 +16,8 @@
       "PackageReferences": [],
       "EditorReferences": [
         "frogpond.alarmkeypad#12949",
-        "woosh.espionage"
+        "woosh.espionage",
+        "facepunch.toilet_a#17158"
       ],
       "Metadata": {}
     }

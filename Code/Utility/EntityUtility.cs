@@ -47,12 +47,10 @@ public static class EntityUtility
 	public static DisplayInfo Info( this Entity entity )
 	{
 		var info = (entity as IHave<DisplayInfo>)?.Item;
-
 		if ( entity is ModelEntity model )
 		{
 			info ??= GetOrCreateInfoFromModel( model.Model );
 		}
-
 		return info ?? GetOrCreateInfoFromType( entity.GetType() );
 	}
 }

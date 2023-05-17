@@ -1,7 +1,9 @@
-﻿using Sandbox;
+﻿using Editor;
+using Sandbox;
 
 namespace Woosh.Espionage;
 
+[Library( "esp_terminal" ), HammerEntity, Title( "Terminal" ), Icon( "terminal" ), Category( "Gameplay" )]
 public sealed class TerminalEntity : AnimatedEntity, IControllable
 {
 	public bool IsUsable( Entity pawn )
