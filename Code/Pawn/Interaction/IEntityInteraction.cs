@@ -31,6 +31,13 @@ public interface IEntityInteraction : IComponent
 	public InteractionIndicator Indicator { get; }
 
 	/// <summary>
+	/// Called on the Client for use in the Indicator. Useful for getting specific data from the entity
+	/// we're currently hovering over. This only gets run if the target entity is interactable.
+	/// <param name="entity"> The entity we are hovering </param>
+	/// </summary>
+	void OnHovering(Entity entity) { }
+	
+	/// <summary>
 	/// Is Interactable is called when the currently hovering item is changed on the Interaction
 	/// handler. This allows us to inject more interaction logic into the handler. This controls
 	/// whether or not we should simulate the component or not...

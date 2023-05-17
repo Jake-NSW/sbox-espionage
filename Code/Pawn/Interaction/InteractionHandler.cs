@@ -13,6 +13,30 @@ public sealed class InteractionHandler : ObservableEntityComponent<Pawn>, ISingl
 		m_Interactions = Array.Empty<IEntityInteraction>();
 	}
 
+	protected override void OnActivate()
+	{
+		base.OnActivate();
+
+		// Lazy..
+		Events.Register<DeployingEntity>( OnDeployed );
+		Events.Register<DeployedEntity>( OnDeployed );
+	}
+
+	protected override void OnDeactivate()
+	{
+		base.OnDeactivate();
+
+		Events.Unregister<DeployingEntity>( OnDeployed );
+		Events.Unregister<DeployedEntity>( OnDeployed );
+	}
+
+	private void OnDeployed()
+	{
+		// Some Holdable Entities add Components
+		Rebuild();
+	}
+
+
 	// State
 
 	public IReadOnlyList<IEntityInteraction> Interactions => m_Interactions;
@@ -34,6 +58,9 @@ public sealed class InteractionHandler : ObservableEntityComponent<Pawn>, ISingl
 
 		foreach ( var interaction in Interactions )
 		{
+			if ( Game.IsClient )
+				interaction.OnHovering( hovering );
+
 			interaction.Simulate( result, client );
 		}
 	}

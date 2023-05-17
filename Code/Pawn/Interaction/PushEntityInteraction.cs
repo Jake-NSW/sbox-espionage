@@ -8,11 +8,18 @@ public interface IPushable
 	void Push( Entity entity, float force );
 }
 
-public sealed class PushEntityInteraction : EntityComponent, IEntityInteraction, ISingletonComponent
+public sealed class PushEntityInteraction : EntityComponent<Pawn>, IEntityInteraction, ISingletonComponent
 {
-	public InteractionIndicator Indicator => new InteractionIndicator( "Push & Pull", "Scroll", MathF.Abs( Input.MouseWheel ) / 14 );
+	public InteractionIndicator Indicator => new InteractionIndicator(
+		"Push & Pull",
+		"Scroll",
+		0
+	);
 
-	public bool IsInteractable( Entity entity ) => entity is IPushable;
+	public bool IsInteractable( Entity entity )
+	{
+		return entity is IPushable;
+	}
 
 	public void Simulate( in TraceResult hovering, IClient client )
 	{

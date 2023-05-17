@@ -2,7 +2,7 @@
 
 namespace Woosh.Espionage;
 
-public sealed class PickupEntityInteraction : EntityComponent, IEntityInteraction
+public sealed class PickupEntityInteraction : EntityComponent<Pawn>, IEntityInteraction
 {
 	public InteractionIndicator Indicator => new InteractionIndicator( "Pickup", $"{Input.GetButtonOrigin( KEYCODE )}", 0 );
 

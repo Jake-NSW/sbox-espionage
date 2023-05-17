@@ -2,7 +2,7 @@
 
 namespace Woosh.Espionage;
 
-public sealed class UseEntityInteraction : EntityComponent, IEntityInteraction, ISingletonComponent
+public sealed class UseEntityInteraction : EntityComponent<Pawn>, IEntityInteraction, ISingletonComponent
 {
 	public InteractionIndicator Indicator => new InteractionIndicator( "Use", Input.GetButtonOrigin( "use" ), 0 );
 

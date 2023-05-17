@@ -19,7 +19,7 @@ public sealed class Dispatcher : IDisposable, IDispatchRegistryTable, IDispatchE
 	{
 		m_Registry.Clear();
 	}
-	
+
 	// Dispatch
 
 	public void Run<T>( T item, object from = null ) where T : struct, IEventData
@@ -31,9 +31,15 @@ public sealed class Dispatcher : IDisposable, IDispatchRegistryTable, IDispatchE
 
 		foreach ( var evt in stack )
 		{
-			(evt as Action)?.Invoke();
-			(evt as StructCallback<T>)?.Invoke( new Event<T>( item, from ) );
-			(evt as DynamicCallback)?.Invoke( new Event<T>( item, from ) );
+			switch ( evt )
+			{
+				case Action action :
+					action.Invoke();
+					continue;
+				case StructCallback<T> callback :
+					callback.Invoke( new Event<T>( item, from ) );
+					continue;
+			}
 		}
 	}
 
