@@ -10,8 +10,6 @@ public partial class CarriableHandler : ObservableEntityComponent<Pawn>, IActive
 	[Net, Local] public Entity Active { get; set; }
 	ICarriable IActive<ICarriable>.Active => Active as ICarriable;
 
-	public CarriableHandler() { }
-
 	// Active
 
 	[Net, Local] private Entity n_RealActive { get; set; }

@@ -29,7 +29,6 @@ public sealed class PickupEntityInteraction : EntityComponent, IEntityInteractio
 
 		if ( Input.Released( KEYCODE ) && m_HeldTime <= 0.2f )
 		{
-			Log.Info( "Picking Up" );
 			Entity.Components.Get<IEntityInventory>().Add( hovering.Entity );
 		}
 	}
