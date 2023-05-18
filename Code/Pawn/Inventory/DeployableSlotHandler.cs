@@ -85,7 +85,7 @@ public sealed class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISi
 
 		Game.AssertServer();
 		n_Slots[slot] = ent;
-		Events.Run( new SlotChanged( slot + 1, ent ) );
+		Events.Run( new SlotAssigned( slot + 1, ent ) );
 
 		WriteNetworkData();
 	}

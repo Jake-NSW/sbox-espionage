@@ -9,7 +9,7 @@ public sealed class Dispatcher : IDisposable, IDispatchRegistryTable, IDispatchE
 	// Registry
 
 	private readonly Dictionary<Type, HashSet<Delegate>> m_Registry;
-
+	
 	public Dispatcher()
 	{
 		m_Registry = new Dictionary<Type, HashSet<Delegate>>();

@@ -13,7 +13,7 @@ public sealed class Mk23Firearm : Firearm, ISlotted
 	public Mk23Firearm()
 	{
 		Events.Register<CreateViewModel>(
-			evt =>
+			static evt =>
 			{
 				var view = evt.Data.ViewModel;
 				view.Model = Model.Load( VIEW_MODEL );

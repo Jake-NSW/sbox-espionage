@@ -10,7 +10,7 @@ public readonly record struct InventoryRemoved( Entity Item ) : IEventData;
 
 // Slots
 
-public readonly record struct SlotChanged( int Slot, Entity Entity ) : IEventData;
+public readonly record struct SlotAssigned( int Slot, Entity Entity ) : IEventData;
 
 public readonly record struct SlotDropping( int Slot, Entity Entity ) : IEventData;
 
