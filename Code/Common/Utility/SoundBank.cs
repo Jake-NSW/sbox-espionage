@@ -6,31 +6,27 @@ namespace Woosh.Common;
 
 public readonly struct SoundBank<T> where T : Enum
 {
-	// Add support for flags!! - was the whole point of it!!!
-
-	private readonly string[] m_Sounds;
+	private readonly Dictionary<int, string> m_Bank;
 
 	public SoundBank()
 	{
-		m_Sounds = new string[EnumValues<T>.Length];
+		m_Bank = new Dictionary<int, string>();
 	}
 
-	public SoundBank( IReadOnlyDictionary<T, string> values ) : this()
+	public string this[ T index ]
 	{
-		foreach ( var (key, value) in values )
-		{
-			Assign( key, value );
-		}
+		get => m_Bank.TryGetValue( index.GetHashCode(), out var value ) ? value : null;
+		init => Add(index, value);
 	}
 
-	public void Assign( T index, string sound )
+	public void Add( T index, string sound )
 	{
-		m_Sounds[EnumValues<T>.IndexOf( index )] = sound;
+		m_Bank.AddOrReplace( index.GetHashCode(), sound );
 	}
 
 	public Sound Play( T index, Vector3 pos )
 	{
-		var value = m_Sounds[EnumValues<T>.IndexOf( index )];
+		var value = this[index];
 		return value == null ? default : Sound.FromWorld( value, pos );
 	}
 }

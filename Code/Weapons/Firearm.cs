@@ -1,18 +1,29 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Sandbox;
 using Woosh.Common;
 
 namespace Woosh.Espionage;
 
-public enum WeaponSound
+[Flags]
+public enum WeaponClientEffects
 {
-	Shoot,
+	Attack,
+	Silenced,
 	Reload
+}
+
+public interface IMutateFirearmSetup
+{
+	void OnPostFirearmSetup( ref FirearmSetup setup );
 }
 
 public struct FirearmSetup
 {
 	public bool IsAutomatic;
+	public bool IsSilenced;
+
 	public float RateOfFire; // RPM
 	public float Control;
 	public float Mobility;
@@ -34,7 +45,7 @@ public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IOb
 		EnableHideInFirstPerson = true;
 		EnableShadowInFirstPerson = true;
 
-		n_Setup = new FirearmSetup { IsAutomatic = true, RateOfFire = 900 };
+		Rebuild();
 	}
 
 	public override void Simulate( IClient cl )
@@ -48,16 +59,48 @@ public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IOb
 		}
 	}
 
+	// Setup
+
 	public FirearmSetup Setup => n_Setup;
-	[Net] private FirearmSetup n_Setup { get; set; }
+
+	[Net, SkipHotload, Change( nameof(OnSetupChanged) )]
+	private FirearmSetup n_Setup { get; set; }
+
+	[Event.Hotload]
+	private void OnHotload()
+	{
+		if ( Game.IsServer )
+			Rebuild();
+	}
+
+	public void Rebuild()
+	{
+		Game.AssertServer();
+		var setup = OnSetupDefault();
+
+		foreach ( var mutate in Components.All().OfType<IMutateFirearmSetup>() )
+		{
+			mutate.OnPostFirearmSetup( ref setup );
+		}
+
+		n_Setup = setup;
+		Events.Run( new FirearmSetupApplied( setup ) );
+	}
+
+	private void OnSetupChanged( FirearmSetup old, FirearmSetup value )
+	{
+		Events.Run( new FirearmSetupApplied( value ) );
+	}
+
+	protected abstract FirearmSetup OnSetupDefault();
 
 	// Shoot
 
-	public virtual SoundBank<WeaponSound> Sounds { get; } = new SoundBank<WeaponSound>( new Dictionary<WeaponSound, string> { { WeaponSound.Shoot, "smg2_firing_suppressed_sound" } } );
+	protected virtual SoundBank<WeaponClientEffects> Sounds { get; } = new SoundBank<WeaponClientEffects>() { [WeaponClientEffects.Attack] = "player_use_fail" };
 
 	[Net, Predicted, Local] private TimeSince n_SinceLastShot { get; set; }
 
-	bool IsFireable( bool checkInput = false )
+	public bool IsFireable( bool checkInput = false )
 	{
 		// Check if any state is running
 		if ( checkInput )
@@ -83,7 +126,7 @@ public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IOb
 		Events.Run( new WeaponFired( new Vector3( -3, 0.2f, 0.2f ) * 35, new Vector3( -1, 0.2f, 0.2f ) * 35 ) );
 
 		// Play Effects
-		PlayClientEffects();
+		PlayClientEffects( WeaponClientEffects.Attack );
 
 		// Owner, Shoot from View Model
 		if ( IsLocalPawn )
@@ -98,12 +141,13 @@ public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IOb
 	}
 
 	[ClientRpc]
-	private void PlayClientEffects()
+	private void PlayClientEffects( WeaponClientEffects effects )
 	{
 		if ( Prediction.CurrentHost == null )
 			Events.Run( new WeaponFired( new Vector3( -3, 0.2f, 0.2f ) * 35, new Vector3( -1, 0.2f, 0.2f ) * 35 ) );
 
-		Sounds.Play( WeaponSound.Shoot, Owner?.AimRay.Position ?? Position );
+		Sounds.Play( effects, Owner?.AimRay.Position ?? Position );
+		Events.Run( new PlayClientEffects<WeaponClientEffects>( effects ) );
 	}
 
 	[ConCmd.Server]
