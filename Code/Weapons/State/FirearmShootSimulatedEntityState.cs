@@ -3,7 +3,7 @@ using Woosh.Common;
 
 namespace Woosh.Espionage;
 
-public sealed partial class FirearmShootSimulatedEntityState : ObservableEntityComponent<Firearm>, ISimulatedEntityState<Firearm>
+public sealed partial class FirearmShootSimulatedEntityState : ObservableEntityComponent<Firearm>, ISimulatedEntityState<Firearm>, ISingletonComponent
 {
 	public FirearmSetup Setup => Entity.Setup;
 
@@ -56,7 +56,15 @@ public sealed partial class FirearmShootSimulatedEntityState : ObservableEntityC
 		Events.Run( new WeaponFired( new Vector3( -3, 0.2f, 0.2f ) * 35, new Vector3( -1, 0.2f, 0.2f ) * 35 ) );
 
 		// Play Effects
-		// PlayClientEffects( WeaponClientEffects.Attack );
+		if ( Game.IsServer )
+		{
+			var effects = WeaponClientEffects.Attack;
+
+			if ( Setup.IsSilenced )
+				effects |= WeaponClientEffects.Silenced;
+
+			PlayClientEffects( effects );
+		}
 
 		// Owner, Shoot from View Model
 		if ( Entity.IsLocalPawn )
@@ -69,6 +77,15 @@ public sealed partial class FirearmShootSimulatedEntityState : ObservableEntityC
 		// No Owner, Shoot from World Model
 		if ( Entity.Owner == null && Game.IsServer ) { }
 	}
+
+
+	[ClientRpc]
+	private void PlayClientEffects( WeaponClientEffects effects )
+	{
+		// Sounds.Play( effects, Owner?.AimRay.Position ?? Position );
+		Events.Run( new PlayClientEffects<WeaponClientEffects>( effects ) );
+	}
+
 
 	[ConCmd.Server]
 	private static void CmdReceivedShootRequest( int indent, Vector3 pos, Vector3 forward )

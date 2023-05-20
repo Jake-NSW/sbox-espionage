@@ -14,11 +14,6 @@ public enum WeaponClientEffects
 	Reload
 }
 
-public interface IMutate<T> where T : struct
-{
-	void OnPostSetup( ref T setup );
-}
-
 public struct FirearmSetup
 {
 	public bool IsAutomatic;
@@ -29,6 +24,8 @@ public struct FirearmSetup
 	public float Mobility;
 	public float Range;
 	public float Accuracy;
+
+	public DrawTime Draw;
 }
 
 public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IObservableEntity
@@ -60,7 +57,6 @@ public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IOb
 	public override void Simulate( IClient cl )
 	{
 		Machine.Simulate( cl );
-		DebugOverlay.ScreenText( Machine.Active?.GetType().Name ?? "null", new Vector2( 500, 25 ) );
 	}
 
 	// Setup
@@ -102,13 +98,6 @@ public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IOb
 
 	protected virtual SoundBank<WeaponClientEffects> Sounds { get; } = new SoundBank<WeaponClientEffects>() { [WeaponClientEffects.Attack] = "player_use_fail" };
 
-	[ClientRpc]
-	private void PlayClientEffects( WeaponClientEffects effects )
-	{
-		Sounds.Play( effects, Owner?.AimRay.Position ?? Position );
-		Events.Run( new PlayClientEffects<WeaponClientEffects>( effects ) );
-	}
-
 	// Pickup
 
 	void IPickup.OnPickup( Entity carrier )
@@ -127,7 +116,7 @@ public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IOb
 
 	// Carriable
 
-	public virtual DrawTime Draw => new DrawTime( 1, 1 );
+	DrawTime ICarriable.Draw => Setup.Draw;
 
 	void ICarriable.Deploying()
 	{

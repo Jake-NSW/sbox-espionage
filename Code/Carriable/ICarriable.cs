@@ -11,8 +11,8 @@ public struct DrawTime
 		Holster = holster;
 	}
 
-	public float Deploy { get; set; }
-	public float Holster { get; set; }
+	public float Deploy;
+	public float Holster;
 }
 
 public interface ISlotted : IEntity

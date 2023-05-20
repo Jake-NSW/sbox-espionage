@@ -32,11 +32,10 @@ public sealed class RustPistolFirearm : Firearm, ISlotted
 		Components.Create<RustFirearmViewmodelAnimator>();
 	}
 
+	public int Slot => CarrySlot.Holster.Index();
+
 	protected override FirearmSetup OnSetupDefault()
 	{
-		return new FirearmSetup() { IsAutomatic = false, RateOfFire = 600 };
+		return new FirearmSetup() { IsAutomatic = false, RateOfFire = 600, Draw = new DrawTime( 1, 0.1f ) };
 	}
-
-	public int Slot => CarrySlot.Holster.Index();
-	public override DrawTime Draw => new DrawTime( 1, 0.2f );
 }

@@ -35,7 +35,7 @@ public sealed class Smg2Firearm : Firearm, ISlotted
 
 	protected override FirearmSetup OnSetupDefault()
 	{
-		return new FirearmSetup() { IsAutomatic = true, RateOfFire = 750 };
+		return new FirearmSetup() { IsAutomatic = true, RateOfFire = 750, Draw = new DrawTime( 1.5f, 1.3f ) };
 	}
 
 	protected override SoundBank<WeaponClientEffects> Sounds { get; } = new SoundBank<WeaponClientEffects>()
@@ -45,5 +45,4 @@ public sealed class Smg2Firearm : Firearm, ISlotted
 	};
 
 	public int Slot => CarrySlot.Front.Index();
-	public override DrawTime Draw => new DrawTime( 1.5f, 1.3f );
 }
