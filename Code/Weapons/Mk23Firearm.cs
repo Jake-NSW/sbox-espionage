@@ -35,7 +35,7 @@ public sealed class Mk23Firearm : Firearm, ISlotted
 
 	protected override FirearmSetup OnSetupDefault()
 	{
-		return new FirearmSetup() { IsAutomatic = false, RateOfFire = 600 };
+		return new FirearmSetup() { IsAutomatic = false, RateOfFire = 800 };
 	}
 
 	protected override SoundBank<WeaponClientEffects> Sounds { get; } = new SoundBank<WeaponClientEffects>()

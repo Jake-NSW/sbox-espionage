@@ -67,7 +67,7 @@ public sealed class InteractionHandler : ObservableEntityComponent<Pawn>, ISingl
 	public void Rebuild()
 	{
 		m_Interactions = p_Hovering == null ? Array.Empty<IEntityInteraction>() : Entity.Components.GetAll<IEntityInteraction>().Where( e => e.IsInteractable( p_Hovering ) ).ToArray();
-		Events.Run( new InteractionTargetChanged( m_Interactions.Length == 0 ? null : p_Hovering, m_Interactions ) );
+		Run( new InteractionTargetChanged( m_Interactions.Length == 0 ? null : p_Hovering, m_Interactions ) );
 	}
 
 	private TraceResult Scan( float size = 8 )

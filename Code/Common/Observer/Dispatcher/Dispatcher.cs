@@ -29,6 +29,7 @@ public sealed class Dispatcher : IDisposable, IDispatchRegistryTable, IDispatchE
 			return;
 		}
 
+		var passthrough = new Event<T>( item, from ); 
 		foreach ( var evt in stack )
 		{
 			switch ( evt )
@@ -37,9 +38,13 @@ public sealed class Dispatcher : IDisposable, IDispatchRegistryTable, IDispatchE
 					action.Invoke();
 					continue;
 				case StructCallback<T> callback :
-					callback.Invoke( new Event<T>( item, from ) );
+					callback.Invoke(passthrough);
 					continue;
 			}
+
+			// Don't do anymore events
+			if ( passthrough.Consumed )
+				break;
 		}
 	}
 
