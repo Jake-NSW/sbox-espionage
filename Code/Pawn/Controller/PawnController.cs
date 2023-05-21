@@ -22,6 +22,6 @@ public abstract class PawnController : ObservableEntityComponent<Pawn>, ISinglet
 		get => Entity.Velocity;
 		set => Entity.Velocity = value;
 	}
-
+	
 	public virtual void Simulate( IClient cl ) { }
 }

@@ -16,6 +16,7 @@ public sealed class Operator : Pawn, IMutateCameraSetup
 
 		// Gameplay
 		Components.Create<PawnLeaning>();
+		Components.Create<WalkController>();
 
 		// Interaction
 		Components.Create<InteractionHandler>();
@@ -23,6 +24,7 @@ public sealed class Operator : Pawn, IMutateCameraSetup
 		Components.Create<UseEntityInteraction>();
 		Components.Create<PickupEntityInteraction>();
 		Components.Create<EquipEntityInteraction>();
+		Components.Create<ControllableEntityInteraction>();
 
 		// Inventory
 		Components.Create<CarriableHandler>();
@@ -43,21 +45,6 @@ public sealed class Operator : Pawn, IMutateCameraSetup
 	protected override void OnPostInputBuild( ref InputContext context )
 	{
 		(Active as IMutateInputContext)?.OnPostInputBuild( ref context );
-	}
-
-	[GameEvent.Tick.Client]
-	private void Tick()
-	{
-		for ( var index = 0; index < Hands.Slots.Count; index++ )
-		{
-			var item = Hands.Slots[index];
-			var active = index == Hands.Active - 1;
-
-			if ( active ) // Stupid
-				DebugOverlay.ScreenText( $"{index} - {item?.GetType().Name ?? "Nothing"} - [Active]", index );
-			else
-				DebugOverlay.ScreenText( $"{index} - {item?.GetType().Name ?? "Nothing"}", index );
-		}
 	}
 
 	public override void Simulate( IClient cl )

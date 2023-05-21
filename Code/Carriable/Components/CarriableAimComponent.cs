@@ -21,7 +21,6 @@ public sealed partial class CarriableAimComponent : ObservableEntityComponent<IC
 		}
 	}
 
-
 	private void ToggleAim( bool toggle )
 	{
 		if ( toggle )
@@ -59,7 +58,7 @@ public sealed partial class CarriableAimComponent : ObservableEntityComponent<IC
 
 		var aim = Easing( m_Delta );
 		setup.Hands.Aim = aim;
-		setup.FieldOfView -= aim * 10;
+		setup.FieldOfView += aim * 5;
 
 		// Workout Angles
 

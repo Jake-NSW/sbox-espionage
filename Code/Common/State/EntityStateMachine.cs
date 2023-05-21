@@ -14,7 +14,7 @@ public sealed class EntityStateMachine<T> where T : IEntity
 	public ISimulatedEntityState<T> Active => m_Active;
 	private ISimulatedEntityState<T> m_Active;
 
-	public void Simulate( IClient client )
+	public bool Simulate( IClient client )
 	{
 		var last = m_Active;
 		
@@ -28,7 +28,7 @@ public sealed class EntityStateMachine<T> where T : IEntity
 			}
 			else
 			{
-				return;
+				return false;
 			}
 		}
 
@@ -51,5 +51,7 @@ public sealed class EntityStateMachine<T> where T : IEntity
 				m_Active = null;
 			}
 		}
+
+		return true;
 	}
 }
