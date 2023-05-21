@@ -1,9 +1,10 @@
-﻿using Sandbox;
+﻿using System;
+using Sandbox;
 using Woosh.Common;
 
 namespace Woosh.Espionage;
 
-public sealed class ViewModelRecoilEffect : IViewModelEffect
+public sealed class ViewModelRecoilEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect
 {
 	public float RecoilSnap { get; init; } = 25;
 	public float RecoilReturnSpeed { get; init; } = 5;
@@ -50,18 +51,25 @@ public sealed class ViewModelRecoilEffect : IViewModelEffect
 		setup.Hands.Offset += (rot.Forward * m_KickbackCurrentPosition.x) + (rot.Left * m_KickbackCurrentPosition.y) + (rot.Down * m_KickbackCurrentPosition.z);
 	}
 
-	public void Register( AnimatedEntity entity, IDispatchRegistryTable table )
+	protected override void OnActivate()
 	{
-		table?.Register<WeaponFired>(
-			evt =>
-			{
-				var rand = Game.Random;
-				var recoil = evt.Data.Recoil;
-				var kickback = evt.Data.Kickback;
+		base.OnActivate();
+		Register<WeaponFired>( OnShoot );
+	}
 
-				m_RecoilTargetRotation += new Vector3( recoil.x, rand.Float( -recoil.y, recoil.y ), Game.Random.Float( -recoil.z, recoil.z ) ) * Time.Delta;
-				m_KickbackTargetPosition += new Vector3( kickback.x, rand.Float( -kickback.y, kickback.y ), Game.Random.Float( -kickback.z, kickback.z ) ) * Time.Delta;
-			}
-		);
+	protected override void OnDeactivate()
+	{
+		base.OnDeactivate();
+		Unregister<WeaponFired>( OnShoot );
+	}
+
+	private void OnShoot( Event<WeaponFired> evt )
+	{
+		var rand = Game.Random;
+		var recoil = evt.Data.Recoil;
+		var kickback = evt.Data.Kickback;
+
+		m_RecoilTargetRotation += new Vector3( recoil.x, rand.Float( -recoil.y, recoil.y ), Game.Random.Float( -recoil.z, recoil.z ) ) * Time.Delta;
+		m_KickbackTargetPosition += new Vector3( kickback.x, rand.Float( -kickback.y, kickback.y ), Game.Random.Float( -kickback.z, kickback.z ) ) * Time.Delta;
 	}
 }

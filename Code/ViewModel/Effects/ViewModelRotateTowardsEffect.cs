@@ -1,11 +1,12 @@
 ﻿using System;
 using Sandbox;
+using Woosh.Common;
 
 namespace Woosh.Espionage;
 
-public sealed class ViewModelRotateTowardsEffect : IViewModelEffect
+public sealed class ViewModelRotateTowardsEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect
 {
-	public float Damping { get; init; } = 12;
+	public float Damping { get; set; } = 12;
 	
 	private readonly Func<Transform?> m_Towards;
 

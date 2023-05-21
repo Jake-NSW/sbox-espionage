@@ -90,6 +90,7 @@ public sealed partial class FirearmShootSimulatedEntityState : ObservableEntityC
 	[ConCmd.Server]
 	private static void CmdReceivedShootRequest( int indent, Vector3 pos, Vector3 forward )
 	{
+		return;
 		_ = new Prop
 		{
 			Model = Model.Load( "models/sbox_props/watermelon/watermelon.vmdl" ),

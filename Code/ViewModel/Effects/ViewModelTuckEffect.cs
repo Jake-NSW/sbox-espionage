@@ -11,17 +11,10 @@ public enum TuckType
 	Hug,
 }
 
-public sealed class ViewModelTuckEffect : IViewModelEffect
+public sealed class ViewModelTuckEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect
 {
-	public float Damping { get; init; } = 14;
-	public TuckType Variant { get; init; }
-
-	private AnimatedEntity m_Model;
-
-	public void Register( AnimatedEntity model, IDispatchRegistryTable table )
-	{
-		m_Model = model;
-	}
+	public float Damping { get; set; } = 14;
+	public TuckType Variant { get; set; }
 
 	// Logic
 
@@ -32,12 +25,12 @@ public sealed class ViewModelTuckEffect : IViewModelEffect
 		const string name = "muzzle";
 
 		// Get the muzzle attachment
-		var attachment = m_Model.GetAttachment( name );
+		var attachment = Entity.GetAttachment( name );
 		if ( !attachment.HasValue )
 			return;
 
 		var muzzle = attachment.Value;
-		var distance = muzzle.Position.Distance( m_Model.Position );
+		var distance = muzzle.Position.Distance( Entity.Position );
 
 		var start = muzzle.Position - (muzzle.Rotation.Forward * distance);
 		var end = start + (muzzle.Rotation.Forward * (distance * 2));

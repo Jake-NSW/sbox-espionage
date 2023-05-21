@@ -17,8 +17,8 @@ public sealed class Mk23Firearm : Firearm, ISlotted
 			{
 				var view = evt.Data.ViewModel;
 				view.Model = Model.Load( VIEW_MODEL );
-				view.SetBodyGroup( "muzzle", 1 );
 				view.ImportFrom<EspEffectStack>();
+				view.Components.Get<ViewModelTuckEffect>().Variant = TuckType.Rotate;
 			}
 		);
 	}
@@ -36,7 +36,7 @@ public sealed class Mk23Firearm : Firearm, ISlotted
 
 	protected override FirearmSetup OnSetupDefault()
 	{
-		return new FirearmSetup() { IsAutomatic = false, RateOfFire = 800, Draw = new DrawTime( 1, 0.6f ), IsSilenced = true };
+		return new FirearmSetup() { IsAutomatic = false, RateOfFire = 800, Draw = new DrawTime( 1, 0.6f ) };
 	}
 
 	protected override SoundBank<WeaponClientEffects> Sounds { get; } = new SoundBank<WeaponClientEffects>()

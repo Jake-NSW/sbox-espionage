@@ -61,7 +61,7 @@ public sealed partial class CarriableAimComponent : ObservableEntityComponent<IC
 		n_AimDelta = Easing( m_Delta );
 
 		setup.Hands.Aim = n_AimDelta;
-		setup.FieldOfView -= n_AimDelta * 20;
+		setup.FieldOfView -= n_AimDelta * 10;
 
 		DebugOverlay.ScreenText( $"IsAiming - {IsAiming}\nDelta = {n_AimDelta}", new Vector2( 30, 512 ) );
 	}

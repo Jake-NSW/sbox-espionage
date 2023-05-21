@@ -1,16 +1,16 @@
-﻿using System;
-using Sandbox;
+﻿using Sandbox;
+using Woosh.Common;
 
 namespace Woosh.Espionage;
 
-public sealed class ViewModelSwayEffect : IViewModelEffect
+public sealed class ViewModelSwayEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect
 {
 	private readonly float m_Multiplier;
 	private readonly float m_AimMultiplier;
 
-	public float Damping { get; init; } = 6;
-	public Angles AngleMultiplier { get; init; } = new Angles( 1, 1, 1 );
-	public Vector2 AxisMultiplier { get; init; } = new Vector2( 1, 1 );
+	public float Damping { get; set; } = 6;
+	public Angles AngleMultiplier { get; set; } = new Angles( 1, 1, 1 );
+	public Vector2 AxisMultiplier { get; set; } = new Vector2( 1, 1 );
 
 	public ViewModelSwayEffect( float multiplier = 1, float aimMultiplier = 0.2f )
 	{

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Sandbox;
-using Sandbox.Effects;
 using Woosh.Common;
 
 namespace Woosh.Espionage;
@@ -52,6 +51,22 @@ public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity
 
 	// Effect Stack
 
+	protected override void OnComponentAdded( EntityComponent component )
+	{
+		base.OnComponentAdded( component );
+
+		if ( component is IViewModelEffect effect )
+			m_Effects.Add( effect );
+	}
+
+	protected override void OnComponentRemoved( EntityComponent component )
+	{
+		base.OnComponentRemoved( component );
+
+		if ( component is IViewModelEffect effect )
+			m_Effects.Remove( effect );
+	}
+
 	private readonly HashSet<IViewModelEffect> m_Effects;
 
 	private void Update( ref CameraSetup setup )
@@ -71,14 +86,8 @@ public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity
 		Rotation = setup.Rotation * setup.Hands.Angles;
 	}
 
-	public void ImportFrom<T>() where T :struct, ITemplate<CompositedViewModel>
+	public void ImportFrom<T>() where T : struct, ITemplate<CompositedViewModel>
 	{
-		new T().Generate(this);
-	}
-
-	public void Add( IViewModelEffect effect )
-	{
-		effect.Register( this, Events );
-		m_Effects.Add( effect );
+		new T().Generate( this );
 	}
 }

@@ -3,15 +3,15 @@ using Woosh.Common;
 
 namespace Woosh.Espionage;
 
-public sealed class ViewModelDeadzoneSwayEffect : IViewModelEffect
+public sealed class ViewModelDeadzoneSwayEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect
 {
 	private readonly Vector2 m_Deadzone;
 
-	public bool AimingOnly { get; init; } = false;
-	public bool AutoCenter { get; init; } = true;
+	public bool AimingOnly { get; set; } = false;
+	public bool AutoCenter { get; set; } = true;
 
-	public float Damping { get; init; } = 8;
-	public float Multiplier { get; init; } = 1;
+	public float Damping { get; set; } = 8;
+	public float Multiplier { get; set; } = 1;
 
 	public ViewModelDeadzoneSwayEffect( Vector2 deadzone )
 	{
@@ -50,20 +50,4 @@ public sealed class ViewModelDeadzoneSwayEffect : IViewModelEffect
 			m_SavedDeadzoneAxis *= setup.Aim;
 		}
 	}
-
-	public void Register( IDispatchRegistryTable table )
-	{
-		table.Register<WeaponFired>(
-			evt =>
-			{
-				var recoil = evt.Data.Recoil.Abs() / 4;
-				var x = Game.Random.Float( -recoil.x, recoil.x ) / 24;
-
-				m_SavedDeadzoneAxis.x -= recoil.y;
-				m_SavedDeadzoneAxis.y -= x;
-			}
-		);
-	}
-
-	public void Unregister( IDispatchRegistryTable table ) { }
 }

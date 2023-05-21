@@ -1,14 +1,15 @@
 ﻿using Sandbox;
+using Woosh.Common;
 
 namespace Woosh.Espionage;
 
-public sealed class ViewModelStrafeOffsetEffect : IViewModelEffect
+public sealed class ViewModelStrafeOffsetEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect
 {
-	public float Damping { get; init; } = 6;
-	public float AxisMultiplier { get; init; } = 10;
-	public float RollMultiplier { get; init; } = 1;
+	public float Damping { get; set; } = 6;
+	public float AxisMultiplier { get; set; } = 10;
+	public float RollMultiplier { get; set; } = 1;
 
-	public float AngleClamp { get; init; } = 20;
+	public float AngleClamp { get; set; } = 20;
 
 	private float m_LastStrafeOffset;
 

@@ -50,15 +50,15 @@ public sealed partial class PawnLeaning : ObservableEntityComponent<Pawn>, IMuta
 	{
 		// Get Distance
 		m_Distance = m_Distance.LerpTo( Direction * DistanceFromEyes( Direction, Entity.CollisionBounds.Translate( Entity.Position ) ), 6.5f * Time.Delta );
-		m_Distance *= 1 - setup.Hands.Aim;
+		var multi = 1 - setup.Hands.Aim;
 
 		setup.Position += setup.Rotation.Right * Distance * m_Distance;
 		setup.Rotation *= Rotation.From( 0, 0, Angle * m_Distance );
 
 		setup.Hands.Angles *= Rotation.From( 0, 0, -Angle * m_Distance );
 
-		setup.Hands.Offset += setup.Rotation.Right * (m_Distance * 0.05f * Distance);
-		setup.Hands.Offset += setup.Rotation.Down * (m_Distance * 0.02f * Distance);
+		setup.Hands.Offset += (setup.Rotation.Right * (m_Distance * 0.05f * Distance)) * multi;
+		setup.Hands.Offset += (setup.Rotation.Down * (m_Distance * 0.02f * Distance)) * multi;
 	}
 
 	private float DistanceFromEyes( int direction, BBox bounds )

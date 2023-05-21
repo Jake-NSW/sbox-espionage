@@ -18,6 +18,7 @@ public sealed class Smg2Firearm : Firearm, ISlotted
 				var view = evt.Data.ViewModel;
 				view.Model = Model.Load( VIEW_MODEL );
 				view.ImportFrom<EspEffectStack>();
+				view.Components.Get<ViewModelTuckEffect>().Variant = TuckType.Hug;
 			}
 		);
 	}
