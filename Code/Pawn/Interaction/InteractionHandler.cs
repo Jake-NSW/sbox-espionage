@@ -73,7 +73,7 @@ public sealed class InteractionHandler : ObservableEntityComponent<Pawn>, ISingl
 	private TraceResult Scan( float size = 8 )
 	{
 		var eyes = Entity.AimRay;
-		var ray = Trace.Ray( eyes.Position, eyes.Position + eyes.Forward * 48 ).Ignore( Entity ).EntitiesOnly();
+		var ray = Trace.Ray( eyes.Position, eyes.Position + eyes.Forward * 72 ).Ignore( Entity ).EntitiesOnly();
 
 		var first = ray.Run();
 		return first.Entity != null ? first : ray.Size( size ).Run();
