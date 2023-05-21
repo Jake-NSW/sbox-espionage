@@ -60,16 +60,16 @@ public sealed partial class CarriableAimComponent : ObservableEntityComponent<IC
 		var aim = Easing( m_Delta );
 		setup.Hands.Aim = aim;
 		setup.FieldOfView -= aim * 10;
-		
+
 		// Workout Angles
-		
+
 		var arch = aim * (1 - aim);
 		var startArch = (aim * aim) * (1 - aim);
-		
+
 		var endArch = aim * (1 - aim);
 		endArch *= endArch;
-		
-		setup.Hands.Angles *= Rotation.FromRoll( arch * -45 ) * Rotation.FromPitch(startArch  * 45);
-		setup.Hands.Offset += setup.Rotation.Down * endArch * 8; 
+
+		setup.Hands.Angles *= Rotation.FromRoll( arch * -35 ) * Rotation.FromPitch( startArch * 20 );
+		setup.Hands.Offset += (setup.Rotation.Down * endArch * 4) + (setup.Rotation.Left * endArch * 8);
 	}
 }

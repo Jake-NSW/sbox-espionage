@@ -3,7 +3,7 @@ using Woosh.Common;
 
 namespace Woosh.Espionage;
 
-public sealed class GenericFirearmViewmodelAnimator : ObservableEntityComponent<Firearm>
+public sealed class GenericFirearmViewmodelAnimator : ObservableEntityComponent<Firearm>, IMutateCameraSetup
 {
 	protected override void OnActivate()
 	{
@@ -18,5 +18,10 @@ public sealed class GenericFirearmViewmodelAnimator : ObservableEntityComponent<
 	private void OnShoot()
 	{
 		(Entity?.Effects.Target as AnimatedEntity)?.SetAnimParameter( "bFire", true );
+	}
+
+	public void OnPostCameraSetup( ref CameraSetup setup )
+	{
+		(Entity?.Effects.Target as AnimatedEntity)?.SetAnimParameter( "fAimBlend", setup.Hands.Aim );
 	}
 }

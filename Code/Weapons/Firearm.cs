@@ -136,7 +136,9 @@ public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IOb
 
 	public void OnPostCameraSetup( ref CameraSetup setup )
 	{
-		Components.Get<CarriableAimComponent>().OnPostCameraSetup( ref setup );
-		(Effects.Target  as AnimatedEntity)?.SetAnimParameter("fAimBlend", setup.Hands.Aim);
+		foreach ( var component in Components.All().OfType<IMutateCameraSetup>() )
+		{
+			component.OnPostCameraSetup( ref setup );
+		}
 	}
 }
