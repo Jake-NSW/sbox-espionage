@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using System;
+using Sandbox;
 using Sandbox.Utility;
 using Woosh.Common;
 
@@ -10,7 +11,6 @@ public sealed partial class CarriableAimComponent : ObservableEntityComponent<IC
 
 	public bool IsAiming => n_IsAiming;
 	[Net, Predicted, Local] private bool n_IsAiming { get; set; }
-	[Net, Predicted, Local] private float n_AimDelta { get; set; }
 	private float AimSpeed => 2.5f;
 
 	public void Simulate( IClient cl )
@@ -21,7 +21,6 @@ public sealed partial class CarriableAimComponent : ObservableEntityComponent<IC
 		}
 	}
 
-	[Predicted] private bool p_LastState { get; set; }
 
 	private void ToggleAim( bool toggle )
 	{
@@ -58,11 +57,19 @@ public sealed partial class CarriableAimComponent : ObservableEntityComponent<IC
 		m_Delta += IsAiming ? Time.Delta * AimSpeed : -Time.Delta * AimSpeed;
 		m_Delta = m_Delta.Min( 1 ).Max( 0 );
 
-		n_AimDelta = Easing( m_Delta );
-
-		setup.Hands.Aim = n_AimDelta;
-		setup.FieldOfView -= n_AimDelta * 10;
-
-		DebugOverlay.ScreenText( $"IsAiming - {IsAiming}\nDelta = {n_AimDelta}", new Vector2( 30, 512 ) );
+		var aim = Easing( m_Delta );
+		setup.Hands.Aim = aim;
+		setup.FieldOfView -= aim * 10;
+		
+		// Workout Angles
+		
+		var arch = aim * (1 - aim);
+		var startArch = (aim * aim) * (1 - aim);
+		
+		var endArch = aim * (1 - aim);
+		endArch *= endArch;
+		
+		setup.Hands.Angles *= Rotation.FromRoll( arch * -45 ) * Rotation.FromPitch(startArch  * 45);
+		setup.Hands.Offset += setup.Rotation.Down * endArch * 8; 
 	}
 }

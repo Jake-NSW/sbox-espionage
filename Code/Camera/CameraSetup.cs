@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using System.Collections.Generic;
+using Sandbox;
 
 namespace Woosh.Espionage;
 
@@ -12,8 +13,13 @@ public ref struct CameraSetup
 		Position = pos;
 		Rotation = rot;
 		FieldOfView = fov;
+		Hands = new ViewModelSetup();
+
+		Effects = new HashSet<ITemporaryCameraEffect>();
 	}
-	
+
+	public HashSet<ITemporaryCameraEffect> Effects { get; }
+
 	public Entity Viewer;
 	public float FieldOfView;
 

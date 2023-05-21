@@ -1,4 +1,6 @@
-﻿using Sandbox;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Sandbox;
 using Woosh.Common;
 
 namespace Woosh.Espionage;
@@ -10,26 +12,41 @@ public interface IMutateCameraSetup
 
 public sealed class CompositedCameraBuilder
 {
-	public delegate void PostCameraSetup( ref CameraSetup setup );
-	
 	public SceneCamera Target { get; }
 
 	public CompositedCameraBuilder( SceneCamera camera )
 	{
 		Game.AssertClient();
 		Target = camera;
+
+		m_Effects = new HashSet<ITemporaryCameraEffect>();
 	}
 
 	// Setup
 
 	public ICameraController Override { get; set; }
 
-	public void Update( ICameraController controller = null, IMutateCameraSetup mutate = null  )
+	private readonly HashSet<ITemporaryCameraEffect> m_Effects;
+
+	public void Update( ICameraController controller = null, IMutateCameraSetup mutate = null )
 	{
 		var setup = new CameraSetup( Target ) { FieldOfView = Screen.CreateVerticalFieldOfView( Game.Preferences.FieldOfView ) };
 		Build( ref setup, controller ?? Override );
+
+		// Run Effects
+		foreach ( var effect in m_Effects.ToArray() )
+		{
+			if ( effect.OnPostCameraSetup( ref setup ) )
+				continue;
+
+			m_Effects.Remove( effect );
+		}
+
+		mutate?.OnPostCameraSetup( ref setup );
 		
-		mutate?.OnPostCameraSetup(ref setup);
+		// Append New Effects
+		if ( setup.Effects.Count > 0 )
+			m_Effects.UnionWith( setup.Effects );
 
 		// Mutate
 

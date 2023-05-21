@@ -21,9 +21,7 @@ public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity
 			viewModel.Update( ref setup );
 		}
 
-		// var fov = Screen.CreateVerticalFieldOfView( 64 );
-		var fov = setup.FieldOfView;
-		camera.Attributes.Set( "viewModelFov", fov - 4 );
+		camera.Attributes.Set( "viewModelFov", setup.FieldOfView - 4 );
 	}
 
 	// Instance
@@ -32,7 +30,7 @@ public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity
 
 	private readonly LinkedListNode<CompositedViewModel> m_Node;
 
-	public CompositedViewModel( IObservableEntity table )
+	public CompositedViewModel( IObservableEntity parent )
 	{
 		Game.AssertClient();
 
@@ -40,7 +38,7 @@ public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity
 
 		s_All.AddLast( m_Node = new LinkedListNode<CompositedViewModel>( this ) );
 
-		Events = table.Events;
+		Events = parent.Events;
 		m_Effects = new HashSet<IViewModelEffect>( 8 );
 	}
 

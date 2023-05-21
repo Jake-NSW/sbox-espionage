@@ -1,19 +1,14 @@
-﻿using Sandbox;
-
-namespace Woosh.Espionage;
+﻿namespace Woosh.Espionage;
 
 public ref struct ViewModelSetup
 {
-	internal ViewModelSetup( Entity owner )
+	public ViewModelSetup()
 	{
-		m_Owner = owner;
 		Aim = 0;
 		Offset = Vector3.Zero;
 		Angles = Rotation.Identity;
 	}
 
-	private readonly Entity m_Owner;
-	public Vector3 Velocity => m_Owner.Velocity;
 
 	// Mutable
 

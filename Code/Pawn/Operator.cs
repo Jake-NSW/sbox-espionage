@@ -32,7 +32,6 @@ public sealed class Operator : Pawn, IMutateCameraSetup
 
 	public void OnPostCameraSetup( ref CameraSetup setup )
 	{
-		setup.Hands = new ViewModelSetup( this );
 		(Active as IMutateCameraSetup)?.OnPostCameraSetup( ref setup );
 
 		foreach ( var component in Components.All().OfType<IMutateCameraSetup>() )
