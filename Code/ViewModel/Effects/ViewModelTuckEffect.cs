@@ -54,8 +54,8 @@ public sealed class ViewModelTuckEffect : IViewModelEffect
 		switch ( Variant )
 		{
 			case TuckType.Push :
-				setup.Hands.Offset += relativeRot * new Vector3( m_Offset, (normal * 3), (-normal * 8) * (1 - setup.Hands.Aim) );
-				setup.Hands.Angles *= Rotation.FromAxis( Vector3.Forward, -(normal * 65) );
+				setup.Hands.Offset += relativeRot * new Vector3( m_Offset, (normal * 3) * (1 - setup.Hands.Aim), (-normal * 8) );
+				setup.Hands.Angles *= Rotation.FromAxis( Vector3.Forward, -(normal * 65) * (1 - setup.Hands.Aim) );
 				break;
 			case TuckType.Rotate :
 				setup.Hands.Offset += relativeRot * new Vector3( -m_Offset / 6, 0, 0 );

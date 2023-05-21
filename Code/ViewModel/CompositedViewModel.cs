@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Sandbox;
+using Sandbox.Effects;
 using Woosh.Common;
 
 namespace Woosh.Espionage;
@@ -21,8 +22,9 @@ public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity
 			viewModel.Update( ref setup );
 		}
 
-		var fov = Screen.CreateVerticalFieldOfView( 64 );
-		camera.Attributes.Set( "viewModelFov", fov );
+		// var fov = Screen.CreateVerticalFieldOfView( 64 );
+		var fov = setup.FieldOfView;
+		camera.Attributes.Set( "viewModelFov", fov - 4 );
 	}
 
 	// Instance

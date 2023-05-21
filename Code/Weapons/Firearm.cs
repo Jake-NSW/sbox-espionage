@@ -28,7 +28,7 @@ public struct FirearmSetup
 	public DrawTime Draw;
 }
 
-public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IObservableEntity
+public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IObservableEntity, IMutateCameraSetup
 {
 	public Dispatcher Events { get; } = new Dispatcher();
 	public EntityStateMachine<Firearm> Machine { get; }
@@ -48,6 +48,7 @@ public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IOb
 		EnableHideInFirstPerson = true;
 		EnableShadowInFirstPerson = true;
 
+		Components.Create<CarriableAimComponent>();
 		Components.Create<FirearmShootSimulatedEntityState>();
 		Components.Create<FirearmReloadSimulatedEntityState>();
 
@@ -56,6 +57,7 @@ public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IOb
 
 	public override void Simulate( IClient cl )
 	{
+		Components.Get<CarriableAimComponent>().Simulate( cl );
 		Machine.Simulate( cl );
 	}
 
@@ -130,5 +132,11 @@ public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IOb
 	{
 		if ( Game.IsServer )
 			EnableDrawing = false;
+	}
+
+	public void OnPostCameraSetup( ref CameraSetup setup )
+	{
+		Components.Get<CarriableAimComponent>().OnPostCameraSetup( ref setup );
+		(Effects.Target  as AnimatedEntity)?.SetAnimParameter("fAimBlend", setup.Hands.Aim);
 	}
 }
