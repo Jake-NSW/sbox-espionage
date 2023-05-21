@@ -4,7 +4,7 @@ using Woosh.Common;
 
 namespace Woosh.Espionage;
 
-[Library( "dm_pistol" ), Title("Pistol"), Icon("gavel"), HammerEntity, EditorModel( WORLD_MODEL )]
+[Library( "dm_pistol" ), Title( "Pistol" ), Icon( "gavel" ), HammerEntity, EditorModel( WORLD_MODEL )]
 public sealed class RustPistolFirearm : Firearm, ISlotted
 {
 	public RustPistolFirearm()

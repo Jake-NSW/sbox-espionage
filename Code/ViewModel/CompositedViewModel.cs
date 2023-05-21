@@ -85,9 +85,4 @@ public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity
 		Position = setup.Position + setup.Hands.Offset;
 		Rotation = setup.Rotation * setup.Hands.Angles;
 	}
-
-	public void ImportFrom<T>() where T : struct, ITemplate<CompositedViewModel>
-	{
-		new T().Generate( this );
-	}
 }
