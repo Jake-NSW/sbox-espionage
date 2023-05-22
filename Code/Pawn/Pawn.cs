@@ -59,7 +59,7 @@ public partial class Pawn : AnimatedEntity, IObservableEntity
 
 	// Simulate
 
-	public BBox Hull => new BBox( new Vector3( -16, -16, 0 ), new Vector3( 16, 16, 64 ) );
+	public BBox Hull => new BBox( new Vector3( -10, -10, 0 ), new Vector3( 10, 10, 64 ) );
 
 
 	/// <summary>

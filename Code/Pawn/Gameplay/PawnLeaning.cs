@@ -13,7 +13,7 @@ public sealed partial class PawnLeaning : ObservableEntityComponent<Pawn>, IMuta
 		if ( Input.Pressed( "lean_right" ) )
 			Lean( 1 );
 
-		if ( Entity.GroundEntity != null && Direction != 0 )
+		if ( Entity.GroundEntity == null && Direction != 0 )
 			n_Direction = 0;
 	}
 
@@ -24,7 +24,7 @@ public sealed partial class PawnLeaning : ObservableEntityComponent<Pawn>, IMuta
 
 	public void Lean( int direction )
 	{
-		if ( Entity.GroundEntity != null )
+		if ( Entity.GroundEntity == null )
 		{
 			return;
 		}
@@ -48,28 +48,29 @@ public sealed partial class PawnLeaning : ObservableEntityComponent<Pawn>, IMuta
 
 	public void OnPostCameraSetup( ref CameraSetup setup )
 	{
-		// Get Distance
-		m_Distance = m_Distance.LerpTo( Direction * DistanceFromEyes( Direction, Entity.CollisionBounds.Translate( Entity.Position ) ), 6.5f * Time.Delta );
+		m_Distance = m_Distance.LerpTo( Direction * NormalFromEyes( Direction, Entity.CollisionBounds.Translate( Entity.Position ) ), 6.5f * Time.Delta );
+		
 		var multi = 1 - setup.Hands.Aim;
+		var normal = m_Distance;
+		
+		setup.Position += setup.Rotation.Right * Distance * normal;
+		setup.Rotation *= Rotation.From( 0, 0, Angle * normal );
 
-		setup.Position += setup.Rotation.Right * Distance * m_Distance;
-		setup.Rotation *= Rotation.From( 0, 0, Angle * m_Distance );
+		setup.Hands.Angles *= Rotation.From( 0, 0, -Angle * normal );
 
-		setup.Hands.Angles *= Rotation.From( 0, 0, -Angle * m_Distance );
-
-		setup.Hands.Offset += (setup.Rotation.Right * (m_Distance * 0.05f * Distance)) * multi;
-		setup.Hands.Offset += (setup.Rotation.Down * (m_Distance * 0.02f * Distance)) * multi;
+		setup.Hands.Offset += (setup.Rotation.Right * (normal * 0.05f * Distance)) * multi;
+		setup.Hands.Offset += (setup.Rotation.Down * (normal * 0.02f * Distance)) * multi;
 	}
 
-	private float DistanceFromEyes( int direction, BBox bounds )
+	private float NormalFromEyes( int direction, BBox bounds )
 	{
-		var girth = bounds.Size.x * 2;
+		var girth = (bounds.Size.x * 2);
 		var info = Trace.Ray( Entity.AimRay.Position, Entity.AimRay.Position + Entity.Rotation.Right * direction * girth )
 			.Ignore( Entity )
 			.Radius( 0.2f )
 			.Run();
 
-		return info.Hit ? info.Distance / girth : 1;
+		return info.Hit ? (info.Distance - 10) / girth : 1;
 	}
 
 }

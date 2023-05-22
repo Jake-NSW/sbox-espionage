@@ -5,6 +5,12 @@ namespace Woosh.Common;
 
 public static class MathUtility
 {
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static float Abs( this float value )
+	{
+		return MathF.Abs( value );
+	}
+	
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]
 	public static float Max( this float value, float max )
 	{
