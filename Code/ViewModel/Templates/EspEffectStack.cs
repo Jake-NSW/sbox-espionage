@@ -14,5 +14,6 @@ public readonly struct EspEffectStack : ITemplate<CompositedViewModel>
 		view.Components.Add( new ViewModelPitchOffsetEffect( 5, 4 ) { Damping = 15 } );
 		view.Components.Add( new ViewModelRecoilEffect() );
 		view.Components.Add( new ViewModelTuckEffect() );
+		view.Components.Add( new ViewModelCameraAnimationEffect() );
 	}
 }
