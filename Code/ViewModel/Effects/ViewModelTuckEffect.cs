@@ -38,7 +38,7 @@ public sealed class ViewModelTuckEffect : ObservableEntityComponent<CompositedVi
 		var end = start + (muzzle.Rotation.Forward * (distance * 2));
 		var info = Trace.Ray( start, end )
 			.Ignore( Game.LocalPawn )
-			.Size( 3 )
+			.Size( 1 )
 			.Run();
 
 		m_Offset = m_Offset.LerpTo( info.Hit && info.Distance < distance ? info.Distance - distance : 0, Damping * Time.Delta );

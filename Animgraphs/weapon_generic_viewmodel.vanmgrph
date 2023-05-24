@@ -2837,7 +2837,7 @@
 							{
 								m_nodeID = 
 								{
-									m_id = 4294967295
+									m_id = 576929336
 								}
 								m_outputID = 
 								{
@@ -3203,6 +3203,12 @@
 					{
 						m_id = 4294967295
 					}
+					m_intParamID = 
+					{
+						m_id = 4294967295
+					}
+					m_intParamMinValue = 0
+					m_intParamMaxValue = 2
 					m_blendDuration = 0.0
 					m_tagBehavior = "SelectorTagBehavior_OnWhileCurrent"
 					m_bResetOnChange = false
@@ -3212,6 +3218,7 @@
 						m_vControlPoint1 = [ 0.5, 0.0 ]
 						m_vControlPoint2 = [ 0.5, 1.0 ]
 					}
+					m_intParamNames = [  ]
 				}
 			},
 			{
@@ -3779,6 +3786,12 @@
 					{
 						m_id = 4294967295
 					}
+					m_intParamID = 
+					{
+						m_id = 4294967295
+					}
+					m_intParamMinValue = 0
+					m_intParamMaxValue = 2
 					m_blendDuration = 0.0
 					m_tagBehavior = "SelectorTagBehavior_OnWhileCurrent"
 					m_bResetOnChange = false
@@ -3788,6 +3801,7 @@
 						m_vControlPoint1 = [ 0.5, 0.0 ]
 						m_vControlPoint2 = [ 0.5, 1.0 ]
 					}
+					m_intParamNames = [  ]
 				}
 			},
 			{
@@ -5225,7 +5239,7 @@
 					m_networkMode = "ServerAuthoritative"
 					m_sNote = ""
 					m_commentText = ""
-					m_size = [ 560.0, 352.0 ]
+					m_size = [ 544.0, 352.0 ]
 					m_color = [ 49, 139, 146, 255 ]
 				}
 			},

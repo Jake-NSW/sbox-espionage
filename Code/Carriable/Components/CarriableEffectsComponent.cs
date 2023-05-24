@@ -40,13 +40,18 @@ public sealed class CarriableEffectsComponent : ObservableEntityComponent<ICarri
 
 	// Deploying
 
+	private bool m_DeployedBefore;
+
 	private void OnDeploying( Event<DeployingEntity> evt )
 	{
 		if ( UnderlyingEntity.IsLocalPawn && m_Model == null )
 			m_Model = OnRequestViewmodel();
 
 		// Create Viewmodel
+		m_Model?.SetAnimParameter( "bFirstDeploy", !m_DeployedBefore );
 		m_Model?.SetAnimParameter( "bDeployed", true );
+
+		m_DeployedBefore = true;
 	}
 
 	// Holstering

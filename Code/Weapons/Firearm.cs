@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Sandbox;
 using Woosh.Common;
 
@@ -49,6 +48,8 @@ public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IOb
 		EnableShadowInFirstPerson = true;
 
 		Components.Create<CarriableAimComponent>();
+		
+		Components.Create<FirearmCheckAmmoSimulatedEntityState>();
 		Components.Create<FirearmShootSimulatedEntityState>();
 		Components.Create<FirearmReloadSimulatedEntityState>();
 

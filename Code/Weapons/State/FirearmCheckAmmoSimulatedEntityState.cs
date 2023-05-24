@@ -31,8 +31,8 @@ public sealed partial class FirearmCheckAmmoSimulatedEntityState : ObservableEnt
 
 	public bool Simulate( IClient cl )
 	{
-		Log.Info("checking ammo");
-		
+		Log.Info( "checking ammo" );
+
 		// Check Ammo 
 		return !Input.Down( "reload" );
 	}
@@ -40,11 +40,16 @@ public sealed partial class FirearmCheckAmmoSimulatedEntityState : ObservableEnt
 	public void OnStart()
 	{
 		// Dispatch Checking Ammo Event
+
+		if ( Game.IsClient )
+			(Entity.Effects.Target as AnimatedEntity)?.SetAnimParameter( "bAttachmentMenu", true );
 	}
 
 	public void OnFinish()
 	{
 		// Dispatch Done Checking Ammo Event
 		m_SinceInput = 0;
+		if ( Game.IsClient )
+			(Entity.Effects.Target as AnimatedEntity)?.SetAnimParameter( "bAttachmentMenu", false );
 	}
 }
