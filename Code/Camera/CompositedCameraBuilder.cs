@@ -49,6 +49,7 @@ public sealed class CompositedCameraBuilder
 			m_Effects.UnionWith( setup.Effects );
 
 		// Mutate
+		Target.Attributes.Set( "viewModelFov", setup.FieldOfView - 4 );
 
 		Target.Position = setup.Position;
 		Target.Rotation = setup.Rotation;

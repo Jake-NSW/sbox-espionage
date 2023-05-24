@@ -12,10 +12,12 @@ public sealed class Mk23Firearm : Firearm, ISlotted
 
 	public Mk23Firearm()
 	{
-		Events.Register<CreateViewModel>(
+		Events.Register<CreatedViewModel>(
 			static evt =>
 			{
-				evt.Data.ViewModel.FromAspect( new ViewModelEffectsAspect( VIEW_MODEL ) { HipTuck = TuckType.Rotate, AimTuck = TuckType.Push } );
+				var model = evt.Data.ViewModel;
+				model.FromAspect( new ViewModelEffectsAspect( VIEW_MODEL ) { HipTuck = TuckType.Rotate, AimTuck = TuckType.Push } );
+				model.Components.Create<GenericFirearmViewModelAnimator>();
 			}
 		);
 	}
@@ -26,9 +28,6 @@ public sealed class Mk23Firearm : Firearm, ISlotted
 
 		Model = Model.Load( WORLD_MODEL );
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
-
-		Components.Create<CarriableEffectsComponent>();
-		Components.Create<GenericFirearmViewmodelAnimator>();
 	}
 
 	protected override FirearmSetup Default => new FirearmSetup()

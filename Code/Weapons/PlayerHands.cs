@@ -10,11 +10,12 @@ public sealed partial class PlayerHands : AnimatedEntity, ICarriable, IObservabl
 
 	public PlayerHands()
 	{
-		Events.Register<CreateViewModel>(
+		Events.Register<CreatedViewModel>(
 			evt =>
 			{
 				var view = evt.Data.ViewModel;
 				view.Model = Model.Load( "weapons/hands/v_espionage_hands.vmdl" );
+				view.Components.Create<GenericFirearmViewModelAnimator>();
 			}
 		);
 	}
@@ -22,7 +23,6 @@ public sealed partial class PlayerHands : AnimatedEntity, ICarriable, IObservabl
 	public override void Spawn()
 	{
 		Transmit = TransmitType.Owner;
-		Components.Create<CarriableEffectsComponent>();
 	}
 
 	// ICarriable

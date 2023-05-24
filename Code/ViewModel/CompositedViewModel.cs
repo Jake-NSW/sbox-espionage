@@ -5,30 +5,9 @@ using Woosh.Common;
 namespace Woosh.Espionage;
 
 [Title( "View Model" ), Category( "ViewModel" ), Icon( "pan_tool" )]
-public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity
+public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity, IMutateCameraSetup
 {
-	private readonly static LinkedList<CompositedViewModel> s_All;
-
-	static CompositedViewModel()
-	{
-		s_All = new LinkedList<CompositedViewModel>();
-	}
-
-	public static void UpdateAllViewModels( ref CameraSetup setup, SceneCamera camera )
-	{
-		foreach ( var viewModel in s_All )
-		{
-			viewModel.Update( ref setup );
-		}
-
-		camera.Attributes.Set( "viewModelFov", setup.FieldOfView - 4 );
-	}
-
-	// Instance
-
 	public Dispatcher Events { get; }
-
-	private readonly LinkedListNode<CompositedViewModel> m_Node;
 
 	public CompositedViewModel( IObservableEntity parent )
 	{
@@ -36,15 +15,8 @@ public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity
 
 		EnableViewmodelRendering = true;
 
-		s_All.AddLast( m_Node = new LinkedListNode<CompositedViewModel>( this ) );
-
 		Events = parent.Events;
 		m_Effects = new HashSet<IViewModelEffect>( 8 );
-	}
-
-	protected override void OnDestroy()
-	{
-		s_All.Remove( m_Node );
 	}
 
 	// Effect Stack
@@ -67,12 +39,12 @@ public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity
 
 	private readonly HashSet<IViewModelEffect> m_Effects;
 
-	private void Update( ref CameraSetup setup )
+	public void OnPostCameraSetup( ref CameraSetup setup )
 	{
-		// Apply Twice
-
 		Position = setup.Position + setup.Hands.Offset;
 		Rotation = setup.Rotation * setup.Hands.Angles;
+
+		var hands = setup.Hands;
 
 		foreach ( var effect in m_Effects )
 		{
@@ -82,5 +54,7 @@ public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity
 		// Append Effects
 		Position = setup.Position + setup.Hands.Offset;
 		Rotation = setup.Rotation * setup.Hands.Angles;
+
+		setup.Hands = hands;
 	}
 }

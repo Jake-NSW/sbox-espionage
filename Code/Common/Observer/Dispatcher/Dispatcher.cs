@@ -9,7 +9,7 @@ public sealed class Dispatcher : IDisposable, IDispatchRegistryTable, IDispatchE
 	// Registry
 
 	private readonly Dictionary<Type, HashSet<Delegate>> m_Registry;
-	
+
 	public Dispatcher()
 	{
 		m_Registry = new Dictionary<Type, HashSet<Delegate>>();
@@ -18,6 +18,16 @@ public sealed class Dispatcher : IDisposable, IDispatchRegistryTable, IDispatchE
 	public void Dispose()
 	{
 		m_Registry.Clear();
+	}
+
+	public bool Any<T>() where T : struct, IEventData
+	{
+		return Count<T>() > 0;
+	}
+
+	public int Count<T>() where T : struct, IEventData
+	{
+		return m_Registry.TryGetValue( typeof(T), out var items ) ? items.Count : 0;
 	}
 
 	// Dispatch
@@ -29,7 +39,7 @@ public sealed class Dispatcher : IDisposable, IDispatchRegistryTable, IDispatchE
 			return;
 		}
 
-		var passthrough = new Event<T>( item, from ); 
+		var passthrough = new Event<T>( item, from );
 		foreach ( var evt in stack )
 		{
 			switch ( evt )
@@ -38,7 +48,7 @@ public sealed class Dispatcher : IDisposable, IDispatchRegistryTable, IDispatchE
 					action.Invoke();
 					continue;
 				case StructCallback<T> callback :
-					callback.Invoke(passthrough);
+					callback.Invoke( passthrough );
 					continue;
 			}
 

@@ -8,7 +8,7 @@ public sealed class Operator : Pawn, IMutateCameraSetup
 {
 	public Entity Active => Components.Get<CarriableHandler>().Active;
 	public IEntityInventory Inventory => Components.Get<IEntityInventory>();
-	public DeployableSlotHandler Hands => Components.Get<DeployableSlotHandler>();
+	public DeployableSlotHandler Slots => Components.Get<DeployableSlotHandler>();
 	
 	public override void Spawn()
 	{
@@ -25,6 +25,7 @@ public sealed class Operator : Pawn, IMutateCameraSetup
 		Components.Create<PickupEntityInteraction>();
 		Components.Create<EquipEntityInteraction>();
 		Components.Create<ControllableEntityInteraction>();
+		Components.Create<ViewModelHandlerComponent>();
 
 		// Inventory
 		Components.Create<CarriableHandler>();
@@ -57,22 +58,22 @@ public sealed class Operator : Pawn, IMutateCameraSetup
 
 		if ( Input.Pressed( "slot_primary" ) )
 		{
-			Hands.Deploy( CarrySlot.Front );
+			Slots.Deploy( CarrySlot.Front );
 		}
 
 		if ( Input.Pressed( "slot_secondary" ) )
 		{
-			Hands.Deploy( CarrySlot.Back );
+			Slots.Deploy( CarrySlot.Back );
 		}
 
 		if ( Input.Pressed( "slot_holster" ) )
 		{
-			Hands.Deploy( CarrySlot.Holster );
+			Slots.Deploy( CarrySlot.Holster );
 		}
 
 		if ( Input.Pressed( "drop" ) )
 		{
-			Hands.Drop( Hands.Active );
+			Slots.Drop( Slots.Active );
 		}
 	}
 }

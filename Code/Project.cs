@@ -7,7 +7,7 @@ namespace Woosh.Espionage;
 
 public sealed class GameHud : HudEntity<HudRoot> { }
 
-public partial class Project : GameManager, IMutateCameraSetup
+public partial class Project : GameManager
 {
 	public static Project Current => GameManager.Current as Project;
 
@@ -21,7 +21,7 @@ public partial class Project : GameManager, IMutateCameraSetup
 		{
 			Camera = new CompositedCameraBuilder( Sandbox.Camera.Main );
 		}
-		
+
 		if ( Game.IsServer )
 		{
 			_ = new GameHud();
@@ -33,17 +33,10 @@ public partial class Project : GameManager, IMutateCameraSetup
 	public override void FrameSimulate( IClient cl )
 	{
 		base.FrameSimulate( cl );
-		Camera.Update( mutate: this );
-
-		Events.Run( new FrameUpdate( Time.Delta ) );
+		
+		Camera.Update( mutate: Game.LocalPawn as IMutateCameraSetup );
 	}
 
-	public void OnPostCameraSetup( ref CameraSetup setup )
-	{
-		(Game.LocalPawn as IMutateCameraSetup)?.OnPostCameraSetup( ref setup );
-		CompositedViewModel.UpdateAllViewModels( ref setup, Camera.Target );
-	}
-	
 	public override void ClientJoined( IClient client )
 	{
 		base.ClientJoined( client );
@@ -59,7 +52,7 @@ public partial class Project : GameManager, IMutateCameraSetup
 		pawn.Inventory.Add( pistol );
 		pawn.Inventory.Add( smg );
 
-		pawn.Hands.Assign( CarrySlot.Holster, pistol );
-		pawn.Hands.Assign( CarrySlot.Front, smg );
+		pawn.Slots.Assign( CarrySlot.Holster, pistol );
+		pawn.Slots.Assign( CarrySlot.Front, smg );
 	}
 }

@@ -3,7 +3,7 @@ using Woosh.Common;
 
 namespace Woosh.Espionage;
 
-public readonly record struct CreateViewModel( CompositedViewModel ViewModel ) : IEventData;
+public readonly record struct CreatedViewModel( CompositedViewModel ViewModel ) : IEventData;
 
 // Deploying
 

@@ -12,8 +12,13 @@ public sealed class Smg2Firearm : Firearm, ISlotted
 
 	public Smg2Firearm()
 	{
-		Events.Register<CreateViewModel>(
-			static evt => evt.Data.ViewModel.FromAspect( new ViewModelEffectsAspect( VIEW_MODEL ) { AimTuck = TuckType.Rotate, HipTuck = TuckType.Hug } )
+		Events.Register<CreatedViewModel>(
+			static evt =>
+			{
+				var model = evt.Data.ViewModel;
+				model.FromAspect( new ViewModelEffectsAspect( VIEW_MODEL ) { AimTuck = TuckType.Rotate, HipTuck = TuckType.Hug } );
+				model.Components.Create<GenericFirearmViewModelAnimator>();
+			}
 		);
 	}
 
@@ -23,9 +28,6 @@ public sealed class Smg2Firearm : Firearm, ISlotted
 
 		Model = Model.Load( WORLD_MODEL );
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
-
-		Components.Create<CarriableEffectsComponent>();
-		Components.Create<GenericFirearmViewmodelAnimator>();
 	}
 
 	protected override FirearmSetup Default => new FirearmSetup()

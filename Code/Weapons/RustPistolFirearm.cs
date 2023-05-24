@@ -9,11 +9,12 @@ public sealed class RustPistolFirearm : Firearm, ISlotted
 {
 	public RustPistolFirearm()
 	{
-		Events.Register<CreateViewModel>(
-			evt =>
+		Events.Register<CreatedViewModel>(
+			static evt =>
 			{
 				var view = evt.Data.ViewModel;
 				view.Model = Model.Load( VIEW_MODEL );
+				view.Components.Create<RustFirearmViewmodelAnimator>();
 			}
 		);
 	}
@@ -27,9 +28,6 @@ public sealed class RustPistolFirearm : Firearm, ISlotted
 
 		Model = Model.Load( WORLD_MODEL );
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
-
-		Components.Create<CarriableEffectsComponent>();
-		Components.Create<RustFirearmViewmodelAnimator>();
 	}
 
 	public int Slot => CarrySlot.Holster.Index();
