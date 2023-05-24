@@ -7,18 +7,41 @@ public sealed class GenericFirearmViewModelAnimator : ObservableEntityComponent<
 	protected override void OnActivate()
 	{
 		Events.Register<WeaponFired>( OnShoot );
-		
+
 		Events.Register<DeployingEntity>( OnDeploying );
 		Events.Register<HolsteringEntity>( OnHolstering );
+
+		Events.Register<CheckAmmoOpen>( OnCheckAmmoOpen );
+		Events.Register<CheckAmmoClosed>( OnCheckAmmoClosed );
 	}
+
 
 	protected override void OnDeactivate()
 	{
 		Events.Unregister<WeaponFired>( OnShoot );
-		
+
 		Events.Unregister<DeployingEntity>( OnDeploying );
 		Events.Unregister<HolsteringEntity>( OnHolstering );
+
+		Events.Unregister<CheckAmmoOpen>( OnCheckAmmoOpen );
+		Events.Unregister<CheckAmmoClosed>( OnCheckAmmoClosed );
 	}
+
+	// Check Ammo
+
+	private void OnCheckAmmoClosed( Event<CheckAmmoClosed> evt )
+	{
+		Log.Info("Closed");
+		Entity.SetAnimParameter( "bAttachmentMenu", false );
+	}
+
+	private void OnCheckAmmoOpen( Event<CheckAmmoOpen> evt )
+	{
+		Log.Info("Opened ");
+		Entity.SetAnimParameter( "bAttachmentMenu", true );
+	}
+
+	// Deploying
 
 	private bool m_DeployedBefore;
 

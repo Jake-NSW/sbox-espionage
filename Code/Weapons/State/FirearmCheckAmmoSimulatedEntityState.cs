@@ -3,26 +3,30 @@ using Woosh.Common;
 
 namespace Woosh.Espionage;
 
+public readonly record struct CheckAmmoOpen : IEventData { }
+
+public readonly record struct CheckAmmoClosed : IEventData { }
+
 public sealed partial class FirearmCheckAmmoSimulatedEntityState : ObservableEntityComponent<Firearm>, ISimulatedEntityState<Firearm>, ISingletonComponent
 {
-	private TimeSince m_SinceInput;
+	[Predicted] private TimeSince p_SinceInput { get; set; }
 
 	public bool TryEnter()
 	{
 		if ( Input.Pressed( "reload" ) )
 		{
-			m_SinceInput = 0;
+			p_SinceInput = 0;
 			return false;
 		}
 
-		if ( Input.Down( "reload" ) && m_SinceInput > 0.2f )
+		if ( Input.Down( "reload" ) && p_SinceInput > 0.2f )
 		{
 			return true;
 		}
 
 		if ( Input.Released( "reload" ) )
 		{
-			m_SinceInput = default;
+			p_SinceInput = default;
 			return false;
 		}
 
@@ -31,25 +35,18 @@ public sealed partial class FirearmCheckAmmoSimulatedEntityState : ObservableEnt
 
 	public bool Simulate( IClient cl )
 	{
-		Log.Info( "checking ammo" );
-
 		// Check Ammo 
 		return !Input.Down( "reload" );
 	}
 
 	public void OnStart()
 	{
-		// Dispatch Checking Ammo Event
-
-		if ( Game.IsClient )
-			(Entity.Effects.Target as AnimatedEntity)?.SetAnimParameter( "bAttachmentMenu", true );
+		Events.Run<CheckAmmoOpen>();
 	}
 
 	public void OnFinish()
 	{
-		// Dispatch Done Checking Ammo Event
-		m_SinceInput = 0;
-		if ( Game.IsClient )
-			(Entity.Effects.Target as AnimatedEntity)?.SetAnimParameter( "bAttachmentMenu", false );
+		Events.Run<CheckAmmoClosed>();
+		p_SinceInput = 0;
 	}
 }
