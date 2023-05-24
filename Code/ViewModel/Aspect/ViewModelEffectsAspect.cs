@@ -19,9 +19,24 @@ public readonly struct ViewModelEffectsAspect : IAspect<CompositedViewModel>
 		if ( Model != null )
 			view.Model = Sandbox.Model.Load( Model );
 
-		view.Components.Add( new ViewModelOffsetEffect( Vector3.Zero, default ) );
+		view.Components.Add( new ViewModelCameraAnimationEffect() );
+
 		view.Components.Add( new ViewModelSwayEffect( 1, 1.3f ) );
+		view.Components.Add(
+			new ViewModelDeadzoneSwayEffect( new Vector2( 10, 10 ) )
+			{
+				AimingOnly = true,
+				AutoCenter = false,
+				Damping = 8
+			}
+		);
+
+		view.Components.Add( new ViewModelOffsetEffect( Vector3.Zero, default ) );
 		view.Components.Add( new ViewModelMoveOffsetEffect( Vector3.One, 10 ) );
+
+		view.Components.Add( new ViewModelWalkEffect() );
+		view.Components.Add( new ViewModelBreatheEffect() );
+
 		view.Components.Add(
 			new ViewModelStrafeOffsetEffect()
 			{
@@ -31,20 +46,12 @@ public readonly struct ViewModelEffectsAspect : IAspect<CompositedViewModel>
 			}
 		);
 		view.Components.Add(
-			new ViewModelDeadzoneSwayEffect( new Vector2( 10, 10 ) )
-			{
-				AimingOnly = true,
-				AutoCenter = false,
-				Damping = 8
-			}
-		);
-		view.Components.Add(
 			new ViewModelPitchOffsetEffect( 5, 4 ) { Damping = 15 }
 		);
+
 		view.Components.Add( new ViewModelRecoilEffect() );
 		view.Components.Add(
 			new ViewModelTuckEffect() { HipVariant = HipTuck, AimVariant = AimTuck }
 		);
-		view.Components.Add( new ViewModelCameraAnimationEffect() );
 	}
 }

@@ -15,11 +15,7 @@ public sealed class Mk23Firearm : Firearm, ISlotted
 		Events.Register<CreateViewModel>(
 			static evt =>
 			{
-				evt.Data.ViewModel.FromAspect( new ViewModelEffectsAspect( VIEW_MODEL )
-				{
-					HipTuck = TuckType.Rotate,
-					AimTuck = TuckType.Push
-				} );
+				evt.Data.ViewModel.FromAspect( new ViewModelEffectsAspect( VIEW_MODEL ) { HipTuck = TuckType.Rotate, AimTuck = TuckType.Push } );
 			}
 		);
 	}
@@ -35,15 +31,12 @@ public sealed class Mk23Firearm : Firearm, ISlotted
 		Components.Create<GenericFirearmViewmodelAnimator>();
 	}
 
-	protected override FirearmSetup OnSetupDefault()
+	protected override FirearmSetup Default => new FirearmSetup()
 	{
-		return new FirearmSetup()
-		{
-			IsAutomatic = false,
-			RateOfFire = 650,
-			Draw = new DrawTime( 1, 0.6f )
-		};
-	}
+		IsAutomatic = false,
+		RateOfFire = 650,
+		Draw = new DrawTime( 1, 0.6f )
+	};
 
 	protected override SoundBank<WeaponClientEffects> Sounds { get; } = new SoundBank<WeaponClientEffects>()
 	{

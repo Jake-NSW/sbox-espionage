@@ -28,20 +28,16 @@ public sealed class Smg2Firearm : Firearm, ISlotted
 		Components.Create<GenericFirearmViewmodelAnimator>();
 	}
 
-	protected override FirearmSetup OnSetupDefault()
+	protected override FirearmSetup Default => new FirearmSetup()
 	{
-		return new FirearmSetup()
-		{
-			IsAutomatic = true,
-			RateOfFire = 750,
-			Draw = new DrawTime( 1.5f, 1.3f )
-		};
-	}
+		IsAutomatic = true,
+		RateOfFire = 750,
+		Draw = new DrawTime( 1.5f, 1.3f )
+	};
 
 	protected override SoundBank<WeaponClientEffects> Sounds { get; } = new SoundBank<WeaponClientEffects>()
 	{
-		[WeaponClientEffects.Attack] = "mk23_firing_sound", 
-		[WeaponClientEffects.Attack | WeaponClientEffects.Silenced] = "smg2_firing_suppressed_sound",
+		[WeaponClientEffects.Attack] = "mk23_firing_sound", [WeaponClientEffects.Attack | WeaponClientEffects.Silenced] = "smg2_firing_suppressed_sound",
 	};
 
 	public int Slot => CarrySlot.Front.Index();

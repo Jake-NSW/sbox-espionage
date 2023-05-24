@@ -79,7 +79,7 @@ public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IOb
 	public void Rebuild()
 	{
 		Game.AssertServer();
-		var setup = OnSetupDefault();
+		var setup = Default;
 
 		foreach ( var mutate in Components.All().OfType<IMutate<FirearmSetup>>() )
 		{
@@ -95,7 +95,7 @@ public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IOb
 		Events.Run( new FirearmSetupApplied( value ) );
 	}
 
-	protected abstract FirearmSetup OnSetupDefault();
+	protected abstract FirearmSetup Default { get; }
 
 	// Shoot
 

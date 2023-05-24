@@ -34,8 +34,10 @@ public sealed class RustPistolFirearm : Firearm, ISlotted
 
 	public int Slot => CarrySlot.Holster.Index();
 
-	protected override FirearmSetup OnSetupDefault()
+	protected override FirearmSetup Default => new FirearmSetup()
 	{
-		return new FirearmSetup() { IsAutomatic = false, RateOfFire = 600, Draw = new DrawTime( 1, 0.1f ) };
-	}
+		IsAutomatic = false,
+		RateOfFire = 600,
+		Draw = new DrawTime( 1, 0.1f )
+	};
 }
