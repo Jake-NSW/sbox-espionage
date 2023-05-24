@@ -40,7 +40,8 @@ public sealed class Smg2Firearm : Firearm, ISlotted
 
 	protected override SoundBank<WeaponClientEffects> Sounds { get; } = new SoundBank<WeaponClientEffects>()
 	{
-		[WeaponClientEffects.Attack] = "mk23_firing_sound", [WeaponClientEffects.Attack | WeaponClientEffects.Silenced] = "smg2_firing_suppressed_sound",
+		[WeaponClientEffects.Attack] = "mk23_firing_sound", 
+		[WeaponClientEffects.Attack | WeaponClientEffects.Silenced] = "smg2_firing_suppressed_sound",
 	};
 
 	public int Slot => CarrySlot.Front.Index();

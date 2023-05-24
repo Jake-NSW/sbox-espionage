@@ -102,6 +102,8 @@ public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IOb
 
 	// Pickup
 
+	public bool Holsterable => Machine.Active == null;
+
 	void IPickup.OnPickup( Entity carrier )
 	{
 		EnableAllCollisions = false;

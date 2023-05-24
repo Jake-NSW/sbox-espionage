@@ -31,6 +31,7 @@ public sealed class Mk23Firearm : Firearm, ISlotted
 		Model = Model.Load( WORLD_MODEL );
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
 
+		Components.Create<FirearmCheckAmmoSimulatedEntityState>();
 		Components.Create<CarriableEffectsComponent>();
 		Components.Create<GenericFirearmViewmodelAnimator>();
 	}
