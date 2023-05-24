@@ -1,5 +1,6 @@
 ﻿using System;
 using Sandbox;
+using Sandbox.Utility;
 using Woosh.Common;
 
 namespace Woosh.Espionage;
@@ -14,7 +15,8 @@ public enum TuckType
 public sealed class ViewModelTuckEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect
 {
 	public float Damping { get; set; } = 14;
-	public TuckType Variant { get; set; }
+	public TuckType AimVariant { get; init; }
+	public TuckType HipVariant { get; init; }
 
 	// Logic
 
@@ -42,18 +44,30 @@ public sealed class ViewModelTuckEffect : ObservableEntityComponent<CompositedVi
 		m_Offset = m_Offset.LerpTo( info.Hit && info.Distance < distance ? info.Distance - distance : 0, Damping * Time.Delta );
 		var normal = MathF.Abs( m_Offset / distance );
 
+		CameraSetup hip = new CameraSetup( setup );
+		Calculate( HipVariant, normal, ref hip );
+		CameraSetup aim = new CameraSetup( setup );
+		Calculate( AimVariant, normal, ref aim );
+
+		var last = setup;
+		setup = CameraSetup.Lerp( hip, aim, Easing.QuadraticInOut( setup.Hands.Aim ) );
+		setup.Viewer = last.Viewer;
+	}
+
+	private void Calculate( TuckType type, float normal, ref CameraSetup setup )
+	{
 		var relativeRot = setup.Rotation * setup.Hands.Angles;
 
-		switch ( Variant )
+		switch ( type )
 		{
 			case TuckType.Push :
 				setup.Hands.Offset += relativeRot * new Vector3( m_Offset, (normal * 3) * (1 - setup.Hands.Aim), (-normal * 8) );
 				setup.Hands.Angles *= Rotation.FromAxis( Vector3.Forward, -(normal * 65) * (1 - setup.Hands.Aim) );
 				break;
 			case TuckType.Rotate :
-				setup.Hands.Offset += relativeRot * new Vector3( -m_Offset / 6, 0, 0 );
+				setup.Hands.Offset += relativeRot * new Vector3( -m_Offset / 3.4f, 0, 0 );
 				setup.Hands.Angles *= Rotation.FromAxis( Vector3.Left, -normal * 90 );
-				setup.Hands.Offset += (setup.Rotation * setup.Hands.Angles) * new Vector3( m_Offset / 1, 0, 0 );
+				setup.Hands.Offset += (setup.Rotation * setup.Hands.Angles) * new Vector3( m_Offset / 1.1f, 0, 0 );
 				break;
 			case TuckType.Hug :
 				setup.Hands.Angles *= Rotation.FromAxis( Vector3.Up, normal * 90 );

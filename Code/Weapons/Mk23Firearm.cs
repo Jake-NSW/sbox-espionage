@@ -15,10 +15,11 @@ public sealed class Mk23Firearm : Firearm, ISlotted
 		Events.Register<CreateViewModel>(
 			static evt =>
 			{
-				var view = evt.Data.ViewModel;
-				view.Model = Model.Load( VIEW_MODEL );
-				view.ImportFrom<CompositedViewModel, EspEffectStack>();
-				view.Components.Get<ViewModelTuckEffect>().Variant = TuckType.Rotate;
+				evt.Data.ViewModel.FromAspect( new ViewModelEffectsAspect( VIEW_MODEL )
+				{
+					HipTuck = TuckType.Rotate,
+					AimTuck = TuckType.Push
+				} );
 			}
 		);
 	}
@@ -46,8 +47,7 @@ public sealed class Mk23Firearm : Firearm, ISlotted
 
 	protected override SoundBank<WeaponClientEffects> Sounds { get; } = new SoundBank<WeaponClientEffects>()
 	{
-		[WeaponClientEffects.Attack] = "mk23_firing_sound",
-		[WeaponClientEffects.Attack | WeaponClientEffects.Silenced] = "mk23_firing_suppressed_sound",
+		[WeaponClientEffects.Attack] = "mk23_firing_sound", [WeaponClientEffects.Attack | WeaponClientEffects.Silenced] = "mk23_firing_suppressed_sound",
 	};
 
 	public int Slot => CarrySlot.Holster.Index();

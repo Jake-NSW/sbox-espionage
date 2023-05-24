@@ -3,12 +3,19 @@ using Sandbox;
 
 namespace Woosh.Espionage;
 
-public ref struct CameraSetup
+public struct CameraSetup
 {
-	internal CameraSetup( SceneCamera camera )
+	public CameraSetup( CameraSetup setup ) : this( setup.Position, setup.Rotation, setup.FieldOfView )
+	{
+		Hands = setup.Hands;
+		Effects = setup.Effects;
+		Viewer = setup.Viewer;
+	}
+
+	public CameraSetup( SceneCamera camera )
 		: this( camera.Position, camera.Rotation, camera.FieldOfView ) { }
 
-	internal CameraSetup( Vector3 pos, Rotation rot, float fov )
+	public CameraSetup( Vector3 pos, Rotation rot, float fov )
 	{
 		Position = pos;
 		Rotation = rot;
@@ -19,6 +26,15 @@ public ref struct CameraSetup
 	}
 
 	public HashSet<ITemporaryCameraEffect> Effects { get; }
+
+	public static CameraSetup Lerp( CameraSetup from, CameraSetup to, float t )
+	{
+		return new CameraSetup(
+			Vector3.Lerp( from.Position, to.Position, t ),
+			Rotation.Lerp( from.Rotation, to.Rotation, t ),
+			MathX.Lerp( from.FieldOfView, to.FieldOfView, t )
+		) { Hands = ViewModelSetup.Lerp( from.Hands, to.Hands, t ) };
+	}
 
 	public Entity Viewer;
 	public float FieldOfView;

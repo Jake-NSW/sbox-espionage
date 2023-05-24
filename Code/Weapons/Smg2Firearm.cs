@@ -13,13 +13,7 @@ public sealed class Smg2Firearm : Firearm, ISlotted
 	public Smg2Firearm()
 	{
 		Events.Register<CreateViewModel>(
-			evt =>
-			{
-				var view = evt.Data.ViewModel;
-				view.Model = Model.Load( VIEW_MODEL );
-				view.ImportFrom<CompositedViewModel, EspEffectStack>();
-				view.Components.Get<ViewModelTuckEffect>().Variant = TuckType.Hug;
-			}
+			static evt => evt.Data.ViewModel.FromAspect( new ViewModelEffectsAspect( VIEW_MODEL ) { AimTuck = TuckType.Rotate, HipTuck = TuckType.Hug } )
 		);
 	}
 
@@ -36,13 +30,17 @@ public sealed class Smg2Firearm : Firearm, ISlotted
 
 	protected override FirearmSetup OnSetupDefault()
 	{
-		return new FirearmSetup() { IsAutomatic = true, RateOfFire = 750, Draw = new DrawTime( 1.5f, 1.3f ) };
+		return new FirearmSetup()
+		{
+			IsAutomatic = true,
+			RateOfFire = 750,
+			Draw = new DrawTime( 1.5f, 1.3f )
+		};
 	}
 
 	protected override SoundBank<WeaponClientEffects> Sounds { get; } = new SoundBank<WeaponClientEffects>()
 	{
-		[WeaponClientEffects.Attack] = "mk23_firing_sound",
-		[WeaponClientEffects.Attack | WeaponClientEffects.Silenced] = "smg2_firing_suppressed_sound",
+		[WeaponClientEffects.Attack] = "mk23_firing_sound", [WeaponClientEffects.Attack | WeaponClientEffects.Silenced] = "smg2_firing_suppressed_sound",
 	};
 
 	public int Slot => CarrySlot.Front.Index();

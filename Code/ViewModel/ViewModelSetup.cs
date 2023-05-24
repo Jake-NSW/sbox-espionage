@@ -1,6 +1,8 @@
-﻿namespace Woosh.Espionage;
+﻿using Sandbox;
 
-public ref struct ViewModelSetup
+namespace Woosh.Espionage;
+
+public struct ViewModelSetup
 {
 	public ViewModelSetup()
 	{
@@ -9,6 +11,15 @@ public ref struct ViewModelSetup
 		Angles = Rotation.Identity;
 	}
 
+	public static ViewModelSetup Lerp( ViewModelSetup from, ViewModelSetup to, float t )
+	{
+		return new ViewModelSetup()
+		{
+			Aim = MathX.Lerp( from.Aim, to.Aim, t ),
+			Offset = Vector3.Lerp( from.Offset, to.Offset, t ),
+			Angles = Rotation.Lerp( from.Angles, to.Angles, t ),
+		};
+	}
 
 	// Mutable
 
