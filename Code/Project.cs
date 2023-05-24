@@ -21,7 +21,7 @@ public partial class Project : GameManager, IMutateCameraSetup
 		{
 			Camera = new CompositedCameraBuilder( Sandbox.Camera.Main );
 		}
-
+		
 		if ( Game.IsServer )
 		{
 			_ = new GameHud();

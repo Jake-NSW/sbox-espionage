@@ -6,10 +6,10 @@ public sealed class ViewModelCameraAnimationEffect : ObservableEntityComponent<C
 {
 	public void OnPostCameraSetup( ref CameraSetup setup )
 	{
-		var cameraAnimTarget = Entity.GetAttachment( "camera_anim_target" );
+		var cameraAnimTarget = Entity.GetAttachment( "camera_anim_target", false );
 		if ( cameraAnimTarget.HasValue )
 		{
-			setup.Rotation *= (cameraAnimTarget.Value.Rotation * Rotation.From(-90, -90, 0)) * setup.Rotation.Inverse;
+			setup.Rotation *= (cameraAnimTarget.Value.Rotation * Rotation.From( -90, -90, 0 ));
 		}
 	}
 }
