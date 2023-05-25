@@ -1192,6 +1192,15 @@
 						weight = 1.0
 						ignore_rotation = false
 					},
+					{
+						_class = "Attachment"
+						name = "eject_port"
+						parent_bone = "Weapon_Barrel_end"
+						relative_origin = [ -0.081861, -7.977914, -5.206513 ]
+						relative_angles = [ 45.000717, -179.9991, -89.999702 ]
+						weight = 1.0
+						ignore_rotation = false
+					},
 				]
 			},
 			{

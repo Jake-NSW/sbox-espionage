@@ -1027,15 +1027,6 @@
 					},
 					{
 						_class = "Attachment"
-						name = "muzzle_suppressed"
-						parent_bone = "Weapon_Body"
-						relative_origin = [ 0.020167, 1.987977, 23.722136 ]
-						relative_angles = [ -90.0, -90.0, 0.0 ]
-						weight = 1.0
-						ignore_rotation = false
-					},
-					{
-						_class = "Attachment"
 						name = "camera_anim_target"
 						parent_bone = "Camera"
 						relative_origin = [ 0.0, 0.0, 0.0 ]
@@ -1045,10 +1036,10 @@
 					},
 					{
 						_class = "Attachment"
-						name = "casing_eject"
+						name = "eject_port"
 						parent_bone = "Weapon_Body"
-						relative_origin = [ -0.710588, 2.085513, 3.10027 ]
-						relative_angles = [ 0.0, 135.000015, 179.999985 ]
+						relative_origin = [ -6.915625, 15.189647, 25.938232 ]
+						relative_angles = [ -0.0, 135.000015, 179.999985 ]
 						weight = 1.0
 						ignore_rotation = false
 					},

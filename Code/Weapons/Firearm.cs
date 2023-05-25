@@ -28,27 +28,8 @@ public struct FirearmSetup
 	public DrawTime Draw;
 }
 
-public sealed partial class FirearmClientEffects : ObservableEntityComponent
-{
-	protected override void OnAutoRegister()
-	{
-		base.OnAutoRegister();
-
-		Register<PlayClientEffects<WeaponClientEffects>>( OnClientEffects );
-	}
-
-	private void OnClientEffects( Event<PlayClientEffects<WeaponClientEffects>> evt )
-	{
-		// We Don't care
-		if ( Entity.IsFirstPersonMode )
-			return;
-
-		// Get Muzzle
-	}
-}
-
 [Category( "Weapon" ), Icon( "gavel" )]
-public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IObservableEntity, IMutateCameraSetup
+public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IMutateCameraSetup
 {
 	public IDispatcher Events { get; } = new Dispatcher();
 	public EntityStateMachine<Firearm> Machine { get; }
@@ -56,6 +37,7 @@ public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IOb
 	public Firearm()
 	{
 		Machine = new EntityStateMachine<Firearm>( this );
+		Events.Register<CreatedViewModel>( static evt => evt.Data.ViewModel.Components.Create<WeaponClientEffectsHandler>() );
 	}
 
 	public IEntityEffects Effects => Components.Get<IEntityEffects>();
@@ -71,7 +53,8 @@ public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IOb
 		EnableShadowInFirstPerson = true;
 
 		Components.Create<CarriableAimComponent>();
-
+		Components.Create<WeaponClientEffectsHandler>();
+		
 		Components.Create<FirearmCheckAmmoSimulatedEntityState>();
 		Components.Create<FirearmShootSimulatedEntityState>();
 		Components.Create<FirearmReloadSimulatedEntityState>();

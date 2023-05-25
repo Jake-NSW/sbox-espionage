@@ -14,16 +14,10 @@ public sealed class InteractionHandler : ObservableEntityComponent<Pawn>, ISingl
 		m_Interactions = Array.Empty<IEntityInteraction>();
 	}
 
-	protected override void OnActivate()
+	protected override void OnAutoRegister()
 	{
 		Register<DeployingEntity>( OnDeployed );
 		Register<DeployedEntity>( OnDeployed );
-	}
-
-	protected override void OnDeactivate()
-	{
-		Unregister<DeployingEntity>( OnDeployed );
-		Unregister<DeployedEntity>( OnDeployed );
 	}
 
 	private void OnDeployed()

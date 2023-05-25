@@ -1,19 +1,12 @@
-﻿using Sandbox;
-using Woosh.Common;
-using Woosh.Signals;
+﻿using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
 public sealed class RustFirearmViewmodelAnimator : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect
 {
-	protected override void OnActivate()
+	protected override void OnAutoRegister()
 	{
-		Events.Register<WeaponFired>( OnShoot );
-	}
-
-	protected override void OnDeactivate()
-	{
-		Events.Unregister<WeaponFired>( OnShoot );
+		Register<WeaponFired>( OnShoot );
 	}
 
 	private void OnShoot()
