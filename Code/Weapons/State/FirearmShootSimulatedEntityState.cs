@@ -1,5 +1,6 @@
 ﻿using Sandbox;
 using Woosh.Common;
+using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
@@ -78,7 +79,6 @@ public sealed partial class FirearmShootSimulatedEntityState : ObservableEntityC
 		if ( Entity.Owner == null && Game.IsServer ) { }
 	}
 
-
 	[ClientRpc]
 	private void PlayClientEffects( WeaponClientEffects effects )
 	{
@@ -86,19 +86,6 @@ public sealed partial class FirearmShootSimulatedEntityState : ObservableEntityC
 		Events.Run( new PlayClientEffects<WeaponClientEffects>( effects ) );
 	}
 
-
 	[ConCmd.Server]
-	private static void CmdReceivedShootRequest( int indent, Vector3 pos, Vector3 forward )
-	{
-		return;
-		_ = new Prop
-		{
-			Model = Model.Load( "models/sbox_props/watermelon/watermelon.vmdl" ),
-			Position = pos + forward,
-			Rotation = Rotation.LookAt( Vector3.Random.Normal ),
-			Scale = 0.4f,
-			PhysicsGroup = { Velocity = forward * 1000 }
-		};
-	}
-
+	private static void CmdReceivedShootRequest( int indent, Vector3 pos, Vector3 forward ) { }
 }

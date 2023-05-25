@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Sandbox;
 using Woosh.Common;
+using Woosh.Signals;
 
 namespace Woosh.Espionage;
 

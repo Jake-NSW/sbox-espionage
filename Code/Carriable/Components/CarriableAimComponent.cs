@@ -1,14 +1,12 @@
-﻿using System;
-using Sandbox;
+﻿using Sandbox;
 using Sandbox.Utility;
 using Woosh.Common;
+using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
 public sealed partial class CarriableAimComponent : ObservableEntityComponent<ICarriable>, IMutateCameraSetup
 {
-	public Easing.Function Easing => Sandbox.Utility.Easing.QuadraticInOut;
-
 	public bool IsAiming => n_IsAiming;
 	[Net, Predicted, Local] private bool n_IsAiming { get; set; }
 	private float AimSpeed => 2.5f;
@@ -56,12 +54,11 @@ public sealed partial class CarriableAimComponent : ObservableEntityComponent<IC
 		m_Delta += IsAiming ? Time.Delta * AimSpeed : -Time.Delta * AimSpeed;
 		m_Delta = m_Delta.Min( 1 ).Max( 0 );
 
-		var aim = Easing( m_Delta );
+		var aim = Easing.QuadraticInOut( m_Delta );
 		setup.Hands.Aim = aim;
-		setup.FieldOfView += aim * 5;
+		setup.FieldOfView -= Easing.ExpoOut( Easing.EaseIn( m_Delta ) ) * 12;
 
 		// Workout Angles
-
 		var arch = aim * (1 - aim);
 		var startArch = (aim * aim) * (1 - aim);
 

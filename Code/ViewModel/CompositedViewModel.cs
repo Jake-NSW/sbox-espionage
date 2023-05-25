@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using Sandbox;
 using Woosh.Common;
+using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
 [Title( "View Model" ), Category( "ViewModel" ), Icon( "pan_tool" )]
 public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity, IMutateCameraSetup
 {
-	public Dispatcher Events { get; }
+	public IDispatcher Events { get; }
 
 	public CompositedViewModel( IObservableEntity parent )
 	{

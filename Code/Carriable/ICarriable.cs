@@ -1,5 +1,6 @@
 ﻿using Sandbox;
 using Woosh.Common;
+using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
@@ -20,7 +21,7 @@ public interface ISlotted : IEntity
 	int Slot { get; }
 }
 
-public interface ICarriable : IEntity, IObservableEntity
+public interface ICarriable : IObservableEntity
 {
 	DrawTime Draw { get; }
 

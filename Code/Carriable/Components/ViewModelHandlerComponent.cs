@@ -1,23 +1,18 @@
-﻿using Woosh.Common;
+﻿using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
 public sealed class ViewModelHandlerComponent : ObservableEntityComponent<Pawn>, IMutateCameraSetup
 {
-	protected override void OnActivate()
+	protected override void OnAutoRegister()
 	{
-		base.OnActivate();
-
 		Events.Register<DeployingEntity>( OnDeploying );
 		Events.Register<HolsteredEntity>( OnHolstered );
 	}
 
 	protected override void OnDeactivate()
 	{
-		base.OnActivate();
-
-		Events.Unregister<DeployingEntity>( OnDeploying );
-		Events.Unregister<HolsteredEntity>( OnHolstered );
+		base.OnDeactivate();
 
 		// Remove Viewmodel
 

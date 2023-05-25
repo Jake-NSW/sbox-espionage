@@ -1,6 +1,8 @@
-﻿namespace Woosh.Common;
+﻿using Woosh.Signals;
 
-public readonly struct FrameUpdate : IEventData
+namespace Woosh.Common;
+
+public readonly struct FrameUpdate : ISignal
 {
 	public float Delta { get; }
 

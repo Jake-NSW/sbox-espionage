@@ -89,7 +89,7 @@ public sealed partial class PushableHingedDoorEntity : AnimatedEntity, IPushable
 	private DoorStates m_State;
 	private float m_Force;
 
-	[Event.Tick.Server]
+	[GameEvent.Tick.Server]
 	private void Tick()
 	{
 		// Debug

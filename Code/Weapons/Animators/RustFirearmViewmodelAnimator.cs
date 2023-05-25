@@ -1,9 +1,10 @@
 ﻿using Sandbox;
 using Woosh.Common;
+using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class RustFirearmViewmodelAnimator : ObservableEntityComponent<Firearm>, IViewModelEffect
+public sealed class RustFirearmViewmodelAnimator : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect
 {
 	protected override void OnActivate()
 	{
@@ -17,7 +18,7 @@ public sealed class RustFirearmViewmodelAnimator : ObservableEntityComponent<Fir
 
 	private void OnShoot()
 	{
-		(Entity?.Effects.Target as AnimatedEntity)?.SetAnimParameter( "fire", true );
+		Entity.SetAnimParameter( "fire", true );
 	}
 
 	public void OnPostCameraSetup( ref CameraSetup setup ) { }

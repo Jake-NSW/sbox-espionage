@@ -2,6 +2,7 @@
 using System.Linq;
 using Sandbox;
 using Woosh.Common;
+using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
@@ -9,14 +10,8 @@ public sealed class GameHud : HudEntity<HudRoot> { }
 
 public partial class Project : GameManager
 {
-	public static Project Current => GameManager.Current as Project;
-
-	public IDispatchExecutor Events { get; }
-
 	public Project()
 	{
-		Events = new GlobalEventDispatcher();
-
 		if ( Game.IsClient )
 		{
 			Camera = new CompositedCameraBuilder( Sandbox.Camera.Main );

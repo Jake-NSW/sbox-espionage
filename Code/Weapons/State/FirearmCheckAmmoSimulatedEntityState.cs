@@ -1,11 +1,12 @@
 ﻿using Sandbox;
 using Woosh.Common;
+using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public readonly record struct CheckAmmoOpen : IEventData { }
+public readonly record struct CheckAmmoOpen : ISignal { }
 
-public readonly record struct CheckAmmoClosed : IEventData { }
+public readonly record struct CheckAmmoClosed : ISignal { }
 
 public sealed partial class FirearmCheckAmmoSimulatedEntityState : ObservableEntityComponent<Firearm>, ISimulatedEntityState<Firearm>, ISingletonComponent
 {

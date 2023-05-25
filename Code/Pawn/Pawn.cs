@@ -2,12 +2,13 @@
 using System.Linq;
 using Sandbox;
 using Woosh.Common;
+using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
 public partial class Pawn : AnimatedEntity, IObservableEntity
 {
-	public Dispatcher Events { get; } = new Dispatcher();
+	public IDispatcher Events { get; } = new Dispatcher();
 	public EntityStateMachine<Pawn> Machine { get; }
 
 	public Pawn()
@@ -18,6 +19,8 @@ public partial class Pawn : AnimatedEntity, IObservableEntity
 	public override void Spawn()
 	{
 		Model = Model.Load( "models/sbox_props/watermelon/watermelon.vmdl" );
+		
+		Tags.Add( "pawn" );
 
 		EnableDrawing = true;
 		EnableHideInFirstPerson = true;

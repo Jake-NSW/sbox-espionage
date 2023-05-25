@@ -1,10 +1,11 @@
 ﻿using Editor;
 using Sandbox;
 using Woosh.Common;
+using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-[Library( "esp_mk23_firearm" ), Title( "Mark 23" ), Icon( "gavel" ), HammerEntity, EditorModel( WORLD_MODEL )]
+[Library( "esp_mk23_firearm" ), Title( "Mark 23" ), HammerEntity, EditorModel( WORLD_MODEL )]
 public sealed class Mk23Firearm : Firearm, ISlotted
 {
 	private const string VIEW_MODEL = "weapons/mk23/v_espionage_mk23.vmdl";

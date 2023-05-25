@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sandbox;
 
 namespace Woosh.Common;
 
 public static class EnumValues<T> where T : Enum
 {
-	private readonly static T[] s_Values;
+	[SkipHotload] private readonly static T[] s_Values;
 
 	static EnumValues()
 	{

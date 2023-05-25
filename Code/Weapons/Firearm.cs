@@ -2,6 +2,7 @@
 using System.Linq;
 using Sandbox;
 using Woosh.Common;
+using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
@@ -27,9 +28,15 @@ public struct FirearmSetup
 	public DrawTime Draw;
 }
 
+public sealed partial class EntityClientEffects : ObservableEntityComponent
+{
+	
+}
+
+[Category( "Weapon" ), Icon( "gavel" )]
 public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IObservableEntity, IMutateCameraSetup
 {
-	public Dispatcher Events { get; } = new Dispatcher();
+	public IDispatcher Events { get; } = new Dispatcher();
 	public EntityStateMachine<Firearm> Machine { get; }
 
 	public Firearm()
@@ -43,12 +50,14 @@ public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IOb
 	{
 		base.Spawn();
 
+		Tags.Add( "pickup" );
+
 		PhysicsEnabled = true;
 		EnableHideInFirstPerson = true;
 		EnableShadowInFirstPerson = true;
 
 		Components.Create<CarriableAimComponent>();
-		
+
 		Components.Create<FirearmCheckAmmoSimulatedEntityState>();
 		Components.Create<FirearmShootSimulatedEntityState>();
 		Components.Create<FirearmReloadSimulatedEntityState>();

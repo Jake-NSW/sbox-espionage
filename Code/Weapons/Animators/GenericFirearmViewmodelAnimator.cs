@@ -1,30 +1,18 @@
-﻿using Woosh.Common;
+﻿using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
 public sealed class GenericFirearmViewModelAnimator : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect
 {
-	protected override void OnActivate()
+	protected override void OnAutoRegister()
 	{
-		Events.Register<WeaponFired>( OnShoot );
+		Register<WeaponFired>( OnShoot );
 
-		Events.Register<DeployingEntity>( OnDeploying );
-		Events.Register<HolsteringEntity>( OnHolstering );
+		Register<DeployingEntity>( OnDeploying );
+		Register<HolsteringEntity>( OnHolstering );
 
-		Events.Register<CheckAmmoOpen>( OnCheckAmmoOpen );
-		Events.Register<CheckAmmoClosed>( OnCheckAmmoClosed );
-	}
-
-
-	protected override void OnDeactivate()
-	{
-		Events.Unregister<WeaponFired>( OnShoot );
-
-		Events.Unregister<DeployingEntity>( OnDeploying );
-		Events.Unregister<HolsteringEntity>( OnHolstering );
-
-		Events.Unregister<CheckAmmoOpen>( OnCheckAmmoOpen );
-		Events.Unregister<CheckAmmoClosed>( OnCheckAmmoClosed );
+		Register<CheckAmmoOpen>( OnCheckAmmoOpen );
+		Register<CheckAmmoClosed>( OnCheckAmmoClosed );
 	}
 
 	// Check Ammo
@@ -58,7 +46,7 @@ public sealed class GenericFirearmViewModelAnimator : ObservableEntityComponent<
 	private void OnHolstering( Event<HolsteringEntity> evt )
 	{
 		Entity.SetAnimParameter( "bDropped", evt.Data.Dropped );
-		Entity?.SetAnimParameter( "bDeployed", false );
+		Entity.SetAnimParameter( "bDeployed", false );
 	}
 
 	private void OnShoot()

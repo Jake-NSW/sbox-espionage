@@ -2,6 +2,7 @@
 using Sandbox;
 using Sandbox.Utility;
 using Woosh.Common;
+using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
@@ -62,7 +63,7 @@ public sealed class ViewModelTuckEffect : ObservableEntityComponent<CompositedVi
 		{
 			case TuckType.Push :
 				setup.Hands.Offset += relativeRot * new Vector3( m_Offset, (normal * 3) * (1 - setup.Hands.Aim), (-normal * 8) );
-				setup.Hands.Angles *= Rotation.FromAxis( Vector3.Forward, -(normal * 65) * (1 - setup.Hands.Aim) );
+				setup.Hands.Angles *= Rotation.FromAxis( Vector3.Forward, -(normal * 65));
 				break;
 			case TuckType.Rotate :
 				setup.Hands.Offset += relativeRot * new Vector3( -m_Offset / 3.4f, 0, 0 );

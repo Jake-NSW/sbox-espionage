@@ -48,6 +48,7 @@
 
   <ItemGroup>
 		<ProjectReference Include="D:\Programs\Steam\steamapps\common\sbox\addons\base\code\Base Library.csproj" />
+		<ProjectReference Include="E:\Projects\Woosh Crew\Unity\Signals\Signals\Library\Signals.Library.csproj" />
 
   </ItemGroup>
 
