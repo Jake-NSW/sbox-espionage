@@ -16,16 +16,12 @@ public sealed class InteractionHandler : ObservableEntityComponent<Pawn>, ISingl
 
 	protected override void OnActivate()
 	{
-		base.OnActivate();
-
 		Register<DeployingEntity>( OnDeployed );
 		Register<DeployedEntity>( OnDeployed );
 	}
 
 	protected override void OnDeactivate()
 	{
-		base.OnDeactivate();
-
 		Unregister<DeployingEntity>( OnDeployed );
 		Unregister<DeployedEntity>( OnDeployed );
 	}
@@ -35,7 +31,6 @@ public sealed class InteractionHandler : ObservableEntityComponent<Pawn>, ISingl
 		// Some Holdable Entities add Components
 		Rebuild();
 	}
-
 
 	// State
 
@@ -68,7 +63,8 @@ public sealed class InteractionHandler : ObservableEntityComponent<Pawn>, ISingl
 	public void Rebuild()
 	{
 		m_Interactions = p_Hovering == null ? Array.Empty<IEntityInteraction>() : Entity.Components.GetAll<IEntityInteraction>().Where( e => e.IsInteractable( p_Hovering ) ).ToArray();
-		Run( new InteractionTargetChanged( m_Interactions.Length == 0 ? null : p_Hovering, m_Interactions ) );
+		var hovering = m_Interactions.Length == 0 ? null : p_Hovering;
+		Run( new InteractionTargetChanged( hovering, m_Interactions ) );
 	}
 
 	private TraceResult Scan( float size = 8 )

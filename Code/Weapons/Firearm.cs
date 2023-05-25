@@ -28,9 +28,23 @@ public struct FirearmSetup
 	public DrawTime Draw;
 }
 
-public sealed partial class EntityClientEffects : ObservableEntityComponent
+public sealed partial class FirearmClientEffects : ObservableEntityComponent
 {
-	
+	protected override void OnAutoRegister()
+	{
+		base.OnAutoRegister();
+
+		Register<PlayClientEffects<WeaponClientEffects>>( OnClientEffects );
+	}
+
+	private void OnClientEffects( Event<PlayClientEffects<WeaponClientEffects>> evt )
+	{
+		// We Don't care
+		if ( Entity.IsFirstPersonMode )
+			return;
+
+		// Get Muzzle
+	}
 }
 
 [Category( "Weapon" ), Icon( "gavel" )]
