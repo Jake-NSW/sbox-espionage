@@ -2,24 +2,16 @@
 using System.Linq;
 using Sandbox;
 using Woosh.Common;
-using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class GameHud : HudEntity<HudRoot> { }
-
-public partial class Project : GameManager
+public sealed class Project : GameManager
 {
 	public Project()
 	{
 		if ( Game.IsClient )
 		{
 			Camera = new CompositedCameraBuilder( Sandbox.Camera.Main );
-		}
-
-		if ( Game.IsServer )
-		{
-			_ = new GameHud();
 		}
 	}
 
@@ -28,7 +20,7 @@ public partial class Project : GameManager
 	public override void FrameSimulate( IClient cl )
 	{
 		base.FrameSimulate( cl );
-		
+
 		Camera.Update( mutate: Game.LocalPawn as IMutateCameraSetup );
 	}
 

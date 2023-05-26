@@ -19,7 +19,7 @@ public partial class Pawn : AnimatedEntity, IObservableEntity
 	public override void Spawn()
 	{
 		Model = Model.Load( "models/sbox_props/watermelon/watermelon.vmdl" );
-		
+
 		Tags.Add( "pawn" );
 
 		EnableDrawing = true;
@@ -64,6 +64,7 @@ public partial class Pawn : AnimatedEntity, IObservableEntity
 
 	public BBox Hull => new BBox( new Vector3( -10, -10, 0 ), new Vector3( 10, 10, 64 ) );
 
+	public override Ray AimRay => new Ray( EyePosition, EyeRotation.Forward );
 
 	/// <summary>
 	/// Position a player should be looking from in world space.
@@ -96,10 +97,19 @@ public partial class Pawn : AnimatedEntity, IObservableEntity
 	/// </summary>
 	[Net, Predicted, Browsable( false )]
 	public Rotation EyeLocalRotation { get; set; }
-	public override Ray AimRay => new Ray( EyePosition, EyeRotation.Forward );
+
+	private IClient m_Last;
+
 	public override void Simulate( IClient cl )
 	{
 		base.Simulate( cl );
+
+		if ( m_Last != Client )
+		{
+			// Dispatch On Pawn Registered
+			m_Last = Client;
+			Events.Run( new PawnPossessed( cl ) );
+		}
 
 		EyeRotation = ViewAngles.ToRotation();
 		Rotation = ViewAngles.WithPitch( 0f ).ToRotation();

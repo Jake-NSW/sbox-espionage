@@ -9,10 +9,13 @@ public sealed class Operator : Pawn, IMutateCameraSetup
 	public Entity Active => Components.Get<CarriableHandler>().Active;
 	public IEntityInventory Inventory => Components.Get<IEntityInventory>();
 	public DeployableSlotHandler Slots => Components.Get<DeployableSlotHandler>();
-	
+
 	public override void Spawn()
 	{
 		base.Spawn();
+		
+		// UI
+		Components.Create<InteractionHudComponent>();
 
 		// Gameplay
 		Components.Create<PawnLeaning>();
@@ -45,6 +48,8 @@ public sealed class Operator : Pawn, IMutateCameraSetup
 
 	protected override void OnPostInputBuild( ref InputContext context )
 	{
+		context.ViewAngles.pitch = context.ViewAngles.pitch.Clamp( -65, 65 );
+
 		(Active as IMutateInputContext)?.OnPostInputBuild( ref context );
 	}
 

@@ -8,7 +8,7 @@
 @namespace Woosh.Espionage
 
 @inherits Panel;
-@attribute [StyleSheet("Code/UI/interaction.scss")]
+@attribute [StyleSheet("interaction.scss")]
 
 <root>
     @if (!string.IsNullOrEmpty(Icon) && !string.IsNullOrEmpty(Display))
@@ -40,7 +40,7 @@
 @code
 {
     private Panel Container { get; set; }
-    
+
     private string Icon { get; set; }
     private string Display { get; set; }
 
@@ -53,12 +53,6 @@
         base.Tick();
         Style.Opacity = 0;
 
-        if (Game.LocalPawn == null)
-            return;
-
-        if (Game.LocalPawn != m_Handler)
-            Rebind(Game.LocalPawn as IObservableEntity);
-
         if (m_Interactions.Count > 0 && m_Target != null)
         {
             m_Last = m_Target.WorldSpaceBounds.Center;
@@ -68,44 +62,34 @@
         for (int i = 0; i < m_Interactions.Count; i++)
         {
             var interaction = m_Interactions[i];
-            var child  = Container.GetChild(i).GetChild(0);
+            var child = Container.GetChild(i).GetChild(0);
             child.Style.Width = Length.Percent(interaction.Indicator.Held * 100);
         }
 
         this.ToWorld(m_Last);
     }
 
-    private void OnInteractionChanged(Event<InteractionTargetChanged> evt)
+    private IReadOnlyList<IEntityInteraction> m_Interactions = Array.Empty<IEntityInteraction>();
+
+    public void OnInteractionChanged(Event<InteractionTargetChanged> evt)
     {
-        // Rebuild UI based on Interactions...
+    // Rebuild UI based on Interactions...
         m_Target = evt.Data.Hovering;
         m_Interactions = evt.Data.Interactions;
-        
+
         if (evt.Data.Hovering == null)
             return;
-        
-        // Get Info
+
+    // Get Info
         var info = m_Target.Info();
         Display = info.Name;
         Icon = info.Icon;
-    }
-
-    // Binding
-
-    private IReadOnlyList<IEntityInteraction> m_Interactions = Array.Empty<IEntityInteraction>();
-    private IObservableEntity m_Handler;
-
-    public void Rebind(IObservableEntity handler)
-    {
-        m_Handler?.Events.Unregister<InteractionTargetChanged>(OnInteractionChanged);
-        m_Handler = handler;
-        m_Handler?.Events.Register<InteractionTargetChanged>(OnInteractionChanged);
     }
 
     // Hash
 
     protected override int BuildHash()
     {
-        return m_Interactions?.GetHashCode() ?? 0 ^ m_Target?.GetHashCode()?? 0;
+        return m_Interactions?.GetHashCode() ?? 0 ^ m_Target?.GetHashCode() ?? 0;
     }
 }
