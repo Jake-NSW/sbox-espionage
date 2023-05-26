@@ -71,7 +71,8 @@ public sealed class ViewModelTuckEffect : ObservableEntityComponent<CompositedVi
 				setup.Hands.Offset += (setup.Rotation * setup.Hands.Angles) * new Vector3( m_Offset / 1.1f, 0, 0 );
 				break;
 			case TuckType.Hug :
-				setup.Hands.Angles *= Rotation.FromAxis( Vector3.Up, normal * 90 );
+				setup.Hands.Offset += setup.Rotation * new Vector3( 6 * normal, 0, 0 );
+				setup.Hands.Angles *= Rotation.FromAxis( Vector3.Up, normal * 140 );
 				setup.Hands.Offset += (setup.Rotation * setup.Hands.Angles) * new Vector3( m_Offset, 0, 0 );
 				break;
 			default :
