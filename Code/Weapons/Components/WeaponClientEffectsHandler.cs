@@ -12,7 +12,6 @@ public sealed class WeaponClientEffectsHandler : ObservableEntityComponent
 
 	private void OnClientEffects( Event<PlayClientEffects<WeaponClientEffects>> evt )
 	{
-		// We Don't care
 		if ( Entity.IsFirstPersonMode )
 			return;
 

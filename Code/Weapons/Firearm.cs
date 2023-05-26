@@ -103,10 +103,6 @@ public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IMu
 
 	protected abstract FirearmSetup Default { get; }
 
-	// Shoot
-
-	protected virtual SoundBank<WeaponClientEffects> Sounds { get; } = new SoundBank<WeaponClientEffects>() { [WeaponClientEffects.Attack] = "player_use_fail" };
-
 	// Pickup
 
 	public bool Holsterable => Machine.Active == null;

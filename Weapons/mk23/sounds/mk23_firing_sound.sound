@@ -1,16 +1,12 @@
-<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
 {
-	data = 
-	{
-		UI = false
-		Volume = 0.7
-		VolumeRandom = 0.2
-		Pitch = 1.0
-		PitchRandom = 0.0
-		DistanceMax = 2000.0
-		Sounds = 
-		[
-			"weapons/mk23/sounds/mk23_firing_sound.vsnd",
-		]
-	}
+  "UI": false,
+  "Volume": "0.60,0.70,0",
+  "Pitch": "0.90,1.10,1",
+  "Decibels": 140,
+  "SelectionMode": "Random",
+  "Sounds": [
+    "weapons/mk23/sounds/mk23_firing_sound.vsnd"
+  ],
+  "MaximumDistance": 4479.734,
+  "MinimumDistance": 223.9867
 }

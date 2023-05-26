@@ -21,6 +21,10 @@ public sealed class Smg2Firearm : Firearm, ISlotted
 				model.Components.Create<GenericFirearmViewModelAnimator>();
 			}
 		);
+
+		Events.Register<PlayClientEffects<WeaponClientEffects>>(
+			static evt => Sounds.Play( evt.Data.Effects, Game.LocalPawn.AimRay.Position )
+		);
 	}
 
 	public override void Spawn()
@@ -38,7 +42,7 @@ public sealed class Smg2Firearm : Firearm, ISlotted
 		Draw = new DrawTime( 1.5f, 1.3f )
 	};
 
-	protected override SoundBank<WeaponClientEffects> Sounds { get; } = new SoundBank<WeaponClientEffects>()
+	private static SoundBank<WeaponClientEffects> Sounds { get; } = new SoundBank<WeaponClientEffects>()
 	{
 		[WeaponClientEffects.Attack] = "mk23_firing_sound", [WeaponClientEffects.Attack | WeaponClientEffects.Silenced] = "smg2_firing_suppressed_sound",
 	};
