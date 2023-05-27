@@ -31,8 +31,7 @@ public sealed class WalkController : PawnController
 		{
 			if ( !IsGrounded )
 			{
-				if ( m_Jumped || Velocity.z.Abs() > 350 )
-					Landed();
+				Landed();
 
 				m_Jumped = false;
 			}
@@ -75,8 +74,12 @@ public sealed class WalkController : PawnController
 	private void Landed()
 	{
 		Events.Run( new PawnLanded( Velocity ) );
-		Velocity = Velocity.WithZ( 0 );
-		m_SinceLanded = 0.2f;
+
+		if ( Velocity.z.Abs() > 300 )
+		{
+			Velocity = Velocity.WithZ( 0 );
+			m_SinceLanded = 0.2f;
+		}
 	}
 
 	private Entity CheckForGround()

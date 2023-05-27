@@ -11,16 +11,11 @@ public sealed class ViewModelJumpOffsetEffect : ObservableEntityComponent<Compos
 	public float RotMulti { get; set; } = 2;
 	public float PosMulti { get; set; } = 1;
 
-	protected override void OnAutoRegister()
-	{
-		base.OnAutoRegister();
-		// When we have a OnLandedEvent, we should play a bounce animation here.
-	}
-
 	protected override void OnActivate()
 	{
 		base.OnActivate();
 
+		// This is BAD... Signals should propagate to the ViewModel...
 		(Entity.Owner as IObservableEntity)?.Events.Register<PawnLanded>( OnLanded );
 	}
 
@@ -59,14 +54,10 @@ public sealed class ViewModelJumpOffsetEffect : ObservableEntityComponent<Compos
 
 		var random = (2 * (MathF.Sin( m_Random.LengthSquared ).Min( 1 ))) - 1;
 		var curved = eased * (1 - eased);
-
 		var offset = new Vector3( 0, -m_LandVelocity.y / 50, m_LandVelocity.z / 80 );
-		setup.Hands.Offset += ((offset) * curved);
-
-		var pitch = curved * -offset.z;
-		setup.Hands.Angles *= Rotation.FromPitch( pitch );
-
-		var roll = curved * random * -m_LandVelocity.z / 50;
-		setup.Hands.Angles *= Rotation.FromRoll( roll );
+		
+		setup.Hands.Offset += offset * curved;
+		setup.Hands.Angles *= Rotation.FromPitch( curved * -offset.z );
+		setup.Hands.Angles *= Rotation.FromRoll( curved * random * -m_LandVelocity.z / 50 );
 	}
 }
