@@ -49,7 +49,7 @@ public sealed class RustShotgunFirearm : Firearm, ISlotted
 	protected override FirearmSetup Default => new FirearmSetup()
 	{
 		IsAutomatic = false,
-		RateOfFire = 90,
+		RateOfFire = 70,
 
 		// Drop on next frame
 		Draw = new DrawTime( 1, Game.TickInterval * 2 )

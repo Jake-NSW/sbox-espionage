@@ -37,7 +37,12 @@ public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IMu
 	public Firearm()
 	{
 		Machine = new EntityStateMachine<Firearm>( this );
-		Events.Register<CreatedViewModel>( static evt => evt.Data.ViewModel.Components.Create<WeaponClientEffectsHandler>() );
+
+		if ( Game.IsClient )
+			Events.Register<CreatedViewModel>( static evt => evt.Data.ViewModel.Components.Create<WeaponClientEffectsHandler>() );
+
+		if ( Game.IsServer )
+			Events.Register<FirearmRebuildRequest>( Rebuild );
 	}
 
 	public IEntityEffects Effects => Components.Get<IEntityEffects>();
@@ -54,7 +59,7 @@ public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IMu
 
 		Components.Create<CarriableAimComponent>();
 		Components.Create<WeaponClientEffectsHandler>();
-		
+
 		Components.Create<FirearmCheckAmmoSimulatedEntityState>();
 		Components.Create<FirearmShootSimulatedEntityState>();
 		Components.Create<FirearmReloadSimulatedEntityState>();
