@@ -26,8 +26,7 @@ public sealed class ViewModelMoveBobEffect : ObservableEntityComponent<Composite
 		// Scale walk bob off property
 		m_Bob *= m_Speed;
 
-		setup.Hands.Offset += setup.Rotation.Up * m_Bob.z;
-		setup.Hands.Offset += setup.Rotation.Left * m_Bob.y * 1.25f;
+		setup.Hands.Offset += setup.Rotation * new Vector3( 0, m_Bob.y * 1.2f, m_Bob.z * 0.8f );
 		setup.Hands.Angles *= Rotation.From( m_Bob.z * 2, m_Bob.y * 4, m_Bob.x * 4 );
 	}
 }
