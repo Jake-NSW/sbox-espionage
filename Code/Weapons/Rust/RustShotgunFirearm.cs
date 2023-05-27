@@ -5,10 +5,10 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-[Library( "dm_pistol" ), Title( "Pistol" ), Icon( "gavel" ), HammerEntity, EditorModel( WORLD_MODEL )]
-public sealed class RustPistolFirearm : Firearm, ISlotted
+[Library( "weapon_shotgun" ), Title( "Shotgun" ), HammerEntity, EditorModel( WORLD_MODEL )]
+public sealed class RustShotgunFirearm : Firearm, ISlotted
 {
-	public RustPistolFirearm()
+	public RustShotgunFirearm()
 	{
 		if ( !Game.IsClient )
 			return;
@@ -28,13 +28,13 @@ public sealed class RustPistolFirearm : Firearm, ISlotted
 			evt =>
 			{
 				if ( evt.Data.Effects == WeaponClientEffects.Attack )
-					PlaySound( "rust_pistol.shoot" );
+					PlaySound( "rust_pumpshotgun.shoot" );
 			}
 		);
 	}
 
-	private const string VIEW_MODEL = "weapons/rust_pistol/v_rust_pistol.vmdl";
-	private const string WORLD_MODEL = "weapons/rust_pistol/rust_pistol.vmdl";
+	private const string VIEW_MODEL = "weapons/rust_pumpshotgun/v_rust_pumpshotgun.vmdl";
+	private const string WORLD_MODEL = "weapons/rust_pumpshotgun/rust_pumpshotgun.vmdl";
 
 	public override void Spawn()
 	{
@@ -44,12 +44,12 @@ public sealed class RustPistolFirearm : Firearm, ISlotted
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
 	}
 
-	public int Slot => CarrySlot.Holster.Index();
+	public int Slot => CarrySlot.Back.Index();
 
 	protected override FirearmSetup Default => new FirearmSetup()
 	{
 		IsAutomatic = false,
-		RateOfFire = 600,
+		RateOfFire = 90,
 
 		// Drop on next frame
 		Draw = new DrawTime( 1, Game.TickInterval * 2 )
