@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using System;
+using Sandbox;
 using Sandbox.Utility;
 using Woosh.Common;
 using Woosh.Signals;
@@ -33,10 +34,13 @@ public sealed class ViewModelJumpOffsetEffect : ObservableEntityComponent<Compos
 	private void OnLanded( Event<PawnLanded> evt )
 	{
 		m_SinceLanded = 0;
-		Log.Info("Landed");
+		m_Random = Vector3.Random;
+		m_LandVelocity = evt.Data.Velocity;
 	}
 
 	private TimeSince m_SinceLanded;
+	private Vector3 m_Random;
+	private Vector3 m_LandVelocity;
 
 	private float m_Offset;
 
@@ -48,9 +52,21 @@ public sealed class ViewModelJumpOffsetEffect : ObservableEntityComponent<Compos
 		setup.Hands.Offset += setup.Rotation.Up * (m_Offset / 2f) * PosMulti;
 		setup.Hands.Angles *= Rotation.From( m_Offset * RotMulti, 0, 0 );
 
-		var normal = (m_SinceLanded / 0.5f).Min( 1 );
-		var eased = Easing.QuadraticInOut( normal );
+		// Land Effects
 
-		setup.Rotation *= Rotation.FromPitch( eased * (1 - eased) * 90);
+		var normal = (m_SinceLanded / 1f).Min( 1 );
+		var eased = Easing.ExpoOut( normal );
+
+		var random = (2 * (MathF.Sin( m_Random.LengthSquared ).Min( 1 ))) - 1;
+		var curved = eased * (1 - eased);
+
+		var offset = new Vector3( 0, -m_LandVelocity.y / 50, m_LandVelocity.z / 80 );
+		setup.Hands.Offset += ((offset) * curved);
+
+		var pitch = curved * -offset.z;
+		setup.Hands.Angles *= Rotation.FromPitch( pitch );
+
+		var roll = curved * random * -m_LandVelocity.z / 50;
+		setup.Hands.Angles *= Rotation.FromRoll( roll );
 	}
 }
