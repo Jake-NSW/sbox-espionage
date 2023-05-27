@@ -1,8 +1,11 @@
 ﻿using Sandbox;
 using Sandbox.Utility;
 using Woosh.Common;
+using Woosh.Signals;
 
 namespace Woosh.Espionage;
+
+public readonly record struct PawnLanded( Vector3 Velocity ) : ISignal;
 
 public sealed class WalkController : PawnController
 {
@@ -71,6 +74,7 @@ public sealed class WalkController : PawnController
 
 	private void Landed()
 	{
+		Events.Run( new PawnLanded( Velocity ) );
 		Velocity = Velocity.WithZ( 0 );
 		m_SinceLanded = 0.2f;
 	}

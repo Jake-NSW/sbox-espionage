@@ -13,7 +13,7 @@ public sealed class Operator : Pawn, IMutateCameraSetup
 	public override void Spawn()
 	{
 		base.Spawn();
-		
+
 		// UI
 		Components.Create<InteractionHudComponent>();
 		Components.Create<InventorySlotsHudComponent>();
@@ -27,7 +27,7 @@ public sealed class Operator : Pawn, IMutateCameraSetup
 		Components.Create<InteractionHandler>();
 		Components.Create<PushEntityInteraction>();
 		Components.Create<UseEntityInteraction>();
-		
+
 		// Controllable
 		Components.Create<ControllableEntityInteraction>();
 		Components.Create<ControllableSimulatedEntityState>();
@@ -63,6 +63,14 @@ public sealed class Operator : Pawn, IMutateCameraSetup
 
 		if ( Machine.Active != null )
 			return;
+
+		for ( var i = 0; i < 10; i++ )
+		{
+			if ( Input.Pressed( $"slot_{i}" ) )
+			{
+				Slots.Deploy( i );
+			}
+		}
 
 		if ( Input.Pressed( "slot_primary" ) )
 		{

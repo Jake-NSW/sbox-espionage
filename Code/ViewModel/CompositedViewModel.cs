@@ -42,6 +42,9 @@ public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity, IMu
 
 	public void OnPostCameraSetup( ref CameraSetup setup )
 	{
+		var initialPos = setup.Hands.Offset;
+		var initialRot = setup.Hands.Angles;
+		
 		Position = setup.Position + setup.Hands.Offset;
 		Rotation = setup.Rotation * setup.Hands.Angles;
 
@@ -53,8 +56,8 @@ public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity, IMu
 		}
 
 		// Append Effects
-		Position = setup.Position + setup.Hands.Offset;
-		Rotation = setup.Rotation * setup.Hands.Angles;
+		Position += setup.Hands.Offset - initialPos;
+		Rotation *= setup.Hands.Angles * initialRot.Inverse;
 
 		setup.Hands = hands;
 	}
