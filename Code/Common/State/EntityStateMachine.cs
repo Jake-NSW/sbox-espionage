@@ -45,11 +45,13 @@ public sealed class EntityStateMachine<T> where T : IEntity
 			m_Active?.OnStart();
 				
 			// Simulate new Target
+			/*
 			if ( m_Active != null && m_Active.Simulate( client ) )
 			{
 				m_Active.OnFinish();
 				m_Active = null;
 			}
+			*/
 		}
 
 		return true;

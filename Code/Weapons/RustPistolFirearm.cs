@@ -10,12 +10,24 @@ public sealed class RustPistolFirearm : Firearm, ISlotted
 {
 	public RustPistolFirearm()
 	{
+		if ( !Game.IsClient )
+			return;
+
 		Events.Register<CreatedViewModel>(
 			static evt =>
 			{
 				var view = evt.Data.ViewModel;
 				view.Model = Model.Load( VIEW_MODEL );
 				view.Components.Create<RustFirearmViewmodelAnimator>();
+				view.Components.Create<SandboxViewModelEffect>();
+			}
+		);
+
+		Events.Register<PlayClientEffects<WeaponClientEffects>>(
+			evt =>
+			{
+				if ( evt.Data.Effects == WeaponClientEffects.Attack )
+					PlaySound( "rust_pistol.shoot" );
 			}
 		);
 	}
@@ -37,6 +49,8 @@ public sealed class RustPistolFirearm : Firearm, ISlotted
 	{
 		IsAutomatic = false,
 		RateOfFire = 600,
-		Draw = new DrawTime( 1, 0.1f )
+		
+		// Drop on next frame
+		Draw = new DrawTime( 1, Game.TickInterval * 2 )
 	};
 }

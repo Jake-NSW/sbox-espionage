@@ -4,27 +4,41 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class ControllableSimulatedEntityState : ObservableEntityComponent<Pawn>, ISimulatedEntityState<Pawn>, ISingletonComponent
+public sealed class ControllableSimulatedEntityState : ObservableEntityComponent<Pawn>, ISimulatedEntityState<Pawn>,
+	ISingletonComponent, IMutateCameraSetup
 {
+	protected override void OnAutoRegister()
+	{
+		Register<InteractionTargetChanged>( evt => m_Target = evt.Data.Hovering );
+	}
+
+	private Entity m_Target;
+
 	public bool TryEnter()
 	{
-		return Input.Pressed( "use" );
+		return Input.Pressed( "use" ) && m_Target is IControllable;
 	}
 
 	public bool Simulate( IClient cl )
 	{
 		// Tab to Leave? Or would it be use?
-		return true;
+		return (m_Target is IControllable controllable) && controllable.Simulate( Entity );
 	}
 
 	public void OnStart()
 	{
 		// Tell Entity we are Controlling it
-		(Entity.Components.Get<InteractionHandler>().Hovering as IControllable)?.Entering( Entity );
+		(m_Target as IControllable)?.Entering( Entity );
 	}
 
 	public void OnFinish()
 	{
-		(Entity.Components.Get<InteractionHandler>().Hovering as IControllable)?.Leaving();
+		(m_Target as IControllable)?.Leaving();
+	}
+
+	public void OnPostCameraSetup( ref CameraSetup setup )
+	{
+		if ( Entity.Machine.Active == this )
+			(m_Target as IMutateCameraSetup)?.OnPostCameraSetup( ref setup );
 	}
 }

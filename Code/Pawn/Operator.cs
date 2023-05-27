@@ -51,7 +51,7 @@ public sealed class Operator : Pawn, IMutateCameraSetup
 
 	protected override void OnPostInputBuild( ref InputContext context )
 	{
-		context.ViewAngles.pitch = context.ViewAngles.pitch.Clamp( -65, 65 );
+		context.ViewAngles.pitch = context.ViewAngles.pitch.Clamp( -75, 70 );
 
 		(Active as IMutateInputContext)?.OnPostInputBuild( ref context );
 	}
