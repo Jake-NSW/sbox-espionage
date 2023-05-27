@@ -23,7 +23,7 @@
             <label class="hovering" text="@Display"></label>
         }
 
-        <div @ref=Container style="flex-direction: column; align-items: flex-start">
+        <div @ref="Container" style="flex-direction: column; align-items: flex-start">
             <!-- Create another thing for each Interaction Opportunity -->
             @foreach (var item in m_Interactions ?? Array.Empty<IEntityInteraction>())
             {

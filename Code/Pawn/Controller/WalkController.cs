@@ -1,4 +1,6 @@
 ﻿using Sandbox;
+using Sandbox.Utility;
+using Woosh.Common;
 
 namespace Woosh.Espionage;
 
@@ -8,8 +10,11 @@ public sealed class WalkController : PawnController
 
 	public int StepSize => 24;
 	public int GroundAngle => 45;
-	public int JumpSpeed => 300;
+	public int JumpSpeed => 260;
 	public float Gravity => 800f;
+
+	private TimeSince m_SinceLanded;
+	private bool m_Jumped;
 
 	public override void Simulate( IClient cl )
 	{
@@ -22,21 +27,28 @@ public sealed class WalkController : PawnController
 		{
 			if ( !IsGrounded )
 			{
-				Entity.Velocity = Entity.Velocity.WithZ( 0 );
+				if ( m_Jumped || Velocity.z.Abs() > 350 )
+					Landed();
+				
+				m_Jumped = false;
 			}
 
 			Entity.Velocity = Accelerate( Entity.Velocity, moveVector.Normal, moveVector.Length, 200.0f * (Input.Down( "run" ) ? 2.5f : 1f), 7.5f );
 			Entity.Velocity = ApplyFriction( Entity.Velocity, 8.0f );
+
+			// Cap our Velocity after we've jumped
+			Entity.Velocity *= Easing.Linear( (m_SinceLanded / 1).Min( 1 ) );
 		}
 		else
 		{
-			Entity.Velocity = Accelerate( Entity.Velocity, moveVector.Normal, moveVector.Length, 100, 20f );
+			Entity.Velocity = Accelerate( Entity.Velocity, moveVector.Normal, moveVector.Length, 30, 20f );
 			Entity.Velocity += Vector3.Down * Gravity * Time.Delta;
 		}
 
-		if ( Input.Pressed( "jump" ) )
+		if ( Input.Pressed( "jump" ) && IsGrounded )
 		{
-			DoJump();
+			Velocity = Entity.Velocity + Vector3.Up * JumpSpeed;
+			m_Jumped = true;
 		}
 
 		var mh = new MoveHelper( Entity.Position, Entity.Velocity );
@@ -56,15 +68,15 @@ public sealed class WalkController : PawnController
 		Entity.GroundEntity = groundEntity;
 	}
 
-	void DoJump()
+	private void Landed()
 	{
-		if ( IsGrounded )
-		{
-			Entity.Velocity = ApplyJump( Entity.Velocity, "jump" );
-		}
+		Velocity /= 4;
+		Velocity = Velocity.WithZ( 0 );
+
+		m_SinceLanded = 0.2f;
 	}
 
-	Entity CheckForGround()
+	private Entity CheckForGround()
 	{
 		if ( Entity.Velocity.z > 100f )
 			return null;
@@ -80,24 +92,28 @@ public sealed class WalkController : PawnController
 		return trace.Entity;
 	}
 
-	Vector3 ApplyFriction( Vector3 input, float frictionAmount )
+	private Vector3 ApplyFriction( Vector3 input, float frictionAmount, float stopSpeed = 100f )
 	{
-		float StopSpeed = 100.0f;
-
 		var speed = input.Length;
-		if ( speed < 0.1f ) return input;
+
+		if ( speed < 0.1f )
+			return input;
 
 		// Bleed off some speed, but if we have less than the bleed
 		// threshold, bleed the threshold amount.
-		float control = (speed < StopSpeed) ? StopSpeed : speed;
+		var control = (speed < stopSpeed) ? stopSpeed : speed;
 
 		// Add the amount to the drop amount.
 		var drop = control * Time.Delta * frictionAmount;
 
 		// scale the velocity
-		float newSpeed = speed - drop;
-		if ( newSpeed < 0 ) newSpeed = 0;
-		if ( newSpeed == speed ) return input;
+		var newSpeed = speed - drop;
+
+		if ( newSpeed < 0 )
+			newSpeed = 0;
+
+		if ( newSpeed == speed )
+			return input;
 
 		newSpeed /= speed;
 		input *= newSpeed;
@@ -105,30 +121,25 @@ public sealed class WalkController : PawnController
 		return input;
 	}
 
-	Vector3 Accelerate( Vector3 input, Vector3 wishdir, float wishspeed, float speedLimit, float acceleration )
+	private Vector3 Accelerate( Vector3 input, Vector3 wishDir, float wishSpeed, float speedLimit, float acceleration )
 	{
-		if ( speedLimit > 0 && wishspeed > speedLimit )
-			wishspeed = speedLimit;
+		if ( speedLimit > 0 && wishSpeed > speedLimit )
+			wishSpeed = speedLimit;
 
-		var currentspeed = input.Dot( wishdir );
-		var addspeed = wishspeed - currentspeed;
+		var currentSpeed = input.Dot( wishDir );
+		var addSpeed = wishSpeed - currentSpeed;
 
-		if ( addspeed <= 0 )
+		if ( addSpeed <= 0 )
 			return input;
 
-		var accelspeed = acceleration * Time.Delta * wishspeed;
+		var accelSpeed = acceleration * Time.Delta * wishSpeed;
 
-		if ( accelspeed > addspeed )
-			accelspeed = addspeed;
+		if ( accelSpeed > addSpeed )
+			accelSpeed = addSpeed;
 
-		input += wishdir * accelspeed;
+		input += wishDir * accelSpeed;
 
 		return input;
-	}
-
-	Vector3 ApplyJump( Vector3 input, string jumpType )
-	{
-		return input + Vector3.Up * JumpSpeed;
 	}
 
 	Vector3 StayOnGround( Vector3 position )

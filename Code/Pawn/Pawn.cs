@@ -108,7 +108,7 @@ public partial class Pawn : AnimatedEntity, IObservableEntity
 		{
 			// Dispatch On Pawn Registered
 			m_Last = Client;
-			Events.Run( new PawnPossessed( cl ) );
+			Events.Run( new EntityPossessed( cl ) );
 		}
 
 		EyeRotation = ViewAngles.ToRotation();

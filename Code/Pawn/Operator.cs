@@ -20,20 +20,23 @@ public sealed class Operator : Pawn, IMutateCameraSetup
 		// Gameplay
 		Components.Create<PawnLeaning>();
 		Components.Create<WalkController>();
+		Components.Create<ViewModelHandlerComponent>();
 
 		// Interaction
 		Components.Create<InteractionHandler>();
 		Components.Create<PushEntityInteraction>();
 		Components.Create<UseEntityInteraction>();
-		Components.Create<PickupEntityInteraction>();
-		Components.Create<EquipEntityInteraction>();
+		
+		// Controllable
 		Components.Create<ControllableEntityInteraction>();
-		Components.Create<ViewModelHandlerComponent>();
+		Components.Create<ControllableSimulatedEntityState>();
 
 		// Inventory
 		Components.Create<CarriableHandler>();
 		Components.Create<InventoryContainer>();
 		Components.Add( new DeployableSlotHandler( 3 ) );
+		Components.Create<PickupEntityInteraction>();
+		Components.Create<EquipEntityInteraction>();
 	}
 
 	public void OnPostCameraSetup( ref CameraSetup setup )

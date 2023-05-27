@@ -11,7 +11,7 @@ public abstract class PawnHudComponent<T> : ObservableEntityComponent<Pawn> wher
 		if ( Game.IsClient )
 		{
 			// Only care on the Client, as its UI
-			Register<PawnPossessed>( OnPawnPossessed );
+			Register<EntityPossessed>( OnPawnPossessed );
 		}
 	}
 
@@ -27,7 +27,7 @@ public abstract class PawnHudComponent<T> : ObservableEntityComponent<Pawn> wher
 
 	private T m_Panel;
 
-	private void OnPawnPossessed( Event<PawnPossessed> signal )
+	private void OnPawnPossessed( Event<EntityPossessed> signal )
 	{
 		// Delete Old UI
 		m_Panel?.Delete();
