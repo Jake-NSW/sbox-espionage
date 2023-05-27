@@ -20,6 +20,7 @@ public sealed class RustPistolFirearm : Firearm, ISlotted
 				view.Model = Model.Load( VIEW_MODEL );
 				view.Components.Create<RustFirearmViewmodelAnimator>();
 				view.Components.Create<SandboxViewModelEffect>();
+				view.Components.Add( new ViewModelOffsetEffect( new Vector3( -10, 6, 1 ), new Vector3( -5, 17, 2.4f ) ) );
 			}
 		);
 
@@ -49,7 +50,7 @@ public sealed class RustPistolFirearm : Firearm, ISlotted
 	{
 		IsAutomatic = false,
 		RateOfFire = 600,
-		
+
 		// Drop on next frame
 		Draw = new DrawTime( 1, Game.TickInterval * 2 )
 	};
