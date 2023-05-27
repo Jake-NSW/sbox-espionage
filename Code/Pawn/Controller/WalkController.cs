@@ -75,7 +75,7 @@ public sealed class WalkController : PawnController
 	{
 		Events.Run( new PawnLanded( Velocity ) );
 
-		if ( Velocity.z.Abs() > 300 )
+		if ( Velocity.z.Abs() > 250 || m_Jumped )
 		{
 			Velocity = Velocity.WithZ( 0 );
 			m_SinceLanded = 0.2f;
