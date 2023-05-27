@@ -9,6 +9,26 @@ namespace Woosh.Common;
 public static class ComponentUtility
 {
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public static void Each<TComponent, TValue>( this IComponentSystem system, TValue value, Action<TValue, TComponent> loop )
+	{
+		foreach ( var component in system.All() )
+		{
+			if(component is TComponent cast)
+				loop.Invoke(value, cast);
+		}
+	}
+	
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public static void Each<TComponent>( this IComponentSystem system, Action<TComponent> loop )
+	{
+		foreach ( var component in system.All() )
+		{
+			if(component is TComponent cast)
+				loop.Invoke(cast);
+		}
+	}
+	
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
 	public static TComponent Get<TComponent>( this EntityComponent component ) where TComponent : class, IComponent => component.Entity.Components.Get<TComponent>();
 
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]

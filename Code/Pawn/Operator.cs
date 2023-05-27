@@ -61,9 +61,8 @@ public sealed class Operator : Pawn, IMutateCameraSetup
 	{
 		base.Simulate( cl );
 
-		Components.Get<InteractionHandler>()?.Simulate( cl );
-		Components.Get<CarriableHandler>()?.Simulate( cl );
-		Components.Get<PawnLeaning>()?.Simulate( cl );
+		if ( Machine.Active != null )
+			return;
 
 		if ( Input.Pressed( "slot_primary" ) )
 		{

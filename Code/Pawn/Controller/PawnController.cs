@@ -1,10 +1,11 @@
 ﻿using System.Runtime.CompilerServices;
 using Sandbox;
+using Woosh.Common;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public abstract class PawnController : ObservableEntityComponent<Pawn>, ISingletonComponent
+public abstract class PawnController : ObservableEntityComponent<Pawn>, ISingletonComponent, ISimulated
 {
 	protected Vector3 Position
 	{

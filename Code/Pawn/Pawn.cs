@@ -116,7 +116,7 @@ public partial class Pawn : AnimatedEntity, IObservableEntity
 
 		if ( Machine.Simulate( cl ) )
 		{
-			Components.Get<PawnController>()?.Simulate( cl );
+			Components.Each<ISimulated, IClient>( cl, ( client, e ) => e.Simulate( client ) );
 		}
 
 		EyeLocalPosition = Vector3.Up * (64f * Scale);

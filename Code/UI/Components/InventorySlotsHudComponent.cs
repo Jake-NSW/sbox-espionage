@@ -13,7 +13,9 @@ public sealed class InventorySlotsHudComponent : EntityHudComponent<RootPanel, P
 		Register<SlotDeploying>( OnSlotDeploying );
 	}
 
-	private void OnSlotAssigned( Event<SlotAssigned> evt ) { }
+	private void OnSlotAssigned( Event<SlotAssigned> evt )
+	{
+	}
 
 	private void OnSlotDeploying( Event<SlotDeploying> evt ) { }
 }

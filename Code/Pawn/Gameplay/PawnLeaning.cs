@@ -4,7 +4,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed partial class PawnLeaning : ObservableEntityComponent<Pawn>, IMutateCameraSetup
+public sealed partial class PawnLeaning : ObservableEntityComponent<Pawn>, IMutateCameraSetup, ISimulated
 {
 	public void Simulate( IClient cl )
 	{

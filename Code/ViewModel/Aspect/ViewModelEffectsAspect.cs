@@ -34,7 +34,7 @@ public readonly struct ViewModelEffectsAspect : IAspect<CompositedViewModel>
 		view.Components.Add( new ViewModelOffsetEffect( Vector3.Zero, default ) );
 		view.Components.Add( new ViewModelMoveOffsetEffect( Vector3.One, 10 ) );
 
-		view.Components.Add( new ViewModelWalkEffect() );
+		view.Components.Add( new ViewModelMoveBobEffect() );
 		view.Components.Add( new ViewModelBreatheEffect() );
 
 		view.Components.Add(
