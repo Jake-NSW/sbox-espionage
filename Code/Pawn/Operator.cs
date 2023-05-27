@@ -16,6 +16,7 @@ public sealed class Operator : Pawn, IMutateCameraSetup
 		
 		// UI
 		Components.Create<InteractionHudComponent>();
+		Components.Create<InventorySlotsHudComponent>();
 
 		// Gameplay
 		Components.Create<PawnLeaning>();

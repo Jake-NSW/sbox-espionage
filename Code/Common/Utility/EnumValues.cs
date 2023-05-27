@@ -4,6 +4,7 @@ using Sandbox;
 
 namespace Woosh.Common;
 
+[SkipHotload]
 public static class EnumValues<T> where T : Enum
 {
 	[SkipHotload] private readonly static T[] s_Values;

@@ -67,6 +67,11 @@ public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IMu
 		Rebuild();
 	}
 
+	protected override void OnDestroy()
+	{
+		Events.Dispose();
+	}
+
 	public override void Simulate( IClient cl )
 	{
 		Components.Get<CarriableAimComponent>().Simulate( cl );
