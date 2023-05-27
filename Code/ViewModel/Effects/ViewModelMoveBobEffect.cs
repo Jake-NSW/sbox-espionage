@@ -13,8 +13,8 @@ public sealed class ViewModelMoveBobEffect : ObservableEntityComponent<Composite
 
 	public void OnPostCameraSetup( ref CameraSetup setup )
 	{
-		var speed = Entity.Owner.Velocity.WithZ( 0 ).Length.LerpInverse( 0, 240 );
-		m_Speed = m_Speed.LerpTo( speed, 2 * Time.Delta );
+		var speed = Entity.Owner.Velocity.WithZ( 0 ).Length.LerpInverse( 0, 180 );
+		m_Speed = m_Speed.LerpTo( speed, 4 * Time.Delta );
 		m_Scale = m_Scale.LerpTo( Game.LocalPawn.GroundEntity != null ? speed : 0, 10 * Time.Delta );
 		m_Delta += Time.Delta * 15.0f * m_Scale;
 
