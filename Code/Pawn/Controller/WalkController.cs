@@ -46,7 +46,7 @@ public sealed class WalkController : PawnController
 			Entity.Velocity += Vector3.Down * Gravity * Time.Delta;
 		}
 
-		if ( Input.Pressed( "jump" ) && IsGrounded )
+		if ( Input.Pressed( "jump" ) && IsGrounded && m_SinceLanded > 0.4f )
 		{
 			Velocity = (Entity.Velocity + Vector3.Up * JumpSpeed) * (m_SinceLanded / 0.8f).Min( 1 );
 			m_Jumped = true;
