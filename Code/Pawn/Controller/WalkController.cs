@@ -9,6 +9,7 @@ public sealed class WalkController : PawnController
 	private bool IsGrounded => Entity.GroundEntity.IsValid();
 
 	public int StepSize => 24;
+	public int WishSpeed => 130;
 	public int GroundAngle => 45;
 	public int JumpSpeed => 260;
 	public float Gravity => 800f;
@@ -29,15 +30,15 @@ public sealed class WalkController : PawnController
 			{
 				if ( m_Jumped || Velocity.z.Abs() > 350 )
 					Landed();
-				
+
 				m_Jumped = false;
 			}
 
-			Entity.Velocity = Accelerate( Entity.Velocity, moveVector.Normal, moveVector.Length, 200.0f * (Input.Down( "run" ) ? 2.5f : 1f), 7.5f );
+			Entity.Velocity = Accelerate( Entity.Velocity, moveVector.Normal, moveVector.Length, WishSpeed * (Input.Down( "run" ) ? 1.5f : 1f), 8.75f );
 			Entity.Velocity = ApplyFriction( Entity.Velocity, 8.0f );
 
 			// Cap our Velocity after we've jumped
-			Entity.Velocity *= Easing.Linear( (m_SinceLanded / 1).Min( 1 ) );
+			Entity.Velocity *= Easing.Linear( (m_SinceLanded / 1 + 0.35f).Min( 1 ) );
 		}
 		else
 		{
@@ -47,7 +48,7 @@ public sealed class WalkController : PawnController
 
 		if ( Input.Pressed( "jump" ) && IsGrounded )
 		{
-			Velocity = Entity.Velocity + Vector3.Up * JumpSpeed;
+			Velocity = (Entity.Velocity + Vector3.Up * JumpSpeed) * (m_SinceLanded / 0.8f).Min( 1 );
 			m_Jumped = true;
 		}
 
@@ -70,9 +71,7 @@ public sealed class WalkController : PawnController
 
 	private void Landed()
 	{
-		Velocity /= 4;
 		Velocity = Velocity.WithZ( 0 );
-
 		m_SinceLanded = 0.2f;
 	}
 
