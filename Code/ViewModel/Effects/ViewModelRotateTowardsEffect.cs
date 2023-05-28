@@ -18,7 +18,7 @@ public sealed class ViewModelRotateTowardsEffect : ObservableEntityComponent<Com
 
 	private Rotation m_LookAt = Rotation.Identity;
 
-	public void OnPostCameraSetup( ref CameraSetup setup )
+	public void OnPostSetup( ref CameraSetup setup )
 	{
 		var trans = m_Towards.Invoke();
 

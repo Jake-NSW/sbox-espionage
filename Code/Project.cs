@@ -21,7 +21,7 @@ public sealed class Project : GameManager
 	{
 		base.FrameSimulate( cl );
 
-		Camera.Update( mutate: Game.LocalPawn as IMutateCameraSetup );
+		Camera.Update( mutate: Game.LocalPawn as IMutate<CameraSetup> );
 	}
 
 	public override void ClientJoined( IClient client )

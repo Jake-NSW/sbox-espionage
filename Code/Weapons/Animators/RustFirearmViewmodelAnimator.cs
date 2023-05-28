@@ -10,5 +10,5 @@ public sealed class RustFirearmViewmodelAnimator : ObservableEntityComponent<Com
 		Register<DeployingEntity>( () => Entity.SetAnimParameter( "deploy", true ) );
 	}
 
-	public void OnPostCameraSetup( ref CameraSetup setup ) { }
+	void IMutate<CameraSetup>.OnPostSetup( ref CameraSetup setup ) { }
 }

@@ -19,7 +19,7 @@ public sealed class ViewModelPitchOffsetEffect : ObservableEntityComponent<Compo
 	private Rotation m_LastOffsetRot = Rotation.Identity;
 	private Vector3 m_LastOffsetPos;
 
-	public void OnPostCameraSetup( ref CameraSetup setup )
+	public void OnPostSetup( ref CameraSetup setup )
 	{
 		var offset = Camera.Rotation.Pitch().Remap( -90, 90, -1, 1 );
 		var rot = setup.Rotation;

@@ -29,7 +29,7 @@ public struct FirearmSetup
 }
 
 [Category( "Weapon" ), Icon( "gavel" )]
-public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IMutateCameraSetup
+public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IMutate<CameraSetup>
 {
 	public IDispatcher Events { get; } = new Dispatcher();
 	public EntityStateMachine<Firearm> Machine { get; }
@@ -149,11 +149,11 @@ public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IMu
 			EnableDrawing = false;
 	}
 
-	public void OnPostCameraSetup( ref CameraSetup setup )
+	public void OnPostSetup( ref CameraSetup setup )
 	{
-		foreach ( var component in Components.All().OfType<IMutateCameraSetup>() )
+		foreach ( var component in Components.All().OfType<IMutate<CameraSetup>>() )
 		{
-			component.OnPostCameraSetup( ref setup );
+			component.OnPostSetup( ref setup );
 		}
 	}
 }

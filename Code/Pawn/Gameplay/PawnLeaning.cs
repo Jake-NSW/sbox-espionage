@@ -5,7 +5,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed partial class PawnLeaning : ObservableEntityComponent<Pawn>, IMutateCameraSetup, ISimulated
+public sealed partial class PawnLeaning : ObservableEntityComponent<Pawn>, IMutate<CameraSetup>, ISimulated
 {
 	public void Simulate( IClient cl )
 	{
@@ -48,7 +48,7 @@ public sealed partial class PawnLeaning : ObservableEntityComponent<Pawn>, IMuta
 	public float Distance { get; set; } = 10f;
 	public float Angle { get; set; } = 10;
 
-	public void OnPostCameraSetup( ref CameraSetup setup )
+	public void OnPostSetup( ref CameraSetup setup )
 	{
 		m_Distance = m_Distance.Approach( Direction * NormalFromEyes( Direction, Entity.CollisionBounds.Translate( Entity.Position ) ), 3.5f * Time.Delta );
 		var multi = 1 - setup.Hands.Aim;

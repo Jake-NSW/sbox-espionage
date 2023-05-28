@@ -18,7 +18,7 @@ public sealed class ViewModelMoveOffsetEffect : ObservableEntityComponent<Compos
 	private float m_LastMoveOffset;
 	public float m_LastSidewayMoveOffset;
 
-	public void OnPostCameraSetup( ref CameraSetup setup )
+	public void OnPostSetup( ref CameraSetup setup )
 	{
 		var rot = setup.Rotation;
 		var velocity = Entity.Owner.Velocity;

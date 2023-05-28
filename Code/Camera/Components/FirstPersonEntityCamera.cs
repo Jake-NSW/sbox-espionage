@@ -1,5 +1,6 @@
 ﻿namespace Woosh.Espionage;
-public sealed class FirstPersonEntityCamera : EntityCameraController, IMutateInputContext
+
+public sealed class FirstPersonEntityCamera : EntityCameraController, IMutate<InputContext>
 {
 	public override void Update( ref CameraSetup setup )
 	{
@@ -10,8 +11,8 @@ public sealed class FirstPersonEntityCamera : EntityCameraController, IMutateInp
 
 	private Angles m_ViewAngles;
 
-	public void OnPostInputBuild( ref InputContext context )
+	public void OnPostSetup( ref InputContext setup )
 	{
-		m_ViewAngles = context.ViewAngles;
+		m_ViewAngles = setup.ViewAngles;
 	}
 }

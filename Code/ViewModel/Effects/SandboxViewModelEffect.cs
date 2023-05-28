@@ -23,7 +23,7 @@ public sealed class SandboxViewModelEffect : ObservableEntityComponent<Composite
 	public float YawInertia { get; private set; }
 	public float PitchInertia { get; private set; }
 
-	public void OnPostCameraSetup( ref CameraSetup setup )
+	public void OnPostSetup( ref CameraSetup setup )
 	{
 		var cameraBoneIndex = Entity.GetBoneIndex( "camera" );
 		if ( cameraBoneIndex != -1 )

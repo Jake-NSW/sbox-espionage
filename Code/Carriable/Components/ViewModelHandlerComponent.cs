@@ -1,8 +1,9 @@
-﻿using Woosh.Signals;
+﻿using Sandbox;
+using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class ViewModelHandlerComponent : ObservableEntityComponent<Pawn>, IMutateCameraSetup
+public sealed class ViewModelHandlerComponent : ObservableEntityComponent<Pawn>, IMutate<CameraSetup>, IMutate<InputContext>
 {
 	protected override void OnAutoRegister()
 	{
@@ -20,12 +21,18 @@ public sealed class ViewModelHandlerComponent : ObservableEntityComponent<Pawn>,
 		m_Model = null;
 	}
 
-	public void OnPostCameraSetup( ref CameraSetup setup )
+	public void OnPostSetup( ref CameraSetup setup )
 	{
-		m_Model?.OnPostCameraSetup( ref setup );
+		(m_Model as IMutate<CameraSetup>)?.OnPostSetup( ref setup );
 	}
 
-	private CompositedViewModel m_Model;
+
+	public void OnPostSetup( ref InputContext setup )
+	{
+		(m_Model as IMutate<InputContext>)?.OnPostSetup( ref setup );
+	}
+
+	private AnimatedEntity m_Model;
 
 	private CompositedViewModel OnRequestViewmodel( IObservableEntity target )
 	{
@@ -52,4 +59,5 @@ public sealed class ViewModelHandlerComponent : ObservableEntityComponent<Pawn>,
 		m_Model?.Delete();
 		m_Model = null;
 	}
+
 }

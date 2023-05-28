@@ -262,28 +262,10 @@
 						_class = "PhysicsShapeBox"
 						parent_bone = "Weapon_Body"
 						surface_prop = "metal"
-						collision_prop = "default"
-						origin = [ 0.0, 3.017294, 3.60285 ]
+						collision_tags = "solid"
+						origin = [ 0.27087, 5.245772, 26.303318 ]
 						angles = [ 0.0, 0.0, 0.0 ]
-						dimensions = [ 1.790432, 2.366767, 11.960029 ]
-					},
-					{
-						_class = "PhysicsShapeBox"
-						parent_bone = "Weapon_Body"
-						surface_prop = "default"
-						collision_prop = "default"
-						origin = [ 0.0, -0.669167, -0.096542 ]
-						angles = [ 0.0, 0.0, 0.0 ]
-						dimensions = [ 1.356224, 5.01657, 3.95908 ]
-					},
-					{
-						_class = "PhysicsShapeBox"
-						parent_bone = "Weapon_Body"
-						surface_prop = "default"
-						collision_prop = "default"
-						origin = [ 0.0, 1.112809, 2.312253 ]
-						angles = [ 0.0, 0.0, 0.0 ]
-						dimensions = [ 1.0, 2.224753, 5.624507 ]
+						dimensions = [ 13.849563, 68.23822, 92.106583 ]
 					},
 				]
 			},
@@ -327,5 +309,6 @@
 		model_archetype = ""
 		primary_associated_entity = ""
 		anim_graph_name = ""
+		base_model_name = ""
 	}
 }

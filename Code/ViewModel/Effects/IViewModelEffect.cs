@@ -1,3 +1,3 @@
 ﻿namespace Woosh.Espionage;
 
-public interface IViewModelEffect : IMutateCameraSetup { }
+public interface IViewModelEffect : IMutate<CameraSetup> { }

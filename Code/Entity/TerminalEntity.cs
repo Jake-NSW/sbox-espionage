@@ -6,7 +6,7 @@ namespace Woosh.Espionage;
 
 [Library( "esp_terminal" ), Icon( "terminal" ), Category( "Gameplay" )]
 [HammerEntity, Model]
-public sealed partial class TerminalEntity : AnimatedEntity, IControllable, IHave<DisplayInfo>, IMutateCameraSetup
+public sealed partial class TerminalEntity : AnimatedEntity, IControllable, IHave<DisplayInfo>, IMutate<CameraSetup>
 {
 	[Net] [Property] public string Display { get; set; }
 
@@ -47,7 +47,7 @@ public sealed partial class TerminalEntity : AnimatedEntity, IControllable, IHav
 		return false;
 	}
 
-	public void OnPostCameraSetup( ref CameraSetup setup )
+	public void OnPostSetup( ref CameraSetup setup )
 	{
 		// var target = WorldSpaceBounds.Center + (Rotation.Backward * 64);
 		setup.Position = setup.Position.WithZ(WorldSpaceBounds.Center.z);

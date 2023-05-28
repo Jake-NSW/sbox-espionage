@@ -5,11 +5,11 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed partial class CarriableAimComponent : ObservableEntityComponent<ICarriable>, IMutateCameraSetup
+public sealed partial class CarriableAimComponent : ObservableEntityComponent<ICarriable>, IMutate<CameraSetup>
 {
 	public bool IsAiming => n_IsAiming;
 	[Net, Predicted, Local] private bool n_IsAiming { get; set; }
-	private float AimSpeed => 2.5f;
+	private float AimSpeed => 2.70f;
 
 	public void Simulate( IClient cl )
 	{
@@ -49,7 +49,7 @@ public sealed partial class CarriableAimComponent : ObservableEntityComponent<IC
 
 	private float m_Delta;
 
-	public void OnPostCameraSetup( ref CameraSetup setup )
+	public void OnPostSetup( ref CameraSetup setup )
 	{
 		m_Delta += IsAiming ? Time.Delta * AimSpeed : -Time.Delta * AimSpeed;
 		m_Delta = m_Delta.Min( 1 ).Max( 0 );

@@ -7,7 +7,7 @@ public sealed class ViewModelCameraAnimationEffect : ObservableEntityComponent<C
 {
 	public float Scale { get; set; } = 1;
 	
-	public void OnPostCameraSetup( ref CameraSetup setup )
+	public void OnPostSetup( ref CameraSetup setup )
 	{
 		var target = Entity.GetAttachment( "camera_anim_target", false );
 		if ( !target.HasValue )

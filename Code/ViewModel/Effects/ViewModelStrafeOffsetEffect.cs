@@ -14,7 +14,7 @@ public sealed class ViewModelStrafeOffsetEffect : ObservableEntityComponent<Comp
 
 	private float m_LastStrafeOffset;
 
-	public void OnPostCameraSetup( ref CameraSetup setup )
+	public void OnPostSetup( ref CameraSetup setup )
 	{
 		var rot = setup.Rotation;
 		var velocity = Entity.Owner.Velocity;

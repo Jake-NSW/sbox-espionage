@@ -5,7 +5,7 @@ using Woosh.Signals;
 namespace Woosh.Espionage;
 
 public sealed class ControllableSimulatedEntityState : ObservableEntityComponent<Pawn>, ISimulatedEntityState<Pawn>,
-	ISingletonComponent, IMutateCameraSetup
+	ISingletonComponent, IMutate<CameraSetup>
 {
 	protected override void OnAutoRegister()
 	{
@@ -36,9 +36,9 @@ public sealed class ControllableSimulatedEntityState : ObservableEntityComponent
 		(m_Target as IControllable)?.Leaving();
 	}
 
-	public void OnPostCameraSetup( ref CameraSetup setup )
+	public void OnPostSetup( ref CameraSetup setup )
 	{
 		if ( Entity.Machine.Active == this )
-			(m_Target as IMutateCameraSetup)?.OnPostCameraSetup( ref setup );
+			(m_Target as IMutate<CameraSetup>)?.OnPostSetup( ref setup );
 	}
 }

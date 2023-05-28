@@ -22,7 +22,7 @@ public sealed class ViewModelSwayEffect : ObservableEntityComponent<CompositedVi
 	private Rotation m_LastSwayRot = Rotation.Identity;
 	private Vector3 m_LastSwayPos;
 
-	public void OnPostCameraSetup( ref CameraSetup setup )
+	public void OnPostSetup( ref CameraSetup setup )
 	{
 		var rot = setup.Rotation;
 

@@ -1,0 +1,29 @@
+﻿@using System
+@using System.Collections.Generic
+@using Sandbox;
+@using Sandbox.UI;
+@using Woosh.Common
+@using Woosh.Signals
+
+@namespace Woosh.Espionage.UI
+
+@inherits Panel;
+
+<root>
+    <div>
+        <label>@Name</label>
+        <label>@Bind</label>
+    </div>
+</root>
+
+@code
+{
+    public CarrySlot(string name, string bind)
+    {
+        Name = name;
+        Bind = bind;
+    }
+
+    public string Name { get; }
+    public string Bind { get; }
+}

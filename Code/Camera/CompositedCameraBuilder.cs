@@ -5,11 +5,6 @@ using Woosh.Common;
 
 namespace Woosh.Espionage;
 
-public interface IMutateCameraSetup
-{
-	void OnPostCameraSetup( ref CameraSetup setup );
-}
-
 public sealed class CompositedCameraBuilder
 {
 	public SceneCamera Target { get; }
@@ -28,7 +23,7 @@ public sealed class CompositedCameraBuilder
 
 	private readonly HashSet<ITemporaryCameraEffect> m_Effects;
 
-	public void Update( ICameraController controller = null, IMutateCameraSetup mutate = null )
+	public void Update( ICameraController controller = null, IMutate<CameraSetup> mutate = null )
 	{
 		var setup = new CameraSetup( Target ) { FieldOfView = Screen.CreateVerticalFieldOfView( Game.Preferences.FieldOfView ) };
 		Build( ref setup, controller ?? Override );
@@ -42,7 +37,7 @@ public sealed class CompositedCameraBuilder
 			m_Effects.Remove( effect );
 		}
 
-		mutate?.OnPostCameraSetup( ref setup );
+		mutate?.OnPostSetup( ref setup );
 		
 		// Append New Effects
 		if ( setup.Effects.Count > 0 )

@@ -38,7 +38,7 @@ public sealed class ViewModelJumpOffsetEffect : ObservableEntityComponent<Compos
 
 	private float m_Offset;
 
-	public void OnPostCameraSetup( ref CameraSetup setup )
+	public void OnPostSetup( ref CameraSetup setup )
 	{
 		m_Offset = m_Offset.LerpTo( Game.LocalPawn.Velocity.z / 75, 15 * Time.Delta );
 		m_Offset = m_Offset.Clamp( -8, 8 );

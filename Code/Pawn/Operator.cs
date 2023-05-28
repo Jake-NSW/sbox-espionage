@@ -1,10 +1,9 @@
-﻿using System.Linq;
-using Sandbox;
+﻿using Sandbox;
 using Woosh.Common;
 
 namespace Woosh.Espionage;
 
-public sealed class Operator : Pawn, IMutateCameraSetup
+public sealed class Operator : Pawn, IMutate<CameraSetup>, IMutate<InputContext>
 {
 	public Entity Active => Components.Get<CarriableHandler>().Active;
 	public IEntityInventory Inventory => Components.Get<IEntityInventory>();
@@ -40,23 +39,23 @@ public sealed class Operator : Pawn, IMutateCameraSetup
 		Components.Create<EquipEntityInteraction>();
 	}
 
-	public void OnPostCameraSetup( ref CameraSetup setup )
+	void IMutate<CameraSetup>.OnPostSetup( ref CameraSetup setup )
 	{
-		(Active as IMutateCameraSetup)?.OnPostCameraSetup( ref setup );
+		(Active as IMutate<CameraSetup>)?.OnPostSetup( ref setup );
 
-		foreach ( var component in Components.All().OfType<IMutateCameraSetup>() )
+		foreach ( var component in Components.All() )
 		{
-			component.OnPostCameraSetup( ref setup );
+			if ( component is IMutate<CameraSetup> cast )
+				cast.OnPostSetup( ref setup );
 		}
 	}
 
-	protected override void OnPostInputBuild( ref InputContext context )
+	void IMutate<InputContext>.OnPostSetup( ref InputContext setup )
 	{
-		context.ViewAngles.pitch = context.ViewAngles.pitch.Clamp( -75, 70 );
-
-		(Active as IMutateInputContext)?.OnPostInputBuild( ref context );
+		setup.ViewAngles.pitch = setup.ViewAngles.pitch.Clamp( -75, 70 );
+		(Active as IMutate<InputContext>)?.OnPostSetup( ref setup );
 	}
-
+	
 	public override void Simulate( IClient cl )
 	{
 		base.Simulate( cl );
@@ -64,32 +63,17 @@ public sealed class Operator : Pawn, IMutateCameraSetup
 		if ( Machine.Active != null )
 			return;
 
-		for ( var i = 0; i < 10; i++ )
-		{
-			if ( Input.Pressed( $"slot_{i}" ) )
-			{
-				Slots.Deploy( i );
-			}
-		}
-
 		if ( Input.Pressed( "slot_primary" ) )
-		{
 			Slots.Deploy( CarrySlot.Front );
-		}
 
 		if ( Input.Pressed( "slot_secondary" ) )
-		{
 			Slots.Deploy( CarrySlot.Back );
-		}
 
 		if ( Input.Pressed( "slot_holster" ) )
-		{
 			Slots.Deploy( CarrySlot.Holster );
-		}
 
 		if ( Input.Pressed( "drop" ) )
-		{
 			Slots.Drop( Slots.Active );
-		}
 	}
+
 }

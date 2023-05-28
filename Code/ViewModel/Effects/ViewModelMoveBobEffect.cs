@@ -11,7 +11,7 @@ public sealed class ViewModelMoveBobEffect : ObservableEntityComponent<Composite
 	private float m_Speed;
 	private Vector3 m_Bob;
 
-	public void OnPostCameraSetup( ref CameraSetup setup )
+	public void OnPostSetup( ref CameraSetup setup )
 	{
 		var speed = Entity.Owner.Velocity.WithZ( 0 ).Length.LerpInverse( 0, 160 );
 		m_Speed = m_Speed.LerpTo( speed, 4 * Time.Delta );

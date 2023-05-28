@@ -1,7 +1,6 @@
 ﻿using System;
 using Sandbox;
 using Sandbox.Utility;
-using Woosh.Common;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
@@ -13,17 +12,19 @@ public enum TuckType
 	Hug,
 }
 
-public sealed class ViewModelTuckEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect
+public sealed class ViewModelTuckEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect, IMutate<InputContext>
 {
 	public float Damping { get; set; } = 14;
 	public TuckType AimVariant { get; init; }
 	public TuckType HipVariant { get; init; }
+	public float MaxNormal { get; init; } = 0.4f;
 
 	// Logic
 
 	private float m_Offset;
+	private float m_Normal;
 
-	public void OnPostCameraSetup( ref CameraSetup setup )
+	public void OnPostSetup( ref CameraSetup setup )
 	{
 		const string name = "muzzle";
 
@@ -42,13 +43,15 @@ public sealed class ViewModelTuckEffect : ObservableEntityComponent<CompositedVi
 			.Size( 1 )
 			.Run();
 
-		m_Offset = m_Offset.LerpTo( info.Hit && info.Distance < distance ? info.Distance - distance : 0, Damping * Time.Delta );
-		var normal = MathF.Abs( m_Offset / distance );
+		var range = info.Hit && info.Distance < distance ? info.Distance - distance : 0;
+		m_Offset = m_Offset.LerpTo( range, Damping * Time.Delta );
+		m_Normal = MathF.Abs( m_Offset / distance );
+
 
 		CameraSetup hip = new CameraSetup( setup );
-		Calculate( HipVariant, normal, ref hip );
+		Calculate( HipVariant, m_Normal, ref hip );
 		CameraSetup aim = new CameraSetup( setup );
-		Calculate( AimVariant, normal, ref aim );
+		Calculate( AimVariant, m_Normal, ref aim );
 
 		var last = setup;
 		setup = CameraSetup.Lerp( hip, aim, Easing.QuadraticInOut( setup.Hands.Aim ) );
@@ -63,7 +66,7 @@ public sealed class ViewModelTuckEffect : ObservableEntityComponent<CompositedVi
 		{
 			case TuckType.Push :
 				setup.Hands.Offset += relativeRot * new Vector3( m_Offset, (normal * 3) * (1 - setup.Hands.Aim), (-normal * 8) );
-				setup.Hands.Angles *= Rotation.FromAxis( Vector3.Forward, -(normal * 65));
+				setup.Hands.Angles *= Rotation.FromAxis( Vector3.Forward, -(normal * 65) );
 				break;
 			case TuckType.Rotate :
 				setup.Hands.Offset += relativeRot * new Vector3( -m_Offset / 3.4f, 0, 0 );
@@ -77,6 +80,15 @@ public sealed class ViewModelTuckEffect : ObservableEntityComponent<CompositedVi
 				break;
 			default :
 				throw new ArgumentOutOfRangeException();
+		}
+	}
+
+	public void OnPostSetup( ref InputContext setup )
+	{
+		// We can't shoot if we're to close to the wall
+		if ( m_Normal > MaxNormal )
+		{
+			Input.SetAction( "shoot", false );
 		}
 	}
 }

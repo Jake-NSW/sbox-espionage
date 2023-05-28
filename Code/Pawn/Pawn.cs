@@ -37,27 +37,32 @@ public partial class Pawn : AnimatedEntity, IObservableEntity
 	public override sealed void BuildInput()
 	{
 		var context = new InputContext() { InputDirection = Input.AnalogMove, ViewAngles = (ViewAngles + Input.AnalogLook).Normal };
-		OnPostInputBuild( ref context );
+		
+		// This is incredibly dumb...
+		(this as IMutate<InputContext>)?.OnPostSetup( ref context );
 
-		foreach ( var input in Components.All().OfType<IMutateInputContext>() )
+		foreach ( var input in Components.All().OfType<IMutate<InputContext>>() )
 		{
 			// Post Build Input
-			input.OnPostInputBuild( ref context );
+			input.OnPostSetup( ref context );
 		}
 
 		InputDirection = context.InputDirection;
 		ViewAngles = context.ViewAngles;
 	}
 
-	protected virtual void OnPostInputBuild( ref InputContext context ) { }
-
 	// Components
 
 	protected override void OnComponentAdded( EntityComponent component )
 	{
 		base.OnComponentAdded( component );
-
 		Events.Run( new ComponentAdded( component ) );
+	}
+
+	protected override void OnComponentRemoved( EntityComponent component )
+	{
+		base.OnComponentRemoved( component );
+		Events.Run( new ComponentRemoved( component ) );
 	}
 
 	// Simulate

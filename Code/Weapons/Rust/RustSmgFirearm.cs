@@ -20,7 +20,7 @@ public class RustSmgFirearm : Firearm, ISlotted
 				view.Model = Model.Load( VIEW_MODEL );
 				view.Components.Create<RustFirearmViewmodelAnimator>();
 				view.Components.Create<SandboxViewModelEffect>();
-				view.Components.Add( new ViewModelOffsetEffect( new Vector3( -10, 6, 1 ), new Vector3( -5, 17, 2.4f ) ) );
+				view.Components.Add( new ViewModelOffsetEffect( new Vector3( -10, 6, 1 ), new Vector3( -10, 6, 1 ) ) );
 			}
 		);
 

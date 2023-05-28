@@ -16,7 +16,7 @@ public sealed class ViewModelRecoilEffect : ObservableEntityComponent<Composited
 	public float KickbackSnap { get; init; } = 25;
 	public float KickbackReturnSpeed { get; init; } = 12;
 
-	public void OnPostCameraSetup( ref CameraSetup setup )
+	public void OnPostSetup( ref CameraSetup setup )
 	{
 		ApplyRecoil( ref setup );
 		ApplyKickback( ref setup );

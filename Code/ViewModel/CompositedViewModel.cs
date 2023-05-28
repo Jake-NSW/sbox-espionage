@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Sandbox;
 using Woosh.Common;
 using Woosh.Signals;
@@ -6,7 +7,7 @@ using Woosh.Signals;
 namespace Woosh.Espionage;
 
 [Title( "View Model" ), Category( "ViewModel" ), Icon( "pan_tool" )]
-public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity, IMutateCameraSetup
+public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity, IMutate<CameraSetup>, IMutate<InputContext>
 {
 	public IDispatcher Events { get; }
 
@@ -40,11 +41,11 @@ public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity, IMu
 
 	private readonly HashSet<IViewModelEffect> m_Effects;
 
-	public void OnPostCameraSetup( ref CameraSetup setup )
+	public void OnPostSetup( ref CameraSetup setup )
 	{
 		var initialPos = setup.Hands.Offset;
 		var initialRot = setup.Hands.Angles;
-		
+
 		Position = setup.Position + setup.Hands.Offset;
 		Rotation = setup.Rotation * setup.Hands.Angles;
 
@@ -52,7 +53,7 @@ public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity, IMu
 
 		foreach ( var effect in m_Effects )
 		{
-			effect.OnPostCameraSetup( ref setup );
+			effect.OnPostSetup( ref setup );
 		}
 
 		// Append Effects
@@ -60,5 +61,13 @@ public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity, IMu
 		Rotation *= setup.Hands.Angles * initialRot.Inverse;
 
 		setup.Hands = hands;
+	}
+
+	public void OnPostSetup( ref InputContext setup )
+	{
+		foreach ( var input in Components.All().OfType<IMutate<InputContext>>() )
+		{
+			input.OnPostSetup( ref setup );
+		}
 	}
 }
