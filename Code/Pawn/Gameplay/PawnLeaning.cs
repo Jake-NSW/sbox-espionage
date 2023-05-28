@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using Sandbox.Utility;
 using Woosh.Common;
 using Woosh.Signals;
 
@@ -49,11 +50,11 @@ public sealed partial class PawnLeaning : ObservableEntityComponent<Pawn>, IMuta
 
 	public void OnPostCameraSetup( ref CameraSetup setup )
 	{
-		m_Distance = m_Distance.LerpTo( Direction * NormalFromEyes( Direction, Entity.CollisionBounds.Translate( Entity.Position ) ), 6.5f * Time.Delta );
-		
+		m_Distance = m_Distance.Approach( Direction * NormalFromEyes( Direction, Entity.CollisionBounds.Translate( Entity.Position ) ), 4f * Time.Delta );
 		var multi = 1 - setup.Hands.Aim;
 		var normal = m_Distance;
-		
+		var delta = Easing.EaseOut( m_Distance.Abs() );
+
 		setup.Position += setup.Rotation.Right * Distance * normal;
 		setup.Rotation *= Rotation.From( 0, 0, Angle * normal );
 
