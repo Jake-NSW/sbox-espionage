@@ -45,15 +45,14 @@ public sealed partial class PawnLeaning : ObservableEntityComponent<Pawn>, IMuta
 
 	private float m_Distance;
 
-	public float Distance { get; set; } = 12f;
-	public float Angle { get; set; } = 15;
+	public float Distance { get; set; } = 10f;
+	public float Angle { get; set; } = 10;
 
 	public void OnPostCameraSetup( ref CameraSetup setup )
 	{
-		m_Distance = m_Distance.Approach( Direction * NormalFromEyes( Direction, Entity.CollisionBounds.Translate( Entity.Position ) ), 4f * Time.Delta );
+		m_Distance = m_Distance.Approach( Direction * NormalFromEyes( Direction, Entity.CollisionBounds.Translate( Entity.Position ) ), 3.5f * Time.Delta );
 		var multi = 1 - setup.Hands.Aim;
-		var normal = m_Distance;
-		var delta = Easing.EaseOut( m_Distance.Abs() );
+		var normal = m_Distance * Easing.ExpoOut( Easing.EaseIn( m_Distance.Abs() ) );
 
 		setup.Position += setup.Rotation.Right * Distance * normal;
 		setup.Rotation *= Rotation.From( 0, 0, Angle * normal );
