@@ -21,19 +21,9 @@ public readonly struct ViewModelEffectsAspect : IAspect<CompositedViewModel>
 
 		view.Components.Add( new ViewModelCameraAnimationEffect() );
 
-		view.Components.Add( new ViewModelSwayEffect( 1, 1.3f ) );
-		
-		/*
-		view.Components.Add(
-			new ViewModelDeadzoneSwayEffect( new Vector2( 10, 10 ) )
-			{
-				AimingOnly = true,
-				AutoCenter = false,
-				Damping = 8
-			}
-		);
-		*/
+		view.Components.Add( new ViewModelSwayEffect( 1, 0.4f ) );
 
+		view.Components.Add( new ViewModelRampOffsetEffect() );
 		view.Components.Add( new ViewModelOffsetEffect( Vector3.Zero, default ) );
 		view.Components.Add( new ViewModelMoveOffsetEffect( Vector3.One, 10 ) );
 		view.Components.Add( new ViewModelJumpOffsetEffect() );

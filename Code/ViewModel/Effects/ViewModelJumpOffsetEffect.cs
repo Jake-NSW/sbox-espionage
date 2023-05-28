@@ -22,7 +22,6 @@ public sealed class ViewModelJumpOffsetEffect : ObservableEntityComponent<Compos
 	protected override void OnDeactivate()
 	{
 		base.OnDeactivate();
-
 		(Entity.Owner as IObservableEntity)?.Events.Unregister<PawnLanded>( OnLanded );
 	}
 
