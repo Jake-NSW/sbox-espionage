@@ -18,7 +18,7 @@ public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity, IMu
 		EnableViewmodelRendering = true;
 
 		Events = parent.Events;
-		m_Effects = new HashSet<IViewModelEffect>( 8 );
+		m_Effects = new List<IViewModelEffect>( 8 );
 	}
 
 	// Effect Stack
@@ -39,7 +39,7 @@ public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity, IMu
 			m_Effects.Remove( effect );
 	}
 
-	private readonly HashSet<IViewModelEffect> m_Effects;
+	private readonly List<IViewModelEffect> m_Effects;
 
 	public void OnPostSetup( ref CameraSetup setup )
 	{
