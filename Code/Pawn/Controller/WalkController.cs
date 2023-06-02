@@ -148,7 +148,7 @@ public sealed class WalkController : PawnController
 		return input;
 	}
 
-	Vector3 StayOnGround( Vector3 position )
+	private Vector3 StayOnGround( Vector3 position )
 	{
 		var start = position + Vector3.Up * 2;
 		var end = position + Vector3.Down * StepSize;
@@ -160,10 +160,17 @@ public sealed class WalkController : PawnController
 		// Now trace down from a known safe position
 		trace = TraceBBox( start, end );
 
-		if ( trace.Fraction <= 0 ) return position;
-		if ( trace.Fraction >= 1 ) return position;
-		if ( trace.StartedSolid ) return position;
-		if ( Vector3.GetAngle( Vector3.Up, trace.Normal ) > GroundAngle ) return position;
+		if ( trace.Fraction <= 0 )
+			return position;
+
+		if ( trace.Fraction >= 1 )
+			return position;
+
+		if ( trace.StartedSolid )
+			return position;
+
+		if ( Vector3.GetAngle( Vector3.Up, trace.Normal ) > GroundAngle )
+			return position;
 
 		return trace.EndPosition;
 	}

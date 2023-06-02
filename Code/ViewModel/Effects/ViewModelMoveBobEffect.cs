@@ -28,5 +28,9 @@ public sealed class ViewModelMoveBobEffect : ObservableEntityComponent<Composite
 
 		setup.Hands.Offset += setup.Rotation * new Vector3( 0, m_Bob.y * 1.2f, m_Bob.z * 0.8f );
 		setup.Hands.Angles *= Rotation.From( m_Bob.z * 2, m_Bob.y * 4, m_Bob.x * 4 );
+		
+		const float cameraScale = 0f;
+
+		setup.Rotation *= Rotation.Lerp( Rotation.Identity, Rotation.From( -m_Bob.z, -m_Bob.y * 2, -m_Bob.x * 3 ), cameraScale, false );
 	}
 }

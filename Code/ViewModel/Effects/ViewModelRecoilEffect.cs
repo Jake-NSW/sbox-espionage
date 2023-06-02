@@ -1,76 +1,58 @@
-﻿using System;
-using Sandbox;
-using Woosh.Common;
+﻿using Sandbox;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
 public sealed class ViewModelRecoilEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect
 {
-	public float RecoilSnap { get; init; } = 25;
-	public float RecoilReturnSpeed { get; init; } = 5;
-	public float RecoilViewAnglesMultiplier { get; init; } = 6f;
+	public float Snap { get; }
+	public float Return { get; }
 	public float RecoilRotationMultiplier { get; init; } = 1;
-	public float RecoilCameraRotationMultiplier { get; init; } = 1;
+	public float RecoilCameraRotationMultiplier { get; init; } = 0.5f;
 
-	public float KickbackSnap { get; init; } = 25;
-	public float KickbackReturnSpeed { get; init; } = 12;
+	public ViewModelRecoilEffect( float snap = 25, float returnSpeed = 5 )
+	{
+		Snap = snap;
+		Return = returnSpeed;
+	}
+
+	protected override void OnAutoRegister()
+	{
+		Register<WeaponFired>(
+			e =>
+			{
+				var rand = Game.Random;
+				var recoil = e.Data.Recoil;
+
+				m_Target += new Vector3( recoil.x, rand.Float( -recoil.y, recoil.y ), rand.Float( -recoil.z, recoil.z ) ) * Time.Delta;
+			}
+		);
+	}
+
+	private Rotation m_Current = Rotation.Identity;
+	private Vector3 m_Target;
 
 	public void OnPostSetup( ref CameraSetup setup )
 	{
-		ApplyRecoil( ref setup );
-		ApplyKickback( ref setup );
-	}
-
-	private Rotation m_RecoilCurrentRotation = Rotation.Identity;
-	private Vector3 m_RecoilTargetRotation;
-
-	private void ApplyRecoil( ref CameraSetup setup )
-	{
 		var rot = setup.Rotation;
 
-		m_RecoilTargetRotation = m_RecoilTargetRotation.LerpTo( Vector3.Zero, RecoilReturnSpeed * Time.Delta );
-		m_RecoilCurrentRotation = Rotation.Slerp( m_RecoilCurrentRotation, Rotation.From( m_RecoilTargetRotation.x, m_RecoilTargetRotation.y, m_RecoilTargetRotation.z ), RecoilSnap * Time.Delta );
+		m_Target = m_Target.LerpTo( Vector3.Zero, Return * Time.Delta );
+		m_Current = Rotation.Slerp( m_Current, Rotation.From( m_Target.x, m_Target.y, m_Target.z ), Snap * Time.Delta );
 
-		setup.Hands.Angles *= m_RecoilCurrentRotation * 1.5f * RecoilRotationMultiplier;
-		setup.Hands.Offset += (rot.Forward * (m_RecoilCurrentRotation.Pitch()) / 2) + (rot.Left * m_RecoilCurrentRotation.Yaw() / 2);
+		setup.Hands.Angles *= m_Current * 2f * RecoilRotationMultiplier;
 
-		// add this back when I support it...
-		setup.Rotation *= Rotation.From( m_RecoilCurrentRotation.Angles() ) * RecoilCameraRotationMultiplier;
-	}
+		// Add Yaw and Roll Offsets
+		setup.Hands.Offset += rot.Left * m_Current.Yaw() / 2;
 
-	private Vector3 m_KickbackCurrentPosition;
-	private Vector3 m_KickbackTargetPosition;
+		// Add Pitch Offsets
+		setup.Hands.Offset += (rot.Forward * (m_Current.Pitch()) / 2) * (1 - setup.Hands.Aim);
 
-	public void ApplyKickback( ref CameraSetup setup )
-	{
-		var rot = setup.Rotation;
-
-		m_KickbackTargetPosition = m_KickbackTargetPosition.LerpTo( Vector3.Zero, KickbackReturnSpeed * Time.Delta );
-		m_KickbackCurrentPosition = m_KickbackCurrentPosition.LerpTo( m_KickbackTargetPosition, KickbackSnap * Time.Delta );
-
-		setup.Hands.Offset += (rot.Forward * m_KickbackCurrentPosition.x) + (rot.Left * m_KickbackCurrentPosition.y) + (rot.Down * m_KickbackCurrentPosition.z);
-	}
-
-	protected override void OnActivate()
-	{
-		base.OnActivate();
-		Register<WeaponFired>( OnShoot );
-	}
-
-	protected override void OnDeactivate()
-	{
-		base.OnDeactivate();
-		Unregister<WeaponFired>( OnShoot );
-	}
-
-	private void OnShoot( Event<WeaponFired> evt )
-	{
-		var rand = Game.Random;
-		var recoil = evt.Data.Recoil;
-		var kickback = evt.Data.Kickback;
-
-		m_RecoilTargetRotation += new Vector3( recoil.x, rand.Float( -recoil.y, recoil.y ), Game.Random.Float( -recoil.z, recoil.z ) ) * Time.Delta;
-		m_KickbackTargetPosition += new Vector3( kickback.x, rand.Float( -kickback.y, kickback.y ), Game.Random.Float( -kickback.z, kickback.z ) ) * Time.Delta;
+		// Add recoil to view angles
+		setup.Rotation *= Rotation.Lerp(
+			Rotation.Identity,
+			// Inverse pitch, but keep yaw and roll
+			m_Current.Inverse * Rotation.FromPitch( m_Current.Pitch() * 2 ),
+			RecoilCameraRotationMultiplier
+		);
 	}
 }
