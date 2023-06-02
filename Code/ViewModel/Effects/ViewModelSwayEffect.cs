@@ -22,27 +22,31 @@ public sealed class ViewModelSwayEffect : ObservableEntityComponent<CompositedVi
 	private Rotation m_LastSwayRot = Rotation.Identity;
 	private Vector3 m_LastSwayPos;
 
-	public void OnPostSetup( ref CameraSetup setup )
+	void IMutate<CameraSetup>.OnPostSetup( ref CameraSetup setup )
 	{
 		var rot = setup.Rotation;
 
-		// This should be based on the View Angles!!!!
+		var aim = 1 - setup.Hands.Aim;
+
+		// Workout how much we've moved since last frame
 		var angles = (m_LastAngles - m_CurrentAngles).Normal;
-		var mouse = new Vector2( angles.yaw, -angles.pitch ) * 5;
+		var mouse = new Vector2( angles.yaw, -angles.pitch ) * 4;
 		mouse *= MathX.Lerp( m_Multiplier, m_AimMultiplier, setup.Hands.Aim );
 		m_LastAngles = m_CurrentAngles;
 
-		var targetRot = Rotation.From( mouse.y, (-mouse.x * 2), mouse.x );
+		// Rotate and lerp the viewmodel
+		var targetRot = Rotation.From( mouse.y, (-mouse.x * (1 + aim)), mouse.x );
 		m_LastSwayRot = Rotation.Lerp( m_LastSwayRot, targetRot, Damping * Time.Delta );
 
-		var targetPos = rot * new Vector3( 0, (mouse.x / 2), (mouse.y / 2) );
+		// Move the viewmodel to a nice new position
+		var targetPos = rot * new Vector3( 0, mouse.x * 0.5f, mouse.y * 0.5f );
 		m_LastSwayPos = m_LastSwayPos.LerpTo( targetPos, Damping * Time.Delta );
 
 		setup.Hands.Angles *= m_LastSwayRot;
 		setup.Hands.Offset += m_LastSwayPos;
 	}
 
-	public void OnPostSetup( ref InputContext setup )
+	void IMutate<InputContext>.OnPostSetup( ref InputContext setup )
 	{
 		m_CurrentAngles = setup.ViewAngles;
 	}

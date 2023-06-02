@@ -5,9 +5,10 @@ namespace Woosh.Espionage;
 
 public sealed class ViewModelProjectilePredictor : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect
 {
-
 	public void OnPostSetup( ref CameraSetup setup )
 	{
+		return;
+		
 		const string name = "muzzle";
 
 		// Get the muzzle attachment
@@ -21,7 +22,6 @@ public sealed class ViewModelProjectilePredictor : ObservableEntityComponent<Com
 		var samples = helper.Sample( muzzle.Position + setup.Hands.Offset, (muzzle.Rotation * setup.Hands.Angles).Forward, 250, 0.0009f, 1f, 0.01f );
 
 		var time = Input.Pressed( "shoot" ) ? 5 : 0;
-
 
 		for ( int i = 1; i < samples.Length; i++ )
 		{

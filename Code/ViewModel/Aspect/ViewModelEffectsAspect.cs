@@ -35,19 +35,16 @@ public readonly struct ViewModelEffectsAspect : IAspect<CompositedViewModel>
 			new ViewModelStrafeOffsetEffect()
 			{
 				Damping = 6,
-				RollMultiplier = 1,
-				AxisMultiplier = 10
+				Roll = 1,
+				Axis = 10
 			}
 		);
-		view.Components.Add(
-			new ViewModelPitchOffsetEffect( 5, 4 ) { Damping = 15 }
-		);
+		view.Components.Add( new ViewModelPitchOffsetEffect( 5, 4 ) { Damping = 15 } );
 
 		view.Components.Add( new ViewModelRecoilEffect() );
-		view.Components.Add(
-			new ViewModelTuckEffect() { HipVariant = HipTuck, AimVariant = AimTuck }
-		);
-
+		view.Components.Add( new ViewModelKickbackEffect() );
+		
+		view.Components.Add( new ViewModelTuckEffect() { HipVariant = HipTuck, AimVariant = AimTuck } );
 		view.Components.Create<ViewModelProjectilePredictor>();
 	}
 }

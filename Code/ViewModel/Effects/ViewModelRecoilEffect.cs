@@ -45,7 +45,7 @@ public sealed class ViewModelRecoilEffect : ObservableEntityComponent<Composited
 		setup.Hands.Offset += rot.Left * m_Current.Yaw() / 2;
 
 		// Add Pitch Offsets
-		setup.Hands.Offset += (rot.Forward * (m_Current.Pitch()) / 2) * (1 - setup.Hands.Aim);
+		setup.Hands.Offset += (rot.Forward * (m_Current.Pitch()) / 2);
 
 		// Add recoil to view angles
 		setup.Rotation *= Rotation.Lerp(

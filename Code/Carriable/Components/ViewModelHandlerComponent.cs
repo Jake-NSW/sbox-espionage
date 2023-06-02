@@ -40,7 +40,6 @@ public sealed class ViewModelHandlerComponent : ObservableEntityComponent<Pawn>,
 			return null;
 
 		var view = new CompositedViewModel( target ) { Owner = Entity };
-		view.Parent = (Entity)Game.LocalClient;
 		target.Events.Run( new CreatedViewModel( view ) );
 		return view;
 	}

@@ -54,7 +54,7 @@ public sealed partial class FirearmShootSimulatedEntityState : ObservableEntityC
 		if ( !Prediction.FirstTime )
 			return;
 
-		Events.Run( new WeaponFired( new Vector3( -5, 0f, 0 ) * 35, new Vector3( -1, 0f, 0f ) * 0 ) );
+		Events.Run( new WeaponFired( new Vector3( -3, 0.2f, 0.2f ) * 35, new Vector3( -1, 0.2f, 0.2f ) * 35 ) );
 
 		// Play Effects
 		if ( Game.IsServer )
