@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using Woosh.Common;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
@@ -24,9 +25,7 @@ public sealed class ViewModelSwayEffect : ObservableEntityComponent<CompositedVi
 
 	void IMutate<CameraSetup>.OnPostSetup( ref CameraSetup setup )
 	{
-		var rot = setup.Rotation;
-
-		var aim = 1 - setup.Hands.Aim;
+		var rot = setup.Rotation.WithRoll( 0 );
 
 		// Workout how much we've moved since last frame
 		var angles = (m_LastAngles - m_CurrentAngles).Normal;
@@ -35,15 +34,15 @@ public sealed class ViewModelSwayEffect : ObservableEntityComponent<CompositedVi
 		m_LastAngles = m_CurrentAngles;
 
 		// Rotate and lerp the viewmodel
-		var targetRot = Rotation.From( mouse.y, (-mouse.x * (1 + aim)), mouse.x );
+		var targetRot = Rotation.From( mouse.y, -mouse.x, mouse.x );
 		m_LastSwayRot = Rotation.Lerp( m_LastSwayRot, targetRot, Damping * Time.Delta );
 
 		// Move the viewmodel to a nice new position
-		var targetPos = rot * new Vector3( 0, mouse.x * 0.5f, mouse.y * 0.5f );
+		var targetPos = new Vector3( 0, mouse.x * 0.5f, mouse.y * 0.5f );
 		m_LastSwayPos = m_LastSwayPos.LerpTo( targetPos, Damping * Time.Delta );
 
 		setup.Hands.Angles *= m_LastSwayRot;
-		setup.Hands.Offset += m_LastSwayPos;
+		setup.Hands.Offset += rot * m_LastSwayPos;
 	}
 
 	void IMutate<InputContext>.OnPostSetup( ref InputContext setup )

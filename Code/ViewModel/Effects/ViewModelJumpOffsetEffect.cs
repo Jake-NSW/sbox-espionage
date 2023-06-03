@@ -32,10 +32,12 @@ public sealed class ViewModelJumpOffsetEffect : ObservableEntityComponent<Compos
 
 	public void OnPostSetup( ref CameraSetup setup )
 	{
+		var rot = setup.Rotation.WithRoll(0);
+		
 		m_Offset = m_Offset.LerpTo( Game.LocalPawn.Velocity.z / 75, 15 * Time.Delta );
 		m_Offset = m_Offset.Clamp( -8, 8 );
 
-		setup.Hands.Offset += setup.Rotation.Up * (m_Offset / 2f) * PosMulti;
+		setup.Hands.Offset += rot.Up * (m_Offset / 2f) * PosMulti;
 		setup.Hands.Angles *= Rotation.From( m_Offset * RotMulti, 0, 0 );
 
 		// Land Effects

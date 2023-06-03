@@ -42,12 +42,12 @@ public sealed partial class FirearmCheckAmmoSimulatedEntityState : ObservableEnt
 
 	public void OnStart()
 	{
-		Events.Run<CheckAmmoOpen>();
+		Run<CheckAmmoOpen>();
 	}
 
 	public void OnFinish()
 	{
-		Events.Run<CheckAmmoClosed>();
+		Run<CheckAmmoClosed>();
 		p_SinceInput = 0;
 	}
 }

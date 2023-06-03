@@ -1,4 +1,5 @@
-﻿using Woosh.Signals;
+﻿using Woosh.Common;
+using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
@@ -16,7 +17,7 @@ public sealed class ViewModelOffsetEffect : ObservableEntityComponent<Composited
 	public void OnPostSetup( ref CameraSetup setup )
 	{
 		var target = Vector3.Lerp( Hip, Aim, setup.Hands.Aim );
-		var rot = setup.Rotation;
-		setup.Hands.Offset += target.x * rot.Forward + target.y * rot.Left + target.z * rot.Up;
+		var rot = setup.Rotation.WithRoll( 0 );
+		setup.Hands.Offset += rot * target;
 	}
 }

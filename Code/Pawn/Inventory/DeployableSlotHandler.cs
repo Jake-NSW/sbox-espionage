@@ -180,6 +180,7 @@ public sealed class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISi
 				catch 
 				{
 					// I have no clue what the fuck is going on 
+					// TODO : Fix this when I am sane
 				}
 			}
 

@@ -5,7 +5,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed partial class CarriableAimComponent : ObservableEntityComponent<ICarriable>, IMutate<CameraSetup>
+public sealed partial class CarriableAimComponent : ObservableEntityComponent<ICarriable>, IMutate<CameraSetup>, ISimulated
 {
 	public bool IsAiming => n_IsAiming;
 	[Net, Predicted, Local] private bool n_IsAiming { get; set; }

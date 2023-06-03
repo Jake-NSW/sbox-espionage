@@ -43,7 +43,7 @@ public sealed class Smg2Firearm : Firearm, ISlotted
 	{
 		IsAutomatic = true,
 		IsSilenced = true,
-		RateOfFire = 750,
+		RateOfFire = 700,
 		Draw = new DrawTime( 1.5f, 1.3f )
 	};
 

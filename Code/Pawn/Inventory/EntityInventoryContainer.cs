@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using Sandbox;
-using Woosh.Common;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public partial class InventoryContainer : ObservableEntityComponent<Pawn>, IEntityInventory, ISingletonComponent
+public partial class EntityInventoryContainer : ObservableEntityComponent, IEntityInventory, ISingletonComponent
 {
 	public IEnumerable<Entity> All => n_Bucket;
 
@@ -33,7 +32,7 @@ public partial class InventoryContainer : ObservableEntityComponent<Pawn>, IEnti
 		// Callback for Entity
 		(ent as IPickup)?.OnPickup( Entity );
 
-		Events.Run( new InventoryAdded( ent ) );
+		Run( new InventoryAdded( ent ), Propagation.Both );
 		return true;
 	}
 
@@ -60,7 +59,7 @@ public partial class InventoryContainer : ObservableEntityComponent<Pawn>, IEnti
 		ent.SetParent( null );
 		ent.EnableDrawing = true;
 
-		Events.Run( new InventoryRemoved( ent ) );
+		Run( new InventoryRemoved( ent ), Propagation.Both );
 
 		// Execute Callback
 		(ent as IPickup)?.OnDrop();
@@ -73,4 +72,3 @@ public partial class InventoryContainer : ObservableEntityComponent<Pawn>, IEnti
 		return n_Bucket.Contains( entity );
 	}
 }
-

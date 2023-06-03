@@ -23,7 +23,7 @@ public sealed class Mk23Firearm : Firearm, ISlotted
 				model.FromAspect( new ViewModelEffectsAspect( VIEW_MODEL ) { HipTuck = TuckType.Rotate, AimTuck = TuckType.Push } );
 				model.Components.Create<GenericFirearmViewModelAnimator>();
 				model.SetMaterialGroup( "chrome" );
-				model.SetBodyGroup( "muzzle", 0 );
+				model.SetBodyGroup( "muzzle", 1 );
 				model.SetBodyGroup( "module", 1 );
 			}
 		);
@@ -44,7 +44,7 @@ public sealed class Mk23Firearm : Firearm, ISlotted
 	protected override FirearmSetup Default => new FirearmSetup()
 	{
 		IsAutomatic = false,
-		IsSilenced = false,
+		IsSilenced = true,
 		RateOfFire = 550,
 		Draw = new DrawTime( 1, 0.6f )
 	};

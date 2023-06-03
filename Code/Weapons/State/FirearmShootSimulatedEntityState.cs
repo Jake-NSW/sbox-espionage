@@ -54,7 +54,7 @@ public sealed partial class FirearmShootSimulatedEntityState : ObservableEntityC
 		if ( !Prediction.FirstTime )
 			return;
 
-		Events.Run( new WeaponFired( new Vector3( -3, 0.2f, 0.2f ) * 35, new Vector3( -1, 0.2f, 0.2f ) * 35 ), Propagation.Both );
+		Run( new WeaponFired( new Vector3( -65, 10f, 10f ), new Vector3( -35, 10f, 10f ) ), Propagation.Both );
 
 		// Play Effects
 		if ( Game.IsServer )
@@ -83,7 +83,7 @@ public sealed partial class FirearmShootSimulatedEntityState : ObservableEntityC
 	private void PlayClientEffects( WeaponClientEffects effects )
 	{
 		// Sounds.Play( effects, Owner?.AimRay.Position ?? Position );
-		Events.Run( new PlayClientEffects<WeaponClientEffects>( effects ) );
+		Run( new PlayClientEffects<WeaponClientEffects>( effects ) );
 	}
 
 	[ConCmd.Server]

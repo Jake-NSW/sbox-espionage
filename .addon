@@ -36,7 +36,9 @@
       "NoWarn": "1701;1702;1591;",
       "References": []
     },
-    "HttpAllowList": null,
+    "HttpAllowList": [
+      "https://espionage.dev/"
+    ],
     "ControlModes": {
       "Keyboard": true
     },
@@ -72,11 +74,6 @@
           "Name": "Run",
           "KeyboardCode": "shift",
           "GamepadCode": "LeftJoystickButton",
-          "GroupName": "Movement"
-        },
-        {
-          "Name": "Walk",
-          "KeyboardCode": "alt",
           "GroupName": "Movement"
         },
         {
@@ -170,6 +167,11 @@
           "Name": "Slot_Holster",
           "KeyboardCode": "3",
           "GroupName": "Inventory"
+        },
+        {
+          "Name": "Alt_Use",
+          "KeyboardCode": "ALT",
+          "GroupName": "Other"
         }
       ]
     },

@@ -33,7 +33,7 @@ public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IP
 {
 	public EntityStateMachine<Firearm> Machine { get; }
 
-	public Firearm()
+	protected Firearm()
 	{
 		Machine = new EntityStateMachine<Firearm>( this );
 
@@ -45,6 +45,10 @@ public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IP
 	}
 
 	public IEntityEffects Effects => Components.Get<IEntityEffects>();
+
+	public bool IsAiming => Components.Get<CarriableAimComponent>()?.IsAiming == true;
+	public bool IsReloading => Machine.Active is FirearmReloadSimulatedEntityState;
+	public bool IsShooting => Machine.Active is FirearmShootSimulatedEntityState;
 
 	public override void Spawn()
 	{
@@ -73,7 +77,7 @@ public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IP
 
 	public override void Simulate( IClient cl )
 	{
-		Components.Get<CarriableAimComponent>().Simulate( cl );
+		Components.Each<ISimulated, IClient>( cl, ( client, e ) => e.Simulate( client ) );
 		Machine.Simulate( cl );
 	}
 

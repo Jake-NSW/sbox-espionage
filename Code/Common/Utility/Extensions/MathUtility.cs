@@ -40,6 +40,32 @@ public static class MathUtility
 		return from + (to - from) * time;
 	}
 
+	// Quaternion
+	
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public static Rotation WithPitch( this Rotation rotation, float pitch )
+	{
+		var rot = rotation * Rotation.FromPitch( rotation.Pitch() ).Inverse;
+		rot *= Rotation.FromPitch( pitch );
+		return rot;
+	}
+	
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public static Rotation WithYaw( this Rotation rotation, float pitch )
+	{
+		var rot = rotation * Rotation.FromYaw( rotation.Yaw() ).Inverse;
+		rot *= Rotation.FromYaw( pitch );
+		return rot;
+	}
+	
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public static Rotation WithRoll( this Rotation rotation, float pitch )
+	{
+		var rot = rotation * Rotation.FromRoll( rotation.Roll() ).Inverse;
+		rot *= Rotation.FromRoll( pitch );
+		return rot;
+	}
+
 	// Vector3 
 
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]

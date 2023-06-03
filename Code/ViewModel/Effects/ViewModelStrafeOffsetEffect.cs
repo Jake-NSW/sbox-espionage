@@ -9,12 +9,12 @@ public sealed class ViewModelStrafeOffsetEffect : ObservableEntityComponent<Comp
 	public float Damping { get; set; } = 6;
 	public float Axis { get; set; } = 10;
 	public float Roll { get; set; } = 1;
-	
+
 	private float m_Offset;
 
 	public void OnPostSetup( ref CameraSetup setup )
 	{
-		var rot = setup.Rotation;
+		var rot = setup.Rotation.WithRoll( 0 );
 		var velocity = Entity.Owner.Velocity;
 
 		m_Offset = m_Offset.LerpTo( -setup.Transform.NormalToLocal( velocity ).y / 180, Damping * Time.Delta );

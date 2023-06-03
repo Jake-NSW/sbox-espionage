@@ -20,7 +20,7 @@ public sealed class ViewModelMoveOffsetEffect : ObservableEntityComponent<Compos
 
 	public void OnPostSetup( ref CameraSetup setup )
 	{
-		var rot = setup.Rotation;
+		var rot = setup.Rotation.WithRoll( 0 );
 		var velocity = Entity.Owner.Velocity;
 
 		m_LastMoveOffset = m_LastMoveOffset.LerpTo( setup.Transform.NormalToLocal( velocity ).x / 90, m_Damping * Time.Delta );

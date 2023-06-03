@@ -38,7 +38,7 @@ public sealed partial class PawnLeaning : ObservableEntityComponent<Pawn>, IMuta
 		}
 
 		n_Direction = (n_Direction + direction).Clamp( -1, 1 );
-		Events.Run( new LeanDirectionChanged( n_Direction ) );
+		Run( new LeanDirectionChanged( n_Direction ), Propagation.Trickle );
 	}
 
 	// Camera

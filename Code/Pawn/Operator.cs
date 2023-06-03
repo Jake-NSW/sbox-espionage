@@ -33,7 +33,7 @@ public sealed class Operator : Pawn, IMutate<CameraSetup>, IMutate<InputContext>
 
 		// Inventory
 		Components.Create<CarriableHandler>();
-		Components.Create<InventoryContainer>();
+		Components.Create<EntityInventoryContainer>();
 		Components.Add( new DeployableSlotHandler( 3 ) );
 		Components.Create<PickupEntityInteraction>();
 		Components.Create<EquipEntityInteraction>();

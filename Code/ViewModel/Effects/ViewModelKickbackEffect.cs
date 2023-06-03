@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using Woosh.Common;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
@@ -32,7 +33,7 @@ public sealed class ViewModelKickbackEffect : ObservableEntityComponent<Composit
 
 	public void OnPostSetup( ref CameraSetup setup )
 	{
-		var rot = setup.Rotation;
+		var rot = setup.Rotation.WithRoll(0);
 
 		m_Target = m_Target.LerpTo( Vector3.Zero, Return * Time.Delta );
 		m_Current = m_Current.LerpTo( m_Target, Snap * Time.Delta );
