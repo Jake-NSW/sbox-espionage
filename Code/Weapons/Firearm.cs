@@ -38,16 +38,7 @@ public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IP
 		Machine = new EntityStateMachine<Firearm>( this );
 
 		if ( Game.IsClient )
-			Events.Register<CreatedViewModel>(
-				static evt =>
-				{
-					var view = evt.Data.ViewModel;
-
-					view.Components.Create<WeaponClientEffectsHandler>();
-
-					// Do something to know where the muzzle is?
-				}
-			);
+			Events.Register<CreatedViewModel>( static evt => evt.Data.ViewModel.Components.Create<WeaponClientEffectsHandler>() );
 
 		if ( Game.IsServer )
 			Events.Register<FirearmRebuildRequest>( Rebuild );

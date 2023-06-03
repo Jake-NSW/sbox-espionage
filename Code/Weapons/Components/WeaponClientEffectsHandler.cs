@@ -16,7 +16,7 @@ public sealed class WeaponClientEffectsHandler : ObservableEntityComponent
 			return;
 
 		// Get Muzzle
-		Particles.Create( "particles/weapons/muzzle_flash/muzzleflash_flash.vpcf", Entity, "muzzle" );
+		// Particles.Create( "particles/weapons/muzzle_flash/muzzleflash_flash.vpcf", Entity, "muzzle" );
 		
 		// This should come out when the slide is racked? Maybe good idea to make an animgraph event for it
 		Particles.Create( "particles/weapons/ejection/pistol_ejectbrass.vpcf", Entity, "eject_port" );

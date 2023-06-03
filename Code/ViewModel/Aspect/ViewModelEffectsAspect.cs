@@ -45,6 +45,5 @@ public readonly struct ViewModelEffectsAspect : IAspect<CompositedViewModel>
 		view.Components.Add( new ViewModelKickbackEffect() );
 		
 		view.Components.Add( new ViewModelTuckEffect() { HipVariant = HipTuck, AimVariant = AimTuck } );
-		view.Components.Create<ViewModelProjectilePredictor>();
 	}
 }
