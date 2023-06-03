@@ -28,6 +28,12 @@ public partial class Pawn : ObservableAnimatedEntity
 		Components.Create<FirstPersonEntityCamera>();
 	}
 
+	public override void TakeDamage( DamageInfo info )
+	{
+		base.TakeDamage( info );
+		Events.Run( new EntityTakenDamage( this, info ) );
+	}
+
 	// Input
 
 	[ClientInput] public Vector3 InputDirection { get; protected set; }
@@ -48,20 +54,6 @@ public partial class Pawn : ObservableAnimatedEntity
 
 		InputDirection = context.InputDirection;
 		ViewAngles = context.ViewAngles;
-	}
-
-	// Components
-
-	protected override void OnComponentAdded( EntityComponent component )
-	{
-		base.OnComponentAdded( component );
-		Events.Run( new ComponentAdded( component ) );
-	}
-
-	protected override void OnComponentRemoved( EntityComponent component )
-	{
-		base.OnComponentRemoved( component );
-		Events.Run( new ComponentRemoved( component ) );
 	}
 
 	// Simulate

@@ -147,7 +147,7 @@ public sealed class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISi
 		if ( ent == null )
 			return;
 
-		Run( new SlotDropping( slot, ent ) ); 
+		Run( new SlotDropping( slot, ent ) );
 
 		if ( Active == slot )
 		{
@@ -190,6 +190,11 @@ public sealed class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISi
 
 public static class DeployableSlotHandlerUtility
 {
+	public static void Assign<TEntity>( this DeployableSlotHandler handler, TEntity ent ) where TEntity : Entity, ISlotted
+	{
+		handler.Assign( ent.Slot, ent );
+	}
+
 	public static void Assign<TSlot>( this DeployableSlotHandler handler, TSlot slot, Entity ent ) where TSlot : Enum
 	{
 		handler.Assign( EnumValues<TSlot>.IndexOf( slot ), ent );

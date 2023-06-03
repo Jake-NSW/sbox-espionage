@@ -29,17 +29,14 @@ public sealed class Project : GameManager
 		base.ClientJoined( client );
 
 		var spawn = All.OfType<SpawnPoint>().MinBy( _ => Guid.NewGuid() ).Transform;
-		spawn.Position += Vector3.Up * 72;
+		spawn.Position += Vector3.Up * 2;
 
 		var pistol = new Mk23Firearm();
 		var smg = new Smg2Firearm();
 
 		var pawn = client.Possess<Operator>( spawn );
 
-		pawn.Inventory.Add( pistol );
-		pawn.Inventory.Add( smg );
-
-		pawn.Slots.Assign( CarrySlot.Holster, pistol );
-		pawn.Slots.Assign( CarrySlot.Front, smg );
+		pawn.Inventory.Add( pistol, smg );
+		pawn.Slots.Deploy( CarrySlot.Front );
 	}
 }

@@ -19,6 +19,14 @@ public interface IEntityInventory : IReadOnlyEntityInventory, IComponent
 
 public static class EntityInventoryUtility
 {
+	public static void Add( this IEntityInventory inv, params Entity[] ent )
+	{
+		foreach ( var entity in ent )
+		{
+			inv.Add( entity );
+		}
+	}
+
 	public static T GetAny<T>( this IReadOnlyEntityInventory inv ) where T : Entity
 	{
 		return inv.All.OfType<T>().FirstOrDefault();
@@ -34,7 +42,7 @@ public static class EntityInventoryUtility
 	public static T DropAny<T>( this IEntityInventory inventory ) where T : Entity
 	{
 		var item = inventory.GetAny<T>();
-		inventory.Drop(item);
+		inventory.Drop( item );
 		return item;
 	}
 
