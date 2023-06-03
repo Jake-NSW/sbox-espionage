@@ -122,6 +122,8 @@ public sealed partial class FirearmShootSimulatedEntityState : ObservableEntityC
 			ray.Surface.DoBulletImpact( ray );
 
 			var info = DamageInfo.FromBullet( ray.EndPosition, direction * 300, 100 );
+			info.Attacker = Entity.Owner;
+			info.Weapon = Entity;
 			ray.Entity.TakeDamage( info );
 			m_Running = false;
 		}
@@ -142,7 +144,7 @@ public sealed partial class FirearmShootSimulatedEntityState : ObservableEntityC
 		var comp = firearm.Components.Get<FirearmShootSimulatedEntityState>();
 		comp.m_SinceShoot = 0;
 		comp.m_Forward = forward;
-		comp.m_Position = pos;
+		comp.m_Position = pos - forward * 2;
 		comp.m_LastPosition = pos;
 		comp.m_Running = true;
 
