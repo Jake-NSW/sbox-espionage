@@ -11,20 +11,12 @@ public sealed class ViewModelJumpOffsetEffect : ObservableEntityComponent<Compos
 	public float RotMulti { get; set; } = 2;
 	public float PosMulti { get; set; } = 1;
 
-	protected override void OnActivate()
+	protected override void OnAutoRegister()
 	{
-		base.OnActivate();
-
-		// This is BAD... Signals should propagate to the ViewModel...
-		(Entity.Owner as IObservableEntity)?.Events.Register<PawnLanded>( OnLanded );
+		base.OnAutoRegister();
+		Register<PawnLanded>(OnLanded);
 	}
-
-	protected override void OnDeactivate()
-	{
-		base.OnDeactivate();
-		(Entity.Owner as IObservableEntity)?.Events.Unregister<PawnLanded>( OnLanded );
-	}
-
+	
 	private void OnLanded( Event<PawnLanded> evt )
 	{
 		m_SinceLanded = 0;

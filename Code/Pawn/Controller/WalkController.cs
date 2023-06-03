@@ -73,7 +73,7 @@ public sealed class WalkController : PawnController
 
 	private void Landed()
 	{
-		Events.Run( new PawnLanded( Velocity ) );
+		Events.Run( new PawnLanded( Velocity ), Propagation.Trickle );
 
 		if ( Velocity.z.Abs() > 250 || m_Jumped )
 		{
