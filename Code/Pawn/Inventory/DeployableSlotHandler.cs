@@ -19,20 +19,20 @@ public sealed class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISi
 		n_Slots = new Entity[slots];
 	}
 
-	protected override void OnActivate()
+	protected override void OnAutoRegister()
 	{
-		base.OnActivate();
+		Register<InventoryAdded>( OnInventoryAdded );
+		Register<InventoryRemoved>( OnInventoryRemoved );
+		Register<DeployingEntity>(
+			evt =>
+			{
+				var ent = evt.Data.Entity;
+				var slot = SlotOfEntity( ent );
 
-		Events.Register<InventoryAdded>( OnInventoryAdded );
-		Events.Register<InventoryRemoved>( OnInventoryRemoved );
-	}
-
-	protected override void OnDeactivate()
-	{
-		base.OnDeactivate();
-
-		Events.Unregister<InventoryAdded>( OnInventoryAdded );
-		Events.Unregister<InventoryRemoved>( OnInventoryRemoved );
+				if ( slot != -1 )
+					Run( new SlotDeploying( slot, ent ) );
+			}
+		);
 	}
 
 	private IEntityInventory Inventory => this.Get<IEntityInventory>();
@@ -82,9 +82,9 @@ public sealed class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISi
 
 	public void Assign( int slot, Entity ent )
 	{
-		slot -= 1;
-
 		Game.AssertServer();
+
+		slot -= 1;
 		n_Slots[slot] = ent;
 		Events.Run( new SlotAssigned( slot + 1, ent ) );
 
@@ -122,7 +122,6 @@ public sealed class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISi
 			return;
 
 		var ent = n_Slots[slot];
-		Events.Run( new SlotDeploying( slot + 1, ent ), from: this );
 
 		if ( !Inventory.Contains( ent ) )
 		{
@@ -147,8 +146,6 @@ public sealed class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISi
 		if ( ent == null )
 			return;
 
-		Run( new SlotDropping( slot, ent ) );
-
 		if ( Active == slot )
 		{
 			Handler.Holster( true, pawn => pawn.Components.Get<IEntityInventory>().Drop( ent ) );
@@ -163,12 +160,30 @@ public sealed class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISi
 	void INetworkSerializer.Read( ref NetRead read )
 	{
 		var length = read.Read<int>();
-		n_Slots = new Entity[length];
+
+		if ( length <= 0 )
+			return;
+
+		n_Slots ??= new Entity[length];
 
 		for ( var i = 0; i < length; i++ )
 		{
 			var id = read.Read<int>();
-			n_Slots[i] = id == 0 ? null : global::Sandbox.Entity.FindByIndex<Entity>( id );
+			var ent = id == 0 ? null : global::Sandbox.Entity.FindByIndex<Entity>( id );
+
+			if ( n_Slots[i] != ent && ent != null )
+			{
+				try
+				{
+					Events?.Run( new SlotAssigned( i + 1, ent ) );
+				}
+				catch 
+				{
+					// I have no clue what the fuck is going on 
+				}
+			}
+
+			n_Slots[i] = ent;
 		}
 	}
 

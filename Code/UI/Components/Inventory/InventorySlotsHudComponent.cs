@@ -1,11 +1,14 @@
 ﻿using Sandbox.UI;
 using Sandbox.UI.Construct;
+using Woosh.Common;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
 public sealed class InventorySlotsHudComponent : EntityHudComponent<RootPanel, Pawn>
 {
+	public DeployableSlotHandler Slots => this.Get<DeployableSlotHandler>();
+
 	protected override void OnAutoRegister()
 	{
 		base.OnAutoRegister();
@@ -28,14 +31,23 @@ public sealed class InventorySlotsHudComponent : EntityHudComponent<RootPanel, P
 
 	private void OnSlotAssigned( Event<SlotAssigned> evt )
 	{
-		Log.Info("Slot Assigned");
-		
 		if ( m_Slots == null )
+		{
+			Log.Info( "Slots are null!" );
 			return;
+		}
 
 		var panel = m_Slots[evt.Data.Slot];
 		panel.DeleteChildren();
-		panel.Add.Label( evt.Data.Entity.Info().Name );
+
+		string name;
+
+		if ( evt.Data.Entity == null )
+			name = "Unknown";
+		else
+			name = evt.Data.Entity.Info().Name;
+		
+		panel.Add.Label( name );
 	}
 
 	private void OnSlotDeploying( Event<SlotDeploying> evt )

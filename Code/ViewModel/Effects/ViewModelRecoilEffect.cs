@@ -3,14 +3,14 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class ViewModelRecoilEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect
+public sealed class ViewModelRecoilEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect, IMutate<InputContext>
 {
 	public float Snap { get; }
 	public float Return { get; }
 	public float RecoilRotationMultiplier { get; init; } = 1;
-	public float RecoilCameraRotationMultiplier { get; init; } = 0.5f;
+	public float RecoilCameraRotationMultiplier { get; init; } = 4f;
 
-	public ViewModelRecoilEffect( float snap = 25, float returnSpeed = 5 )
+	public ViewModelRecoilEffect( float snap = 30, float returnSpeed = 7 )
 	{
 		Snap = snap;
 		Return = returnSpeed;
@@ -54,5 +54,11 @@ public sealed class ViewModelRecoilEffect : ObservableEntityComponent<Composited
 			m_Current.Inverse * Rotation.FromPitch( m_Current.Pitch() * 2 ),
 			RecoilCameraRotationMultiplier
 		);
+	}
+
+	public void OnPostSetup( ref InputContext setup )
+	{
+		setup.ViewAngles.pitch += m_Current.Pitch() * 0.004f;
+		setup.ViewAngles.yaw += m_Current.Yaw() * 0.006f;
 	}
 }
