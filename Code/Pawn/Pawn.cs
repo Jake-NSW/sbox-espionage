@@ -6,9 +6,8 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public partial class Pawn : AnimatedEntity, IObservableEntity
+public partial class Pawn : ObservableAnimatedEntity
 {
-	public IDispatcher Events { get; } = new Dispatcher();
 	public EntityStateMachine<Pawn> Machine { get; }
 
 	public Pawn()

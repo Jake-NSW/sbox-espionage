@@ -29,9 +29,8 @@ public struct FirearmSetup
 }
 
 [Category( "Weapon" ), Icon( "gavel" )]
-public abstract partial class Firearm : AnimatedEntity, ICarriable, IPickup, IMutate<CameraSetup>
+public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IPickup, IMutate<CameraSetup>
 {
-	public IDispatcher Events { get; } = new Dispatcher();
 	public EntityStateMachine<Firearm> Machine { get; }
 
 	public Firearm()
