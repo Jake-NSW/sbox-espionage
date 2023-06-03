@@ -4,5 +4,5 @@ namespace Woosh.Espionage;
 
 public interface IEntityEffects : IComponent
 {
-	public ModelEntity Target { get; }
+	public AnimatedEntity Target { get; }
 }

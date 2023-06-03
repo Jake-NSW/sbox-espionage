@@ -68,10 +68,15 @@ public sealed partial class FirearmShootSimulatedEntityState : ObservableEntityC
 		}
 
 		// Owner, Shoot from View Model
-		if ( Entity.IsLocalPawn )
+		if ( Entity.Owner != null && Entity.IsLocalPawn )
 		{
-			var muzzle = Entity.Effects?.Target?.GetAttachment( "muzzle" ) ?? Entity.Owner.Transform;
-			CmdReceivedShootRequest( NetworkIdent, muzzle.Position, muzzle.Rotation.Forward );
+			Log.Info( "Shooting on Client" );
+
+			if ( Entity.Effects?.GetAttachment( "muzzle" ) is { } muzzle )
+			{
+				CmdReceivedShootRequest( NetworkIdent, muzzle.Position, muzzle.Rotation.Forward );
+			}
+
 			return;
 		}
 
@@ -82,10 +87,15 @@ public sealed partial class FirearmShootSimulatedEntityState : ObservableEntityC
 	[ClientRpc]
 	private void PlayClientEffects( WeaponClientEffects effects )
 	{
-		// Sounds.Play( effects, Owner?.AimRay.Position ?? Position );
 		Run( new PlayClientEffects<WeaponClientEffects>( effects ) );
 	}
 
 	[ConCmd.Server]
-	private static void CmdReceivedShootRequest( int indent, Vector3 pos, Vector3 forward ) { }
+	private static void CmdReceivedShootRequest( int indent, Vector3 pos, Vector3 forward )
+	{
+		DebugOverlay.Sphere( pos, 1, Color.Red, duration: 5 );
+		DebugOverlay.Line( pos, pos + forward * 8, Color.Green, duration: 5 );
+
+		Log.Info( "Shooting on Server" );
+	}
 }

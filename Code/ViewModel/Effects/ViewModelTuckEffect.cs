@@ -1,6 +1,7 @@
 ﻿using System;
 using Sandbox;
 using Sandbox.Utility;
+using Woosh.Common;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
@@ -77,7 +78,7 @@ public sealed class ViewModelTuckEffect : ObservableEntityComponent<CompositedVi
 			case TuckType.Hug :
 				setup.Hands.Offset += setup.Rotation * new Vector3( 6 * normal, 0, 0 );
 				setup.Hands.Angles *= Rotation.FromAxis( Vector3.Up, normal * 140 );
-				setup.Hands.Offset += (setup.Rotation * setup.Hands.Angles) * new Vector3( m_Offset, 0, 0 );
+				setup.Hands.Offset += (setup.Rotation.WithRoll( 0 ) * setup.Hands.Angles.WithRoll( 0 )) * new Vector3( m_Offset, 0, 0 );
 				break;
 			default :
 				throw new ArgumentOutOfRangeException();

@@ -7,8 +7,8 @@ public sealed class ViewModelHandlerComponent : ObservableEntityComponent<Pawn>,
 {
 	protected override void OnAutoRegister()
 	{
-		Events.Register<DeployingEntity>( OnDeploying );
-		Events.Register<HolsteredEntity>( OnHolstered );
+		Register<DeployingEntity>( OnDeploying );
+		Register<HolsteredEntity>( OnHolstered );
 	}
 
 	protected override void OnDeactivate()
@@ -19,6 +19,9 @@ public sealed class ViewModelHandlerComponent : ObservableEntityComponent<Pawn>,
 
 		m_Model?.Delete();
 		m_Model = null;
+		
+		m_Effects?.Remove();
+		m_Effects = null;
 	}
 
 	public void OnPostSetup( ref CameraSetup setup )
@@ -26,19 +29,16 @@ public sealed class ViewModelHandlerComponent : ObservableEntityComponent<Pawn>,
 		(m_Model as IMutate<CameraSetup>)?.OnPostSetup( ref setup );
 	}
 
-
 	public void OnPostSetup( ref InputContext setup )
 	{
 		(m_Model as IMutate<InputContext>)?.OnPostSetup( ref setup );
 	}
 
 	private AnimatedEntity m_Model;
+	private AppliedViewModelEntityEffects m_Effects;
 
-	private CompositedViewModel OnRequestViewmodel( IObservableEntity target )
+	private CompositedViewModel OnRequestViewmodel( IObservable target )
 	{
-		if ( !target.Events.Any<CreatedViewModel>() )
-			return null;
-
 		var view = new CompositedViewModel( target ) { Owner = Entity };
 		target.Events.Run( new CreatedViewModel( view ) );
 		return view;
@@ -48,9 +48,10 @@ public sealed class ViewModelHandlerComponent : ObservableEntityComponent<Pawn>,
 
 	private void OnDeploying( Event<DeployingEntity> evt )
 	{
-		if ( UnderlyingEntity.IsLocalPawn && m_Model == null )
+		if ( Entity.IsLocalPawn && m_Model == null )
 		{
-			m_Model = OnRequestViewmodel( evt.Data.Entity as IObservableEntity );
+			m_Model = OnRequestViewmodel( evt.Data.Entity as IObservable );
+			evt.Data.Entity.Components.Add( m_Effects = new AppliedViewModelEntityEffects( m_Model ) );
 		}
 	}
 
@@ -58,6 +59,9 @@ public sealed class ViewModelHandlerComponent : ObservableEntityComponent<Pawn>,
 	{
 		m_Model?.Delete();
 		m_Model = null;
+		
+		m_Effects?.Remove();
+		m_Effects = null;
 	}
 
 }

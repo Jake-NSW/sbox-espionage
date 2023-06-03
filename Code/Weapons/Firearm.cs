@@ -38,13 +38,22 @@ public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IP
 		Machine = new EntityStateMachine<Firearm>( this );
 
 		if ( Game.IsClient )
-			Events.Register<CreatedViewModel>( static evt => evt.Data.ViewModel.Components.Create<WeaponClientEffectsHandler>() );
+			Events.Register<CreatedViewModel>(
+				static evt =>
+				{
+					var view = evt.Data.ViewModel;
+
+					view.Components.Create<WeaponClientEffectsHandler>();
+
+					// Do something to know where the muzzle is?
+				}
+			);
 
 		if ( Game.IsServer )
 			Events.Register<FirearmRebuildRequest>( Rebuild );
 	}
 
-	public IEntityEffects Effects => Components.Get<IEntityEffects>();
+	public AnimatedEntity Effects => Components.Get<IEntityEffects>()?.Target ?? this;
 
 	public bool IsAiming => Components.Get<CarriableAimComponent>()?.IsAiming == true;
 	public bool IsReloading => Machine.Active is FirearmReloadSimulatedEntityState;

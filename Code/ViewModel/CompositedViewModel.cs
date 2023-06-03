@@ -11,7 +11,7 @@ public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity, IMu
 {
 	public IDispatcher Events { get; }
 
-	public CompositedViewModel( IObservableEntity parent )
+	public CompositedViewModel( IObservable parent )
 	{
 		Game.AssertClient();
 
