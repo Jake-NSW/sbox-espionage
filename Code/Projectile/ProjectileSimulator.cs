@@ -17,7 +17,7 @@ public sealed class ProjectileSimulator : ObservableEntityComponent<Project>, IS
 	public void Add( ProjectileDetails details )
 	{
 		m_InMotion.Add( details, details.Start - details.Forward * 4 );
-		WriteNetworkData();
+		// WriteNetworkData();
 	}
 
 	public void Remove( ProjectileDetails details )
@@ -34,6 +34,9 @@ public sealed class ProjectileSimulator : ObservableEntityComponent<Project>, IS
 
 	public void Simulate( IClient client )
 	{
+		if ( !Prediction.FirstTime )
+			return;
+
 		foreach ( var (details, last) in m_InMotion )
 		{
 			var helper = new ProjectileMovementHelper( details );
@@ -42,27 +45,34 @@ public sealed class ProjectileSimulator : ObservableEntityComponent<Project>, IS
 
 			if ( details.Since > 3 )
 			{
-				Log.Info( "Faded Away!" );
+				Log.Info( $"Faded Away! - {details.Since}" );
 				Remove( details );
 				return;
 			}
 
-			var ray = Trace.Ray( last, pos ).UseHitboxes()
+			// Play Trace
+			var ray = Trace.Ray( last, pos )
+				.UseHitboxes()
 				.WithAnyTags( "solid", "player", "npc" )
 				.Ignore( Entity.Owner )
 				.Size( 1 )
 				.Run();
 
+			DebugOverlay.Sphere( pos, 10, Game.IsServer ? Color.Red : Color.Blue );
+
 			if ( ray.Hit )
 			{
-				Log.Info("Hit!");
+				Log.Info( $"Hit! - {details.Since}/ tick - {Time.Tick}" );
+				ray.Surface.DoBulletImpact( ray );
 				
-				if ( Game.IsClient )
-				{
-					ray.Surface.DoBulletImpact( ray );
-				}
+				DebugOverlay.TraceResult(ray, 15);
 
-				if ( Game.IsServer )
+				Remove( details );
+			}
+
+			if ( Game.IsServer )
+			{
+				if ( ray.Hit )
 				{
 					var info = DamageInfo.FromBullet( ray.EndPosition, direction * details.Force, 100 )
 						.WithAttacker( Sandbox.Entity.FindByIndex( details.Attacker ) )
@@ -70,9 +80,9 @@ public sealed class ProjectileSimulator : ObservableEntityComponent<Project>, IS
 
 					ray.Entity.TakeDamage( info );
 				}
-
-				Remove( details );
 			}
+
+			// m_InMotion[details] = pos;
 		}
 	}
 

@@ -38,11 +38,12 @@ public partial class Pawn : ObservableAnimatedEntity
 
 	[ClientInput] public Vector3 InputDirection { get; protected set; }
 	[ClientInput] public Angles ViewAngles { get; set; }
+	[ClientInput] public Ray Muzzle { get; set; }
 
 	public override sealed void BuildInput()
 	{
 		var context = new InputContext() { InputDirection = Input.AnalogMove, ViewAngles = (ViewAngles + Input.AnalogLook).Normal };
-		
+
 		// This is incredibly dumb...
 		(this as IMutate<InputContext>)?.OnPostSetup( ref context );
 
@@ -54,6 +55,7 @@ public partial class Pawn : ObservableAnimatedEntity
 
 		InputDirection = context.InputDirection;
 		ViewAngles = context.ViewAngles;
+		Muzzle = context.Muzzle;
 	}
 
 	// Simulate

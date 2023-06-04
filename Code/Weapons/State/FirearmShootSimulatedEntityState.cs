@@ -4,7 +4,8 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed partial class FirearmShootSimulatedEntityState : ObservableEntityComponent<Firearm>, ISimulatedEntityState<Firearm>, ISingletonComponent
+public sealed partial class FirearmShootSimulatedEntityState : ObservableEntityComponent<Firearm>,
+	ISimulatedEntityState<Firearm>, ISingletonComponent, IMutate<InputContext>
 {
 	public FirearmSetup Setup => Entity.Setup;
 
@@ -68,11 +69,24 @@ public sealed partial class FirearmShootSimulatedEntityState : ObservableEntityC
 		}
 
 		// Owner, Shoot from View Model
-		if ( Entity.Owner != null && Entity.IsLocalPawn )
+		// if ( Entity.Owner != null && Entity.IsLocalPawn )
 		{
-			if ( Entity.Effects?.GetAttachment( "muzzle" ) is { } muzzle )
+			var ray = (Entity.Owner as Pawn).Muzzle;
+			// if ( Entity.Effects?.GetAttachment( "muzzle" ) is { } muzzle )
 			{
-				CmdReceivedShootRequest( Entity.NetworkIdent, muzzle.Position, muzzle.Rotation.Forward );
+				// CmdReceivedShootRequest( Entity.NetworkIdent, muzzle.Position, muzzle.Rotation.Forward );
+				GameManager.Current.Components.GetOrCreate<ProjectileSimulator>().Add(
+					new ProjectileDetails()
+					{
+						Force = Setup.Force,
+						Mass = 0.0009f,
+						Start = ray.Position,
+						Forward = ray.Forward,
+						Attacker = Entity.Owner.NetworkIdent,
+						Weapon = Entity.NetworkIdent,
+						Since = 0
+					}
+				);
 			}
 
 			return;
@@ -87,7 +101,6 @@ public sealed partial class FirearmShootSimulatedEntityState : ObservableEntityC
 	{
 		Run( new PlayClientEffects<WeaponClientEffects>( effects ) );
 	}
-
 
 	[ConCmd.Server]
 	private static void CmdReceivedShootRequest( int indent, Vector3 pos, Vector3 forward )
@@ -105,5 +118,13 @@ public sealed partial class FirearmShootSimulatedEntityState : ObservableEntityC
 				Since = 0
 			}
 		);
+	}
+
+	public void OnPostSetup( ref InputContext setup )
+	{
+		if ( Entity.Effects?.GetAttachment( "muzzle" ) is { } muzzle )
+			setup.Muzzle = new Ray(muzzle.Position, muzzle.Rotation.Forward);
+		else
+			setup.Muzzle = default;
 	}
 }

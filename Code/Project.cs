@@ -31,9 +31,9 @@ public sealed class Project : GameManager, IObservable
 
 	public override void Simulate( IClient cl )
 	{
-		base.Simulate( cl );
-		
 		Components.Each<ISimulated, IClient>( cl, ( client, simulated ) => simulated.Simulate( client ) );
+		
+		base.Simulate( cl );
 	}
 
 	public override void ClientJoined( IClient client )

@@ -31,7 +31,7 @@ public struct FirearmSetup
 }
 
 [Category( "Weapon" ), Icon( "gavel" )]
-public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IPickup, IMutate<CameraSetup>
+public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IPickup, IMutate<CameraSetup>, IMutate<InputContext>
 {
 	public EntityStateMachine<Firearm> Machine { get; }
 
@@ -157,6 +157,14 @@ public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IP
 	public void OnPostSetup( ref CameraSetup setup )
 	{
 		foreach ( var component in Components.All().OfType<IMutate<CameraSetup>>() )
+		{
+			component.OnPostSetup( ref setup );
+		}
+	}
+
+	public void OnPostSetup( ref InputContext setup )
+	{
+		foreach ( var component in Components.All().OfType<IMutate<InputContext>>() )
 		{
 			component.OnPostSetup( ref setup );
 		}

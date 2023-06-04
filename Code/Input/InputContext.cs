@@ -4,4 +4,6 @@ public struct InputContext
 {
 	public Angles ViewAngles;
 	public Vector3 InputDirection;
+
+	public Ray Muzzle;
 }
