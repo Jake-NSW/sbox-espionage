@@ -48,6 +48,7 @@ public class RustSmgFirearm : Firearm, ISlotted
 	{
 		IsAutomatic = true,
 		RateOfFire = 650,
+		Force = 250,
 		Draw = new DrawTime( 1, Game.TickInterval * 2 )
 	};
 

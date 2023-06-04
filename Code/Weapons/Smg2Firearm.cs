@@ -15,7 +15,7 @@ public sealed class Smg2Firearm : Firearm, ISlotted
 	{
 		if ( !Game.IsClient )
 			return;
-		
+
 		Events.Register<CreatedViewModel>(
 			static evt =>
 			{
@@ -34,7 +34,7 @@ public sealed class Smg2Firearm : Firearm, ISlotted
 	public override void Spawn()
 	{
 		base.Spawn();
-		
+
 		Model = Model.Load( WORLD_MODEL );
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
 	}
@@ -44,6 +44,7 @@ public sealed class Smg2Firearm : Firearm, ISlotted
 		IsAutomatic = true,
 		IsSilenced = true,
 		RateOfFire = 700,
+		Force = 250,
 		Draw = new DrawTime( 1.5f, 1.3f )
 	};
 
@@ -51,7 +52,6 @@ public sealed class Smg2Firearm : Firearm, ISlotted
 
 	private static SoundBank<WeaponClientEffects> Sounds { get; } = new SoundBank<WeaponClientEffects>()
 	{
-		[WeaponClientEffects.Attack] = "mk23_firing_sound", 
-		[WeaponClientEffects.Attack | WeaponClientEffects.Silenced] = "smg2_firing_suppressed_sound",
+		[WeaponClientEffects.Attack] = "mk23_firing_sound", [WeaponClientEffects.Attack | WeaponClientEffects.Silenced] = "smg2_firing_suppressed_sound",
 	};
 }

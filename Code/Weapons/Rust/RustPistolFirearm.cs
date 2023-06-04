@@ -50,6 +50,7 @@ public sealed class RustPistolFirearm : Firearm, ISlotted
 	{
 		IsAutomatic = false,
 		RateOfFire = 600,
+		Force = 250,
 
 		// Drop on next frame
 		Draw = new DrawTime( 1, Game.TickInterval * 2 )

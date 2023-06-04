@@ -70,8 +70,6 @@ public sealed partial class FirearmShootSimulatedEntityState : ObservableEntityC
 		// Owner, Shoot from View Model
 		if ( Entity.Owner != null && Entity.IsLocalPawn )
 		{
-			Log.Info( "Shooting on Client" );
-
 			if ( Entity.Effects?.GetAttachment( "muzzle" ) is { } muzzle )
 			{
 				CmdReceivedShootRequest( Entity.NetworkIdent, muzzle.Position, muzzle.Rotation.Forward );
@@ -90,64 +88,22 @@ public sealed partial class FirearmShootSimulatedEntityState : ObservableEntityC
 		Run( new PlayClientEffects<WeaponClientEffects>( effects ) );
 	}
 
-	private TimeSince m_SinceShoot;
-	private Vector3 m_Forward;
-	private Vector3 m_Position;
-
-	private Vector3 m_LastPosition;
-
-	private bool m_Running;
-
-	[GameEvent.Tick]
-	private void Tick()
-	{
-		if ( !m_Running )
-			return;
-
-		var helper = new ProjectMovementHelper( 300, 0.0009f );
-
-		var position = helper.AtTime( m_SinceShoot, m_Position, m_Forward );
-		var direction = (position - m_LastPosition).Normal;
-
-		var ray = Trace.Ray( m_LastPosition, position )
-			.UseHitboxes()
-			.WithAnyTags( "solid", "player", "npc" )
-			.Ignore( Entity.Owner )
-			.Size( 1 )
-			.Run();
-
-		if ( ray.Hit )
-		{
-			Log.Info( "HIT!" );
-			ray.Surface.DoBulletImpact( ray );
-
-			var info = DamageInfo.FromBullet( ray.EndPosition, direction * 300, 100 );
-			info.Attacker = Entity.Owner;
-			info.Weapon = Entity;
-			ray.Entity.TakeDamage( info );
-			m_Running = false;
-		}
-
-		m_LastPosition = position;
-	}
 
 	[ConCmd.Server]
 	private static void CmdReceivedShootRequest( int indent, Vector3 pos, Vector3 forward )
 	{
-		// DebugOverlay.Sphere( pos, 1, Color.Red, duration: 5 );
-		// DebugOverlay.Line( pos, pos + forward * 8, Color.Green, duration: 5 );
-
-		var helper = new ProjectMovementHelper( 300, 0.0009f );
-		// DebugOverlay.Projectile( helper, pos, forward, 5 );
-
 		var firearm = Sandbox.Entity.FindByIndex<Firearm>( indent );
-		var comp = firearm.Components.Get<FirearmShootSimulatedEntityState>();
-		comp.m_SinceShoot = 0;
-		comp.m_Forward = forward;
-		comp.m_Position = pos - forward * 2;
-		comp.m_LastPosition = pos;
-		comp.m_Running = true;
-
-		Log.Info( "Shooting on Server" );
+		GameManager.Current.Components.GetOrCreate<ProjectileSimulator>().Add(
+			new ProjectileDetails()
+			{
+				Force = firearm.Setup.Force,
+				Mass = 0.0009f,
+				Start = pos,
+				Forward = forward,
+				Attacker = firearm.Owner.NetworkIdent,
+				Weapon = firearm.NetworkIdent,
+				Since = 0
+			}
+		);
 	}
 }

@@ -25,6 +25,8 @@ public struct FirearmSetup
 	public float Range;
 	public float Accuracy;
 
+	public float Force;
+
 	public DrawTime Draw;
 }
 

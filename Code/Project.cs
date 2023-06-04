@@ -2,13 +2,18 @@
 using System.Linq;
 using Sandbox;
 using Woosh.Common;
+using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class Project : GameManager
+public sealed class Project : GameManager, IObservable
 {
+	public IDispatcher Events { get; }
+
 	public Project()
 	{
+		Events = Dispatcher.CreateForEntity( this );
+
 		if ( Game.IsClient )
 		{
 			Camera = new CompositedCameraBuilder( Sandbox.Camera.Main );
@@ -22,6 +27,13 @@ public sealed class Project : GameManager
 		base.FrameSimulate( cl );
 
 		Camera.Update( mutate: Game.LocalPawn as IMutate<CameraSetup> );
+	}
+
+	public override void Simulate( IClient cl )
+	{
+		base.Simulate( cl );
+		
+		Components.Each<ISimulated, IClient>( cl, ( client, simulated ) => simulated.Simulate( client ) );
 	}
 
 	public override void ClientJoined( IClient client )

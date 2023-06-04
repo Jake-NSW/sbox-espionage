@@ -46,6 +46,7 @@ public sealed class Mk23Firearm : Firearm, ISlotted
 		IsAutomatic = false,
 		IsSilenced = true,
 		RateOfFire = 550,
+		Force = 300,
 		Draw = new DrawTime( 1, 0.6f )
 	};
 
