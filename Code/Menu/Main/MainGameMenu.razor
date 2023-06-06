@@ -1,4 +1,5 @@
-﻿@using Sandbox;
+﻿@using System
+@using Sandbox;
 @using Sandbox.UI;
 @attribute [StyleSheet]
 @inherits Panel
@@ -7,6 +8,15 @@
 
 <root class="menu__start-menu">
     <div class="header">
+        <div>
+            <span>@DateTime.Now.ToLongTimeString()</span>
+        </div>
+        <div style="flex-grow: 1"></div>
+        <div style="font-size: 14px; flex-direction: column; justify-content: flex-end">
+            @Game.UserName
+        </div>
+    </div>
+    <div class="title">
         <label class="game-title">
             @Game.Menu.Package.Title
         </label>
@@ -24,15 +34,36 @@
         <button class="button">
             <span>> Community</span>
         </button>
+        @if (Game.InGame)
+        {
+            <button class="button" onclick="@(() => Game.Menu.LeaveServer("Client Disconnect"))">
+                <span>> Quit</span>
+            </button>
+        }
+        else
+        {
+            <button class="button" onclick="@(() => Game.Menu.Close())">
+                <span>> Close</span>
+            </button>
+        }
     </div>
 
     <div class="footer">
         <div>
             <span>Terminal 32</span>
         </div>
-        <div style="flex-grow: 1"></div>
-        <div style="font-size: 14px; flex-direction: column; align-items: flex-end">
-            | Phoenix OS |
+        <div style="flex-grow: 1;"></div>
+        <div style="font-size: 14px;  justify-content: flex-start">
+            Phoenix OS
         </div>
     </div>
 </root>
+
+@code {
+
+    protected override int BuildHash()
+    {
+        return DateTime.Now.GetHashCode();
+    }
+
+}

@@ -14,7 +14,11 @@
   font-family: Aldrich;
   font-size: 48px;
 
-  background-color: black;
+  text-transform: uppercase;
+
+  background-color: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(16px);
+
   color: orange;
 
   flex-direction: column;
@@ -24,7 +28,7 @@
 
   // Navigator
 
-  .header {
+  .title {
     flex-grow: 1;
     align-items: flex-start;
     justify-content: flex-end;
@@ -55,16 +59,21 @@
     background-color: orange;
   }
 
-  // Footer
+  // Footer & Header
+
+  .header {
+    font-size: 20px;
+    font-family: Ra Mono;
+
+    padding: 12px 8px 12px; 
+    border-bottom: 1px solid orange;
+  }
 
   .footer {
     font-size: 20px;
-
-    filter: drop-shadow(0 0 2px orange);
+    font-family: Ra Mono;
 
     padding: 12px 8px 0;
     border-top: 1px solid orange;
-
-    bottom: 0;
   }
 }
