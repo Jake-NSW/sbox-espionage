@@ -64,9 +64,6 @@ public sealed class ProjectileSimulator : ObservableEntityComponent<Project>, IS
 			{
 				Log.Info( $"Hit! - {details.Since}/ tick - {Time.Tick}" );
 				ray.Surface.DoBulletImpact( ray );
-				
-				DebugOverlay.TraceResult(ray, 15);
-
 				Remove( details );
 			}
 

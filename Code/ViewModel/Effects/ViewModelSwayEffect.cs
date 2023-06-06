@@ -28,7 +28,7 @@ public sealed class ViewModelSwayEffect : ObservableEntityComponent<CompositedVi
 		var rot = setup.Rotation.WithRoll( 0 );
 
 		// Workout how much we've moved since last frame
-		var angles = (m_LastAngles - m_CurrentAngles).Normal;
+		var angles = (m_LastAngles - m_CurrentAngles).Normal * 4;
 		var mouse = new Vector2( angles.yaw, -angles.pitch );
 		mouse *= MathX.Lerp( m_Multiplier, m_AimMultiplier, setup.Hands.Aim );
 		m_LastAngles = m_CurrentAngles;

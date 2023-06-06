@@ -1,0 +1,38 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+@attribute [StyleSheet]
+@inherits Panel
+@implements Sandbox.Menu.IGameMenuPanel
+@namespace Espionage.UI.Menu
+
+<root class="menu__start-menu">
+    <div class="header">
+        <label class="game-title">
+            @Game.Menu.Package.Title
+        </label>
+    </div>
+    <div class="navigator">
+        <button class="play-button button" onclick="@(() => Game.Menu.StartServerAsync(1, "Server", "playground/item_test"))">
+            <span>> Play</span>
+        </button>
+        <button class="play-button button">
+            <span>> Settings</span>
+        </button>
+        <button class="play-button button">
+            <span>> Servers</span>
+        </button>
+        <button class="button">
+            <span>> Community</span>
+        </button>
+    </div>
+
+    <div class="footer">
+        <div>
+            <span>Terminal 32</span>
+        </div>
+        <div style="flex-grow: 1"></div>
+        <div style="font-size: 14px; flex-direction: column; align-items: flex-end">
+            | Phoenix OS |
+        </div>
+    </div>
+</root>
