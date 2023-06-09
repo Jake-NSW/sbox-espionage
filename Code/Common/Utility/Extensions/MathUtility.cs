@@ -6,6 +6,26 @@ namespace Woosh.Common;
 
 public static class MathUtility
 {
+	// Damping
+
+	public static float Damp( this float value, float to, float damp )
+	{
+		damp = 1 - MathF.Pow( damp, Time.Delta );
+		return MathX.Lerp( value, to, damp );
+	}
+
+	public static Vector3 Damp( this Vector3 value, Vector3 to, float damp )
+	{
+		damp = 1 - MathF.Pow( damp, Time.Delta );
+		return Vector3.Lerp( value, to, damp );
+	}
+
+	public static Rotation Damp( this Rotation value, Rotation to, float damp )
+	{
+		damp = 1 - MathF.Pow( damp, Time.Delta );
+		return Rotation.Lerp( value, to, damp );
+	}
+
 	// Float
 
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]
@@ -41,7 +61,7 @@ public static class MathUtility
 	}
 
 	// Quaternion
-	
+
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]
 	public static Rotation WithPitch( this Rotation rotation, float pitch )
 	{
@@ -49,7 +69,7 @@ public static class MathUtility
 		rot *= Rotation.FromPitch( pitch );
 		return rot;
 	}
-	
+
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]
 	public static Rotation WithYaw( this Rotation rotation, float pitch )
 	{
@@ -57,7 +77,7 @@ public static class MathUtility
 		rot *= Rotation.FromYaw( pitch );
 		return rot;
 	}
-	
+
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]
 	public static Rotation WithRoll( this Rotation rotation, float pitch )
 	{
