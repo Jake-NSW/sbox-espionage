@@ -9,14 +9,14 @@ public sealed class ProjectileSimulator : ObservableEntityComponent<Project>, IS
 {
 	public ProjectileSimulator()
 	{
-		m_InMotion = new Dictionary<ProjectileDetails, Vector3>( 16 );
+		m_InMotion = new List<ProjectileDetails>( 32 );
 	}
 
-	private readonly Dictionary<ProjectileDetails, Vector3> m_InMotion;
+	private readonly List<ProjectileDetails> m_InMotion;
 
 	public void Add( ProjectileDetails details )
 	{
-		m_InMotion.Add( details, details.Start - details.Forward * 4 );
+		m_InMotion.Add( details );
 		// WriteNetworkData();
 	}
 
@@ -24,6 +24,11 @@ public sealed class ProjectileSimulator : ObservableEntityComponent<Project>, IS
 	{
 		m_InMotion.Remove( details );
 		// WriteNetworkData();
+	}
+
+	public void Remove( int index )
+	{
+		m_InMotion.RemoveAt( index );
 	}
 
 	public void Clear( ProjectileDetails details )
@@ -37,10 +42,12 @@ public sealed class ProjectileSimulator : ObservableEntityComponent<Project>, IS
 		if ( !Prediction.FirstTime )
 			return;
 
-		foreach ( var (details, last) in m_InMotion )
+		for ( var i = 0; i < m_InMotion.Count; i++ )
 		{
+			var details = m_InMotion[i];
 			var helper = new ProjectileMovementHelper( details );
 			var pos = helper.AtTime( details.Since, details.Start, details.Forward );
+			var last = helper.AtTime( details.Since - Time.Delta, details.Start, details.Forward );
 			var direction = (pos - last).Normal;
 
 			if ( details.Since > 3 )
@@ -50,36 +57,36 @@ public sealed class ProjectileSimulator : ObservableEntityComponent<Project>, IS
 				return;
 			}
 
+			var attacker = Sandbox.Entity.FindByIndex( details.Attacker );
+			var weapon = Sandbox.Entity.FindByIndex( details.Weapon );
+
 			// Play Trace
 			var ray = Trace.Ray( last, pos )
 				.UseHitboxes()
 				.WithAnyTags( "solid", "player", "npc" )
-				.Ignore( Entity.Owner )
+				.Ignore( attacker )
+				.Ignore( weapon )
 				.Size( 1 )
 				.Run();
 
-			DebugOverlay.Sphere( pos, 10, Game.IsServer ? Color.Red : Color.Blue );
-
-			if ( ray.Hit )
+			if ( !ray.Hit )
 			{
-				Log.Info( $"Hit! - {details.Since}/ tick - {Time.Tick}" );
-				ray.Surface.DoBulletImpact( ray );
-				Remove( details );
+				continue;
 			}
+
+			ray.Surface.DoBulletImpact( ray );
+			Remove( i );
 
 			if ( Game.IsServer )
 			{
-				if ( ray.Hit )
-				{
-					var info = DamageInfo.FromBullet( ray.EndPosition, direction * details.Force, 100 )
-						.WithAttacker( Sandbox.Entity.FindByIndex( details.Attacker ) )
-						.WithWeapon( Sandbox.Entity.FindByIndex( details.Weapon ) );
+				var info = DamageInfo.FromBullet( ray.EndPosition, direction * details.Force * 4, 100 )
+					.WithAttacker( attacker )
+					.WithWeapon( weapon )
+					.WithHitBody( ray.Body )
+					.WithBone( ray.Bone );
 
-					ray.Entity.TakeDamage( info );
-				}
+				ray.Entity.TakeDamage( info );
 			}
-
-			// m_InMotion[details] = pos;
 		}
 	}
 
@@ -93,7 +100,7 @@ public sealed class ProjectileSimulator : ObservableEntityComponent<Project>, IS
 		for ( var i = 0; i < length; i++ )
 		{
 			var details = read.Read<ProjectileDetails>();
-			m_InMotion.Add( details, details.Start );
+			m_InMotion.Add( details );
 		}
 	}
 

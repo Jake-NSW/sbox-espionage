@@ -10,7 +10,8 @@
       "Schema": 0,
       "HasAssets": false,
       "AssetsPath": null,
-      "ResourcePaths": null,
+      "Resources": null,
+      "MenuResources": null,
       "HasCode": false,
       "CodePath": null,
       "PackageReferences": [],
@@ -42,7 +43,17 @@
         "facepunch.beer_keg_a1#17692",
         "oki.shuba_shuba#15889",
         "facepunch.bench_plastic#10838",
-        "facepunch.beer_keg_a2#17691"
+        "facepunch.beer_keg_a2#17691",
+        "facepunch.leaves_pile_a6#18236",
+        "facepunch.plasticbucketa1#18244",
+        "facepunch.oildrumexplosive#18223",
+        "facepunch.tv#18055",
+        "facepunch.oil_drum#18226",
+        "facepunch.trolley#18258",
+        "facepunch.leaves_strt_a2#18238",
+        "facepunch.bathtub#18259",
+        "facepunch.bench_plastic#18241",
+        "facepunch.toilet_a#18252"
       ],
       "Metadata": {}
     }

@@ -1,5 +1,4 @@
-﻿using Sandbox;
-using Woosh.Common;
+﻿using Woosh.Common;
 
 namespace Woosh.Espionage;
 
