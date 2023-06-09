@@ -1,0 +1,54 @@
+﻿.terminal-hover-button {
+  .ridge {
+    width: 0;
+    background-color: orange;
+  }
+
+  .text {
+    transition: padding-left 0.1s ease;
+
+    padding: 6px 8px;
+    font-size: 28px;
+    align-self: stretch;
+    align-items: center;
+    justify-content: flex-start;
+    flex-grow: 1;
+  }
+
+  .terminal-hover-button__tooltip {
+    text-transform: none;
+    font-size: 14px;
+
+    padding-bottom: 2px;
+    padding-right: 2px;
+
+    justify-content: flex-end;
+    align-items: flex-end;
+    align-self: stretch;
+    flex-grow: 1;
+    opacity: 0;
+  }
+
+  &:hover {
+    .text {
+      padding-left: 12px;
+      color: black;
+      background-color: orange;
+    }
+
+    .ridge {
+      width: 8px;
+      margin-left: 6px;
+      margin-right: 4px;
+    }
+
+    .terminal-hover-button__tooltip {
+      opacity: 0.8;
+    }
+  }
+
+  &.active {
+    .ridge {
+    }
+  }
+}

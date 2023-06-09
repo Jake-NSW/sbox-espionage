@@ -1,0 +1,25 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+@using Sandbox.Menu;
+
+@attribute [StyleSheet]
+@inherits RootPanel
+@implements Sandbox.Menu.ILoadingScreenPanel
+@namespace Espionage.UI.Menu
+
+<root>
+    <div>Loading!</div>
+    <div>@Progress.Title</div>
+</root>
+
+@code {
+    public LoadingProgress Progress;
+
+    public void OnLoadingProgress(LoadingProgress progress)
+    {
+        Log.Info(progress.Title);
+        Progress = progress;
+        StateHasChanged();
+    }
+
+}

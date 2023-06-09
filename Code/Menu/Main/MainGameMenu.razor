@@ -1,69 +1,90 @@
-﻿@using System
-@using Sandbox;
+﻿@using Sandbox;
 @using Sandbox.UI;
+
 @attribute [StyleSheet]
 @inherits Panel
 @implements Sandbox.Menu.IGameMenuPanel
 @namespace Espionage.UI.Menu
 
 <root class="menu__start-menu">
-    <div class="header">
-        <div>
-            <span>@DateTime.Now.ToLongTimeString()</span>
+    <div class="terminal-back">
+        <div class="header" style="display: none">
+            <div>
+                <label text="menu"></label>
+            </div>
+            <div style="flex-grow: 1"></div>
+            <div style="font-size: 14px; align-items: flex-end">
+                <label text="User: "></label>
+                @Game.UserName
+            </div>
         </div>
-        <div style="flex-grow: 1"></div>
-        <div style="font-size: 14px; flex-direction: column; justify-content: flex-end">
-            @Game.UserName
+        <div class="terminal-output">
         </div>
-    </div>
-    <div class="title">
-        <label class="game-title">
-            @Game.Menu.Package.Title
-        </label>
-    </div>
-    <div class="navigator">
-        <button class="play-button button" onclick="@(() => Game.Menu.StartServerAsync(1, "Server", "playground/item_test"))">
-            <span>> Play</span>
-        </button>
-        <button class="play-button button">
-            <span>> Settings</span>
-        </button>
-        <button class="play-button button">
-            <span>> Servers</span>
-        </button>
-        <button class="button">
-            <span>> Community</span>
-        </button>
-        @if (Game.InGame)
-        {
-            <button class="button" onclick="@(() => Game.Menu.LeaveServer("Client Disconnect"))">
-                <span>> Quit</span>
-            </button>
-        }
-        else
-        {
-            <button class="button" onclick="@(() => Game.Menu.Close())">
-                <span>> Close</span>
-            </button>
-        }
+        <div class="footer" style="bottom: 0">
+            <div>
+                Terminal 32
+            </div>
+            <div style="flex-grow: 1;"></div>
+            <div style="font-size: 14px;  justify-content: flex-start">
+                Phoenix OS
+            </div>
+        </div>
     </div>
 
-    <div class="footer">
-        <div>
-            <span>Terminal 32</span>
+    <div class="terminal-front">
+        <div class="title">
+            @Game.Menu.Package.Title
         </div>
-        <div style="flex-grow: 1;"></div>
-        <div style="font-size: 14px;  justify-content: flex-start">
-            Phoenix OS
+        <div class="navigator">
+            @if (!Game.InGame)
+            {
+                <TerminalHoverButton onclick="@OnPlayClicked" Text="Play" Tooltip="Quick Matchmaking" style="max-width: 512px; align-self: stretch"/>
+            }
+            else
+            {
+                <TerminalHoverButton onclick="@OnPlayClicked" Text="Continue" Tooltip="Quick Matchmaking" style="max-width: 512px; align-self: stretch"/>
+            }
+            
+            <TerminalHoverButton onclick="@OnSettingsClicked" Text="Settings" Tooltip="Adjust User Settings" style="max-width: 512px; align-self: stretch"/>
+            <TerminalHoverButton onclick="@OnServersClicked" Text="Servers" Tooltip="Find your Community" style="max-width: 512px; align-self: stretch"/>
+            <TerminalHoverButton onclick="@OnCommunityClicked" Text="Community" Tooltip="Join our Discord" style="max-width: 512px; align-self: stretch"/>
+            @if (Game.InGame)
+            {
+                <TerminalHoverButton onclick="@OnDisconnectClicked" Text="Disconnect" Tooltip="Return to the main menu" style="max-width: 512px; align-self: stretch"/>
+            }
+            else
+            {
+                <TerminalHoverButton onclick="@OnCloseClicked" Text="Quit" Tooltip="Quit Espionage" style="max-width: 512px; align-self: stretch"/>
+            }
         </div>
     </div>
 </root>
 
-@code {
+@functions {
 
-    protected override int BuildHash()
+    private void OnPlayClicked()
     {
-        return DateTime.Now.GetHashCode();
+        if (!Game.InGame)
+        {
+            Game.Menu.StartServerAsync(1, "Server", "playground/item_test");
+        }
+        else
+        {
+            Game.Menu.HideMenu();
+        }
     }
 
+    private void OnSettingsClicked() { }
+    private void OnServersClicked() { }
+    private void OnCommunityClicked() { }
+
+    private void OnDisconnectClicked()
+    {
+        Game.Menu.LeaveServer("Left the server");
+    }
+
+    private void OnCloseClicked()
+    {
+        Game.Menu.Close();
+    }
 }

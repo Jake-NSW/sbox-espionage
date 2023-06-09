@@ -1,0 +1,22 @@
+﻿@using Sandbox.UI;
+@attribute [StyleSheet]
+@inherits Panel
+@namespace Espionage.UI.Menu
+
+<root class="terminal-hover-button">
+    <div class="ridge"></div>
+    <div class="text">
+        @Text
+        @if (Tooltip != null)
+        {
+            <div class="terminal-hover-button__tooltip">
+                @Tooltip
+            </div>
+        }
+    </div>
+</root>
+
+@code {
+    public string Text { get; set; }
+    public string Tooltip { get; set; }
+}
