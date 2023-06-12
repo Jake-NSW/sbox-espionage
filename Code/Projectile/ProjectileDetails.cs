@@ -5,7 +5,7 @@ namespace Woosh.Espionage;
 public struct ProjectileDetails
 {
 	public TimeSince Since;
-	
+
 	public int Attacker;
 	public int Weapon;
 

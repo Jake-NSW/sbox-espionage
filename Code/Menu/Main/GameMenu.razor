@@ -1,9 +1,7 @@
-﻿@using Sandbox;
+@using Sandbox
 @using Sandbox.UI;
-
 @attribute [StyleSheet]
 @inherits Panel
-@implements Sandbox.Menu.IGameMenuPanel
 @namespace Espionage.UI.Menu
 
 <root class="menu__start-menu">
@@ -19,6 +17,7 @@
             </div>
         </div>
         <div class="terminal-output">
+            menu/
         </div>
         <div class="footer" style="bottom: 0">
             <div>
@@ -42,9 +41,9 @@
             }
             else
             {
-                <TerminalHoverButton onclick="@OnPlayClicked" Text="Continue" Tooltip="Quick Matchmaking" style="max-width: 512px; align-self: stretch"/>
+                <TerminalHoverButton onclick="@OnPlayClicked" Text="Continue" Tooltip="Keep Playing" style="max-width: 512px; align-self: stretch"/>
             }
-            
+
             <TerminalHoverButton onclick="@OnSettingsClicked" Text="Settings" Tooltip="Adjust User Settings" style="max-width: 512px; align-self: stretch"/>
             <TerminalHoverButton onclick="@OnServersClicked" Text="Servers" Tooltip="Find your Community" style="max-width: 512px; align-self: stretch"/>
             <TerminalHoverButton onclick="@OnCommunityClicked" Text="Community" Tooltip="Join our Discord" style="max-width: 512px; align-self: stretch"/>
@@ -87,4 +86,5 @@
     {
         Game.Menu.Close();
     }
+
 }

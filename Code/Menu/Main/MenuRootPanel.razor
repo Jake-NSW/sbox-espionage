@@ -1,0 +1,27 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+
+@attribute [StyleSheet]
+@inherits Panel
+@implements Sandbox.Menu.IGameMenuPanel
+@namespace Espionage.UI.Menu
+
+<root style="flex-grow: 1">
+    @if (Game.InGame)
+    {
+        <PauseMenu></PauseMenu>
+    }
+    else
+    {
+        <GameMenu></GameMenu>
+    }
+</root>
+
+@code
+{
+    [GameEvent.Menu.ServerJoined]
+    private void OnServerJoined()
+    {
+        StateHasChanged();
+    }
+}

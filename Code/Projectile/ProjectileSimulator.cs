@@ -20,12 +20,6 @@ public sealed class ProjectileSimulator : ObservableEntityComponent<Project>, IS
 		// WriteNetworkData();
 	}
 
-	public void Remove( ProjectileDetails details )
-	{
-		m_InMotion.Remove( details );
-		// WriteNetworkData();
-	}
-
 	public void Remove( int index )
 	{
 		m_InMotion.RemoveAt( index );
@@ -53,7 +47,7 @@ public sealed class ProjectileSimulator : ObservableEntityComponent<Project>, IS
 			if ( details.Since > 3 )
 			{
 				Log.Info( $"Faded Away! - {details.Since}" );
-				Remove( details );
+				Remove( i );
 				return;
 			}
 
@@ -107,9 +101,9 @@ public sealed class ProjectileSimulator : ObservableEntityComponent<Project>, IS
 	public void Write( NetWrite write )
 	{
 		write.Write( m_InMotion.Count );
-		foreach ( var details in m_InMotion )
+		foreach ( var projectile in m_InMotion )
 		{
-			write.Write( details );
+			write.Write( projectile );
 		}
 	}
 }

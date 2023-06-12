@@ -1,0 +1,13 @@
+﻿@using Sandbox
+@using Sandbox.UI;
+@attribute [StyleSheet]
+@inherits Panel
+@namespace Espionage.UI.Menu
+
+<root style="flex-grow: 1">
+    <div style="backdrop-filter: blur(24px); flex-grow: 1">
+        <button class="tooltip" onclick="@(() => Game.Menu.LeaveServer("Disconnected"))">
+            Leave!!
+        </button>
+    </div>
+</root>
