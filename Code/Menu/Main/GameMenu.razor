@@ -1,3 +1,5 @@
+@using System
+@using System.Linq
 @using Sandbox
 @using Sandbox.UI;
 @attribute [StyleSheet]
@@ -17,7 +19,7 @@
             </div>
         </div>
         <div class="terminal-output">
-            menu/
+            <label @ref="Panel" id="terminal-output__text"></label>
         </div>
         <div class="footer" style="bottom: 0">
             <div>
@@ -35,31 +37,47 @@
             @Game.Menu.Package.Title
         </div>
         <div class="navigator">
-            @if (!Game.InGame)
+            @foreach (var item in Details)
             {
-                <TerminalHoverButton onclick="@OnPlayClicked" Text="Play" Tooltip="Quick Matchmaking" style="max-width: 512px; align-self: stretch"/>
-            }
-            else
-            {
-                <TerminalHoverButton onclick="@OnPlayClicked" Text="Continue" Tooltip="Keep Playing" style="max-width: 512px; align-self: stretch"/>
-            }
-
-            <TerminalHoverButton onclick="@OnSettingsClicked" Text="Settings" Tooltip="Adjust User Settings" style="max-width: 512px; align-self: stretch"/>
-            <TerminalHoverButton onclick="@OnServersClicked" Text="Servers" Tooltip="Find your Community" style="max-width: 512px; align-self: stretch"/>
-            <TerminalHoverButton onclick="@OnCommunityClicked" Text="Community" Tooltip="Join our Discord" style="max-width: 512px; align-self: stretch"/>
-            @if (Game.InGame)
-            {
-                <TerminalHoverButton onclick="@OnDisconnectClicked" Text="Disconnect" Tooltip="Return to the main menu" style="max-width: 512px; align-self: stretch"/>
-            }
-            else
-            {
-                <TerminalHoverButton onclick="@OnCloseClicked" Text="Quit" Tooltip="Quit Espionage" style="max-width: 512px; align-self: stretch"/>
+                <TerminalHoverButton
+                    onclick="@(item.OnClicked)"
+                    onmousemove="@(() => OnButtonMouseEnter(item))"
+                    onmouseout="@(() => Panel.Text = string.Empty)"
+                    Text="@(item.Title)"
+                    Tooltip="@(item.Tooltip)"
+                    style="max-width: 512px; align-self: stretch">
+                </TerminalHoverButton>
             }
         </div>
     </div>
 </root>
 
-@functions {
+@code {
+
+    private Label Panel { get; set; }
+
+    private struct ButtonDetails
+    {
+        public ButtonDetails(string title, string tooltip, Action onClicked)
+        {
+            Title = title;
+            Tooltip = tooltip;
+            OnClicked = onClicked;
+        }
+
+        public string Title { get; }
+        public string Tooltip { get; }
+        public Action OnClicked { get; }
+    }
+
+    private ButtonDetails[] Details => new[]
+    {
+        new ButtonDetails("Play", "Quick Matchmaking", OnPlayClicked),
+        new ButtonDetails("Settings", "Adjust User Settings", OnSettingsClicked),
+        new ButtonDetails("Servers", "Find your Community", OnServersClicked),
+        new ButtonDetails("Community", "Join our Discord", OnCommunityClicked),
+        new ButtonDetails("Quit", "Quit Espionage", OnCloseClicked)
+    };
 
     private void OnPlayClicked()
     {
@@ -71,6 +89,11 @@
         {
             Game.Menu.HideMenu();
         }
+    }
+
+    private void OnButtonMouseEnter(ButtonDetails details)
+    {
+        Panel.Text = "C:/menu/... " + details.Title.ToLower();
     }
 
     private void OnSettingsClicked() { }
