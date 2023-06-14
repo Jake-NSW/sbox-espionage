@@ -46,6 +46,11 @@ public static class EntityUtility
 
 	public static DisplayInfo Info( this Entity entity )
 	{
+		if ( entity == null )
+		{
+			return new DisplayInfo() { Name = "Unknown" };
+		}
+		
 		var info = (entity as IHave<DisplayInfo>)?.Item;
 		if ( entity is ModelEntity model )
 		{

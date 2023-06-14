@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Sandbox;
 using Woosh.Common;
 using Woosh.Signals;
@@ -8,8 +9,20 @@ namespace Woosh.Espionage;
 
 public sealed class App : GameManager, IObservable
 {
-	public new static App Current => GameManager.Current as App;
-	
+	public new static App Current
+	{
+		[MethodImpl( MethodImplOptions.AggressiveInlining )]
+		get => GameManager.Current as App;
+	}
+
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public static T Get<T>() where T : EntityComponent
+	{
+		return Current.Components.Get<T>();
+	}
+
+	// Instance
+
 	public IDispatcher Events { get; }
 
 	public App()

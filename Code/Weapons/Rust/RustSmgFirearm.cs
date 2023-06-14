@@ -5,7 +5,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-[Library( "weapon_smg" ), Title( "SMG" ), HammerEntity, EditorModel( WORLD_MODEL )]
+[Library( "weapon_smg" ), Title( "Submachine Gun" ), Description("Made in a basement"), HammerEntity, EditorModel( WORLD_MODEL )]
 public class RustSmgFirearm : Firearm, ISlotted
 {
 	public RustSmgFirearm()

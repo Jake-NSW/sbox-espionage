@@ -5,7 +5,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-[Library( "weapon_pistol" ), Title( "Pistol" ), HammerEntity, EditorModel( WORLD_MODEL )]
+[Library( "weapon_pistol" ), Title( "Pistol" ), Description("Made with shit"), HammerEntity, EditorModel( WORLD_MODEL )]
 public sealed class RustPistolFirearm : Firearm, ISlotted
 {
 	public RustPistolFirearm()

@@ -5,7 +5,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-[Library( "esp_smg2_firearm" ), Title( "SMG2" ), Icon( "gavel" ), HammerEntity, EditorModel( WORLD_MODEL )]
+[Library( "esp_smg2_firearm" ), Title( "SMG II" ), Description("Heckler & Koch"), Icon( "gavel" ), HammerEntity, EditorModel( WORLD_MODEL )]
 public sealed class Smg2Firearm : Firearm, ISlotted
 {
 	private const string VIEW_MODEL = "weapons/smg2/v_espionage_smg2.vmdl";

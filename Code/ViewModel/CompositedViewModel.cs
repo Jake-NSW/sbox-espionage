@@ -41,7 +41,7 @@ public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity, IMu
 
 	private readonly List<IViewModelEffect> m_Effects;
 
-	public void OnPostSetup( ref CameraSetup setup )
+	void IMutate<CameraSetup>.OnPostSetup( ref CameraSetup setup )
 	{
 		var initialPos = setup.Hands.Offset;
 		var initialRot = setup.Hands.Angles;
@@ -63,7 +63,7 @@ public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity, IMu
 		setup.Hands = hands;
 	}
 
-	public void OnPostSetup( ref InputContext setup )
+	void IMutate<InputContext>.OnPostSetup( ref InputContext setup )
 	{
 		foreach ( var input in Components.All().OfType<IMutate<InputContext>>() )
 		{
