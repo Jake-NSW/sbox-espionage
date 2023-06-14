@@ -35,11 +35,11 @@
     public override void Tick()
     {
         Style.Opacity = Easing.ExpoOut(1 - (m_SinceApplied / 2.4f));
-        // Style.Opacity = 1;
 
         if (m_Target.IsValid())
         {
-            this.ToWorld(m_Target.GetAttachment("muzzle").Value.Position);
+            var trans = m_Target.GetAttachment("muzzle").Value;
+            this.ToWorld(trans.Position + trans.Rotation.Backward * 4);
         }
     }
 }
