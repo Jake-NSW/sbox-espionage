@@ -8,22 +8,26 @@ public static class MathUtility
 {
 	// Damping
 
-	public static float Damp( this float value, float to, float damp )
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public static float Damp( this float value, float to, float smoothing, float delta )
 	{
-		damp = 1 - MathF.Pow( damp, Time.Delta );
-		return MathX.Lerp( value, to, damp );
+		return MathX.Lerp( value, to, 1 - MathF.Exp( -smoothing * delta ) );
 	}
 
-	public static Vector3 Damp( this Vector3 value, Vector3 to, float damp )
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public static Vector3 Damp( this Vector3 value, Vector3 to, float smoothing, float delta )
 	{
-		damp = 1 - MathF.Pow( damp, Time.Delta );
-		return Vector3.Lerp( value, to, damp );
+		return new Vector3(
+			x: value.x.Damp( to.x, smoothing, delta ),
+			y: value.y.Damp( to.y, smoothing, delta ),
+			z: value.z.Damp( to.z, smoothing, delta )
+		);
 	}
 
-	public static Rotation Damp( this Rotation value, Rotation to, float damp )
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public static Rotation Damp( this Rotation value, Rotation to, float smoothing, float delta )
 	{
-		damp = 1 - MathF.Pow( damp, Time.Delta );
-		return Rotation.Lerp( value, to, damp );
+		return Rotation.Lerp( value, to, 1 - MathF.Exp( -smoothing * delta ) );
 	}
 
 	// Float

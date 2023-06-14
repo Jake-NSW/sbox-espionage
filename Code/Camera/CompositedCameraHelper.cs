@@ -5,11 +5,11 @@ using Woosh.Common;
 
 namespace Woosh.Espionage;
 
-public sealed class CompositedCameraBuilder
+public sealed class CompositedCameraHelper
 {
 	public SceneCamera Target { get; }
 
-	public CompositedCameraBuilder( SceneCamera camera )
+	public CompositedCameraHelper( SceneCamera camera )
 	{
 		Game.AssertClient();
 		Target = camera;

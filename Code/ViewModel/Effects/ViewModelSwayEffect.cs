@@ -35,11 +35,11 @@ public sealed class ViewModelSwayEffect : ObservableEntityComponent<CompositedVi
 
 		// Rotate and lerp the viewmodel
 		var targetRot = Rotation.From( mouse.y, -mouse.x, mouse.x );
-		m_LastSwayRot = Rotation.Lerp( m_LastSwayRot, targetRot, Damping * Time.Delta );
+		m_LastSwayRot = m_LastSwayRot.Damp( targetRot, Damping , Time.Delta);
 
 		// Move the viewmodel to a nice new position
 		var targetPos = new Vector3( 0, mouse.x * 0.5f, mouse.y * 0.5f );
-		m_LastSwayPos = m_LastSwayPos.LerpTo( targetPos, Damping * Time.Delta );
+		m_LastSwayPos = m_LastSwayPos.Damp( targetPos, Damping, Time.Delta );
 
 		setup.Hands.Angles *= m_LastSwayRot;
 		setup.Hands.Offset += rot * m_LastSwayPos;

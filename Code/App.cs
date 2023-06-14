@@ -6,33 +6,33 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class Project : GameManager, IObservable
+public sealed class App : GameManager, IObservable
 {
+	public new static App Current => GameManager.Current as App;
+	
 	public IDispatcher Events { get; }
 
-	public Project()
+	public App()
 	{
-		Events = Dispatcher.CreateForEntity( this );
+		Events = new Dispatcher();
 
-		if ( Game.IsClient )
+		if ( Game.IsServer )
 		{
-			Camera = new CompositedCameraBuilder( Sandbox.Camera.Main );
+			// Setup Components
+			Components.Create<CameraBuilderComponent>();
+			Components.Create<GamemodeHandlerComponent>();
 		}
 	}
-
-	private CompositedCameraBuilder Camera { get; }
 
 	public override void FrameSimulate( IClient cl )
 	{
 		base.FrameSimulate( cl );
-
-		Camera.Update( mutate: Game.LocalPawn as IMutate<CameraSetup> );
+		Events.Run( new FrameUpdate( Time.Delta ) );
 	}
 
 	public override void Simulate( IClient cl )
 	{
 		Components.Each<ISimulated, IClient>( cl, ( client, simulated ) => simulated.Simulate( client ) );
-		
 		base.Simulate( cl );
 	}
 

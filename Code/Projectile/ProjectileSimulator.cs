@@ -5,7 +5,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class ProjectileSimulator : ObservableEntityComponent<Project>, ISimulated, INetworkSerializer
+public sealed class ProjectileSimulator : ObservableEntityComponent<App>, ISimulated, INetworkSerializer
 {
 	public ProjectileSimulator()
 	{

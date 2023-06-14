@@ -35,13 +35,13 @@ public sealed class ViewModelRecoilEffect : ObservableEntityComponent<Composited
 
 	public void OnPostSetup( ref CameraSetup setup )
 	{
-		var rot = setup.Rotation.WithRoll(0);
+		var rot = setup.Rotation.WithRoll( 0 );
 
-		m_Target = m_Target.LerpTo( Vector3.Zero, Return * Time.Delta );
+		m_Target = m_Target.Damp( Vector3.Zero, Return, Time.Delta );
 		m_Current = Rotation.Slerp( m_Current, Rotation.From( m_Target.x, m_Target.y, m_Target.z ), Snap * Time.Delta );
-		
+
 		var angles = Rotation.Lerp( Rotation.Identity, m_Current, Multiplier, false );
-		
+
 		setup.Hands.Angles *= angles;
 
 		// Add Yaw and Roll Offsets
