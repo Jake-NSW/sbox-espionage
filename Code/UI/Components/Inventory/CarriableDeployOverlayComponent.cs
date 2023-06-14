@@ -1,5 +1,4 @@
-﻿using Sandbox;
-using Sandbox.UI;
+﻿using Sandbox.UI;
 using Woosh.Espionage.UI;
 using Woosh.Signals;
 
