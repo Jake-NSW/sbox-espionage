@@ -21,10 +21,15 @@
     private AnimatedEntity m_Target;
     private TimeSince m_SinceApplied;
 
+    public void FadeOut()
+    {
+        m_SinceApplied = 0;
+    }
+
     public void Override(string name, string description, AnimatedEntity viewmodel)
     {
         m_Target = viewmodel;
-        m_SinceApplied = 0;
+        m_SinceApplied = default;
 
         Name = name;
         Description = description;
@@ -32,9 +37,11 @@
         StateHasChanged();
     }
 
+    private const float FadeOutTime = 0.75f;
+
     public override void Tick()
     {
-        Style.Opacity = Easing.ExpoOut(1 - (m_SinceApplied / 2.4f));
+        Style.Opacity = m_SinceApplied == default ? 1 : Easing.ExpoOut(1 - (m_SinceApplied / FadeOutTime));
 
         if (m_Target.IsValid())
         {

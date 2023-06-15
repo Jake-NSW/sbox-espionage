@@ -9,7 +9,14 @@ public sealed class CarriableDeployOverlayComponent : EntityHudComponent<RootPan
 	protected override void OnAutoRegister()
 	{
 		base.OnAutoRegister();
+		
 		Register<CreatedViewModel>( OnViewModelCreated );
+		Register<DeployedEntity>( OnDeployed );
+	}
+
+	private void OnDeployed( Event<DeployedEntity> evt )
+	{
+		m_Overlay.FadeOut();
 	}
 
 	private void OnViewModelCreated( Event<CreatedViewModel> evt )
