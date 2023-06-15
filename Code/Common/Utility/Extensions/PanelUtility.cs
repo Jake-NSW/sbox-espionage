@@ -95,4 +95,42 @@ public static class PanelUtility
 		panel.Style.Top = Length.Fraction( screen.y );
 		panel.Style.Dirty();
 	}
+
+	public async static void WriteOut( this Label label, string text, float delay = 0.04f )
+	{
+		label.Text = string.Empty;
+
+		for ( var i = 0; i < text.Length; i++ )
+		{
+			if ( label.Text.Length > 0 )
+				label.Text = label.Text.Remove( label.Text.Length - 1 );
+
+			label.Text += text[i];
+
+			if ( i != text.Length - 1 )
+				label.Text += "_";
+
+			await GameTask.DelaySeconds( delay );
+		}
+
+		label.Text = text;
+	}
+
+	public async static void BackspaceOut( this Label label, float delay = 0.04f )
+	{
+		var length = label.Text.Length;
+
+		for ( int i = 0; i < length; i++ )
+		{
+			if ( label.Text.Length > 2 )
+				label.Text = "_" + label.Text.Substring( 2 );
+			else
+				label.Text = label.Text.Substring( 1 );
+
+			await GameTask.DelaySeconds( delay );
+		}
+
+		label.Text = string.Empty;
+	}
 }
+

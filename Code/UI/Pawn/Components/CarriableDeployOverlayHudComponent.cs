@@ -1,10 +1,9 @@
 ﻿using Sandbox.UI;
-using Woosh.Espionage.UI;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class CarriableDeployOverlayComponent : EntityHudComponent<RootPanel, Pawn>
+public sealed class CarriableDeployOverlayHudComponent : EntityHudComponent<RootPanel, Pawn>
 {
 	protected override void OnAutoRegister()
 	{
@@ -31,10 +30,10 @@ public sealed class CarriableDeployOverlayComponent : EntityHudComponent<RootPan
 		m_Overlay.Override( info.Name, info.Description, evt.Data.ViewModel );
 	}
 
-	private CarriableDeployOverlay m_Overlay;
+	private UI.CarriableDeployOverlay m_Overlay;
 
 	protected override void OnCreateUI( RootPanel root )
 	{
-		m_Overlay = root.AddChild<CarriableDeployOverlay>();
+		m_Overlay = root.AddChild<UI.CarriableDeployOverlay>();
 	}
 }
