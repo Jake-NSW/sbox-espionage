@@ -5,9 +5,16 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-[Library( "weapon_shotgun" ), Title( "Shotgun" ), Description("Made with love"), HammerEntity, EditorModel( WORLD_MODEL )]
-public sealed class RustShotgunFirearm : Firearm, ISlotted
+[Library( "weapon_shotgun" ), HammerEntity, EditorModel( WORLD_MODEL )]
+public sealed class RustShotgunFirearm : Firearm, ISlotted, IHave<EntityInfo>
 {
+	public EntityInfo Item { get; } = new EntityInfo()
+	{
+		Display = "Shotgun",
+		Brief = "Made with love",
+		Icon = "gavel"
+	};
+
 	public RustShotgunFirearm()
 	{
 		if ( !Game.IsClient )

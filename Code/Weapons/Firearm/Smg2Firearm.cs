@@ -5,11 +5,19 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-[Library( "esp_smg2_firearm" ), Title( "SMG II" ), Description("Heckler & Koch"), Icon( "gavel" ), HammerEntity, EditorModel( WORLD_MODEL )]
-public sealed class Smg2Firearm : Firearm, ISlotted
+[Library( "esp_smg2_firearm" ), HammerEntity, EditorModel( WORLD_MODEL )]
+public sealed class Smg2Firearm : Firearm, ISlotted, IHave<EntityInfo>
 {
 	private const string VIEW_MODEL = "weapons/smg2/v_espionage_smg2.vmdl";
 	private const string WORLD_MODEL = "weapons/smg2/espionage_smg2.vmdl";
+
+	public EntityInfo Item { get; } = new EntityInfo()
+	{
+		Display = "SMG II",
+		Brief = "Heckler & Koch",
+		Icon = "gavel",
+		Description = "A prototype supersonic sub machine gun"
+	};
 
 	public Smg2Firearm()
 	{

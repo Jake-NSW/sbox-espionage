@@ -5,19 +5,13 @@ namespace Woosh.Espionage;
 
 public sealed class CarriableDeployOverlayHudComponent : EntityHudComponent<RootPanel, Pawn>
 {
-	protected override void OnAutoRegister()
-	{
-		base.OnAutoRegister();
-
-		Register<CreatedViewModel>( OnViewModelCreated );
-		Register<DeployedEntity>( OnDeployed );
-	}
-
+	[Listen]
 	private void OnDeployed( Event<DeployedEntity> evt )
 	{
 		m_Overlay.FadeOut();
 	}
 
+	[Listen]
 	private void OnViewModelCreated( Event<CreatedViewModel> evt )
 	{
 		var ent = evt.Data.Target;

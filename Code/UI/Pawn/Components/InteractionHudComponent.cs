@@ -5,13 +5,7 @@ namespace Woosh.Espionage;
 
 public sealed class InteractionHudComponent : EntityHudComponent<RootPanel, Pawn>
 {
-	protected override void OnAutoRegister()
-	{
-		base.OnAutoRegister();
-
-		Register<InteractionTargetChanged>( OnInteractionChanged );
-	}
-
+	[Listen]
 	private void OnInteractionChanged( Event<InteractionTargetChanged> evt )
 	{
 		m_Badge?.OnInteractionChanged( evt );

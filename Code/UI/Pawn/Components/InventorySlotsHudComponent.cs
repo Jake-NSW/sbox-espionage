@@ -9,16 +9,8 @@ public sealed class InventorySlotsHudComponent : EntityHudComponent<RootPanel, P
 {
 	public DeployableSlotHandler Slots => this.Get<DeployableSlotHandler>();
 
-	protected override void OnAutoRegister()
-	{
-		base.OnAutoRegister();
-
-		Register<SlotAssigned>( OnSlotAssigned );
-		Register<SlotDeploying>( OnSlotDeploying );
-	}
-
 	private Panel[] m_Slots = new Panel[10];
-
+	
 	protected override void OnCreateUI( RootPanel root )
 	{
 		base.OnCreateUI( root );
@@ -29,6 +21,7 @@ public sealed class InventorySlotsHudComponent : EntityHudComponent<RootPanel, P
 		}
 	}
 
+	[Listen]
 	private void OnSlotAssigned( Event<SlotAssigned> evt )
 	{
 		if ( m_Slots == null )
@@ -50,6 +43,7 @@ public sealed class InventorySlotsHudComponent : EntityHudComponent<RootPanel, P
 		panel.Add.Label( name );
 	}
 
+	[Listen]
 	private void OnSlotDeploying( Event<SlotDeploying> evt )
 	{
 		if ( m_Slots == null )
