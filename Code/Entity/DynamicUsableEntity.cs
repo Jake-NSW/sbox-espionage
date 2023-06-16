@@ -5,9 +5,14 @@ using Woosh.Common;
 namespace Woosh.Espionage;
 
 [Library( "esp_dynamic_usable" ), HammerEntity, Category( "World Building" ), Model]
-public sealed partial class DynamicUsableEntity : AnimatedEntity, IHave<DisplayInfo>, IUse
+public sealed partial class DynamicUsableEntity : AnimatedEntity, IHave<EntityInfo>, IUse
 {
-	DisplayInfo IHave<DisplayInfo>.Item => new DisplayInfo() { Name = Title, Description = Description, Icon = Icon, };
+	EntityInfo IHave<EntityInfo>.Item => new EntityInfo()
+	{
+		Display = Title,
+		Description = Description,
+		Icon = Icon,
+	};
 
 	public override void Spawn()
 	{

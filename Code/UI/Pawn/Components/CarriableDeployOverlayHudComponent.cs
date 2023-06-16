@@ -26,8 +26,8 @@ public sealed class CarriableDeployOverlayHudComponent : EntityHudComponent<Root
 		if ( ent == null )
 			return;
 
-		var info = ent.Info();
-		m_Overlay.Override( info.Name, info.Description, evt.Data.ViewModel );
+		var info = EntityInfo.FromEntity( ent );
+		m_Overlay.Override( info.Display, info.Brief, evt.Data.ViewModel );
 	}
 
 	private UI.CarriableDeployOverlay m_Overlay;

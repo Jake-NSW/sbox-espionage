@@ -20,12 +20,13 @@ public struct FirearmSetup
 	public bool IsSilenced;
 
 	public float RateOfFire; // RPM
+	
+	public float Force;
+	public float Spread;
 	public float Control;
 	public float Mobility;
 	public float Range;
 	public float Accuracy;
-
-	public float Force;
 
 	public DrawTime Draw;
 }

@@ -6,13 +6,14 @@ namespace Woosh.Espionage;
 
 [Library( "esp_terminal" ), Icon( "terminal" ), Category( "Gameplay" )]
 [HammerEntity, Model]
-public sealed partial class TerminalEntity : AnimatedEntity, IControllable, IHave<DisplayInfo>, IMutate<CameraSetup>
+public sealed partial class TerminalEntity : AnimatedEntity, IControllable, IHave<EntityInfo>, IMutate<CameraSetup>
 {
 	[Net] [Property] public string Display { get; set; }
 
-	DisplayInfo IHave<DisplayInfo>.Item => new DisplayInfo()
+	EntityInfo IHave<EntityInfo>.Item => new EntityInfo()
 	{
-		Name = Display, Icon = "terminal",
+		Display = Display,
+		Icon = "terminal",
 	};
 
 	public override void Spawn()

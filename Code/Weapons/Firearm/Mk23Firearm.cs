@@ -5,11 +5,20 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-[Library( "esp_mk23_firearm" ), Title( "MK23" ), Description( "Heckler & Koch" ), HammerEntity, EditorModel( WORLD_MODEL )]
-public sealed class Mk23Firearm : Firearm, ISlotted
+[Library( "esp_mk23_firearm" ), HammerEntity, EditorModel( WORLD_MODEL )]
+public sealed class Mk23Firearm : Firearm, ISlotted, IHave<EntityInfo>
 {
 	private const string VIEW_MODEL = "weapons/mk23/v_espionage_mk23.vmdl";
 	private const string WORLD_MODEL = "weapons/mk23/espionage_mk23.vmdl";
+
+	public EntityInfo Item { get; } = new EntityInfo
+	{
+		Display = "MK23",
+		Brief = "Heckler & Koch",
+		Icon = "gavel",
+		Description = "A semi-automatic large framed pistol, chambered in .45 ACP.",
+		Group = "weapon"
+	};
 
 	public Mk23Firearm()
 	{

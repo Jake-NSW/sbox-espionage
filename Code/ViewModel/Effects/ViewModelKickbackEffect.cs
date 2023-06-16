@@ -20,10 +20,8 @@ public sealed class ViewModelKickbackEffect : ObservableEntityComponent<Composit
 		Register<WeaponFired>(
 			e =>
 			{
-				var rand = Game.Random;
 				var kick = e.Data.Kickback;
-
-				m_Target += new Vector3( kick.x, rand.Float( -kick.y, kick.y ), rand.Float( -kick.z, kick.z ) ) * Time.Delta;
+				m_Target += new Vector3( kick.x, kick.y.Range(), kick.z.Range() ) * Time.Delta;
 			}
 		);
 	}

@@ -83,6 +83,12 @@ public static class MathUtility
 	}
 
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public static float Range( this float value )
+	{
+		return Game.Random.Float( -value, value );
+	}
+
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
 	public static Rotation WithRoll( this Rotation rotation, float pitch )
 	{
 		var rot = rotation * Rotation.FromRoll( rotation.Roll() ).Inverse;

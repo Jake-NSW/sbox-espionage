@@ -45,6 +45,7 @@ public sealed class Smg2Firearm : Firearm, ISlotted
 		IsSilenced = true,
 		RateOfFire = 700,
 		Force = 250,
+		Spread = 2,
 		Draw = new DrawTime( 1.5f, 1.3f )
 	};
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Sandbox;
 using Woosh.Common;
 using Woosh.Espionage.Data;
@@ -8,8 +9,21 @@ namespace Woosh.Espionage;
 
 public static class EntityUtility
 {
+#nullable enable
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public static T? Has<T>( this Entity ent )
+	{
+		if ( ent is IHave<T> have )
+		{
+			return have.Item;
+		}
+
+		return default;
+	}
+#nullable restore
+
 	// Cooler Display Info
-	
+
 	[SkipHotload] private readonly static Dictionary<(Type Type, int Hash), DisplayInfo> m_TypeInfo;
 
 	static EntityUtility()
@@ -46,16 +60,6 @@ public static class EntityUtility
 
 	public static DisplayInfo Info( this Entity entity )
 	{
-		if ( entity == null )
-		{
-			return new DisplayInfo() { Name = "Unknown" };
-		}
-		
-		var info = (entity as IHave<DisplayInfo>)?.Item;
-		if ( entity is ModelEntity model )
-		{
-			info ??= GetOrCreateInfoFromModel( model.Model );
-		}
-		return info ?? GetOrCreateInfoFromType( entity.GetType() );
+		return entity == null ? new DisplayInfo() { Name = "Unknown" } : GetOrCreateInfoFromType( entity.GetType() );
 	}
 }

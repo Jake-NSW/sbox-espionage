@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using System;
+using Sandbox;
 using Woosh.Common;
 using Woosh.Signals;
 
@@ -68,32 +69,24 @@ public sealed partial class FirearmShootSimulatedEntityState : ObservableEntityC
 			PlayClientEffects( effects );
 		}
 
+		Game.SetRandomSeed( Time.Tick );
+
 		// Owner, Shoot from View Model
-		// if ( Entity.Owner != null && Entity.IsLocalPawn )
+		var ray = (Entity.Owner as Pawn).Muzzle;
 		{
-			var ray = (Entity.Owner as Pawn).Muzzle;
-			// if ( Entity.Effects?.GetAttachment( "muzzle" ) is { } muzzle )
-			{
-				// CmdReceivedShootRequest( Entity.NetworkIdent, muzzle.Position, muzzle.Rotation.Forward );
-				GameManager.Current.Components.GetOrCreate<ProjectileSimulator>().Add(
-					new ProjectileDetails()
-					{
-						Force = Setup.Force,
-						Mass = 0.0009f,
-						Start = ray.Position,
-						Forward = ray.Forward,
-						Attacker = Entity.Owner.NetworkIdent,
-						Weapon = Entity.NetworkIdent,
-						Since = 0
-					}
-				);
-			}
-
-			return;
+			GameManager.Current.Components.GetOrCreate<ProjectileSimulator>().Add(
+				new ProjectileDetails()
+				{
+					Force = Setup.Force,
+					Mass = 0.0009f,
+					Start = ray.Position,
+					Forward = (Rotation.LookAt( ray.Forward ) * Rotation.FromYaw( Setup.Spread.Range() ) * Rotation.FromPitch( Setup.Spread.Range() )).Forward,
+					Attacker = Entity.Owner.NetworkIdent,
+					Weapon = Entity.NetworkIdent,
+					Since = 0
+				}
+			);
 		}
-
-		// No Owner, Shoot from World Model
-		if ( Entity.Owner == null && Game.IsServer ) { }
 	}
 
 	[ClientRpc]
@@ -123,7 +116,7 @@ public sealed partial class FirearmShootSimulatedEntityState : ObservableEntityC
 	public void OnPostSetup( ref InputContext setup )
 	{
 		if ( Entity.Effects?.GetAttachment( "muzzle" ) is { } muzzle )
-			setup.Muzzle = new Ray(muzzle.Position, muzzle.Rotation.Forward);
+			setup.Muzzle = new Ray( muzzle.Position, muzzle.Rotation.Forward );
 		else
 			setup.Muzzle = default;
 	}

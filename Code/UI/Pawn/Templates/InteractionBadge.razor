@@ -79,8 +79,8 @@
             return;
 
         // Get Info
-        var info = m_Target.Info();
-        Display = info.Name;
+        var info = EntityInfo.FromEntity(evt.Hovering);
+        Display = info.Display;
         Icon = info.Icon;
     }
 

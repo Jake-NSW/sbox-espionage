@@ -22,10 +22,8 @@ public sealed class ViewModelRecoilEffect : ObservableEntityComponent<Composited
 		Register<WeaponFired>(
 			e =>
 			{
-				var rand = Game.Random;
 				var recoil = e.Data.Recoil;
-
-				m_Target += new Vector3( recoil.x, rand.Float( -recoil.y, recoil.y ), rand.Float( -recoil.z, recoil.z ) ) * Time.Delta;
+				m_Target += new Vector3( recoil.x, recoil.y.Range(), recoil.z.Range() ) * Time.Delta;
 			}
 		);
 	}

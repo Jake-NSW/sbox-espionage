@@ -5,8 +5,6 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public readonly record struct PawnLanded( Vector3 Velocity ) : ISignal;
-
 public sealed class WalkController : PawnController
 {
 	private bool IsGrounded => Entity.GroundEntity.IsValid();
@@ -32,7 +30,6 @@ public sealed class WalkController : PawnController
 			if ( !IsGrounded )
 			{
 				Landed();
-
 				m_Jumped = false;
 			}
 
