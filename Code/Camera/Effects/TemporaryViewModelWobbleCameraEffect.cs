@@ -8,7 +8,7 @@ public sealed class TemporaryViewModelWobbleCameraEffect : ITemporaryCameraEffec
 	public TemporaryViewModelWobbleCameraEffect( float time, float speed, float amplitude )
 	{
 		m_TimeUntil = time;
-		
+
 		m_Speed = speed;
 		m_Amplitude = amplitude;
 	}
@@ -19,9 +19,9 @@ public sealed class TemporaryViewModelWobbleCameraEffect : ITemporaryCameraEffec
 
 	public bool OnPostCameraSetup( ref CameraSetup setup )
 	{
-		float currentAmplitude = m_Amplitude * (1 - m_TimeUntil.Passed.Clamp(0, 1));
-		
-		Log.Info(currentAmplitude);
+		float currentAmplitude = m_Amplitude * (1 - m_TimeUntil.Passed.Clamp( 0, 1 ));
+
+		Log.Info( currentAmplitude );
 
 		var wobbleAmount = MathF.Sin( m_TimeUntil.Fraction * 8 ) * currentAmplitude;
 		// setup.Hands.Offset += setup.Rotation * new Vector3( 0, wobbleAmount, 0 );

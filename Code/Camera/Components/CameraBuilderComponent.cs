@@ -29,6 +29,16 @@ public sealed partial class CameraBuilderComponent : ObservableEntityComponent<A
 		m_Helper.Update( mutate: Game.LocalPawn as IMutate<CameraSetup> );
 	}
 
+	public void AddEffect( ITemporaryCameraEffect effect )
+	{
+		m_Helper.Effects.Add( effect );
+	}
+
+	public void RemoveEffect( ITemporaryCameraEffect effect )
+	{
+		m_Helper.Effects.Remove( effect );
+	}
+
 	// Active Camera Controller
 
 	[Net] private BaseNetworkable n_Camera { get; set; }

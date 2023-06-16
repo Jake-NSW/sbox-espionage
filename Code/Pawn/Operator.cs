@@ -17,6 +17,7 @@ public sealed class Operator : Pawn, IMutate<CameraSetup>, IMutate<InputContext>
 		Components.Create<InteractionHudComponent>();
 		Components.Create<CarriableDeployOverlayHudComponent>();
 		Components.Create<InventorySlotsHudComponent>();
+		Components.Create<AmmoCheckOverlayHudComponent>();
 
 		// Gameplay
 		Components.Create<PawnLeaning>();
@@ -55,8 +56,14 @@ public sealed class Operator : Pawn, IMutate<CameraSetup>, IMutate<InputContext>
 	{
 		setup.ViewAngles.pitch = setup.ViewAngles.pitch.Clamp( -75, 70 );
 		(Active as IMutate<InputContext>)?.OnPostSetup( ref setup );
+
+		foreach ( var component in Components.All() )
+		{
+			if ( component is IMutate<InputContext> cast )
+				cast.OnPostSetup( ref setup );
+		}
 	}
-	
+
 	public override void Simulate( IClient cl )
 	{
 		base.Simulate( cl );

@@ -19,13 +19,13 @@ public sealed class GenericFirearmViewModelAnimator : ObservableEntityComponent<
 
 	private void OnCheckAmmoClosed( Event<CheckAmmoClosed> evt )
 	{
-		Log.Info("Closed");
+		Log.Info("Check Ammo Closed");
 		Entity.SetAnimParameter( "bAttachmentMenu", false );
 	}
 
 	private void OnCheckAmmoOpen( Event<CheckAmmoOpen> evt )
 	{
-		Log.Info("Opened ");
+		Log.Info("Check Ammo Open");
 		Entity.SetAnimParameter( "bAttachmentMenu", true );
 	}
 

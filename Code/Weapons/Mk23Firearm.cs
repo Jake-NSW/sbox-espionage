@@ -5,7 +5,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-[Library( "esp_mk23_firearm" ), Title( "MK23" ), Description("Heckler & Koch"), HammerEntity, EditorModel( WORLD_MODEL )]
+[Library( "esp_mk23_firearm" ), Title( "MK23" ), Description( "Heckler & Koch" ), HammerEntity, EditorModel( WORLD_MODEL )]
 public sealed class Mk23Firearm : Firearm, ISlotted
 {
 	private const string VIEW_MODEL = "weapons/mk23/v_espionage_mk23.vmdl";
@@ -22,8 +22,8 @@ public sealed class Mk23Firearm : Firearm, ISlotted
 				var model = evt.Data.ViewModel;
 				model.FromAspect( new ViewModelEffectsAspect( VIEW_MODEL ) { HipTuck = TuckType.Rotate, AimTuck = TuckType.Push } );
 				model.Components.Create<GenericFirearmViewModelAnimator>();
-				model.SetMaterialGroup( "chrome" );
-				model.SetBodyGroup( "muzzle", 1 );
+				model.SetMaterialGroup( "tan" );
+				model.SetBodyGroup( "muzzle", 0 );
 				model.SetBodyGroup( "module", 1 );
 			}
 		);
@@ -44,7 +44,7 @@ public sealed class Mk23Firearm : Firearm, ISlotted
 	protected override FirearmSetup Default => new FirearmSetup()
 	{
 		IsAutomatic = false,
-		IsSilenced = true,
+		IsSilenced = false,
 		RateOfFire = 550,
 		Force = 400,
 		Draw = new DrawTime( 1, 0.6f )

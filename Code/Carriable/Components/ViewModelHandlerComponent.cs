@@ -5,12 +5,6 @@ namespace Woosh.Espionage;
 
 public sealed class ViewModelHandlerComponent : ObservableEntityComponent<Pawn>, IMutate<CameraSetup>, IMutate<InputContext>
 {
-	protected override void OnAutoRegister()
-	{
-		Register<DeployingEntity>( OnDeploying );
-		Register<HolsteredEntity>( OnHolstered );
-	}
-
 	protected override void OnDeactivate()
 	{
 		base.OnDeactivate();
@@ -49,6 +43,7 @@ public sealed class ViewModelHandlerComponent : ObservableEntityComponent<Pawn>,
 
 	// Deploying
 
+	[Listen]
 	private void OnDeploying( Event<DeployingEntity> evt )
 	{
 		if ( Entity.IsLocalPawn && m_Model == null )
@@ -58,6 +53,7 @@ public sealed class ViewModelHandlerComponent : ObservableEntityComponent<Pawn>,
 		}
 	}
 
+	[Listen]
 	private void OnHolstered( Event<HolsteredEntity> evt )
 	{
 		m_Model?.Delete();

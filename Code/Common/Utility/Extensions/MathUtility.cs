@@ -6,7 +6,7 @@ namespace Woosh.Common;
 
 public static class MathUtility
 {
-	// Damping
+	// Damping (Using extension, so when I find a way to make it so its not fixed to float, I can just change it here)
 
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]
 	public static float Damp( this float value, float to, float smoothing, float delta )

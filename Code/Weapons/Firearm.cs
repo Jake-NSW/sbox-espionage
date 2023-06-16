@@ -153,8 +153,10 @@ public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IP
 		if ( Game.IsServer )
 			EnableDrawing = false;
 	}
+	
+	// IMutate
 
-	public void OnPostSetup( ref CameraSetup setup )
+	void IMutate<CameraSetup>.OnPostSetup( ref CameraSetup setup )
 	{
 		foreach ( var component in Components.All().OfType<IMutate<CameraSetup>>() )
 		{
@@ -162,7 +164,7 @@ public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IP
 		}
 	}
 
-	public void OnPostSetup( ref InputContext setup )
+	void IMutate<InputContext>.OnPostSetup( ref InputContext setup )
 	{
 		foreach ( var component in Components.All().OfType<IMutate<InputContext>>() )
 		{

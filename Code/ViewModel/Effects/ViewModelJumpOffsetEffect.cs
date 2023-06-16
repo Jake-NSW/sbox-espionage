@@ -11,12 +11,7 @@ public sealed class ViewModelJumpOffsetEffect : ObservableEntityComponent<Compos
 	public float RotMulti { get; set; } = 2;
 	public float PosMulti { get; set; } = 1;
 
-	protected override void OnAutoRegister()
-	{
-		base.OnAutoRegister();
-		Register<PawnLanded>(OnLanded);
-	}
-	
+	[Listen]
 	private void OnLanded( Event<PawnLanded> evt )
 	{
 		m_SinceLanded = 0;
@@ -43,7 +38,7 @@ public sealed class ViewModelJumpOffsetEffect : ObservableEntityComponent<Compos
 		// Land Effects
 
 		var normal = (m_SinceLanded / 1f).Min( 1 );
-		var eased = Easing.ExpoOut( normal );
+		var eased =Easing.ExpoOut( normal );
 
 		var random = (2 * (MathF.Sin( m_Random.LengthSquared ).Min( 1 ))) - 1;
 		var curved = eased * (1 - eased);

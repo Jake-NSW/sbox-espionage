@@ -33,10 +33,10 @@ public sealed class ViewModelKickbackEffect : ObservableEntityComponent<Composit
 
 	public void OnPostSetup( ref CameraSetup setup )
 	{
-		var rot = setup.Rotation.WithRoll(0);
+		var rot = setup.Rotation.WithRoll( 0 );
 
-		m_Target = m_Target.LerpTo( Vector3.Zero, Return * Time.Delta );
-		m_Current = m_Current.LerpTo( m_Target, Snap * Time.Delta );
+		m_Target = m_Target.Damp( Vector3.Zero, Return, Time.Delta );
+		m_Current = m_Current.Damp( m_Target, Snap, Time.Delta );
 
 		setup.Hands.Offset += (rot.Forward * m_Current.x) + (rot.Left * m_Current.y) + (rot.Down * m_Current.z);
 	}

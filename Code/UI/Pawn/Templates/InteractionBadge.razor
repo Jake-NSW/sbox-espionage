@@ -3,38 +3,36 @@
 @using Sandbox;
 @using Sandbox.UI;
 @using Woosh.Common
-@using Woosh.Signals
 
 @namespace Woosh.Espionage.UI
-
-@inherits Panel;
 @attribute [StyleSheet]
+@inherits Panel;
 
 <root>
-    @if (!string.IsNullOrEmpty(Icon) && !string.IsNullOrEmpty(Display))
-    {
-        <div class="icon">
-            <label text="@Icon"></label>
-        </div>
-    }
-    <div style="flex-direction: column; align-items: flex-start;">
-        @if (!string.IsNullOrEmpty(Display))
+        @if (!string.IsNullOrEmpty(Icon) && !string.IsNullOrEmpty(Display))
         {
-            <label class="hovering" text="@Display"></label>
+            <div class="icon">
+                <label text="@Icon"></label>
+            </div>
         }
-
-        <div @ref="Container" style="flex-direction: column; align-items: flex-start">
-            <!-- Create another thing for each Interaction Opportunity -->
-            @foreach (var item in m_Interactions ?? Array.Empty<IEntityInteraction>())
+        <div style="flex-direction: column; align-items: flex-start;">
+            @if (!string.IsNullOrEmpty(Display))
             {
-                <div class="container">
-                    <div style="position: absolute; height: 100%; background-color: red;"></div>
-                    <label class="bind" text="@($"[{item.Indicator.Bind}]")"></label>
-                    <label class="action" text="@item.Indicator.Action"></label>
-                </div>
+                <label class="hovering" text="@Display"></label>
             }
+
+            <div @ref="Container" style="flex-direction: column; align-items: flex-start">
+                <!-- Create another thing for each Interaction Opportunity -->
+                @foreach (var item in m_Interactions ?? Array.Empty<IEntityInteraction>())
+                {
+                    <div class="container">
+                        <div style="position: absolute; height: 100%; background-color: red;"></div>
+                        <label class="bind" text="@($"[{item.Indicator.Bind}]")"></label>
+                        <label class="action" text="@item.Indicator.Action"></label>
+                    </div>
+                }
+            </div>
         </div>
-    </div>
 </root>
 
 @code
@@ -71,16 +69,16 @@
 
     private IReadOnlyList<IEntityInteraction> m_Interactions = Array.Empty<IEntityInteraction>();
 
-    public void OnInteractionChanged(Event<InteractionTargetChanged> evt)
+    public void OnInteractionChanged(InteractionTargetChanged evt)
     {
-    // Rebuild UI based on Interactions...
-        m_Target = evt.Data.Hovering;
-        m_Interactions = evt.Data.Interactions;
+        // Rebuild UI based on Interactions...
+        m_Target = evt.Hovering;
+        m_Interactions = evt.Interactions;
 
-        if (evt.Data.Hovering == null)
+        if (evt.Hovering == null)
             return;
 
-    // Get Info
+        // Get Info
         var info = m_Target.Info();
         Display = info.Name;
         Icon = info.Icon;

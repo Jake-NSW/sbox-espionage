@@ -4,10 +4,6 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public readonly record struct CheckAmmoOpen : ISignal { }
-
-public readonly record struct CheckAmmoClosed : ISignal { }
-
 public sealed partial class FirearmCheckAmmoSimulatedEntityState : ObservableEntityComponent<Firearm>, ISimulatedEntityState<Firearm>, ISingletonComponent
 {
 	[Predicted] private TimeSince p_SinceInput { get; set; }
@@ -42,12 +38,12 @@ public sealed partial class FirearmCheckAmmoSimulatedEntityState : ObservableEnt
 
 	public void OnStart()
 	{
-		Run<CheckAmmoOpen>();
+		Run<CheckAmmoOpen>( propagation: Propagation.Bubble );
 	}
 
 	public void OnFinish()
 	{
-		Run<CheckAmmoClosed>();
+		Run<CheckAmmoClosed>( propagation: Propagation.Bubble );
 		p_SinceInput = 0;
 	}
 }

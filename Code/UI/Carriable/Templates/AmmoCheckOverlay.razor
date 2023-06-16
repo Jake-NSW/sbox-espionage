@@ -1,0 +1,43 @@
+﻿@using Sandbox
+@using Sandbox.UI;
+@using Woosh.Common
+
+@namespace Woosh.Espionage.UI
+@attribute [StyleSheet]
+
+@inherits Panel
+
+<root>
+    <label text="Ammo!!"></label>
+</root>
+
+@code {
+    public AmmoCheckOverlay()
+    {
+        Style.Opacity = 0;
+    }
+    
+    public bool Checking
+    {
+        get => m_Checking;
+        set
+        {
+            m_Checking = value;
+            Style.Opacity = m_Checking ? 1 : 0;
+        }
+    }
+
+    public AnimatedEntity Target { get; set; }
+
+    public override void Tick()
+    {
+        if (Target.IsValid() && Target?.GetAttachment("magazine_top") is { } transform)
+        {
+            this.ToWorld(transform.Position);
+        }
+
+        base.Tick();
+    }
+
+    private bool m_Checking;
+}

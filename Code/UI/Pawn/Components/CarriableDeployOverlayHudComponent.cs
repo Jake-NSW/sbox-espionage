@@ -8,7 +8,7 @@ public sealed class CarriableDeployOverlayHudComponent : EntityHudComponent<Root
 	protected override void OnAutoRegister()
 	{
 		base.OnAutoRegister();
-		
+
 		Register<CreatedViewModel>( OnViewModelCreated );
 		Register<DeployedEntity>( OnDeployed );
 	}

@@ -14,14 +14,13 @@ public sealed class CompositedCameraHelper
 		Game.AssertClient();
 		Target = camera;
 
-		m_Effects = new HashSet<ITemporaryCameraEffect>();
+		Effects = new HashSet<ITemporaryCameraEffect>();
 	}
 
 	// Setup
 
 	public ICameraController Override { get; set; }
-
-	private readonly HashSet<ITemporaryCameraEffect> m_Effects;
+	public HashSet<ITemporaryCameraEffect> Effects { get; }
 
 	public void Update( ICameraController controller = null, IMutate<CameraSetup> mutate = null )
 	{
@@ -29,19 +28,20 @@ public sealed class CompositedCameraHelper
 		Build( ref setup, controller ?? Override );
 
 		// Run Effects
-		foreach ( var effect in m_Effects.ToArray() )
+		foreach ( var effect in Effects.ToArray() )
 		{
 			if ( effect.OnPostCameraSetup( ref setup ) )
 				continue;
 
-			m_Effects.Remove( effect );
+			Log.Info("Removing Effect");
+			Effects.Remove( effect );
 		}
 
 		mutate?.OnPostSetup( ref setup );
-		
+
 		// Append New Effects
 		if ( setup.Effects.Count > 0 )
-			m_Effects.UnionWith( setup.Effects );
+			Effects.UnionWith( setup.Effects );
 
 		// Mutate
 		Target.Attributes.Set( "viewModelFov", setup.FieldOfView - 4 );

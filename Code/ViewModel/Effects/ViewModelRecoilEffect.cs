@@ -33,7 +33,7 @@ public sealed class ViewModelRecoilEffect : ObservableEntityComponent<Composited
 	private Rotation m_Current = Rotation.Identity;
 	private Vector3 m_Target;
 
-	public void OnPostSetup( ref CameraSetup setup )
+	void IMutate<CameraSetup>.OnPostSetup( ref CameraSetup setup )
 	{
 		var rot = setup.Rotation.WithRoll( 0 );
 

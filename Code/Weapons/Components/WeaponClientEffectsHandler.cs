@@ -5,16 +5,12 @@ namespace Woosh.Espionage;
 
 public sealed class WeaponClientEffectsHandler : ObservableEntityComponent
 {
-	protected override void OnAutoRegister()
-	{
-		Register<PlayClientEffects<WeaponClientEffects>>( OnClientEffects );
-	}
-
+	[Listen]
 	private void OnClientEffects( Event<PlayClientEffects<WeaponClientEffects>> evt )
 	{
 		if ( Entity.IsFirstPersonMode )
 			return;
-
+		
 		// Get Muzzle
 		// Particles.Create( "particles/weapons/muzzle_flash/muzzleflash_flash.vpcf", Entity, "muzzle" );
 		
