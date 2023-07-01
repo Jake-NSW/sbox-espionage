@@ -8,7 +8,6 @@ namespace Woosh.Espionage;
 [Library( "esp_mk23_firearm" ), HammerEntity, EditorModel( WORLD_MODEL )]
 public sealed class Mk23Firearm : Firearm, ISlotted, IHave<EntityInfo>
 {
-	private const string VIEW_MODEL = "weapons/mk23/v_espionage_mk23.vmdl";
 	private const string WORLD_MODEL = "weapons/mk23/espionage_mk23.vmdl";
 
 	public EntityInfo Item { get; } = new EntityInfo
@@ -47,7 +46,7 @@ public sealed class Mk23Firearm : Firearm, ISlotted, IHave<EntityInfo>
 	{
 		base.Spawn();
 
-		Model = Model.Load( WORLD_MODEL );
+		Model = Model.Load( "woosh.mdl_esp_mk23" );
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
 	}
 

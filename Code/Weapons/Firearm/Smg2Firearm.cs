@@ -43,8 +43,7 @@ public sealed class Smg2Firearm : Firearm, ISlotted, IHave<EntityInfo>
 	public override void Spawn()
 	{
 		base.Spawn();
-
-		Model = Model.Load( WORLD_MODEL );
+		Model = Model.Load( "woosh.mdl_esp_smg2" );
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
 	}
 
