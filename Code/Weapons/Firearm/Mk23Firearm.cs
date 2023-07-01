@@ -46,7 +46,7 @@ public sealed class Mk23Firearm : Firearm, ISlotted, IHave<EntityInfo>
 	{
 		base.Spawn();
 
-		Model = Model.Load( "woosh.mdl_esp_mk23" );
+		Model = Cloud.Model( "woosh.mdl_esp_mk23" );
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
 	}
 

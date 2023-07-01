@@ -29,11 +29,12 @@ public sealed class App : GameManager, IObservable
 	{
 		Events = new Dispatcher();
 
+		// Setup Components
 		if ( Game.IsServer )
 		{
-			// Setup Components
 			Components.Create<CameraBuilderComponent>();
 			Components.Create<GamemodeHandlerComponent>();
+			Components.Create<ProjectileSimulator>();
 		}
 	}
 
