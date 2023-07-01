@@ -33,7 +33,7 @@ public sealed class WalkController : PawnController
 				m_Jumped = false;
 			}
 
-			Entity.Velocity = Accelerate( Entity.Velocity, moveVector.Normal, moveVector.Length, WishSpeed * (Input.Down( "run" ) ? 1.5f : 1f), 8.75f );
+			Entity.Velocity = Accelerate( Entity.Velocity, moveVector.Normal, moveVector.Length, WishSpeed, 8.75f );
 			Entity.Velocity = ApplyFriction( Entity.Velocity, 8.0f );
 
 			// Cap our Velocity after we've jumped
@@ -146,7 +146,6 @@ public sealed class WalkController : PawnController
 			accelSpeed = addSpeed;
 
 		input += wishDir * accelSpeed;
-
 		return input;
 	}
 

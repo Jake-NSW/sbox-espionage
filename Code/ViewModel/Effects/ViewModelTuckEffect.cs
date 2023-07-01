@@ -46,9 +46,8 @@ public sealed class ViewModelTuckEffect : ObservableEntityComponent<CompositedVi
 			.Run();
 
 		var range = info.Hit && info.Distance < distance ? info.Distance - distance : 0;
-		m_Offset = m_Offset.LerpTo( range, Damping * Time.Delta );
+		m_Offset = m_Offset.Damp( range, Damping, Time.Delta );
 		m_Normal = MathF.Abs( m_Offset / distance );
-
 
 		CameraSetup hip = new CameraSetup( setup );
 		Calculate( HipVariant, m_Normal, ref hip );

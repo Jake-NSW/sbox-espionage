@@ -12,7 +12,8 @@
   "HasCode": true,
   "CodePath": "/Code/",
   "PackageReferences": [
-    "woosh.signals"
+    "woosh.signals",
+    "woosh.tripods"
   ],
   "EditorReferences": null,
   "Metadata": {

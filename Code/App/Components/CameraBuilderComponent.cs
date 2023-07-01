@@ -15,32 +15,22 @@ public sealed partial class CameraBuilderComponent : ObservableEntityComponent<A
 		}
 	}
 
-	protected override void OnAutoRegister()
-	{
-		if ( Game.IsClient )
-		{
-			Register<FrameUpdate>( Update );
-		}
-	}
-
+	[Listen]
 	private void Update( Event<FrameUpdate> evt )
 	{
 		Game.AssertClient();
-		m_Helper.Update( mutate: Game.LocalPawn as IMutate<CameraSetup> );
-	}
+		using ( var mutator = m_Helper.Update( Active ) )
+		{
+			// Mutate Pawn
+			mutator.Mutate( Game.LocalPawn as IMutate<CameraSetup> );
 
-	public void AddEffect( ITemporaryCameraEffect effect )
-	{
-		m_Helper.Effects.Add( effect );
-	}
-
-	public void RemoveEffect( ITemporaryCameraEffect effect )
-	{
-		m_Helper.Effects.Remove( effect );
+			// Mutate Viewmodels
+		}
 	}
 
 	// Active Camera Controller
 
+	public ICameraController Active => (ICameraController)n_Camera;
 	[Net] private BaseNetworkable n_Camera { get; set; }
 
 	public void Set<T>( T camera ) where T : BaseNetworkable, ICameraController

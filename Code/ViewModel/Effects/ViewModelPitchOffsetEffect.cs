@@ -24,8 +24,8 @@ public sealed class ViewModelPitchOffsetEffect : ObservableEntityComponent<Compo
 		var offset = Camera.Rotation.Pitch().Remap( -90, 90, -1, 1 );
 		var rot = setup.Rotation;
 
-		m_LastOffsetRot = Rotation.Slerp( m_LastOffsetRot, Rotation.Lerp( Rotation.From( offset * PitchOffset, 0, 0 ), Rotation.Identity, setup.Hands.Aim ), Damping * Time.Delta );
-		m_LastOffsetPos = m_LastOffsetPos.LerpTo( Vector3.Lerp( rot.Up * offset * YawOffset, Vector3.Zero, setup.Hands.Aim ), Damping * Time.Delta );
+		m_LastOffsetRot = m_LastOffsetRot.Damp( Rotation.Lerp( Rotation.From( offset * PitchOffset, 0, 0 ), Rotation.Identity, setup.Hands.Aim ), Damping, Time.Delta );
+		m_LastOffsetPos = m_LastOffsetPos.Damp( Vector3.Lerp( rot.Up * offset * YawOffset, Vector3.Zero, setup.Hands.Aim ), Damping, Time.Delta );
 
 		setup.Hands.Angles *= m_LastOffsetRot;
 		setup.Hands.Offset += m_LastOffsetPos;

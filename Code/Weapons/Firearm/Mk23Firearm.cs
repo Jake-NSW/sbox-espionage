@@ -28,12 +28,13 @@ public sealed class Mk23Firearm : Firearm, ISlotted, IHave<EntityInfo>
 		Events.Register<CreatedViewModel>(
 			static evt =>
 			{
-				var model = evt.Data.ViewModel;
-				model.FromAspect( new ViewModelEffectsAspect( VIEW_MODEL ) { HipTuck = TuckType.Rotate, AimTuck = TuckType.Push } );
-				model.Components.Create<GenericFirearmViewModelAnimator>();
-				model.SetMaterialGroup( "tan" );
-				model.SetBodyGroup( "muzzle", 0 );
-				model.SetBodyGroup( "module", 1 );
+				var view = evt.Data.ViewModel;
+				view.Model = Model.Load( VIEW_MODEL );
+				view.Import( new ViewModelEffectsAspect() );
+				view.Components.Create<GenericFirearmViewModelAnimator>();
+				view.SetMaterialGroup( "tan" );
+				view.SetBodyGroup( "muzzle", 0 );
+				view.SetBodyGroup( "module", 1 );
 			}
 		);
 

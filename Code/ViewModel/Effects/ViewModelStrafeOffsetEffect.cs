@@ -17,7 +17,7 @@ public sealed class ViewModelStrafeOffsetEffect : ObservableEntityComponent<Comp
 		var rot = setup.Rotation.WithRoll( 0 );
 		var velocity = Entity.Owner.Velocity;
 
-		m_Offset = m_Offset.LerpTo( -setup.Transform.NormalToLocal( velocity ).y / 180, Damping * Time.Delta );
+		m_Offset = m_Offset.Damp( -setup.Transform.NormalToLocal( velocity ).y / 180, Damping , Time.Delta );
 		m_Offset = m_Offset.Clamp( -10, 10 );
 
 		setup.Hands.Angles *= Rotation.From( 0, 0, m_Offset * Axis );

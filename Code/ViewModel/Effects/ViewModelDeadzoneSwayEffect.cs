@@ -34,7 +34,7 @@ public sealed class ViewModelDeadzoneSwayEffect : ObservableEntityComponent<Comp
 			m_SavedDeadzoneAxis.y = m_SavedDeadzoneAxis.y.LerpTo( 0, 2f * Time.Delta );
 
 		var axis = Rotation.From( m_SavedDeadzoneAxis.x, m_SavedDeadzoneAxis.y, 0 );
-		m_LastDeadzoneRotation = Rotation.Slerp( m_LastDeadzoneRotation, AimingOnly ? Rotation.Lerp( Rotation.Identity, axis, setup.Hands.Aim ) : axis, Damping * Time.Delta );
+		m_LastDeadzoneRotation = m_LastDeadzoneRotation.Damp( AimingOnly ? Rotation.Lerp( Rotation.Identity, axis, setup.Hands.Aim ) : axis, Damping, Time.Delta );
 		setup.Hands.Angles *= m_LastDeadzoneRotation;
 	}
 

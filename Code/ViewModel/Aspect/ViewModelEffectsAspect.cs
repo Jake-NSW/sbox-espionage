@@ -3,35 +3,34 @@ using Woosh.Common;
 
 namespace Woosh.Espionage;
 
-public readonly struct ViewModelEffectsAspect : IAspect<CompositedViewModel>
+public readonly struct ViewModelEffectsAspect : IEntityAspect<CompositedViewModel>
 {
-	public string Model { get; }
+	public ViewModelEffectsAspect() { }
+
 	public TuckType HipTuck { get; init; } = TuckType.Push;
 	public TuckType AimTuck { get; init; } = TuckType.Push;
 
-	public ViewModelEffectsAspect( string model )
+
+	void IEntityAspect<CompositedViewModel>.ImportFrom( CompositedViewModel value, IComponentSystem system )
 	{
-		Model = model;
+		// Nothing to Import
 	}
 
-	public void Fill( CompositedViewModel view )
+	void IEntityAspect<CompositedViewModel>.ExportTo( CompositedViewModel view, IComponentSystem system )
 	{
-		if ( Model != null )
-			view.Model = Sandbox.Model.Load( Model );
+		system.Add( new ViewModelCameraAnimationEffect() );
 
-		view.Components.Add( new ViewModelCameraAnimationEffect() );
+		system.Add( new ViewModelSwayEffect( 1, 0.4f ) );
 
-		view.Components.Add( new ViewModelSwayEffect( 1, 0.4f ) );
+		system.Add( new ViewModelRampOffsetEffect() );
+		system.Add( new ViewModelOffsetEffect( Vector3.Zero, default ) );
+		system.Add( new ViewModelMoveOffsetEffect( Vector3.One, 10 ) );
+		system.Add( new ViewModelJumpOffsetEffect() );
 
-		view.Components.Add( new ViewModelRampOffsetEffect() );
-		view.Components.Add( new ViewModelOffsetEffect( Vector3.Zero, default ) );
-		view.Components.Add( new ViewModelMoveOffsetEffect( Vector3.One, 10 ) );
-		view.Components.Add( new ViewModelJumpOffsetEffect() );
+		system.Add( new ViewModelMoveBobEffect() );
+		system.Add( new ViewModelBreatheEffect() );
 
-		view.Components.Add( new ViewModelMoveBobEffect() );
-		view.Components.Add( new ViewModelBreatheEffect() );
-
-		view.Components.Add(
+		system.Add(
 			new ViewModelStrafeOffsetEffect()
 			{
 				Damping = 6,
@@ -39,11 +38,10 @@ public readonly struct ViewModelEffectsAspect : IAspect<CompositedViewModel>
 				Axis = 10
 			}
 		);
-		view.Components.Add( new ViewModelPitchOffsetEffect( 5, 4 ) { Damping = 15 } );
+		system.Add( new ViewModelPitchOffsetEffect( 5, 4 ) { Damping = 15 } );
 
-		view.Components.Add( new ViewModelRecoilEffect() );
-		view.Components.Add( new ViewModelKickbackEffect() );
-		
-		view.Components.Add( new ViewModelTuckEffect() { HipVariant = HipTuck, AimVariant = AimTuck } );
+		system.Add( new ViewModelRecoilEffect() );
+		system.Add( new ViewModelKickbackEffect() );
+		system.Add( new ViewModelTuckEffect() { HipVariant = HipTuck, AimVariant = AimTuck } );
 	}
 }

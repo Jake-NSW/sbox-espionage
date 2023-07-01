@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Runtime.CompilerServices;
 using Sandbox;
-using Woosh.Common;
 
 namespace Woosh.Espionage;
 
@@ -13,43 +11,15 @@ public sealed class CompositedCameraHelper
 	{
 		Game.AssertClient();
 		Target = camera;
-
-		Effects = new HashSet<ITemporaryCameraEffect>();
 	}
 
 	// Setup
 
-	public ICameraController Override { get; set; }
-	public HashSet<ITemporaryCameraEffect> Effects { get; }
-
-	public void Update( ICameraController controller = null, IMutate<CameraSetup> mutate = null )
+	public CameraMutateScope Update( ICameraController controller = null )
 	{
 		var setup = new CameraSetup( Target ) { FieldOfView = Screen.CreateVerticalFieldOfView( Game.Preferences.FieldOfView ) };
-		Build( ref setup, controller ?? Override );
-
-		// Run Effects
-		foreach ( var effect in Effects.ToArray() )
-		{
-			if ( effect.OnPostCameraSetup( ref setup ) )
-				continue;
-
-			Log.Info("Removing Effect");
-			Effects.Remove( effect );
-		}
-
-		mutate?.OnPostSetup( ref setup );
-
-		// Append New Effects
-		if ( setup.Effects.Count > 0 )
-			Effects.UnionWith( setup.Effects );
-
-		// Mutate
-		Target.Attributes.Set( "viewModelFov", setup.FieldOfView - 4 );
-
-		Target.Position = setup.Position;
-		Target.Rotation = setup.Rotation;
-		Target.FirstPersonViewer = setup.Viewer;
-		Target.FieldOfView = setup.FieldOfView;
+		Build( ref setup, controller );
+		return new CameraMutateScope( Target, setup );
 	}
 
 	// Active
@@ -70,16 +40,16 @@ public sealed class CompositedCameraHelper
 		m_Last?.Update( ref setup );
 	}
 
-	private ICameraController Find()
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	private static ICameraController Find()
 	{
-		if ( GameManager.Current is IActive<ICameraController> game )
-			return game.Active;
+		// Only allow components to be used as cameras if none was found
 
-		if ( Game.LocalPawn is IActive<ICameraController> pawn )
-			return pawn.Active;
+		if ( Game.LocalClient.Components.Get<EntityCameraController>() is { } clientCamera )
+			return clientCamera;
 
-		if ( Game.LocalPawn.Components.Get<EntityCameraController>() is { } component )
-			return component;
+		if ( Game.LocalPawn?.Components.Get<EntityCameraController>() is { } pawnCamera )
+			return pawnCamera;
 
 		return null;
 	}

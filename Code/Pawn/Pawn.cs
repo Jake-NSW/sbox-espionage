@@ -24,14 +24,6 @@ public partial class Pawn : ObservableAnimatedEntity
 		EnableDrawing = true;
 		EnableHideInFirstPerson = true;
 		EnableShadowInFirstPerson = true;
-
-		Components.Create<FirstPersonEntityCamera>();
-	}
-
-	public override void TakeDamage( DamageInfo info )
-	{
-		base.TakeDamage( info );
-		Events.Run( new EntityTakenDamage( this, info ) );
 	}
 
 	// Input
@@ -60,42 +52,6 @@ public partial class Pawn : ObservableAnimatedEntity
 
 	// Simulate
 
-	public BBox Hull => new BBox( new Vector3( -10, -10, 0 ), new Vector3( 10, 10, 64 ) );
-
-	public override Ray AimRay => new Ray( EyePosition, EyeRotation.Forward );
-
-	/// <summary>
-	/// Position a player should be looking from in world space.
-	/// </summary>
-	[Browsable( false )]
-	public Vector3 EyePosition
-	{
-		get => Transform.PointToWorld( EyeLocalPosition );
-		set => EyeLocalPosition = Transform.PointToLocal( value );
-	}
-
-	/// <summary>
-	/// Position a player should be looking from in local to the entity coordinates.
-	/// </summary>
-	[Net, Predicted, Browsable( false )]
-	public Vector3 EyeLocalPosition { get; set; }
-
-	/// <summary>
-	/// Rotation of the entity's "eyes", i.e. rotation for the camera when this entity is used as the view entity.
-	/// </summary>
-	[Browsable( false )]
-	public Rotation EyeRotation
-	{
-		get => Transform.RotationToWorld( EyeLocalRotation );
-		set => EyeLocalRotation = Transform.RotationToLocal( value );
-	}
-
-	/// <summary>
-	/// Rotation of the entity's "eyes", i.e. rotation for the camera when this entity is used as the view entity. In local to the entity coordinates.
-	/// </summary>
-	[Net, Predicted, Browsable( false )]
-	public Rotation EyeLocalRotation { get; set; }
-
 	private IClient m_Last;
 
 	public override void Simulate( IClient cl )
@@ -119,4 +75,28 @@ public partial class Pawn : ObservableAnimatedEntity
 
 		EyeLocalPosition = Vector3.Up * (64f * Scale);
 	}
+
+	public BBox Hull => new BBox( new Vector3( -10, -10, 0 ), new Vector3( 10, 10, 64 ) );
+
+	// Eyes
+
+	public override Ray AimRay => new Ray( EyePosition, EyeRotation.Forward );
+
+	[Browsable( false )]
+	public Vector3 EyePosition
+	{
+		get => Transform.PointToWorld( EyeLocalPosition );
+		set => EyeLocalPosition = Transform.PointToLocal( value );
+	}
+
+	[Net, Predicted, Browsable( false )] public Vector3 EyeLocalPosition { get; set; }
+
+	[Browsable( false )]
+	public Rotation EyeRotation
+	{
+		get => Transform.RotationToWorld( EyeLocalRotation );
+		set => EyeLocalRotation = Transform.RotationToLocal( value );
+	}
+
+	[Net, Predicted, Browsable( false )] public Rotation EyeLocalRotation { get; set; }
 }

@@ -6,7 +6,7 @@ using Woosh.Signals;
 namespace Woosh.Espionage;
 
 [Library( "weapon_smg" ), Title( "SMG" ), Description( "Pew Pew" ), HammerEntity, EditorModel( WORLD_MODEL )]
-public class RustSmgFirearm : Firearm, ISlotted, IHave<EntityInfo>
+public sealed class RustSmgFirearm : Firearm, ISlotted, IHave<EntityInfo>
 {
 	public EntityInfo Item { get; } = new EntityInfo()
 	{

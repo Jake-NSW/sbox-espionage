@@ -40,7 +40,7 @@ public sealed class App : GameManager, IObservable
 	public override void FrameSimulate( IClient cl )
 	{
 		base.FrameSimulate( cl );
-		Events.Run( new FrameUpdate( Time.Delta ) );
+		Events.Run<FrameUpdate>();
 	}
 
 	public override void Simulate( IClient cl )
