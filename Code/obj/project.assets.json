@@ -21,16 +21,6 @@
         "runtime": {
           "bin/placeholder/Signals.Library.dll": {}
         }
-      },
-      "Tripods/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v7.0",
-        "compile": {
-          "bin/placeholder/Tripods.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/Tripods.dll": {}
-        }
       }
     }
   },
@@ -44,18 +34,12 @@
       "type": "project",
       "path": "../../../Unity/Signals/Signals/Library/Signals.Library.csproj",
       "msbuildProject": "../../../Unity/Signals/Signals/Library/Signals.Library.csproj"
-    },
-    "Tripods/1.0.0": {
-      "type": "project",
-      "path": "../../../Libraries/Tripods/Tripods.csproj",
-      "msbuildProject": "../../../Libraries/Tripods/Tripods.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net7.0": [
       "Base Library >= 1.0.0",
-      "Signals.Library >= 1.0.0",
-      "Tripods >= 1.0.0"
+      "Signals.Library >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -92,9 +76,6 @@
           "projectReferences": {
             "D:\\Programs\\Steam\\steamapps\\common\\sbox\\addons\\base\\code\\Base Library.csproj": {
               "projectPath": "D:\\Programs\\Steam\\steamapps\\common\\sbox\\addons\\base\\code\\Base Library.csproj"
-            },
-            "E:\\Projects\\Woosh Crew\\Libraries\\Tripods\\Tripods.csproj": {
-              "projectPath": "E:\\Projects\\Woosh Crew\\Libraries\\Tripods\\Tripods.csproj"
             },
             "E:\\Projects\\Woosh Crew\\Unity\\Signals\\Signals\\Library\\Signals.Library.csproj": {
               "projectPath": "E:\\Projects\\Woosh Crew\\Unity\\Signals\\Signals\\Library\\Signals.Library.csproj"

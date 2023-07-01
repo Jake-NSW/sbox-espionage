@@ -12,8 +12,7 @@
   "HasCode": true,
   "CodePath": "/Code/",
   "PackageReferences": [
-    "woosh.signals",
-    "woosh.tripods"
+    "woosh.signals"
   ],
   "EditorReferences": null,
   "Metadata": {
@@ -244,6 +243,21 @@
           "b": "projectile"
         }
       ]
-    }
+    },
+    "Summary": "Espionage. The tactical stealth action experience",
+    "Description": "",
+    "Public": false,
+    "LaunchConfigs": [
+      {
+        "Name": "Espionage Item Test",
+        "GameIdent": "woosh.espionage#local",
+        "MapName": "playground/item_test.vmap",
+        "MaxPlayers": 1,
+        "GameSettings": {},
+        "Addons": "",
+        "PreLaunchCommand": "",
+        "PostLaunchCommand": ""
+      }
+    ]
   }
 }

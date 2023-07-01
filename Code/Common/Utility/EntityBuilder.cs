@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 using Sandbox;
 
 namespace Woosh.Common;
@@ -147,6 +148,8 @@ public static class EntityBuilderUtility
 			case Transform casted :
 				builder.Entity.SetAnimParameter( name, casted );
 				break;
+			default :
+				throw new ArgumentException();
 		}
 
 		return builder;
