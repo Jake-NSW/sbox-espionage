@@ -21,14 +21,11 @@ public sealed class RustShotgunFirearm : Firearm, ISlotted, IHave<EntityInfo>
 			return;
 
 		Events.Register<CreatedViewModel>(
-			static evt =>
-			{
-				var view = evt.Data.ViewModel;
-				view.Model = Model.Load( VIEW_MODEL );
-				view.Components.Create<RustFirearmViewmodelAnimator>();
-				view.Components.Create<SandboxViewModelEffect>();
-				view.Components.Add( new ViewModelOffsetEffect( new Vector3( -10, 6, 1 ), new Vector3( -10, 6, 1 ) ) );
-			}
+			static evt => evt.Data.ViewModel.Build()
+				.WithModel( Model.Load( VIEW_MODEL ) )
+				.WithComponent( new RustFirearmViewmodelAnimator() )
+				.WithComponent( new SandboxViewModelEffect() )
+				.WithComponent( new ViewModelOffsetEffect( new Vector3( -10, 6, 1 ), new Vector3( -10, 6, 1 ) ) )
 		);
 
 		Events.Register<PlayClientEffects<WeaponClientEffects>>(

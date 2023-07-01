@@ -25,14 +25,11 @@ public sealed class Smg2Firearm : Firearm, ISlotted, IHave<EntityInfo>
 			return;
 
 		Events.Register<CreatedViewModel>(
-			static evt =>
-			{
-				var view = evt.Data.ViewModel;
-				view.Model = Cloud.Model( "woosh.mdl_esp_vsmg2" );
-				view.Import( new ViewModelEffectsAspect() );
-				view.Components.Create<GenericFirearmViewModelAnimator>();
-				view.SetBodyGroup( "muzzle", 1 );
-			}
+			static evt => evt.Data.ViewModel.Build()
+				.WithModel( Cloud.Model( "woosh.mdl_esp_vsmg2" ) )
+				.WithAspect( new ViewModelEffectsAspect() )
+				.WithComponent( new GenericFirearmViewModelAnimator() )
+				.WithBodyGroup( "muzzle", 1 )
 		);
 
 		Events.Register<PlayClientEffects<WeaponClientEffects>>(

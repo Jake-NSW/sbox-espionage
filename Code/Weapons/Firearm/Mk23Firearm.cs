@@ -25,16 +25,13 @@ public sealed class Mk23Firearm : Firearm, ISlotted, IHave<EntityInfo>
 			return;
 
 		Events.Register<CreatedViewModel>(
-			static evt =>
-			{
-				var view = evt.Data.ViewModel;
-				view.Model = Cloud.Model( "woosh.mdl_esp_vmk23" );
-				view.Import( new ViewModelEffectsAspect() );
-				view.Components.Create<GenericFirearmViewModelAnimator>();
-				view.SetMaterialGroup( "tan" );
-				view.SetBodyGroup( "muzzle", 0 );
-				view.SetBodyGroup( "module", 1 );
-			}
+			static evt => evt.Data.ViewModel.Build()
+				.WithModel( Cloud.Model( "woosh.mdl_esp_vmk23" ) )
+				.WithAspect( new ViewModelEffectsAspect() )
+				.WithComponent( new GenericFirearmViewModelAnimator() )
+				.WithMaterialGroup( "tan" )
+				.WithBodyGroup( "muzzle", 0 )
+				.WithBodyGroup( "module", 1 )
 		);
 
 		Events.Register<PlayClientEffects<WeaponClientEffects>>(

@@ -10,4 +10,7 @@ public static class EntityUtility
 	{
 		template.ExportTo( entity, entity.Components );
 	}
+
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public static EntityBuilder<T> Build<T>( this T entity ) where T : class, IEntity => new EntityBuilder<T>( entity );
 }
