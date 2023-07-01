@@ -29,7 +29,7 @@ public sealed class Mk23Firearm : Firearm, ISlotted, IHave<EntityInfo>
 			static evt =>
 			{
 				var view = evt.Data.ViewModel;
-				view.Model = Model.Load( VIEW_MODEL );
+				view.Model = Cloud.Model( "woosh.mdl_esp_vmk23" );
 				view.Import( new ViewModelEffectsAspect() );
 				view.Components.Create<GenericFirearmViewModelAnimator>();
 				view.SetMaterialGroup( "tan" );
