@@ -5,33 +5,6 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-[Library( "esp_magazine" )]
-public class Magazine : ModelEntity, IPickup, IHave<EntityInfo>
-{
-	public EntityInfo Item => new EntityInfo()
-	{
-		Display = "12r Magazine",
-		Brief = "For MK23",
-		Icon = "swipe_up",
-	};
-
-	public int[] Ammo { get; }
-
-	public override void Spawn()
-	{
-		base.Spawn();
-
-		Model = Model.Load( "weapons/mk23/espionage_mk23_12r_mag.vmdl" );
-		Tags.Add( "pickup" );
-
-		PhysicsEnabled = true;
-		EnableHideInFirstPerson = true;
-		EnableShadowInFirstPerson = true;
-
-		SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
-	}
-}
-
 [Library( "esp_mk23_firearm" ), HammerEntity, EditorModel( WORLD_MODEL )]
 public sealed class Mk23Firearm : Firearm, ISlotted, IHave<EntityInfo>
 {
@@ -50,6 +23,13 @@ public sealed class Mk23Firearm : Firearm, ISlotted, IHave<EntityInfo>
 	{
 		if ( !Game.IsClient )
 			return;
+
+		Events.Register<ValidAmmoProviderCheck>(
+			static evt =>
+			{
+				evt.Data.AddType<MK23StandardMagazine>();
+			}
+		);
 
 		Events.Register<CreatedViewModel>(
 			static evt => evt.Data.ViewModel.Build()

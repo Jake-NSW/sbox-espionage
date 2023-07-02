@@ -53,6 +53,7 @@ public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IP
 	public bool IsAiming => Components.Get<CarriableAimComponent>()?.IsAiming == true;
 	public bool IsReloading => Machine.Active is FirearmReloadSimulatedEntityState;
 	public bool IsShooting => Machine.Active is FirearmShootSimulatedEntityState;
+	public IFirearmAmmoProvider Ammo => Components.Get<FirearmReloadSimulatedEntityState>().Active;
 
 	public override void Spawn()
 	{

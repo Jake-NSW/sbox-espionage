@@ -4,10 +4,8 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed partial class FirearmReloadSimulatedEntityState : ObservableEntityComponent<Firearm>, ISimulatedEntityState<Firearm>, ISingletonComponent
+public sealed partial class ShotgunReloadSimulatedEntityState : ObservableEntityComponent<Firearm>, ISimulatedEntityState<Firearm>, ISingletonComponent
 {
-	public IFirearmAmmoProvider Active { get; }
-	
 	private TimeSince m_SinceInput;
 
 	public bool TryEnter()

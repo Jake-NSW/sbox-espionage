@@ -79,4 +79,19 @@ public static class ComponentUtility
 	{
 		return components.Get<T>() != null;
 	}
+
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public static void Replace<TLast, TNew>( this IComponentSystem system, TNew comp ) where TLast : IComponent where TNew : class, IComponent
+	{
+		system.RemoveAny<TLast>();
+		system.Add( comp );
+	}
+
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public static TNew Replace<TLast, TNew>( this IComponentSystem system ) where TLast : IComponent where TNew : class, IComponent, new()
+	{
+		var comp = new TNew();
+		system.Replace<TLast, TNew>( comp );
+		return comp;
+	}
 }

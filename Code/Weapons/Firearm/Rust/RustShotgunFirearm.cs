@@ -47,6 +47,9 @@ public sealed class RustShotgunFirearm : Firearm, ISlotted, IHave<EntityInfo>
 
 		Model = Model.Load( WORLD_MODEL );
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
+
+		// Use Shotgun Simulated Reload State (Continuous reloading)
+		Components.Replace<FirearmReloadSimulatedEntityState, ShotgunReloadSimulatedEntityState>();
 	}
 
 	public int Slot => CarrySlot.Back.Index();
