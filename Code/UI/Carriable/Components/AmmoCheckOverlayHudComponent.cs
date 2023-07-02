@@ -8,7 +8,6 @@ public sealed class AmmoCheckOverlayHudComponent : EntityHudComponent<RootPanel,
 	protected override void OnCreateUI( RootPanel root )
 	{
 		base.OnCreateUI( root );
-
 		m_Overlay = root.AddChild<UI.AmmoCheckOverlay>();
 	}
 

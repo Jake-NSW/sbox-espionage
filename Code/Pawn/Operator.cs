@@ -18,6 +18,7 @@ public sealed class Operator : Pawn, IMutate<CameraSetup>, IMutate<InputContext>
 		Components.Create<CarriableDeployOverlayHudComponent>();
 		Components.Create<InventorySlotsHudComponent>();
 		Components.Create<AmmoCheckOverlayHudComponent>();
+		Components.Create<CrosshairHudComponent>();
 
 		// Gameplay
 		Components.Create<PawnLeaning>();
