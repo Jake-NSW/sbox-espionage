@@ -26,15 +26,11 @@ public sealed class App : GameManager, IObservable
 	[ConCmd.Admin( "esp_ent_create" )]
 	public static void CreateEntity( string className )
 	{
-		var type = TypeLibrary.GetType( className );
-		var entity = type.Create<Entity>();
-
 		var caller = ConsoleSystem.Caller;
 		var forward = caller.Pawn.AimRay.Forward;
 		var start = caller.Pawn.AimRay.Position;
 		var ray = Trace.Ray( start, start + forward * 128 ).Ignore( caller.Pawn ).Run();
-		entity.Position = ray.EndPosition + -forward * 4;
-		DebugOverlay.TraceResult( ray, 5 );
+		TypeLibrary.GetType( className ).Create<Entity>().Position = ray.EndPosition + -forward * 4;
 	}
 
 	// Instance
