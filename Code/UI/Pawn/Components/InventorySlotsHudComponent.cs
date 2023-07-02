@@ -5,13 +5,13 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class InventorySlotsHudComponent : EntityHudComponent<RootPanel, Pawn>
+public sealed class InventorySlotsHudComponent : EntityHudComponent<Pawn>
 {
 	public DeployableSlotHandler Slots => this.Get<DeployableSlotHandler>();
 
 	private Panel[] m_Slots = new Panel[10];
 	
-	protected override void OnCreateUI( RootPanel root )
+	protected override void OnCreateUI( Panel root )
 	{
 		base.OnCreateUI( root );
 		m_Slots = new Panel[10];

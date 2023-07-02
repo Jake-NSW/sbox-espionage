@@ -61,6 +61,7 @@ public partial class Pawn : ObservableAnimatedEntity
 		if ( m_Last != Client )
 		{
 			// Dispatch On Pawn Registered
+			Events.Run( new EntityUnPossessed(), Propagation.Trickle );
 			m_Last = Client;
 			Events.Run( new EntityPossessed( cl ), Propagation.Trickle );
 		}

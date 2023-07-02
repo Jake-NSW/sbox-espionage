@@ -3,7 +3,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class InteractionHudComponent : EntityHudComponent<RootPanel, Pawn>
+public sealed class InteractionHudComponent : EntityHudComponent<Pawn>
 {
 	[Listen]
 	private void OnInteractionChanged( Event<InteractionTargetChanged> evt )
@@ -13,7 +13,7 @@ public sealed class InteractionHudComponent : EntityHudComponent<RootPanel, Pawn
 
 	private UI.InteractionBadge m_Badge;
 
-	protected override void OnCreateUI( RootPanel root )
+	protected override void OnCreateUI( Panel root )
 	{
 		root.AddChild( m_Badge = new UI.InteractionBadge() );
 	}

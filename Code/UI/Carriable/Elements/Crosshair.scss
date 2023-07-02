@@ -1,6 +1,6 @@
-﻿$gap: 6px;
-$size: 5px;
-$thickness: 2px;
+﻿$gap: 5px;
+$size: 6px;
+$thickness: 1px;
 
 Crosshair {
   position: absolute;
@@ -34,16 +34,14 @@ Crosshair {
 
     .el0, .el1 {
       width: $size;
-      top: -1px;
+      top: -0.5px;
       height: $thickness;
-      border-radius: 1px;
     }
 
     .el2, .el3 {
       width: $thickness;
-      left: -1px;
+      left: -0.5px;
       height: $size;
-      border-radius: 1px;
     }
 
     .el0 {

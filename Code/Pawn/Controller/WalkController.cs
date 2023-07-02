@@ -10,7 +10,7 @@ public sealed class WalkController : PawnController
 	private bool IsGrounded => Entity.GroundEntity.IsValid();
 
 	public int StepSize => 24;
-	public int WishSpeed => 120;
+	public int WishSpeed => 130;
 	public int GroundAngle => 45;
 	public int JumpSpeed => 260;
 	public float Gravity => 800f;

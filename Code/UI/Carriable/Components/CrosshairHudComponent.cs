@@ -6,9 +6,9 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class CrosshairHudComponent : EntityHudComponent<RootPanel, Pawn>, IMutate<CameraSetup>
+public sealed class CrosshairHudComponent : EntityHudComponent<Pawn>, IMutate<CameraSetup>
 {
-	protected override void OnCreateUI( RootPanel root )
+	protected override void OnCreateUI( Panel root )
 	{
 		base.OnCreateUI( root );
 		m_Crosshair = root.AddChild<UI.Crosshair>();

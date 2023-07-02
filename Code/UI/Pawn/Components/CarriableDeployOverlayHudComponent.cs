@@ -3,7 +3,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class CarriableDeployOverlayHudComponent : EntityHudComponent<RootPanel, Pawn>
+public sealed class CarriableDeployOverlayHudComponent : EntityHudComponent<Pawn>
 {
 	[Listen]
 	private void OnDeployed( Event<DeployedEntity> evt )
@@ -26,7 +26,7 @@ public sealed class CarriableDeployOverlayHudComponent : EntityHudComponent<Root
 
 	private UI.CarriableDeployOverlay m_Overlay;
 
-	protected override void OnCreateUI( RootPanel root )
+	protected override void OnCreateUI( Panel root )
 	{
 		m_Overlay = root.AddChild<UI.CarriableDeployOverlay>();
 	}

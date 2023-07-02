@@ -3,9 +3,9 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class AmmoCheckOverlayHudComponent : EntityHudComponent<RootPanel, Pawn>
+public sealed class AmmoCheckOverlayHudComponent : EntityHudComponent<Pawn>
 {
-	protected override void OnCreateUI( RootPanel root )
+	protected override void OnCreateUI( Panel root )
 	{
 		base.OnCreateUI( root );
 		m_Overlay = root.AddChild<UI.AmmoCheckOverlay>();
@@ -22,14 +22,14 @@ public sealed class AmmoCheckOverlayHudComponent : EntityHudComponent<RootPanel,
 	[Listen]
 	private void OnAmmoCheckOpen( Event<CheckAmmoOpen> evt )
 	{
-		Log.Info("Open");
+		Log.Info( "Open" );
 		m_Overlay.Checking = true;
 	}
 
 	[Listen]
 	private void OnAmmoCheckClosed( Event<CheckAmmoClosed> evt )
 	{
-		Log.Info("Closed");
+		Log.Info( "Closed" );
 		m_Overlay.Checking = false;
 	}
 }
