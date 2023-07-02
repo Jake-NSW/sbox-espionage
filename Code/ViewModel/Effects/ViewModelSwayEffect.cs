@@ -35,7 +35,6 @@ public sealed class ViewModelSwayEffect : ObservableEntityComponent<CompositedVi
 		var mouse = new Vector2( angles.yaw, -angles.pitch );
 		mouse *= MathX.Lerp( m_Multiplier, m_AimMultiplier, setup.Hands.Aim );
 		mouse = mouse.ClampMagnitude( 14 );
-		DebugOverlay.ScreenText( mouse.ToString() );
 
 		m_LastAngles = m_CurrentAngles;
 

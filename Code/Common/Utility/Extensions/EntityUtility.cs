@@ -12,5 +12,5 @@ public static class EntityUtility
 	}
 
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]
-	public static EntityBuilder<T> Build<T>( this T entity ) where T : class, IEntity => new EntityBuilder<T>( entity );
+	public static EntityBuilder<T> Build<T>( this T entity ) where T : Entity => new EntityBuilder<T>( entity );
 }

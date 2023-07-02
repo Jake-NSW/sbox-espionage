@@ -10,7 +10,7 @@ public sealed class RustShotgunFirearm : Firearm, ISlotted, IHave<EntityInfo>
 {
 	public EntityInfo Item { get; } = new EntityInfo()
 	{
-		Display = "Shotgun",
+		Display = "Makeshift Shotgun",
 		Brief = "Made with love",
 		Icon = "gavel"
 	};
@@ -26,6 +26,7 @@ public sealed class RustShotgunFirearm : Firearm, ISlotted, IHave<EntityInfo>
 				.WithComponent( new RustFirearmViewmodelAnimator() )
 				.WithComponent( new SandboxViewModelEffect() )
 				.WithComponent( new ViewModelOffsetEffect( new Vector3( -10, 6, 1 ), new Vector3( -10, 6, 1 ) ) )
+				.WithComponent( new ViewModelPitchOffsetEffect() )
 		);
 
 		Events.Register<PlayClientEffects<WeaponClientEffects>>(

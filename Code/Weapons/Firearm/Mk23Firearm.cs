@@ -5,6 +5,26 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
+[Library( "esp_magazine" )]
+public class Magazine : ModelEntity, IPickup
+{
+	public int[] Ammo { get; }
+
+	public override void Spawn()
+	{
+		base.Spawn();
+		
+		Model = Model.Load( "weapons/mk23/espionage_mk23_12r_mag.vmdl" );
+		Tags.Add( "pickup" );
+		
+		PhysicsEnabled = true;
+		EnableHideInFirstPerson = true;
+		EnableShadowInFirstPerson = true;
+		
+		SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
+	}
+}
+
 [Library( "esp_mk23_firearm" ), HammerEntity, EditorModel( WORLD_MODEL )]
 public sealed class Mk23Firearm : Firearm, ISlotted, IHave<EntityInfo>
 {
@@ -29,7 +49,7 @@ public sealed class Mk23Firearm : Firearm, ISlotted, IHave<EntityInfo>
 				.WithModel( Cloud.Model( "woosh.mdl_esp_vmk23" ) )
 				.WithAspect( new ViewModelEffectsAspect() )
 				.WithComponent( new GenericFirearmViewModelAnimator() )
-				.WithMaterialGroup( "tan" )
+				.WithMaterialGroup( "chrome" )
 				.WithBodyGroup( "muzzle", 0 )
 				.WithBodyGroup( "module", 1 )
 		);

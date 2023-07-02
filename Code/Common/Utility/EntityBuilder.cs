@@ -4,7 +4,7 @@ using Sandbox;
 
 namespace Woosh.Common;
 
-public readonly struct EntityBuilder<T> where T : class, IEntity
+public readonly struct EntityBuilder<T> where T : Entity
 {
 	public T Entity { get; }
 
@@ -13,33 +13,49 @@ public readonly struct EntityBuilder<T> where T : class, IEntity
 	{
 		Entity = entity;
 	}
+
+	// Components
+
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public EntityBuilder<T> WithTransform( Vector3? position = default, Rotation? rotation = default )
+	{
+		Entity.Position = position ?? Entity.Position;
+		Entity.Rotation = rotation ?? Entity.Rotation;
+		return this;
+	}
+
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public EntityBuilder<T> WithTransform( Transform transform )
+	{
+		Entity.Position = transform.Position;
+		Entity.Rotation = transform.Rotation;
+		return this;
+	}
+
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public EntityBuilder<T> WithComponent<TComponent>( TComponent comp ) where TComponent : class, IComponent
+	{
+		Entity.Components.Add( comp );
+		return this;
+	}
+
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public EntityBuilder<T> WithComponent<TComponent>() where TComponent : class, IComponent, new()
+	{
+		Entity.Components.Create<TComponent>();
+		return this;
+	}
+
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public EntityBuilder<T> WithAspect<TAspect>( TAspect aspect ) where TAspect : struct, IEntityAspect<T>
+	{
+		Entity.Import( aspect );
+		return this;
+	}
 }
 
 public static class EntityBuilderUtility
 {
-	// Components
-
-	[MethodImpl( MethodImplOptions.AggressiveInlining )]
-	public static EntityBuilder<T> WithComponent<T, TComponent>( this EntityBuilder<T> builder, TComponent comp ) where T : class, IEntity where TComponent : class, IComponent
-	{
-		builder.Entity.Components.Add( comp );
-		return builder;
-	}
-
-	[MethodImpl( MethodImplOptions.AggressiveInlining )]
-	public static EntityBuilder<T> WithComponent<T, TComponent>( this EntityBuilder<T> builder ) where T : class, IEntity where TComponent : class, IComponent, new()
-	{
-		builder.Entity.Components.Create<TComponent>();
-		return builder;
-	}
-
-	[MethodImpl( MethodImplOptions.AggressiveInlining )]
-	public static EntityBuilder<T> WithAspect<T, TAspect>( this EntityBuilder<T> builder, TAspect aspect ) where T : class, IEntity where TAspect : struct, IEntityAspect<T>
-	{
-		builder.Entity.Import( aspect );
-		return builder;
-	}
-
 	// Physics
 
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]

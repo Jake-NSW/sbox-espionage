@@ -20,7 +20,8 @@ public struct FirearmSetup
 	public bool IsSilenced;
 
 	public float RateOfFire; // RPM
-	
+
+	public float Weight;
 	public float Force;
 	public float Spread;
 	public float Control;
@@ -72,7 +73,7 @@ public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IP
 
 		Rebuild();
 	}
-
+	
 	protected override void OnDestroy()
 	{
 		Events.Dispose();
@@ -154,7 +155,7 @@ public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IP
 		if ( Game.IsServer )
 			EnableDrawing = false;
 	}
-	
+
 	// IMutate
 
 	void IMutate<CameraSetup>.OnPostSetup( ref CameraSetup setup )

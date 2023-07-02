@@ -17,7 +17,7 @@ public sealed partial class FirearmShootSimulatedEntityState : ObservableEntityC
 
 	public bool Simulate( IClient cl )
 	{
-		if ( IsFireable() )
+		if ( IsFireable() && Prediction.FirstTime )
 			Shoot();
 
 		return !Setup.IsAutomatic || !Input.Down( "shoot" );
@@ -53,10 +53,8 @@ public sealed partial class FirearmShootSimulatedEntityState : ObservableEntityC
 	{
 		n_SinceLastShot = 0;
 
-		if ( !Prediction.FirstTime )
-			return;
-
 		Run( new WeaponFired( new Vector3( -65, 10f, 10f ), new Vector3( -35, 10f, 10f ) ), Propagation.Both );
+		var muzzle = (Entity.Owner as Pawn)?.Muzzle ?? (Entity.GetAttachment( "muzzle" ) ?? Entity.Transform).ToRay();
 
 		// Play Effects
 		if ( Game.IsServer )
@@ -67,26 +65,26 @@ public sealed partial class FirearmShootSimulatedEntityState : ObservableEntityC
 				effects |= WeaponClientEffects.Silenced;
 
 			PlayClientEffects( effects );
+
+			if ( Entity.Owner == null )
+				Entity.ApplyAbsoluteImpulse( -muzzle.Forward * 500 + Vector3.Random * 25 );
 		}
 
 		Game.SetRandomSeed( Time.Tick );
 
 		// Owner, Shoot from View Model
-		var ray = (Entity.Owner as Pawn).Muzzle;
-		{
-			GameManager.Current.Components.GetOrCreate<ProjectileSimulator>().Add(
-				new ProjectileDetails()
-				{
-					Force = Setup.Force,
-					Mass = 0.0009f,
-					Start = ray.Position,
-					Forward = (Rotation.LookAt( ray.Forward ) * Rotation.FromYaw( Setup.Spread.Range() ) * Rotation.FromPitch( Setup.Spread.Range() )).Forward,
-					Attacker = Entity.Owner.NetworkIdent,
-					Weapon = Entity.NetworkIdent,
-					Since = 0
-				}
-			);
-		}
+		GameManager.Current.Components.GetOrCreate<ProjectileSimulator>().Add(
+			new ProjectileDetails()
+			{
+				Force = Setup.Force,
+				Mass = 0.0009f,
+				Start = muzzle.Position,
+				Forward = (Rotation.LookAt( muzzle.Forward ) * Rotation.FromYaw( Setup.Spread.Range() ) * Rotation.FromPitch( Setup.Spread.Range() )).Forward,
+				Attacker = Entity.Owner.NetworkIdent,
+				Weapon = Entity.NetworkIdent,
+				Since = 0
+			}
+		);
 	}
 
 	[ClientRpc]
@@ -119,5 +117,21 @@ public sealed partial class FirearmShootSimulatedEntityState : ObservableEntityC
 			setup.Muzzle = new Ray( muzzle.Position, muzzle.Rotation.Forward );
 		else
 			setup.Muzzle = default;
+	}
+
+	[Listen]
+	private void OnTakeDamage( Event<EntityTakenDamage> evt )
+	{
+		if ( Game.IsClient )
+			return;
+
+		var info = evt.Data.LastDamageInfo;
+		if ( !info.HasTag( "blunt" ) )
+			return;
+
+		if ( IsFireable() )
+		{
+			Shoot();
+		}
 	}
 }

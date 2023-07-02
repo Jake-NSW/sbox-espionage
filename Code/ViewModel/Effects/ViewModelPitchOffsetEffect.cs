@@ -10,6 +10,8 @@ public sealed class ViewModelPitchOffsetEffect : ObservableEntityComponent<Compo
 	public float YawOffset { get; set; }
 	public float Damping { get; set; } = 15;
 
+	public ViewModelPitchOffsetEffect() : this( 5, 4 ) { }
+
 	public ViewModelPitchOffsetEffect( float pitchOffset = 5, float yawOffset = 4 )
 	{
 		PitchOffset = pitchOffset;
