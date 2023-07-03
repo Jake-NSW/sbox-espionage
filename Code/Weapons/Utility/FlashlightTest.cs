@@ -5,24 +5,21 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage.Utility;
 
-[Library( "esp_long_stick_gun" ), HammerEntity, EditorModel( WORLD_MODEL )]
-public sealed class LongStickGun : ObservableAnimatedEntity, ICarriable, IPickup, ISlotted<CarrySlot>, IHave<EntityInfo>
+[Library( "esp_flash_light_test" ), HammerEntity, EditorModel( WORLD_MODEL )]
+public sealed class FlashlightTest : ObservableAnimatedEntity, ICarriable, IPickup, ISlotted<CarrySlot>, IHave<EntityInfo>
 {
 	private const string WORLD_MODEL = "weapons/mk23/espionage_mk23.vmdl";
 
-	public LongStickGun()
+	public FlashlightTest()
 	{
 		if ( !Game.IsClient )
 			return;
 
 		Events.Register<CreatedViewModel>(
 			static evt => evt.Data.ViewModel.Build()
-				.WithModel( Model.Load( "weapons/debug/v_long_gun.vmdl" ) )
+				.WithModel( Model.Load( "weapons/rust_flashlight/v_rust_flashlight.vmdl" ) )
 				.WithAspect( new ViewModelEffectsAspect() )
-				.WithComponent( new GenericFirearmViewModelAnimator() )
-				.WithMaterialGroup( "chrome" )
-				.WithBodyGroup( "muzzle", 0 )
-				.WithBodyGroup( "module", 1 )
+				.WithComponent( new RustFirearmViewmodelAnimator() )
 		);
 	}
 
@@ -40,13 +37,13 @@ public sealed class LongStickGun : ObservableAnimatedEntity, ICarriable, IPickup
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
 	}
 
-	public CarrySlot Slot => CarrySlot.Grenade;
+	public CarrySlot Slot => CarrySlot.Utility;
 
 	public EntityInfo Item => new EntityInfo()
 	{
-		Display = "Tuck Debug",
-		Brief = "A gun with a long stick",
-		Icon = "gavel",
+		Display = "Flashlight Test",
+		Brief = "about it...",
+		Icon = "light",
 	};
 
 	// IPickup

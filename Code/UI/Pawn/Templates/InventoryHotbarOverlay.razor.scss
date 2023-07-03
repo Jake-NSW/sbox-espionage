@@ -10,8 +10,8 @@
   .slot-bar {
     flex-direction: row;
     gap: 4px;
-    height: 75px;
-    width: 480px;
+    height: 70px;
+    width: 520px;
 
   }
 
@@ -22,6 +22,7 @@
     flex-direction: row;
     flex-grow: 1;
 
+    padding: 8px;
     justify-content: center;
     align-items: center;
     color: white;
@@ -35,29 +36,54 @@
 
   .slot.active {
     color: black;
-    flex-grow: 2;
+    flex-grow: 1.6;
     background-color: white;
   }
 
   .slot.small {
-    max-width: 64px;
+    max-width: 70px;
   }
 
   .slot.holster {
-    max-width: 96px;
+    max-width: 90px;
   }
 
   .slot.holster.active, .slot.small.active {
-    max-width: 128px;
+    max-width: 110px;
   }
 
   .slot-item {
+    transition: opacity 0.2s ease-in-out;
+    opacity: 0;
+
     font-weight: bold;
     font-size: 10px;
-    opacity: 0.6;
     position: absolute;
-    bottom: 4px;
+    bottom: 2px;
     left: 4px;
+  }
+
+  .active .slot-item {
+    opacity: 0.6;
+  }
+
+
+  .slot-icon {
+    transition: opacity 0.2s ease-in-out;
+    opacity: 0.4;
+
+    // Why!
+    height: 50%;
+
+    position: absolute;
+
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .active .slot-icon {
+    opacity: 1;
   }
 
   .slot-name {

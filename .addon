@@ -173,6 +173,16 @@
           "Name": "Alt_Use",
           "KeyboardCode": "ALT",
           "GroupName": "Other"
+        },
+        {
+          "Name": "Slot_Grenade",
+          "KeyboardCode": "4",
+          "GroupName": "Inventory"
+        },
+        {
+          "Name": "Slot_Utility",
+          "KeyboardCode": "5",
+          "GroupName": "Inventory"
         }
       ]
     },

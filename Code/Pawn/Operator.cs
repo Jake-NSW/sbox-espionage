@@ -24,7 +24,7 @@ public sealed class Operator : Pawn, IMutate<CameraSetup>, IMutate<InputContext>
 		Components.Create<PawnLeaning>();
 		Components.Create<WalkController>();
 		Components.Create<ViewModelHandlerComponent>();
-		
+
 		// Camera
 		Components.Create<FirstPersonEntityCamera>();
 
@@ -40,7 +40,7 @@ public sealed class Operator : Pawn, IMutate<CameraSetup>, IMutate<InputContext>
 		// Inventory
 		Components.Create<CarriableHandler>();
 		Components.Create<EntityInventoryContainer>();
-		Components.Add( new DeployableSlotHandler( 3 ) );
+		Components.Add( new DeployableSlotHandler( 5 ) );
 		Components.Create<PickupEntityInteraction>();
 		Components.Create<EquipEntityInteraction>();
 	}
@@ -83,6 +83,12 @@ public sealed class Operator : Pawn, IMutate<CameraSetup>, IMutate<InputContext>
 
 		if ( Input.Pressed( "slot_holster" ) )
 			Slots.Deploy( CarrySlot.Holster );
+
+		if ( Input.Pressed( "slot_grenade" ) )
+			Slots.Deploy( CarrySlot.Grenade );
+
+		if ( Input.Pressed( "slot_utility" ) )
+			Slots.Deploy( CarrySlot.Utility );
 
 		if ( Input.Pressed( "drop" ) )
 			Slots.Drop( Slots.Active );
