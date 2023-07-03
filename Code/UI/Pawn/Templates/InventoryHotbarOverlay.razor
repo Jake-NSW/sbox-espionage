@@ -13,7 +13,7 @@
             <div class="@GetSlotClass(i)">
                 <img class="slot-icon" src="Icons/gun.png" alt="Icon"/>
                 <label class="slot-item" text="@(Infos[i].Display ?? "Unknown")"></label>
-                <label class="slot-name" text="@(((CarrySlot)i).ToKeyBind())"></label>
+                <label class="slot-name" text="@(GetSlotName(i))"></label>
             </div>
         }
     </div>
@@ -26,6 +26,12 @@
         Infos = new EntityInfo[5];
     }
 
+    private string GetSlotName(int slot)
+    {
+        var carry = (CarrySlot)slot;
+        return slot == Active ? carry.ToName() : carry.ToKeyBind();
+    }
+    
     private string GetSlotClass(int slot)
     {
         var stringBuilder = new StringBuilder("slot");
