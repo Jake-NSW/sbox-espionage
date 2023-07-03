@@ -174,7 +174,7 @@ public sealed class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISi
 			var id = read.Read<int>();
 			var ent = id == 0 ? null : global::Sandbox.Entity.FindByIndex<Entity>( id );
 
-			if ( n_Slots[i] != ent && ent != null )
+			if ( n_Slots[i] != ent )
 				Events?.Run( new SlotAssigned( i + 1, ent ) );
 
 			n_Slots[i] = ent;

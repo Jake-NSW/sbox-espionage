@@ -11,7 +11,7 @@
         @for (var i = 0; i < Infos.Length; i++)
         {
             <div class="@GetSlotClass(i)">
-                <img class="slot-icon" src="Icons/gun.png" alt="Icon"/>
+                <img class="slot-icon" src="@(GetSlotImage(i))" alt="Icon"/>
                 <label class="slot-item" text="@(Infos[i].Display ?? "Unknown")"></label>
                 <label class="slot-name" text="@(GetSlotName(i))"></label>
             </div>
@@ -26,12 +26,22 @@
         Infos = new EntityInfo[5];
     }
 
+    private string GetSlotImage(int slot)
+    {
+        return "Icons/gun.png";
+    }
+
     private string GetSlotName(int slot)
     {
         var carry = (CarrySlot)slot;
         return slot == Active ? carry.ToName() : carry.ToKeyBind();
     }
-    
+
+    private bool ValidSlot(int slot)
+    {
+        return Infos[slot].Display != null;
+    }
+
     private string GetSlotClass(int slot)
     {
         var stringBuilder = new StringBuilder("slot");
@@ -49,7 +59,7 @@
             stringBuilder.Append(" hidden");
         }
 
-        if (slot >= 3)
+        if (slot >= 2 && (ValidSlot(0) || ValidSlot(1)))
         {
             stringBuilder.Append(" small");
         }

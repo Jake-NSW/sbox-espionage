@@ -44,11 +44,11 @@
     max-width: 70px;
   }
 
-  .slot.holster {
+  .slot.holster.small {
     max-width: 90px;
   }
 
-  .slot.holster.active, .slot.small.active {
+  .slot.small.active {
     max-width: 110px;
   }
 
