@@ -10,7 +10,7 @@
   .slot-bar {
     flex-direction: row;
     gap: 4px;
-    height: 64px;
+    height: 75px;
     width: 480px;
 
   }
@@ -39,24 +39,32 @@
     background-color: white;
   }
 
-  .slot.holster {
-    max-width: 96px;
-  }
-
   .slot.small {
     max-width: 64px;
   }
 
-  .slot.small.active {
+  .slot.holster {
+    max-width: 96px;
+  }
+
+  .slot.holster.active, .slot.small.active {
     max-width: 128px;
   }
 
-  .keybind {
-    font-family: RaMono;
-    font-weight: 800;
+  .slot-item {
+    font-weight: bold;
+    font-size: 10px;
+    opacity: 0.6;
+    position: absolute;
+    bottom: 4px;
+    left: 4px;
+  }
 
+  .slot-name {
+    font-family: RaMono;
     color: white;
     position: absolute;
+    font-size: 10px;
     bottom: -20px;
   }
 }

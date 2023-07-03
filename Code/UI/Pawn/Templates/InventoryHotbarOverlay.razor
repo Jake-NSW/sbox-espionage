@@ -11,8 +11,8 @@
         @for (var i = 0; i < Infos.Length; i++)
         {
             <div class="@GetSlotClass(i)">
-                <label text="@(Infos[i].Display ?? "Unknown")"></label>
-                <label class="keybind" text="@(i + 1)"></label>
+                <label class="slot-item" text="@(Infos[i].Display ?? "Unknown")"></label>
+                <label class="slot-name" text="@(((CarrySlot)i).ToName())"></label>
             </div>
         }
     </div>
@@ -42,7 +42,7 @@
             stringBuilder.Append(" hidden");
         }
 
-        if (slot >= 2)
+        if (slot >= 3)
         {
             stringBuilder.Append(" small");
         }
