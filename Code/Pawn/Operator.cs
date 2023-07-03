@@ -24,6 +24,7 @@ public sealed class Operator : Pawn, IMutate<CameraSetup>, IMutate<InputContext>
 		Components.Create<PawnLeaning>();
 		Components.Create<WalkController>();
 		Components.Create<ViewModelHandlerComponent>();
+		Components.Create<PawnRagDollSimulatedEntityState>();
 
 		// Camera
 		Components.Create<FirstPersonEntityCamera>();

@@ -78,6 +78,10 @@
     public void Remove(int slot)
     {
         Infos[slot - 1] = default;
+
+        if (slot - 1 == Active)
+            Active = -1;
+
         StateHasChanged();
     }
 

@@ -8,6 +8,6 @@ public interface ISimulatedEntityState<T> : IComponent where T : IEntity
 
 	bool Simulate( IClient cl );
 
-	void OnStart();
-	void OnFinish();
+	void OnStart() { }
+	void OnFinish() { }
 }

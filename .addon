@@ -108,18 +108,6 @@
           "GroupName": "Actions"
         },
         {
-          "Name": "SlotPrev",
-          "KeyboardCode": "mouse4",
-          "GamepadCode": "SwitchLeftBumper",
-          "GroupName": "Inventory"
-        },
-        {
-          "Name": "SlotNext",
-          "KeyboardCode": "mouse5",
-          "GamepadCode": "SwitchRightBumper",
-          "GroupName": "Inventory"
-        },
-        {
           "Name": "Voice",
           "KeyboardCode": "v",
           "GamepadCode": "RightJoystickButton",
@@ -132,7 +120,7 @@
           "GroupName": "Other"
         },
         {
-          "Name": "Score",
+          "Name": "Inventory",
           "KeyboardCode": "tab",
           "GamepadCode": "SwitchLeftMenu",
           "GroupName": "Other"
@@ -170,11 +158,6 @@
           "GroupName": "Inventory"
         },
         {
-          "Name": "Alt_Use",
-          "KeyboardCode": "ALT",
-          "GroupName": "Other"
-        },
-        {
           "Name": "Slot_Grenade",
           "KeyboardCode": "4",
           "GroupName": "Inventory"
@@ -183,6 +166,11 @@
           "Name": "Slot_Utility",
           "KeyboardCode": "5",
           "GroupName": "Inventory"
+        },
+        {
+          "Name": "Ragdoll",
+          "KeyboardCode": "K",
+          "GroupName": "Other"
         }
       ]
     },
