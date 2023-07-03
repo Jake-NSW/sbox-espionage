@@ -6,7 +6,7 @@ using Woosh.Signals;
 namespace Woosh.Espionage;
 
 [Library( "esp_mk23_firearm" ), HammerEntity, EditorModel( WORLD_MODEL )]
-public sealed class Mk23Firearm : Firearm, ISlotted, IHave<EntityInfo>
+public sealed class Mk23Firearm : Firearm, ISlotted<CarrySlot>, IHave<EntityInfo>
 {
 	private const string WORLD_MODEL = "weapons/mk23/espionage_mk23.vmdl";
 
@@ -27,7 +27,7 @@ public sealed class Mk23Firearm : Firearm, ISlotted, IHave<EntityInfo>
 		Events.Register<ValidAmmoProviderCheck>(
 			static evt =>
 			{
-				evt.Data.AddType<MK23StandardMagazine>();
+				evt.Data.AddType<Mk23StandardMagazine>();
 			}
 		);
 
@@ -63,7 +63,7 @@ public sealed class Mk23Firearm : Firearm, ISlotted, IHave<EntityInfo>
 		Draw = new DrawTime( 1, 0.6f )
 	};
 
-	public int Slot => CarrySlot.Holster.Index();
+	public CarrySlot Slot => CarrySlot.Holster;
 
 	private static SoundBank<WeaponClientEffects> Sounds { get; } = new SoundBank<WeaponClientEffects>()
 	{

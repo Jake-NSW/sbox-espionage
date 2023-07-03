@@ -4,9 +4,9 @@ using Woosh.Common;
 namespace Woosh.Espionage;
 
 [Library( "esp_mk23_12r_mag" )]
-public sealed class MK23StandardMagazine : Magazine, IHave<EntityInfo>
+public sealed class Mk23StandardMagazine : Magazine, IHave<EntityInfo>
 {
-	public MK23StandardMagazine() : base( 12 ) { }
+	public Mk23StandardMagazine() : base( 12 ) { }
 
 	public EntityInfo Item => new EntityInfo
 	{

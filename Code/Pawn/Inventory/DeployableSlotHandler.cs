@@ -22,7 +22,7 @@ public sealed class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISi
 	protected override void OnAutoRegister()
 	{
 		base.OnAutoRegister();
-		
+
 		Register<DeployingEntity>(
 			evt =>
 			{
@@ -163,7 +163,8 @@ public sealed class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISi
 	{
 		var length = read.Read<int>();
 
-		if ( length <= 0 )
+		// Entity is null sometimes when reading?
+		if ( length <= 0 || Entity == null )
 			return;
 
 		n_Slots ??= new Entity[length];
@@ -174,17 +175,7 @@ public sealed class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISi
 			var ent = id == 0 ? null : global::Sandbox.Entity.FindByIndex<Entity>( id );
 
 			if ( n_Slots[i] != ent && ent != null )
-			{
-				try
-				{
-					Events?.Run( new SlotAssigned( i + 1, ent ) );
-				}
-				catch 
-				{
-					// I have no clue what the fuck is going on 
-					// TODO : Fix this when I am sane
-				}
-			}
+				Events?.Run( new SlotAssigned( i + 1, ent ) );
 
 			n_Slots[i] = ent;
 		}

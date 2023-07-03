@@ -241,6 +241,15 @@
         {
           "a": "pawn",
           "b": "projectile"
+        },
+        {
+          "a": "pickup",
+          "b": "projectile"
+        },
+        {
+          "a": "projectile",
+          "b": "projectile",
+          "r": "Collide"
         }
       ]
     },

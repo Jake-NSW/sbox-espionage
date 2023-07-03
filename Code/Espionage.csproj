@@ -22,6 +22,7 @@
 
 	<ItemGroup>
 	  <AdditionalFiles Include="**/*.razor" />
+	  <AdditionalFiles Include="UI\Pawn\Templates\InventoryHotbarOverlay.razor.scss" />
 	</ItemGroup>
 
 

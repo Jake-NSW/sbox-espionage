@@ -6,7 +6,7 @@ using Woosh.Signals;
 namespace Woosh.Espionage;
 
 [Library( "weapon_pistol" ), HammerEntity, EditorModel( WORLD_MODEL )]
-public sealed class RustPistolFirearm : Firearm, ISlotted, IHave<EntityInfo>
+public sealed class RustPistolFirearm : Firearm, ISlotted<CarrySlot>, IHave<EntityInfo>
 {
 	public EntityInfo Item { get; } = new EntityInfo
 	{
@@ -49,7 +49,7 @@ public sealed class RustPistolFirearm : Firearm, ISlotted, IHave<EntityInfo>
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
 	}
 
-	public int Slot => CarrySlot.Holster.Index();
+	public CarrySlot Slot => CarrySlot.Holster;
 
 	protected override FirearmSetup Default => new FirearmSetup()
 	{

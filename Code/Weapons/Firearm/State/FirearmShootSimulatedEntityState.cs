@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using Sandbox;
 using Woosh.Common;
 using Woosh.Signals;
@@ -53,7 +54,7 @@ public sealed partial class FirearmShootSimulatedEntityState : ObservableEntityC
 	{
 		n_SinceLastShot = 0;
 
-		Run( new WeaponFired( new Vector3( -65, 10f, 10f ), new Vector3( -35, 10f, 10f ) ), Propagation.Both );
+		Run( ApplyRecoilFromSetup( Setup ), Propagation.Both );
 		var muzzle = (Entity.Owner as Pawn)?.Muzzle ?? (Entity.GetAttachment( "muzzle" ) ?? Entity.Transform).ToRay();
 
 		// Play Effects
@@ -87,28 +88,17 @@ public sealed partial class FirearmShootSimulatedEntityState : ObservableEntityC
 		);
 	}
 
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public static WeaponFired ApplyRecoilFromSetup( in FirearmSetup setup )
+	{
+		// Do Later...
+		return new WeaponFired( new Vector3( -65, 10f, 10f ), new Vector3( -35, 10f, 10f ) );
+	}
+
 	[ClientRpc]
 	private void PlayClientEffects( WeaponClientEffects effects )
 	{
 		Run( new PlayClientEffects<WeaponClientEffects>( effects ) );
-	}
-
-	[ConCmd.Server]
-	private static void CmdReceivedShootRequest( int indent, Vector3 pos, Vector3 forward )
-	{
-		var firearm = Sandbox.Entity.FindByIndex<Firearm>( indent );
-		GameManager.Current.Components.GetOrCreate<ProjectileSimulator>().Add(
-			new ProjectileDetails()
-			{
-				Force = firearm.Setup.Force,
-				Mass = 0.0009f,
-				Start = pos,
-				Forward = forward,
-				Attacker = firearm.Owner.NetworkIdent,
-				Weapon = firearm.NetworkIdent,
-				Since = 0
-			}
-		);
 	}
 
 	public void OnPostSetup( ref InputContext setup )
@@ -130,8 +120,6 @@ public sealed partial class FirearmShootSimulatedEntityState : ObservableEntityC
 			return;
 
 		if ( IsFireable() )
-		{
 			Shoot();
-		}
 	}
 }

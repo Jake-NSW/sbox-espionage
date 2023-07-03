@@ -1,0 +1,79 @@
+﻿@using System.Text
+@using Sandbox.UI;
+
+@namespace Woosh.Espionage.UI
+@attribute [StyleSheet]
+
+@inherits Panel;
+
+<root>
+    <div class="slot-bar">
+        @for (var i = 0; i < Infos.Length; i++)
+        {
+            <div class="@GetSlotClass(i)">
+                <label text="@(Infos[i].Display ?? "Unknown")"></label>
+                <label class="keybind" text="@(i + 1)"></label>
+            </div>
+        }
+    </div>
+</root>
+
+@code {
+
+    public InventoryHotbarOverlay()
+    {
+        Infos = new EntityInfo[5];
+    }
+
+    private string GetSlotClass(int slot)
+    {
+        var stringBuilder = new StringBuilder("slot");
+
+        if (slot == Active)
+        {
+            stringBuilder.Append(" active");
+        }
+
+        stringBuilder.Append(' ');
+        stringBuilder.Append(((CarrySlot)slot).ToName().ToLower());
+
+        if (Infos[slot].Display == null)
+        {
+            stringBuilder.Append(" hidden");
+        }
+
+        if (slot >= 2)
+        {
+            stringBuilder.Append(" small");
+        }
+
+        if (Infos[slot].Display == null)
+        {
+            stringBuilder.Append(" hidden");
+        }
+
+        return stringBuilder.ToString();
+    }
+
+    private EntityInfo[] Infos { get; set; }
+    private int Active { get; set; }
+
+    public void Remove(int slot)
+    {
+        Infos[slot - 1] = default;
+        StateHasChanged();
+    }
+
+    public void Deploying(int slot)
+    {
+        Active = slot - 1;
+        StateHasChanged();
+    }
+
+    public void Assign(int slot, EntityInfo info)
+    {
+        Infos[slot - 1] = info;
+        StateHasChanged();
+    }
+
+}

@@ -6,7 +6,7 @@ using Woosh.Signals;
 namespace Woosh.Espionage;
 
 [Library( "weapon_smg" ), Title( "SMG" ), Description( "Pew Pew" ), HammerEntity, EditorModel( WORLD_MODEL )]
-public sealed class RustSmgFirearm : Firearm, ISlotted, IHave<EntityInfo>
+public sealed class RustSmgFirearm : Firearm, ISlotted<CarrySlot>, IHave<EntityInfo>
 {
 	public EntityInfo Item { get; } = new EntityInfo()
 	{
@@ -38,6 +38,8 @@ public sealed class RustSmgFirearm : Firearm, ISlotted, IHave<EntityInfo>
 		);
 	}
 
+	public CarrySlot Slot => CarrySlot.Front;
+
 	private const string VIEW_MODEL = "weapons/rust_smg/v_rust_smg.vmdl";
 	private const string WORLD_MODEL = "weapons/rust_smg/rust_smg.vmdl";
 
@@ -56,6 +58,4 @@ public sealed class RustSmgFirearm : Firearm, ISlotted, IHave<EntityInfo>
 		Force = 250,
 		Draw = new DrawTime( 1, Game.TickInterval * 2 )
 	};
-
-	public int Slot => CarrySlot.Front.Index();
 }

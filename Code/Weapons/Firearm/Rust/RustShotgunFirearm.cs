@@ -6,7 +6,7 @@ using Woosh.Signals;
 namespace Woosh.Espionage;
 
 [Library( "weapon_shotgun" ), HammerEntity, EditorModel( WORLD_MODEL )]
-public sealed class RustShotgunFirearm : Firearm, ISlotted, IHave<EntityInfo>
+public sealed class RustShotgunFirearm : Firearm, ISlotted<CarrySlot>, IHave<EntityInfo>
 {
 	public EntityInfo Item { get; } = new EntityInfo()
 	{
@@ -41,6 +41,8 @@ public sealed class RustShotgunFirearm : Firearm, ISlotted, IHave<EntityInfo>
 	private const string VIEW_MODEL = "weapons/rust_pumpshotgun/v_rust_pumpshotgun.vmdl";
 	private const string WORLD_MODEL = "weapons/rust_pumpshotgun/rust_pumpshotgun.vmdl";
 
+	public CarrySlot Slot => CarrySlot.Back;
+
 	public override void Spawn()
 	{
 		base.Spawn();
@@ -51,8 +53,6 @@ public sealed class RustShotgunFirearm : Firearm, ISlotted, IHave<EntityInfo>
 		// Use Shotgun Simulated Reload State (Continuous reloading)
 		Components.Replace<FirearmReloadSimulatedEntityState, ShotgunReloadSimulatedEntityState>();
 	}
-
-	public int Slot => CarrySlot.Back.Index();
 
 	protected override FirearmSetup Default => new FirearmSetup()
 	{

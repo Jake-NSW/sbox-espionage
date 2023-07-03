@@ -1,16 +1,15 @@
-﻿using System.ComponentModel;
-using System.Linq;
+﻿using System.Linq;
 using Sandbox;
 using Woosh.Common;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public partial class Pawn : ObservableAnimatedEntity
+public abstract partial class Pawn : ObservableAnimatedEntity
 {
 	public EntityStateMachine<Pawn> Machine { get; }
 
-	public Pawn()
+	protected Pawn()
 	{
 		Machine = new EntityStateMachine<Pawn>( this );
 	}
@@ -56,8 +55,6 @@ public partial class Pawn : ObservableAnimatedEntity
 
 	public override void Simulate( IClient cl )
 	{
-		base.Simulate( cl );
-
 		if ( m_Last != Client )
 		{
 			// Dispatch On Pawn Registered
@@ -68,36 +65,33 @@ public partial class Pawn : ObservableAnimatedEntity
 
 		EyeRotation = ViewAngles.ToRotation();
 		Rotation = ViewAngles.WithPitch( 0f ).ToRotation();
+		EyeLocalPosition = Vector3.Up * (64f * Scale);
 
 		if ( Machine.Simulate( cl ) )
 		{
-			Components.Each<ISimulated, IClient>( cl, ( client, e ) => e.Simulate( client ) );
+			Components.Each( cl, ( IClient client, ISimulated e ) => e.Simulate( client ) );
 		}
-
-		EyeLocalPosition = Vector3.Up * (64f * Scale);
 	}
 
-	public BBox Hull => new BBox( new Vector3( -10, -10, 0 ), new Vector3( 10, 10, 64 ) );
+	public virtual BBox Hull => new BBox( new Vector3( -10, -10, 0 ), new Vector3( 10, 10, 64 ) );
 
 	// Eyes
 
 	public override Ray AimRay => new Ray( EyePosition, EyeRotation.Forward );
 
-	[Browsable( false )]
 	public Vector3 EyePosition
 	{
 		get => Transform.PointToWorld( EyeLocalPosition );
 		set => EyeLocalPosition = Transform.PointToLocal( value );
 	}
 
-	[Net, Predicted, Browsable( false )] public Vector3 EyeLocalPosition { get; set; }
+	[Net, Predicted] public Vector3 EyeLocalPosition { get; set; }
 
-	[Browsable( false )]
 	public Rotation EyeRotation
 	{
 		get => Transform.RotationToWorld( EyeLocalRotation );
 		set => EyeLocalRotation = Transform.RotationToLocal( value );
 	}
 
-	[Net, Predicted, Browsable( false )] public Rotation EyeLocalRotation { get; set; }
+	[Net, Predicted] public Rotation EyeLocalRotation { get; set; }
 }

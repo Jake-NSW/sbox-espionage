@@ -1,5 +1,4 @@
 ﻿using Sandbox.UI;
-using Sandbox.UI.Construct;
 using Woosh.Common;
 using Woosh.Signals;
 
@@ -9,46 +8,29 @@ public sealed class InventorySlotsHudComponent : EntityHudComponent<Pawn>
 {
 	public DeployableSlotHandler Slots => this.Get<DeployableSlotHandler>();
 
-	private Panel[] m_Slots = new Panel[10];
-	
 	protected override void OnCreateUI( Panel root )
 	{
 		base.OnCreateUI( root );
-		m_Slots = new Panel[10];
-		for ( int i = 0; i < m_Slots.Length; i++ )
-		{
-			m_Slots[i] = root.Add.Panel( "slot_panel" );
-		}
+		m_Overlay = root.AddChild<UI.InventoryHotbarOverlay>();
 	}
+
+	private UI.InventoryHotbarOverlay m_Overlay;
 
 	[Listen]
 	private void OnSlotAssigned( Event<SlotAssigned> evt )
 	{
-		if ( m_Slots == null )
+		if ( evt.Data.Entity == null )
 		{
-			Log.Info( "Slots are null!" );
+			m_Overlay.Remove( evt.Data.Slot );
 			return;
 		}
 
-		var panel = m_Slots[evt.Data.Slot];
-		panel.DeleteChildren();
-
-		string name;
-
-		if ( evt.Data.Entity == null )
-			name = "Unknown";
-		else
-			name = evt.Data.Entity.Info().Name;
-		
-		panel.Add.Label( name );
+		m_Overlay.Assign( evt.Data.Slot, EntityInfo.FromEntity( evt.Data.Entity ) );
 	}
 
 	[Listen]
 	private void OnSlotDeploying( Event<SlotDeploying> evt )
 	{
-		if ( m_Slots == null )
-			return;
-
-		m_Slots[evt.Data.Slot].AddClass( "active" );
+		m_Overlay.Deploying( evt.Data.Slot );
 	}
 }

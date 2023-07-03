@@ -6,9 +6,8 @@ using Woosh.Signals;
 namespace Woosh.Espionage;
 
 [Library( "esp_smg2_firearm" ), HammerEntity, EditorModel( WORLD_MODEL )]
-public sealed class Smg2Firearm : Firearm, ISlotted, IHave<EntityInfo>
+public sealed class Smg2Firearm : Firearm, ISlotted<CarrySlot>, IHave<EntityInfo>
 {
-	private const string VIEW_MODEL = "weapons/smg2/v_espionage_smg2.vmdl";
 	private const string WORLD_MODEL = "weapons/smg2/espionage_smg2.vmdl";
 
 	public EntityInfo Item { get; } = new EntityInfo()
@@ -54,7 +53,7 @@ public sealed class Smg2Firearm : Firearm, ISlotted, IHave<EntityInfo>
 		Draw = new DrawTime( 1.5f, 1.3f )
 	};
 
-	public int Slot => CarrySlot.Front.Index();
+	public CarrySlot Slot => CarrySlot.Front;
 
 	private static SoundBank<WeaponClientEffects> Sounds { get; } = new SoundBank<WeaponClientEffects>()
 	{
