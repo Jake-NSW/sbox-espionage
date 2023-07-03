@@ -12,6 +12,26 @@ public enum CarrySlot
 public static class CarrySlotUtility
 {
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public static string ToInputAction( this CarrySlot slot )
+	{
+		return slot switch
+		{
+			CarrySlot.Front => "slot_primary",
+			CarrySlot.Back => "slot_secondary",
+			CarrySlot.Holster => "slot_holster",
+			CarrySlot.Grenade => "slot_grenade",
+			CarrySlot.Utility => "slot_utility",
+			_ => throw new ArgumentOutOfRangeException( nameof(slot), slot, null )
+		};
+	}
+
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public static string ToKeyBind( this CarrySlot slot )
+	{
+		return Input.GetButtonOrigin( slot.ToInputAction() );
+	}
+
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
 	public static string ToName( this CarrySlot slot )
 	{
 		return slot switch

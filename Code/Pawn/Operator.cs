@@ -75,23 +75,17 @@ public sealed class Operator : Pawn, IMutate<CameraSetup>, IMutate<InputContext>
 		if ( Machine.Active != null )
 			return;
 
-		if ( Input.Pressed( "slot_primary" ) )
-			Slots.Deploy( CarrySlot.Front );
-
-		if ( Input.Pressed( "slot_secondary" ) )
-			Slots.Deploy( CarrySlot.Back );
-
-		if ( Input.Pressed( "slot_holster" ) )
-			Slots.Deploy( CarrySlot.Holster );
-
-		if ( Input.Pressed( "slot_grenade" ) )
-			Slots.Deploy( CarrySlot.Grenade );
-
-		if ( Input.Pressed( "slot_utility" ) )
-			Slots.Deploy( CarrySlot.Utility );
+		for ( var i = 0; i < EnumValues<CarrySlot>.Length; i++ )
+		{
+			var value = EnumValues<CarrySlot>.ValueOf( i + 1 );
+			if ( Input.Pressed( value.ToInputAction() ) )
+				Slots.Deploy( value );
+		}
 
 		if ( Input.Pressed( "drop" ) )
+		{
 			Slots.Drop( Slots.Active );
+		}
 	}
 
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Sandbox;
 
 namespace Woosh.Common;
@@ -16,6 +17,7 @@ public static class EnumValues<T> where T : Enum
 
 	public static int Length => s_Values.Length;
 
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
 	public static int IndexOf( T input )
 	{
 		var compare = EqualityComparer<T>.Default;
@@ -29,5 +31,11 @@ public static class EnumValues<T> where T : Enum
 		}
 
 		throw new InvalidOperationException();
+	}
+
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public static T ValueOf( int index )
+	{
+		return s_Values[index - 1];
 	}
 }

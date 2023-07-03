@@ -13,7 +13,7 @@
             <div class="@GetSlotClass(i)">
                 <img class="slot-icon" src="Icons/gun.png" alt="Icon"/>
                 <label class="slot-item" text="@(Infos[i].Display ?? "Unknown")"></label>
-                <label class="slot-name" text="@(((CarrySlot)i).ToName())"></label>
+                <label class="slot-name" text="@(((CarrySlot)i).ToKeyBind())"></label>
             </div>
         }
     </div>
