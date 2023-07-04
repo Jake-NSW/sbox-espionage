@@ -26,8 +26,10 @@ public sealed class CarriableDeployOverlayHudComponent : EntityHudComponent<Pawn
 
 	private UI.CarriableDeployOverlay m_Overlay;
 
-	protected override void OnCreateUI( Panel root )
+	protected override Panel OnCreateUI()
 	{
+		var root = CreateFullscreenPanel();
 		m_Overlay = root.AddChild<UI.CarriableDeployOverlay>();
+		return root;
 	}
 }

@@ -1,0 +1,23 @@
+﻿@using Sandbox.UI;
+
+@namespace Woosh.Espionage.UI
+@attribute [StyleSheet]
+@inherits Panel;
+
+<root>
+    <label class="info-display" text="@(Info.Display)"></label>
+    <label text="16/120"></label>
+</root>
+
+@code{
+    EntityInfo Info { get; set; }
+
+    public void Remove() { }
+
+    public void Assign(EntityInfo info)
+    {
+        Info = info;
+        StateHasChanged();
+    }
+
+}

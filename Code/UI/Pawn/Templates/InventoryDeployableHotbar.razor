@@ -6,22 +6,20 @@
 
 @inherits Panel;
 
-<root>
-    <div class="slot-bar">
-        @for (var i = 0; i < Infos.Length; i++)
-        {
-            <div class="@GetSlotClass(i)">
-                <img class="slot-icon" src="@(GetSlotImage(i))" alt="Icon"/>
-                <label class="slot-item" text="@(Infos[i].Display ?? "Unknown")"></label>
-                <label class="slot-name" text="@(GetSlotName(i))"></label>
-            </div>
-        }
-    </div>
+<root class="slot-bar">
+    @for (var i = 0; i < Infos.Length; i++)
+    {
+        <div class="@GetSlotClass(i)">
+            <img class="slot-icon" src="@(GetSlotImage(i))" alt="Icon"/>
+            <label class="slot-item" text="@(Infos[i].Display ?? "Unknown")"></label>
+            <label class="slot-name" text="@(GetSlotName(i))"></label>
+        </div>
+    }
 </root>
 
 @code {
 
-    public InventoryHotbarOverlay()
+    public InventoryDeployableHotbar()
     {
         Infos = new EntityInfo[5];
     }
@@ -29,7 +27,6 @@
     private string GetSlotImage(int slot)
     {
         return null;
-        // return "Icons/gun.png";
     }
 
     private string GetSlotName(int slot)

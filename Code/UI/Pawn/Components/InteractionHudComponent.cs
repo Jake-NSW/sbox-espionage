@@ -13,8 +13,10 @@ public sealed class InteractionHudComponent : EntityHudComponent<Pawn>
 
 	private UI.InteractionBadge m_Badge;
 
-	protected override void OnCreateUI( Panel root )
+	protected override Panel OnCreateUI()
 	{
+		var root = CreateFullscreenPanel();
 		root.AddChild( m_Badge = new UI.InteractionBadge() );
+		return root;
 	}
 }

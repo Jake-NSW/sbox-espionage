@@ -8,11 +8,12 @@ namespace Woosh.Espionage;
 
 public sealed class CrosshairHudComponent : EntityHudComponent<Pawn>, IMutate<CameraSetup>
 {
-	protected override void OnCreateUI( Panel root )
+	protected override Panel OnCreateUI()
 	{
-		base.OnCreateUI( root );
+		var root = CreateFullscreenPanel();
 		m_Crosshair = root.AddChild<UI.Crosshair>();
 		m_Crosshair.AddClass( "dm_pistol" );
+		return root;
 	}
 
 	private UI.Crosshair m_Crosshair;

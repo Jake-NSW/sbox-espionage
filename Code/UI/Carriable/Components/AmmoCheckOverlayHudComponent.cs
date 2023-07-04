@@ -5,10 +5,11 @@ namespace Woosh.Espionage;
 
 public sealed class AmmoCheckOverlayHudComponent : EntityHudComponent<Pawn>
 {
-	protected override void OnCreateUI( Panel root )
+	protected override Panel OnCreateUI()
 	{
-		base.OnCreateUI( root );
+		var root = CreateFullscreenPanel();
 		m_Overlay = root.AddChild<UI.AmmoCheckOverlay>();
+		return root;
 	}
 
 	private UI.AmmoCheckOverlay m_Overlay;

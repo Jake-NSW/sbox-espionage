@@ -1,0 +1,14 @@
+﻿.operator-hud {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  justify-content: flex-end;
+  align-items: flex-end;
+
+  padding: 32px;
+}
+
+.equipment-panel {
+  flex-direction: column;
+}

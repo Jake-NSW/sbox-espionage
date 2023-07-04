@@ -1,0 +1,13 @@
+ActiveEquipmentDetails {
+  flex-direction: row-reverse;
+  align-items: flex-end;
+
+  .info-display {
+    font-family: Aldrich;
+    color: white;
+    font-size: 32px;
+  }
+
+  border-bottom: white 2px solid;
+  margin-bottom: 4px;
+}
