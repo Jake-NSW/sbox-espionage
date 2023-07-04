@@ -44,6 +44,7 @@ public sealed class LongStickGun : ObservableAnimatedEntity, ICarriable, IPickup
 
 	public EntityInfo Item => new EntityInfo()
 	{
+		Nickname = "Tuck",
 		Display = "Tuck Debug",
 		Brief = "A gun with a long stick",
 		Icon = "gavel",

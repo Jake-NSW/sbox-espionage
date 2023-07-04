@@ -41,6 +41,7 @@ public sealed class FlashlightTest : ObservableAnimatedEntity, ICarriable, IPick
 
 	public EntityInfo Item => new EntityInfo()
 	{
+		Nickname = "Light",
 		Display = "Flashlight Test",
 		Brief = "about it...",
 		Icon = "light",

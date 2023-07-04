@@ -9,14 +9,13 @@
 @inherits Panel;
 
 <root class="carriable-deploy-overlay">
-    <label class="carriable-deploy-overlay__name" text="@Name"></label>
-    <label class="carriable-deploy-overlay__desc" text="@Description"></label>
+    <label class="carriable-deploy-overlay__name" text="@Info.Nickname"></label>
+    <label class="carriable-deploy-overlay__desc" text="@Info.Brief"></label>
 </root>
 
 @code
 {
-    public string Name { get; private set; }
-    public string Description { get; private set; }
+    public EntityInfo Info { get; private set; }
 
     private AnimatedEntity m_Target;
     private TimeSince m_SinceApplied;
@@ -26,13 +25,12 @@
         m_SinceApplied = 0;
     }
 
-    public void Override(string name, string description, AnimatedEntity viewmodel)
+    public void Override(EntityInfo info, AnimatedEntity viewmodel)
     {
         m_Target = viewmodel;
         m_SinceApplied = default;
 
-        Name = name;
-        Description = description;
+        Info = info;
 
         StateHasChanged();
     }

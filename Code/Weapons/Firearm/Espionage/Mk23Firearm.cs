@@ -12,7 +12,8 @@ public sealed class Mk23Firearm : Firearm, ISlotted<CarrySlot>, IHave<EntityInfo
 
 	public EntityInfo Item { get; } = new EntityInfo
 	{
-		Display = "MK23",
+		Nickname = "MK23",
+		Display = "SOCOM Mark23",
 		Brief = "Heckler & Koch",
 		Icon = "gavel",
 		Description = "A semi-automatic large framed pistol, chambered in .45 ACP.",

@@ -10,6 +10,7 @@ public sealed class RustSmgFirearm : Firearm, ISlotted<CarrySlot>, IHave<EntityI
 {
 	public EntityInfo Item { get; } = new EntityInfo()
 	{
+		Nickname = "SMG",
 		Display = "Makeshift SMG",
 		Brief = "Pew Pew",
 		Icon = "gavel"

@@ -5,17 +5,30 @@
 @inherits Panel;
 
 <root>
-    <label class="info-display" text="@(Info.Display)"></label>
-    <label text="16/120"></label>
+    @if (!string.IsNullOrWhiteSpace(Info.Nickname))
+    {
+        <div class="info-background">
+            <label class="info-display back" text="@(Info.Nickname)"></label>
+            <div class="info-gradient"></div>
+            <label class="info-display front" text="@(Info.Nickname)"></label>
+        </div>
+    }
+
+    <label style="color: white; font-size: 16px;" text="Automatic"></label>
 </root>
 
 @code{
     EntityInfo Info { get; set; }
 
-    public void Remove() { }
+    public void Remove()
+    {
+        Info = default;
+        StateHasChanged();
+    }
 
     public void Assign(EntityInfo info)
     {
+        // info = info with { Nickname = "Defend"};
         Info = info;
         StateHasChanged();
     }

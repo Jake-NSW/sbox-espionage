@@ -13,7 +13,7 @@ public sealed class OperatorEquipmentHudComponent : EntityHudComponent<UI.Operat
 	protected override Panel OnCreateUI()
 	{
 		var root = new Panel();
-		
+
 		root.AddClass( "equipment-panel" );
 		m_EquipmentDetails = root.AddChild<UI.ActiveEquipmentDetails>();
 		m_Hotbar = root.AddChild<UI.InventoryDeployableHotbar>();
@@ -26,8 +26,17 @@ public sealed class OperatorEquipmentHudComponent : EntityHudComponent<UI.Operat
 	private UI.ActiveEquipmentDetails m_EquipmentDetails;
 
 	[Listen]
+	private void OnHolstered( Event<HolsteredEntity> evt )
+	{
+		m_EquipmentDetails.Remove();
+	}
+
+	[Listen]
 	private void OnDeploying( Event<DeployingEntity> evt )
 	{
+		if ( evt.Data.Entity == null )
+			return;
+
 		// Update the overlay to show the deploying entity
 		m_EquipmentDetails.Assign( EntityInfo.FromEntity( evt.Data.Entity ) );
 	}

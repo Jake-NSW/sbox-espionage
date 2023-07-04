@@ -24,6 +24,7 @@ public readonly struct EntityInfo
 		return FromDisplayInfo( ent.Info() );
 	}
 
+	public string Nickname { get; init; }
 	public string Display { get; init; }
 	public string Brief { get; init; }
 	public string Icon { get; init; }

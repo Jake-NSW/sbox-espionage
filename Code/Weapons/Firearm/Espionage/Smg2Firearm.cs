@@ -12,7 +12,8 @@ public sealed class Smg2Firearm : Firearm, ISlotted<CarrySlot>, IHave<EntityInfo
 
 	public EntityInfo Item { get; } = new EntityInfo()
 	{
-		Display = "SMG II",
+		Nickname = "SMG II",
+		Display = "Prototype SMG II",
 		Brief = "Heckler & Koch",
 		Icon = "gavel",
 		Description = "A prototype supersonic sub machine gun"
