@@ -10,10 +10,12 @@
   .slot-bar {
     flex-direction: row;
     gap: 4px;
-    height: 70px;
+    height: 60px;
     width: 550px;
 
   }
+  
+  // Container
 
   .slot {
     background-color: rgba(0, 0, 0, 0.5);
@@ -30,10 +32,15 @@
     transition: all 0.2s ease-in-out;
   }
 
-  .slot.hidden {
-    display: none;
-  }
+  // Hidden
 
+  .slot.hidden {
+    padding: 0;
+    display: none; // Shouldn't use this!
+    opacity: 0;
+    flex-grow: 0;
+  }
+  
   .slot.active {
     color: black;
     flex-grow: 1.6;
@@ -51,6 +58,8 @@
   .slot.small.active {
     max-width: 120px;
   }
+  
+  // Item
 
   .slot-item {
     transition: opacity 0.2s ease-in-out;
@@ -66,7 +75,8 @@
   .active .slot-item {
     opacity: 0.6;
   }
-
+  
+  // Icon
 
   .slot-icon {
     transition: opacity 0.2s ease-in-out;
@@ -74,6 +84,7 @@
 
     // Why!
     height: 50%;
+    width: 100%;
 
     position: absolute;
 
@@ -85,6 +96,8 @@
   .active .slot-icon {
     opacity: 1;
   }
+  
+  // Key Bind
 
   .slot-name {
     font-family: RaMono;

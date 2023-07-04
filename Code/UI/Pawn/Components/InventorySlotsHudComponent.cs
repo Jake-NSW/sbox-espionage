@@ -1,10 +1,15 @@
-﻿using Sandbox.UI;
+﻿using Sandbox;
+using Sandbox.UI;
 using Woosh.Common;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class InventorySlotsHudComponent : EntityHudComponent<Pawn>
+public sealed class OperatorHudPanel : RootPanel
+{
+}
+
+public sealed class InventorySlotsHudComponent : EntityHudComponent<OperatorHudPanel, Pawn>
 {
 	public DeployableSlotHandler Slots => this.Get<DeployableSlotHandler>();
 
