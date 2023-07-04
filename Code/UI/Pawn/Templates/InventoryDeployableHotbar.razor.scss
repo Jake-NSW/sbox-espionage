@@ -1,4 +1,9 @@
-﻿InventoryDeployableHotbar {
+﻿$glow-color: lightblue;
+$desaturate-glow-color: desaturate($glow-color, 30%);
+$saturate-glow-color: saturate($glow-color, 60%);
+$glow-shadow: 0 0 8px rgba($glow-color, 0.6), 0 0 6px rgba($glow-color, 0.8), 0 0 4px rgba($saturate-glow-color, 1), 0 0 2px rgba($glow-color, 0.4);
+
+InventoryDeployableHotbar {
   flex-direction: row;
   gap: 4px;
   height: 60px;
@@ -33,7 +38,8 @@
   .slot.active {
     color: black;
     flex-grow: 1.6;
-    background-color: white;
+    background-color: $glow-color;
+    border: 2px $glow-color solid;
   }
 
   .slot.small {
