@@ -1,4 +1,5 @@
-﻿@using Sandbox.UI;
+﻿@using Sandbox
+@using Sandbox.UI;
 
 @namespace Woosh.Espionage.UI
 @attribute [StyleSheet]
@@ -8,24 +9,26 @@
     @if (!string.IsNullOrWhiteSpace(Info.Nickname))
     {
         <div class="info-background">
-            <label class="info-display back" text="@(Info.Nickname)"></label>
+            <label class="info-display back" text="@(Back)"></label>
             <div class="info-gradient"></div>
-            <label class="info-display front" text="@(Info.Nickname)"></label>
+            <label class="info-display front" text="@(Back)"></label>
         </div>
     }
 
     <div class="info-foreground"></div>
     <div class="info-bar">
-        <label text="Semi-Auto" style="opacity: 0.4; font-size: 16px; text-transform: uppercase;"/>
+        <label text="@(Game.UserName)" style="opacity: 0.55; font-size: 16px; text-transform: uppercase;"/>
         <div style="flex-grow: 1"></div>
         <label text="31" style="font-size: 22px;"></label>
-        <label text="/" style="opacity: 0.5; font-size: 16px; margin: 0 4px;"></label>
-        <label text="240" style="opacity: 0.5; font-size: 16px;"></label>
+        <label text="/" style="opacity: 0.55; font-size: 16px; margin: 0 4px;"></label>
+        <label text="240" style="opacity: 0.55; font-size: 16px;"></label>
     </div>
 </root>
 
 @code{
     EntityInfo Info { get; set; }
+    
+    public string Back => Info.Nickname;
 
     public void Remove()
     {
@@ -35,7 +38,6 @@
 
     public void Assign(EntityInfo info)
     {
-        // info = info with { Nickname = "Defend"};
         Info = info;
         StateHasChanged();
     }
