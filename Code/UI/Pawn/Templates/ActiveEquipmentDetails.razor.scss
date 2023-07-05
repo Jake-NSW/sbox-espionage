@@ -1,4 +1,4 @@
-$glow-color: lightblue;
+$glow-color: ghostwhite;
 $desaturate-glow-color: desaturate($glow-color, 30%);
 $saturate-glow-color: saturate($glow-color, 60%);
 $glow-shadow: -6px -2px 8px rgba($glow-color, 0.7), 0 0 6px rgba($glow-color, 0.8), 0 0 4px rgba($saturate-glow-color, 1), 0 0 2px rgba($glow-color, 0.4);
@@ -10,6 +10,9 @@ ActiveEquipmentDetails {
   flex-grow: 1;
   min-height: 96px;
 
+  border-bottom: rgba(whitesmoke, 0.8) 2px solid;
+  margin-bottom: 4px;
+
   .info-bar {
     flex-direction: row;
     flex-grow: 1;
@@ -17,8 +20,7 @@ ActiveEquipmentDetails {
     font-family: RaMono;
     padding: 0 6px 2px;
 
-    text-shadow: 0 0 6px rgba(black, 0.5);
-
+    text-shadow: 0 0 6px rgba(black, 0.70);
     align-items: flex-end;
   }
 
@@ -36,7 +38,7 @@ ActiveEquipmentDetails {
     flex-direction: row-reverse;
     width: 100%;
     height: 48px;
-    opacity: 0.15;
+    opacity: 0.12;
   }
 
   .info-foreground {
@@ -70,7 +72,4 @@ ActiveEquipmentDetails {
     text-shadow: 0 0 8px rgba(black, 0.4);
     color: rgba($glow-color, 1);
   }
-
-  border-bottom: white 2px solid;
-  margin-bottom: 4px;
 }

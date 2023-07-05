@@ -1,18 +1,14 @@
-﻿$glow-color: lightblue;
-$desaturate-glow-color: desaturate($glow-color, 30%);
-$saturate-glow-color: saturate($glow-color, 60%);
-$glow-shadow: 0 0 8px rgba($glow-color, 0.6), 0 0 6px rgba($glow-color, 0.8), 0 0 4px rgba($saturate-glow-color, 1), 0 0 2px rgba($glow-color, 0.4);
-
-InventoryDeployableHotbar {
+﻿InventoryDeployableHotbar {
   flex-direction: row;
   gap: 4px;
   height: 60px;
-  width: 550px;
+  flex-grow: 1;
+
+  //display: none;
 
   // Container
-
   .slot {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(black, 0.5);
     backdrop-filter: blur(4px);
 
     flex-direction: row;
@@ -38,7 +34,7 @@ InventoryDeployableHotbar {
   .slot.active {
     color: black;
     flex-grow: 1.6;
-    background-color: $glow-color;
+    background-color: rgba(whitesmoke, 0.8);
   }
 
   .slot.small {
@@ -95,7 +91,7 @@ InventoryDeployableHotbar {
 
   .slot-name {
     font-family: RaMono;
-    color: white;
+    color: rgba(whitesmoke, 0.8);
     position: absolute;
     font-size: 11px;
     bottom: -22px;
