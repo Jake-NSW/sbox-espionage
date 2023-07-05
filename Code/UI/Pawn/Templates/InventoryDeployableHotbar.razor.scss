@@ -39,7 +39,6 @@ InventoryDeployableHotbar {
     color: black;
     flex-grow: 1.6;
     background-color: $glow-color;
-    border: 2px $glow-color solid;
   }
 
   .slot.small {
@@ -98,7 +97,7 @@ InventoryDeployableHotbar {
     font-family: RaMono;
     color: white;
     position: absolute;
-    font-size: 10px;
-    bottom: -20px;
+    font-size: 11px;
+    bottom: -22px;
   }
 }

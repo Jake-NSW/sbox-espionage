@@ -1,7 +1,7 @@
 $glow-color: lightblue;
 $desaturate-glow-color: desaturate($glow-color, 30%);
 $saturate-glow-color: saturate($glow-color, 60%);
-$glow-shadow: -6px -2px 8px rgba($glow-color, 0.6), 0 0 6px rgba($glow-color, 0.8), 0 0 4px rgba($saturate-glow-color, 1), 0 0 2px rgba($glow-color, 0.4);
+$glow-shadow: -6px -2px 8px rgba($glow-color, 0.7), 0 0 6px rgba($glow-color, 0.8), 0 0 4px rgba($saturate-glow-color, 1), 0 0 2px rgba($glow-color, 0.4);
 
 ActiveEquipmentDetails {
   flex-direction: row-reverse;
@@ -10,12 +10,41 @@ ActiveEquipmentDetails {
   flex-grow: 1;
   min-height: 96px;
 
+  .info-bar {
+    flex-direction: row;
+    flex-grow: 1;
+    color: white;
+    font-family: RaMono;
+    padding: 0 6px 2px;
+
+    text-shadow: 0 0 6px rgba(black, 0.5);
+
+    align-items: flex-end;
+  }
+
+  // Info Background
+
+  .info-background:intro {
+    opacity: 0;
+  }
+
   .info-background {
+    // Light Flash Effect
+    transition: opacity 1.5s bounce-in-out;
+
     position: absolute;
     flex-direction: row-reverse;
     width: 100%;
     height: 48px;
-    opacity: 0.12;
+    opacity: 0.15;
+  }
+
+  .info-foreground {
+    position: absolute;
+    width: 100%;
+    height: 48px;
+    background-image: linear-gradient(to top, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0) 80%);
+    mask-image: linear-gradient(to left, black, white 7%, white 93%, black);
   }
 
   .info-display {
