@@ -16,11 +16,12 @@
     justify-content: center;
     align-items: center;
     color: white;
-    
+
     border-color: rgba(whitesmoke, 0.5);
     border-width: 0;
 
     transition: all 0.2s ease-in-out;
+    opacity: 0.45;
   }
 
   // Hidden
@@ -34,6 +35,7 @@
 
   .slot.active {
     flex-grow: 1.6;
+    opacity: 0.88;
   }
 
   .slot.small {
@@ -54,15 +56,15 @@
     transition: opacity 0.2s ease-in-out;
     opacity: 0;
 
+    align-self: flex-end;
     font-weight: bold;
-    font-size: 10px;
+    font-size: 9px;
     position: absolute;
-    bottom: 2px;
-    left: 4px;
+    bottom: 4px;
   }
 
   .active .slot-item {
-    opacity: 0.6;
+    opacity: 0.4;
   }
 
   // Icon
@@ -83,7 +85,7 @@
   }
 
   .active .slot-icon {
-    opacity: 1;
+    opacity: 0.7;
   }
 
   // Key Bind
@@ -92,7 +94,53 @@
     font-family: RaMono;
     color: rgba(whitesmoke, 0.8);
     position: absolute;
+    align-self: flex-end;
     font-size: 11px;
     bottom: -22px;
+  }
+
+  // Active Border
+
+  .active .icon-border {
+    opacity: 1;
+  }
+
+  .icon-border {
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    .line {
+      position: absolute;
+      height: 1px;
+      background-color: rgba(whitesmoke, 0.5);
+    }
+
+    .left {
+      left: 0;
+    }
+
+    .right {
+      right: 0;
+    }
+
+    .up {
+      top: 0;
+      height: 1px;
+      width: 8px;
+    }
+
+    .down {
+      bottom: 0;
+      height: 1px;
+      width: 8px;
+    }
+
+    .side {
+      height: 100%;
+      width: 1px;
+    }
   }
 }
