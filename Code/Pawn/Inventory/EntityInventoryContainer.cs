@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Sandbox;
 using Woosh.Signals;
@@ -7,13 +8,13 @@ namespace Woosh.Espionage;
 
 public sealed class EntityInventoryContainer : ObservableEntityComponent, IEntityInventory, ISingletonComponent, INetworkSerializer
 {
-	public IEnumerable<Entity> All => n_Entities;
+	public IEnumerable<Entity> All => n_Entities.Select( Entity.FindByIndex );
 
-	private HashSet<Entity> n_Entities;
+	private HashSet<int> n_Entities;
 
 	public EntityInventoryContainer()
 	{
-		n_Entities = new HashSet<Entity>();
+		n_Entities = new HashSet<int>();
 	}
 
 	public bool Add( Entity ent )
@@ -26,10 +27,10 @@ public sealed class EntityInventoryContainer : ObservableEntityComponent, IEntit
 			Log.Error( $"Can't pickup item {ent}" );
 			return false;
 		}
-
+		
 		// Add to Bucket
-		n_Entities.Add( ent );
-
+		n_Entities.Add( ent.NetworkIdent );
+		
 		// Apply things to Entity
 		ent.SetParent( Entity, "weapon_attach", Transform.Zero );
 		ent.Owner = Entity;
@@ -63,7 +64,7 @@ public sealed class EntityInventoryContainer : ObservableEntityComponent, IEntit
 		}
 
 		// Remove from Bucket
-		n_Entities.Add( ent );
+		n_Entities.Remove( ent.NetworkIdent );
 
 		// Apply things to Entity
 		ent.SetParent( null );
@@ -82,7 +83,7 @@ public sealed class EntityInventoryContainer : ObservableEntityComponent, IEntit
 
 	public bool Contains( Entity entity )
 	{
-		return n_Entities.Contains( entity );
+		return entity != null && n_Entities.Contains( entity.NetworkIdent );
 	}
 
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]
@@ -111,13 +112,16 @@ public sealed class EntityInventoryContainer : ObservableEntityComponent, IEntit
 			return;
 
 		var oldEntities = n_Entities;
-		var received = new HashSet<Entity>();
+		var received = new HashSet<int>();
 
 		for ( var i = 0; i < length; i++ )
 		{
 			var ent = Entity.FindByIndex<Entity>( read.Read<int>() );
-			received.Add( ent );
-			if ( !oldEntities.Contains( ent ) )
+			if ( ent == null )
+				continue;
+
+			received.Add( ent.NetworkIdent );
+			if ( !oldEntities.Contains( ent.NetworkIdent ) )
 			{
 				// New Entity
 				RunInventoryAdded( ent );
@@ -130,7 +134,7 @@ public sealed class EntityInventoryContainer : ObservableEntityComponent, IEntit
 			if ( !received.Contains( oldEnt ) )
 			{
 				// Removed
-				RunInventoryRemoved( oldEnt );
+				RunInventoryRemoved( Entity.FindByIndex<Entity>( oldEnt ) );
 			}
 		}
 
@@ -141,10 +145,10 @@ public sealed class EntityInventoryContainer : ObservableEntityComponent, IEntit
 	{
 		write.Write( m_NetHash );
 		write.Write( n_Entities.Count );
-		
+
 		foreach ( var entity in n_Entities )
 		{
-			write.Write( entity.NetworkIdent );
+			write.Write( entity );
 		}
 	}
 }

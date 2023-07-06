@@ -160,6 +160,8 @@ public sealed class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISi
 					var inventory = pawn.Components.Get<IEntityInventory>();
 					if ( inventory.Contains( ent ) )
 						inventory.Drop( ent );
+					else
+						Log.Error("Inventory didnt contain item when dropping!");
 				}
 			);
 			return;
