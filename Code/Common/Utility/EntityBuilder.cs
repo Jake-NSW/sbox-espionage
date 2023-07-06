@@ -46,6 +46,12 @@ public readonly struct EntityBuilder<T> where T : Entity
 		return this;
 	}
 
+	public EntityBuilder<T> WithoutAnyComponent<TComponent>() where TComponent : class, IComponent
+	{
+		Entity.Components.RemoveAny<TComponent>();
+		return this;
+	}
+
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]
 	public EntityBuilder<T> WithAspect<TAspect>( TAspect aspect ) where TAspect : struct, IEntityAspect<T>
 	{
