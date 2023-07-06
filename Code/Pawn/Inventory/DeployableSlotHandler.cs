@@ -33,12 +33,17 @@ public sealed class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISi
 					Run( new SlotDeploying( slot, ent ) );
 			}
 		);
+
+		if ( Game.IsServer )
+		{
+			Register<InventoryAdded>( OnInventoryAdded );
+			Register<InventoryRemoved>( OnInventoryRemoved );
+		}
 	}
 
 	private IEntityInventory Inventory => this.Get<IEntityInventory>();
 	private CarriableHandler Handler => this.Get<CarriableHandler>();
 
-	[Listen]
 	private void OnInventoryRemoved( Event<InventoryRemoved> evt )
 	{
 		var item = evt.Data.Item;
@@ -53,7 +58,6 @@ public sealed class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISi
 		Assign( slot, null );
 	}
 
-	[Listen]
 	private void OnInventoryAdded( Event<InventoryAdded> evt )
 	{
 		var item = evt.Data.Item;

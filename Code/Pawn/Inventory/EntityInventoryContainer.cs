@@ -1,14 +1,20 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Sandbox;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public partial class EntityInventoryContainer : ObservableEntityComponent, IEntityInventory, ISingletonComponent
+public sealed class EntityInventoryContainer : ObservableEntityComponent, IEntityInventory, ISingletonComponent, INetworkSerializer
 {
-	public IEnumerable<Entity> All => n_Bucket;
+	public IEnumerable<Entity> All => n_Entities;
 
-	[Net, Local] private IList<Entity> n_Bucket { get; set; }
+	private HashSet<Entity> n_Entities;
+
+	public EntityInventoryContainer()
+	{
+		n_Entities = new HashSet<Entity>();
+	}
 
 	public bool Add( Entity ent )
 	{
@@ -22,7 +28,7 @@ public partial class EntityInventoryContainer : ObservableEntityComponent, IEnti
 		}
 
 		// Add to Bucket
-		n_Bucket.Add( ent );
+		n_Entities.Add( ent );
 
 		// Apply things to Entity
 		ent.SetParent( Entity, "weapon_attach", Transform.Zero );
@@ -32,7 +38,11 @@ public partial class EntityInventoryContainer : ObservableEntityComponent, IEnti
 		// Callback for Entity
 		(ent as IPickup)?.OnPickup( Entity );
 
-		Run( new InventoryAdded( ent ), Propagation.Both );
+		RunInventoryAdded( ent );
+
+		m_NetHash ^= ent.GetHashCode();
+		WriteNetworkData();
+
 		return true;
 	}
 
@@ -53,22 +63,88 @@ public partial class EntityInventoryContainer : ObservableEntityComponent, IEnti
 		}
 
 		// Remove from Bucket
-		n_Bucket.Remove( ent );
+		n_Entities.Add( ent );
 
 		// Apply things to Entity
 		ent.SetParent( null );
 		ent.EnableDrawing = true;
 
-		Run( new InventoryRemoved( ent ), Propagation.Both );
+		RunInventoryRemoved( ent );
 
 		// Execute Callback
 		(ent as IPickup)?.OnDrop();
 
 		ent.Owner = null;
+
+		m_NetHash ^= ent.GetHashCode();
+		WriteNetworkData();
 	}
 
 	public bool Contains( Entity entity )
 	{
-		return n_Bucket.Contains( entity );
+		return n_Entities.Contains( entity );
+	}
+
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	private void RunInventoryRemoved( Entity ent ) => Run( new InventoryRemoved( ent ), Propagation.Both );
+
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	private void RunInventoryAdded( Entity ent ) => Run( new InventoryAdded( ent ), Propagation.Both );
+
+	// Serialization
+
+	private int m_NetHash;
+
+	void INetworkSerializer.Read( ref NetRead read )
+	{
+		if ( Entity == null )
+			return;
+
+		var hash = read.Read<int>();
+		if ( m_NetHash == hash )
+			return;
+
+		m_NetHash = hash;
+
+		var length = read.Read<int>();
+		if ( length <= 0 )
+			return;
+
+		var oldEntities = n_Entities;
+		var received = new HashSet<Entity>();
+
+		for ( var i = 0; i < length; i++ )
+		{
+			var ent = Entity.FindByIndex<Entity>( read.Read<int>() );
+			received.Add( ent );
+			if ( !oldEntities.Contains( ent ) )
+			{
+				// New Entity
+				RunInventoryAdded( ent );
+			}
+		}
+
+		// Remove old entities
+		foreach ( var oldEnt in oldEntities )
+		{
+			if ( !received.Contains( oldEnt ) )
+			{
+				// Removed
+				RunInventoryRemoved( oldEnt );
+			}
+		}
+
+		n_Entities = received;
+	}
+
+	void INetworkSerializer.Write( NetWrite write )
+	{
+		write.Write( m_NetHash );
+		write.Write( n_Entities.Count );
+		
+		foreach ( var entity in n_Entities )
+		{
+			write.Write( entity.NetworkIdent );
+		}
 	}
 }
