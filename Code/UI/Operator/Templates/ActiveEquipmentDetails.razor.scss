@@ -6,10 +6,10 @@ $glow-shadow: -6px -2px 8px rgba($glow-color, 0.7), 0 0 6px rgba($glow-color, 0.
 ActiveEquipmentDetails {
   flex-direction: row-reverse;
   align-items: flex-end;
-  overflow: hidden;
   flex-grow: 1;
   min-height: 96px;
 
+  overflow: hidden;
   border-bottom: rgba(whitesmoke, 0.5) 1px solid;
   margin-bottom: 4px;
 
@@ -38,16 +38,18 @@ ActiveEquipmentDetails {
     flex-direction: row-reverse;
     width: 100%;
     height: 48px;
-    opacity: 0.14;
+    opacity: 0.2;
   }
 
   .info-foreground {
     position: absolute;
     width: 100%;
     height: 48px;
-    background-image: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0) 80%);
-    opacity: 0.4;
-    mask-image: linear-gradient(to left, black, white 7%, white 93%, black);
+    //background-color: red;
+    opacity: 0.6;
+
+    background-image: linear-gradient(to left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 10%, rgba(0, 0, 0, 1) 90%, rgba(0, 0, 0, 0));
+    mask-image: linear-gradient(to top, white, black 80%);
   }
 
   .info-display {

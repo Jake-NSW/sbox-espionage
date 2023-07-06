@@ -74,7 +74,7 @@ public sealed class App : GameManager, IObservable
 
 		var pawn = client.Possess<Operator>( spawn );
 
-		pawn.Inventory.Add( pistol, smg );
+		pawn.Inventory.Add( pistol, smg, new PlayerHands() );
 		pawn.Slots.Deploy( CarrySlot.Front );
 	}
 }

@@ -1,13 +1,20 @@
 ﻿InventoryDeployableHotbar {
   flex-direction: row;
   gap: 4px;
-  height: 60px;
   flex-grow: 1;
+
+  height: 70px;
+
+  .empty {
+    height: 0;
+  }
 
   // Container
   .slot {
     background-color: rgba(black, 0.5);
     backdrop-filter: blur(4px);
+    
+    box-shadow: 0 0 64px 16px rgba(black, 0.3);
 
     flex-direction: row;
     flex-grow: 1;
@@ -64,21 +71,24 @@
   }
 
   .active .slot-item {
-    opacity: 0.4;
+    opacity: 0;
   }
 
   // Icon
 
   .slot-icon {
     transition: opacity 0.2s ease-in-out;
-    opacity: 0.4;
+    opacity: 0.7;
+    
+    background-image-tint: ghostwhite;
 
     // Why!
-    height: 50%;
+    height: 60%;
     width: 100%;
 
     position: absolute;
-
+    
+    background-clip: content-box;
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;

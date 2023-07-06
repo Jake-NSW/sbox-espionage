@@ -150,7 +150,14 @@ public sealed class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISi
 
 		if ( Active == slot )
 		{
-			Handler.Holster( true, pawn => pawn.Components.Get<IEntityInventory>().Drop( ent ) );
+			Handler.Holster(
+				true, pawn =>
+				{
+					var inventory = pawn.Components.Get<IEntityInventory>();
+					if ( inventory.Contains( ent ) )
+						inventory.Drop( ent );
+				}
+			);
 			return;
 		}
 
