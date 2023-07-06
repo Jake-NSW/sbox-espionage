@@ -72,7 +72,7 @@
             stringBuilder.Append(" small");
         }
 
-        if (Infos[slot].Display == null)
+        if (!Infos[slot].IsValid)
         {
             stringBuilder.Append(" hidden");
         }

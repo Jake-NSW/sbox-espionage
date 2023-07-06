@@ -23,6 +23,8 @@ public readonly struct EntityInfo
 
 		return FromDisplayInfo( ent.Info() );
 	}
+	
+	public bool IsValid => Nickname != null || Display != null || Brief != null || Icon != null || Description != null || Group != null;
 
 	public string Nickname { get; init; }
 	public string Display { get; init; }

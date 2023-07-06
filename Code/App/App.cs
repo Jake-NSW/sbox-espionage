@@ -71,10 +71,13 @@ public sealed class App : GameManager, IObservable
 
 		var pistol = new Mk23Firearm();
 		var smg = new Smg2Firearm();
+		var hands = new PlayerHands();
 
 		var pawn = client.Possess<Operator>( spawn );
+		hands.Owner = pawn;
 
-		pawn.Inventory.Add( pistol, smg, new PlayerHands() );
+		pawn.Inventory.Add( pistol, smg );
+		pawn.Slots.Assign( CarrySlot.Utility, hands );
 		pawn.Slots.Deploy( CarrySlot.Front );
 	}
 }

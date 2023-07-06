@@ -5,7 +5,7 @@ using Woosh.Signals;
 namespace Woosh.Espionage;
 
 [Library, Title( "Hands" ), Icon( "pan_tool" )]
-public sealed partial class PlayerHands : MeleeWeapon, IPickup, ISlotted<CarrySlot>, IHave<EntityInfo>
+public sealed partial class PlayerHands : MeleeWeapon, ISlotted<CarrySlot>, IHave<EntityInfo>
 {
 	public PlayerHands()
 	{
@@ -15,7 +15,7 @@ public sealed partial class PlayerHands : MeleeWeapon, IPickup, ISlotted<CarrySl
 				var view = evt.Data.ViewModel;
 				view.Model = Model.Load( "weapons/hands/v_espionage_hands.vmdl" );
 				view.Components.Create<GenericFirearmViewModelAnimator>();
-				view.Build().WithAspect<ViewModelEffectsAspect>( new ViewModelEffectsAspect() );
+				view.Build().WithAspect( new ViewModelEffectsAspect() );
 			}
 		);
 	}
@@ -26,5 +26,5 @@ public sealed partial class PlayerHands : MeleeWeapon, IPickup, ISlotted<CarrySl
 	}
 
 	public CarrySlot Slot => CarrySlot.Utility;
-	public EntityInfo Item { get; } = new EntityInfo() { Nickname = "Hands" };
+	public EntityInfo Item { get; } = new EntityInfo() { Nickname = "Hands", Display = "Hands" };
 }

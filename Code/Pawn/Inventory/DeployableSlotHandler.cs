@@ -21,7 +21,11 @@ public sealed class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISi
 
 	protected override void OnAutoRegister()
 	{
-		base.OnAutoRegister();
+		if ( Game.IsServer )
+		{
+			Register<InventoryAdded>( OnInventoryAdded );
+			Register<InventoryRemoved>( OnInventoryRemoved );
+		}
 
 		Register<DeployingEntity>(
 			evt =>
@@ -33,12 +37,6 @@ public sealed class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISi
 					Run( new SlotDeploying( slot, ent ) );
 			}
 		);
-
-		if ( Game.IsServer )
-		{
-			Register<InventoryAdded>( OnInventoryAdded );
-			Register<InventoryRemoved>( OnInventoryRemoved );
-		}
 	}
 
 	private IEntityInventory Inventory => this.Get<IEntityInventory>();
@@ -129,12 +127,17 @@ public sealed class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISi
 
 		var ent = n_Slots[slot];
 
+		/* Jake : Can't remember why this was here, feel like
+				  its not needed after me adding the inventory
+				  added signal...
+				  
 		if ( !Inventory.Contains( ent ) )
 		{
 			Assign( slot + 1, null );
 			Handler.Deploy( null );
 			return;
 		}
+		*/
 
 		Handler.Deploy( ent, timing );
 	}

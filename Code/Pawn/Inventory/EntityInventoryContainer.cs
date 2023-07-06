@@ -86,6 +86,8 @@ public sealed class EntityInventoryContainer : ObservableEntityComponent, IEntit
 		return entity != null && n_Entities.Contains( entity.NetworkIdent );
 	}
 
+	// Utility
+	
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]
 	private void RunInventoryRemoved( Entity ent ) => Run( new InventoryRemoved( ent ), Propagation.Both );
 
@@ -121,21 +123,17 @@ public sealed class EntityInventoryContainer : ObservableEntityComponent, IEntit
 				continue;
 
 			received.Add( ent.NetworkIdent );
+			
+			// Check if we're a new entity
 			if ( !oldEntities.Contains( ent.NetworkIdent ) )
-			{
-				// New Entity
 				RunInventoryAdded( ent );
-			}
 		}
 
-		// Remove old entities
 		foreach ( var oldEnt in oldEntities )
 		{
+			// Check if we're a removed entity
 			if ( !received.Contains( oldEnt ) )
-			{
-				// Removed
 				RunInventoryRemoved( Entity.FindByIndex<Entity>( oldEnt ) );
-			}
 		}
 
 		n_Entities = received;
