@@ -14,6 +14,12 @@ public readonly struct EntityBuilder<T> where T : Entity
 		Entity = entity;
 	}
 
+	public EntityBuilder<TNew> WithChild<TNew>( TNew value, bool boneMerge = false ) where TNew : Entity
+	{
+		value.SetParent(Entity, true);
+		return new EntityBuilder<TNew>( value );
+	}
+
 	// Components
 
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]
@@ -53,7 +59,7 @@ public readonly struct EntityBuilder<T> where T : Entity
 	}
 
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]
-	public EntityBuilder<T> WithAspect<TAspect>( TAspect aspect ) where TAspect : struct, IEntityAspect<T>
+	public EntityBuilder<T> WithAspect<TAspect>( TAspect aspect = default ) where TAspect : struct, IEntityAspect<T>
 	{
 		Entity.Import( aspect );
 		return this;

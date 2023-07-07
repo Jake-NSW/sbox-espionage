@@ -24,7 +24,7 @@ public sealed class RustSmgFirearm : Firearm, ISlotted<CarrySlot>, IHave<EntityI
 		Events.Register<CreatedViewModel>(
 			static evt => evt.Data.ViewModel.Build()
 				.WithModel( Model.Load( VIEW_MODEL ) )
-				.WithComponent( new RustFirearmViewmodelAnimator() )
+				.WithComponent( new RustFirearmViewModelAnimator() )
 				.WithComponent( new SandboxViewModelEffect() )
 				.WithComponent( new ViewModelOffsetEffect( new Vector3( -10, 6, 1 ), new Vector3( -10, 6, 1 ) ) )
 				.WithComponent( new ViewModelPitchOffsetEffect() )

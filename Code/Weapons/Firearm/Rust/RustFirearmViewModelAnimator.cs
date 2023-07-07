@@ -2,7 +2,7 @@
 
 namespace Woosh.Espionage;
 
-public sealed class RustFirearmViewmodelAnimator : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect
+public sealed class RustFirearmViewModelAnimator : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect
 {
 	protected override void OnAutoRegister()
 	{

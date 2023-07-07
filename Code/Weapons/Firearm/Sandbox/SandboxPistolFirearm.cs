@@ -5,29 +5,30 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-[Library( "weapon_pistol" ), HammerEntity, EditorModel( WORLD_MODEL )]
-public sealed class RustPistolFirearm : Firearm, ISlotted<CarrySlot>, IHave<EntityInfo>
+[Library( "sandbox_pistol" ), HammerEntity, EditorModel( WORLD_MODEL )]
+public sealed class SandboxPistolFirearm : Firearm, ISlotted<CarrySlot>, IHave<EntityInfo>
 {
 	public EntityInfo Item { get; } = new EntityInfo
 	{
-		Nickname = "SAP",
-		Display = "Makeshift Pistol",
-		Brief = "Made with shit",
+		Nickname = "Pistol",
+		Display = "USP Pistol",
+		Brief = "A pistol.",
 		Icon = "gavel"
 	};
 
-	public RustPistolFirearm()
+	public SandboxPistolFirearm()
 	{
 		if ( !Game.IsClient )
 			return;
 
 		Events.Register<CreatedViewModel>(
 			static evt => evt.Data.ViewModel.Build()
-				.WithModel( Model.Load( VIEW_MODEL ) )
-				.WithComponent<RustFirearmViewModelAnimator>()
-				.WithComponent<SandboxViewModelEffect>()
-				.WithComponent( new ViewModelOffsetEffect( new Vector3( -10, 6, 1 ), new Vector3( -10, 6, 1 ) ) )
-				.WithComponent<ViewModelPitchOffsetEffect>()
+				.WithModel( Cloud.Model( "facepunch.v_usp" ) )
+				.WithComponent<SandboxFirearmViewModelAnimator>()
+				.WithAspect<ViewModelEffectsAspect>(default)
+				.WithBodyGroup( "barrel", 2 )
+				.WithBodyGroup( "sights", 2 )
+				.WithChild( new AnimatedEntity( "models/first_person/first_person_arms.vmdl" ) { EnableViewmodelRendering = true }, true )
 		);
 
 		Events.Register<PlayClientEffects<WeaponClientEffects>>(
@@ -39,14 +40,13 @@ public sealed class RustPistolFirearm : Firearm, ISlotted<CarrySlot>, IHave<Enti
 		);
 	}
 
-	private const string VIEW_MODEL = "weapons/rust_pistol/v_rust_pistol.vmdl";
 	private const string WORLD_MODEL = "weapons/rust_pistol/rust_pistol.vmdl";
 
 	public override void Spawn()
 	{
 		base.Spawn();
 
-		Model = Model.Load( WORLD_MODEL );
+		Model = Cloud.Model( "facepunch.w_usp" );
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
 		Components.RemoveAny<CarriableAimComponent>();
 	}
@@ -62,4 +62,5 @@ public sealed class RustPistolFirearm : Firearm, ISlotted<CarrySlot>, IHave<Enti
 		// Drop on next frame
 		Draw = new DrawTime( 1, Game.TickInterval * 2 )
 	};
+
 }

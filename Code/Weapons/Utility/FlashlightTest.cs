@@ -19,7 +19,7 @@ public sealed class FlashlightTest : ObservableAnimatedEntity, ICarriable, IPick
 			static evt => evt.Data.ViewModel.Build()
 				.WithModel( Model.Load( "weapons/rust_flashlight/v_rust_flashlight.vmdl" ) )
 				.WithAspect( new ViewModelEffectsAspect() )
-				.WithComponent( new RustFirearmViewmodelAnimator() )
+				.WithComponent( new RustFirearmViewModelAnimator() )
 		);
 	}
 
