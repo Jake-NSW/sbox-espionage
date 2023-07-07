@@ -37,6 +37,17 @@ public sealed class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISi
 					Run( new SlotDeploying( slot, ent ) );
 			}
 		);
+
+		Register<HolsteredEntity>(
+			evt =>
+			{
+				var ent = evt.Data.Entity;
+				var slot = SlotOfEntity( ent );
+
+				if ( slot != -1 )
+					Run( new SlotHolstered( slot ) );
+			}
+		);
 	}
 
 	private IEntityInventory Inventory => this.Get<IEntityInventory>();
@@ -164,7 +175,7 @@ public sealed class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISi
 					if ( inventory.Contains( ent ) )
 						inventory.Drop( ent );
 					else
-						Log.Error("Inventory didnt contain item when dropping!");
+						Log.Error( "Inventory didnt contain item when dropping!" );
 				}
 			);
 			return;

@@ -94,7 +94,12 @@ public sealed class Operator : Pawn, IMutate<CameraSetup>, IMutate<InputContext>
 		{
 			var value = EnumValues<CarrySlot>.ValueOf( i + 1 );
 			if ( Input.Pressed( value.ToInputAction() ) )
-				Slots.Deploy( value );
+			{
+				if ( Slots.Active - 1 == i )
+					Carriable.Holster( false );
+				else
+					Slots.Deploy( value );
+			}
 		}
 
 		if ( Input.Pressed( "drop" ) )

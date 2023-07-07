@@ -56,6 +56,12 @@ public sealed class OperatorEquipmentHudComponent : EntityHudComponent<UI.Operat
 
 		m_Hotbar.Assign( evt.Data.Slot, EntityInfo.FromEntity( evt.Data.Entity ) );
 	}
+	
+	[Listen]
+	private void OnSlotHolstered( Event<SlotHolstered> evt )
+	{
+		m_Hotbar.Deploying( 0 );
+	}
 
 	[Listen]
 	private void OnSlotDeploying( Event<SlotDeploying> evt )

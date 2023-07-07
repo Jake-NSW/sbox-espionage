@@ -161,7 +161,8 @@ public partial class CarriableHandler : ObservableEntityComponent<Pawn>, IActive
 
 	public void Holster( bool dropping, EntityComponentCallback onHolstered = null )
 	{
-		Game.AssertServer();
+		if ( Game.IsClient )
+			return;
 
 		if ( Active is ICarriable { Holsterable: false } )
 		{
