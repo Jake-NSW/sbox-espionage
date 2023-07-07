@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using Sandbox;
 using Woosh.Common;
 using Woosh.Signals;
@@ -34,6 +35,25 @@ public sealed class App : GameManager, IObservable
 	}
 
 	// Instance
+
+	private async static Task LoadMapFromDragDrop( string url )
+	{
+		var package = await Package.FetchAsync( url, true );
+		if ( package.PackageType == Package.Type.Map )
+		{
+			Game.ChangeLevel(package.FullIdent);
+		}
+	}
+
+	public override bool OnDragDropped( string text, Ray ray, string action )
+	{
+		if ( action == "drop" )
+		{
+			_ = LoadMapFromDragDrop( text );
+		}
+
+		return base.OnDragDropped( text, ray, action );
+	}
 
 	public IDispatcher Events { get; }
 

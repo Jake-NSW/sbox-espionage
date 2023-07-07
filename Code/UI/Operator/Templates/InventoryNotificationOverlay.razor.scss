@@ -33,9 +33,9 @@
 
   .text-back {
     transition: width 0.3s ease-in-out;
-    
+
     margin-right: 2px;
-    background-color: rgba(black, 0.45);
+    background-color: rgba(black, 0.35);
     backdrop-filter: blur(4px);
     //box-shadow: 0 0 64px 16px rgba(black, 0.3);
 
@@ -46,7 +46,7 @@
 
     .text {
       text-transform: uppercase;
-     
+
       opacity: 0.8;
       transition: all 0.3s ease-in-out;
       flex-grow: 1;
@@ -54,8 +54,8 @@
       color: white;
     }
   }
-  
-  .icon-border{
+
+  .icon-border {
     opacity: 0.45;
   }
 
@@ -71,7 +71,7 @@
       }
     }
   }
-  
+
   &:intro {
     .text-back {
       .text {
