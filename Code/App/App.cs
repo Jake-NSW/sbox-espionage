@@ -10,13 +10,6 @@ namespace Woosh.Espionage;
 
 public sealed class App : GameManager, IObservable
 {
-	protected override void OnCallRemoteProcedure( int id, NetRead read )
-	{
-		base.OnCallRemoteProcedure( id, read );
-		
-		Networking
-	}
-
 	public new static App Current
 	{
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
@@ -98,13 +91,10 @@ public sealed class App : GameManager, IObservable
 
 		var pistol = new Mk23Firearm();
 		var smg = new Smg2Firearm();
-		var hands = new PlayerHands();
 
 		var pawn = client.Possess<Operator>( spawn );
-		hands.Owner = pawn;
 
 		pawn.Inventory.Add( pistol, smg );
-		pawn.Slots.Assign( CarrySlot.Utility, hands );
 		pawn.Slots.Deploy( CarrySlot.Front );
 	}
 }

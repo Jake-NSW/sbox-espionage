@@ -1,5 +1,6 @@
 ﻿using Sandbox;
 using Woosh.Common;
+using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
@@ -8,10 +9,27 @@ public sealed class Operator : Pawn, IMutate<CameraSetup>, IMutate<InputContext>
 	public Entity Active => Components.Get<CarriableHandler>().Active;
 	public IEntityInventory Inventory => Components.Get<IEntityInventory>();
 	public DeployableSlotHandler Slots => Components.Get<DeployableSlotHandler>();
+	public CarriableHandler Carriable => Components.Get<CarriableHandler>();
+
+	private PlayerHands m_Hands;
 
 	public override void Spawn()
 	{
 		base.Spawn();
+
+		m_Hands = new PlayerHands { Owner = this };
+		Events.Register<HolsteredEntity>(
+			e =>
+			{
+					Log.Info( "Deploying Something" );
+					
+				if ( e.Data.Deploying == null )
+				{
+					Carriable.Deploy( m_Hands );
+					Log.Info( "Deploying Hands" );
+				}
+			}
+		);
 
 		// UI
 		Components.Create<InteractionHudComponent>();

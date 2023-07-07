@@ -22,7 +22,6 @@ public sealed class InventoryNotificationHudComponent : EntityHudComponent<UI.Op
 	[Listen]
 	private void OnInventoryAdded( Event<InventoryAdded> evt )
 	{
-		Log.Info( $"Item added to inventory!! {evt.Data.Item}" );
 		Add( EntityInfo.FromEntity( evt.Data.Item ), false );
 	}
 
@@ -39,7 +38,6 @@ public sealed class InventoryNotificationHudComponent : EntityHudComponent<UI.Op
 	[Listen]
 	private void OnInventoryRemoved( Event<InventoryRemoved> evt )
 	{
-		Log.Info( $"Item removed from inventory :(( {evt.Data.Item}" );
 		Add( EntityInfo.FromEntity( evt.Data.Item ), true );
 	}
 }
