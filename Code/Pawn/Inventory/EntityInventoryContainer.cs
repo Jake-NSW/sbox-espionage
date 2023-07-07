@@ -27,10 +27,10 @@ public sealed class EntityInventoryContainer : ObservableEntityComponent, IEntit
 			Log.Error( $"Can't pickup item {ent}" );
 			return false;
 		}
-		
+
 		// Add to Bucket
 		n_Entities.Add( ent.NetworkIdent );
-		
+
 		// Apply things to Entity
 		ent.SetParent( Entity, "weapon_attach", Transform.Zero );
 		ent.Owner = Entity;
@@ -41,7 +41,7 @@ public sealed class EntityInventoryContainer : ObservableEntityComponent, IEntit
 
 		RunInventoryAdded( ent );
 
-		m_NetHash ^= ent.GetHashCode();
+		m_NetHash++;
 		WriteNetworkData();
 
 		return true;
@@ -77,8 +77,9 @@ public sealed class EntityInventoryContainer : ObservableEntityComponent, IEntit
 
 		ent.Owner = null;
 
-		m_NetHash ^= ent.GetHashCode();
+		m_NetHash++;
 		WriteNetworkData();
+
 	}
 
 	public bool Contains( Entity entity )
@@ -87,7 +88,7 @@ public sealed class EntityInventoryContainer : ObservableEntityComponent, IEntit
 	}
 
 	// Utility
-	
+
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]
 	private void RunInventoryRemoved( Entity ent ) => Run( new InventoryRemoved( ent ), Propagation.Both );
 
@@ -96,14 +97,14 @@ public sealed class EntityInventoryContainer : ObservableEntityComponent, IEntit
 
 	// Serialization
 
-	private int m_NetHash;
+	private uint m_NetHash;
 
 	void INetworkSerializer.Read( ref NetRead read )
 	{
 		if ( Entity == null )
 			return;
 
-		var hash = read.Read<int>();
+		var hash = read.Read<uint>();
 		if ( m_NetHash == hash )
 			return;
 
@@ -123,7 +124,7 @@ public sealed class EntityInventoryContainer : ObservableEntityComponent, IEntit
 				continue;
 
 			received.Add( ent.NetworkIdent );
-			
+
 			// Check if we're a new entity
 			if ( !oldEntities.Contains( ent.NetworkIdent ) )
 				RunInventoryAdded( ent );
