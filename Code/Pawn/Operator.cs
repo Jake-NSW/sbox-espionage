@@ -21,13 +21,8 @@ public sealed class Operator : Pawn, IMutate<CameraSetup>, IMutate<InputContext>
 		Events.Register<HolsteredEntity>(
 			e =>
 			{
-					Log.Info( "Deploying Something" );
-					
-				if ( e.Data.Deploying == null )
-				{
+				if ( e.Data.Deploying == null && e.Data.Deploying is not PlayerHands )
 					Carriable.Deploy( m_Hands );
-					Log.Info( "Deploying Hands" );
-				}
 			}
 		);
 

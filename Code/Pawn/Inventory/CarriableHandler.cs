@@ -179,10 +179,12 @@ public partial class CarriableHandler : ObservableEntityComponent<Pawn>, IActive
 
 	private void OnHolstered()
 	{
+		// Unsure about moving this here.
+		Run( new HolsteredEntity( Active, n_ToDeploy ) );
+		
 		n_IsHolstering = false;
 
 		(Active as ICarriable)?.OnHolstered();
-		Run( new HolsteredEntity( Active, n_ToDeploy ) );
 		(Active as IObservableEntity)?.Events.Run( new HolsteredEntity( Active, n_ToDeploy ), from: this );
 
 		n_IsDropping = false;
