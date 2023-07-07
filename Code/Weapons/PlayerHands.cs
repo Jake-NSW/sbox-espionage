@@ -15,7 +15,7 @@ public sealed partial class PlayerHands : MeleeWeapon, ISlotted<CarrySlot>, IHav
 				var view = evt.Data.ViewModel;
 				view.Model = Model.Load( "weapons/hands/v_espionage_hands.vmdl" );
 				view.Components.Create<GenericFirearmViewModelAnimator>();
-				view.Build() .WithAspect( new ViewModelEffectsAspect() ).WithoutAnyComponent<ViewModelPitchOffsetEffect>();
+				view.Build().WithAspect( new ViewModelEffectsAspect() ).WithoutAnyComponent<ViewModelPitchOffsetEffect>();
 			}
 		);
 	}

@@ -1,0 +1,26 @@
+﻿@using Sandbox.UI;
+
+@namespace Woosh.Espionage.UI
+@attribute [StyleSheet]
+@inherits Panel;
+
+<root class="@(Removed ? "removed" : "added")">
+    <div class="symbol-back">
+        <label class="symbol" text="@(Removed ? "remove" : "add")"></label>
+    </div>
+    <div class="text-back">
+        <label class="text" text="@(Info.Display)"></label>
+    </div>
+</root>
+
+@code {
+    public EntityInfo Info { get; }
+    public bool Removed { get; }
+
+    public InventoryNotificationOverlay(EntityInfo info, bool removed)
+    {
+        Info = info;
+        Removed = removed;
+    }
+
+}

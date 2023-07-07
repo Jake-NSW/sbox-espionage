@@ -13,3 +13,19 @@
   flex-direction: column;
   width: 550px;
 }
+
+.notification-container {
+  position: absolute;
+  flex-direction: column;
+  padding: 32px;
+}
+
+.notification-mask {
+  position: absolute;
+  top: 50%;
+  right: 0;
+
+  width: 500px;
+  height: 300px;
+  justify-content: flex-end;
+}

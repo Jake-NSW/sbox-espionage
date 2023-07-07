@@ -53,6 +53,7 @@ public sealed class RustShotgunFirearm : Firearm, ISlotted<CarrySlot>, IHave<Ent
 
 		// Use Shotgun Simulated Reload State (Continuous reloading)
 		Components.Replace<FirearmReloadSimulatedEntityState, ShotgunReloadSimulatedEntityState>();
+		Components.RemoveAny<CarriableAimComponent>();
 	}
 
 	protected override FirearmSetup Default => new FirearmSetup()

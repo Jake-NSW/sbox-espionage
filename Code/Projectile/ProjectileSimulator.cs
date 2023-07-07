@@ -57,7 +57,7 @@ public sealed class ProjectileSimulator : ObservableEntityComponent<App>, ISimul
 			// Play Trace
 			var ray = Trace.Ray( last, pos )
 				.UseHitboxes()
-				.WithAnyTags( "solid", "player", "npc" )
+				.WithAnyTags( "solid", "player", "npc", "glass", "prop" )
 				.Ignore( attacker )
 				.Ignore( weapon )
 				.Size( 1 )

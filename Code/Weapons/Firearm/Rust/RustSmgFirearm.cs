@@ -50,6 +50,7 @@ public sealed class RustSmgFirearm : Firearm, ISlotted<CarrySlot>, IHave<EntityI
 
 		Model = Model.Load( WORLD_MODEL );
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
+		Components.RemoveAny<CarriableAimComponent>();
 	}
 
 	protected override FirearmSetup Default { get; } = new FirearmSetup()

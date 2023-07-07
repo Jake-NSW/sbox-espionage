@@ -48,6 +48,7 @@ public sealed class RustPistolFirearm : Firearm, ISlotted<CarrySlot>, IHave<Enti
 
 		Model = Model.Load( WORLD_MODEL );
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
+		Components.RemoveAny<CarriableAimComponent>();
 	}
 
 	public CarrySlot Slot => CarrySlot.Holster;

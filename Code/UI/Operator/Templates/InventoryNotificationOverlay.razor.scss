@@ -1,0 +1,67 @@
+﻿InventoryNotificationOverlay {
+  opacity: 1;
+  transition: height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  flex-direction: row-reverse;
+
+  overflow: hidden;
+
+  font-size: 20px;
+  font-family: RaMono;
+
+  background-color: rgba(black, 0.5);
+  backdrop-filter: blur(4px);
+
+  box-shadow: 0 0 64px 16px rgba(black, 0.3);
+
+  // Symbol
+
+  .symbol-back {
+    justify-content: center;
+    align-items: center;
+    padding: 4px;
+
+    .symbol {
+      color: white;
+      font-family: "Material Icons";
+    }
+  }
+
+  &.added .symbol-back {
+    background-color: green;
+  }
+
+  &.removed .symbol-back {
+    background-color: red;
+  }
+
+  // Text
+
+  .text-back {
+    flex-grow: 1;
+
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    padding: 6px 18px;
+
+    .text {
+      transition: all 0.3s ease-in-out;
+      flex-grow: 1;
+      text-align: right;
+      color: white;
+    }
+  }
+
+  &:intro, &:outro {
+    opacity: 0;
+    height: 0;
+  }
+
+  &:intro {
+    .text-back {
+      .text {
+        right: -120%;
+      }
+    }
+  }
+}
