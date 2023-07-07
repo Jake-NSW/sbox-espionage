@@ -1,0 +1,38 @@
+﻿.icon-border {
+  z-index: 100;
+  transition: opacity 0.2s ease-in-out;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  .line {
+    position: absolute;
+    height: 1px;
+    background-color: rgba(whitesmoke, 0.5);
+  }
+
+  .left {
+    left: 0;
+  }
+
+  .right {
+    right: 0;
+  }
+
+  .up {
+    top: 0;
+    height: 1px;
+    width: 8px;
+  }
+
+  .down {
+    bottom: 0;
+    height: 1px;
+    width: 8px;
+  }
+
+  .side {
+    height: 100%;
+    width: 1px;
+  }
+}
