@@ -25,7 +25,7 @@ public sealed class SandboxPistolFirearm : Firearm, ISlotted<CarrySlot>, IHave<E
 			static evt => evt.Data.ViewModel.Build()
 				.WithModel( Cloud.Model( "facepunch.v_usp" ) )
 				.WithComponent<SandboxFirearmViewModelAnimator>()
-				.WithAspect<ViewModelEffectsAspect>(default)
+				.WithAspect<ViewModelEffectsAspect>()
 				.WithBodyGroup( "barrel", 2 )
 				.WithBodyGroup( "sights", 2 )
 				.WithChild( new AnimatedEntity( "models/first_person/first_person_arms.vmdl" ) { EnableViewmodelRendering = true }, true )

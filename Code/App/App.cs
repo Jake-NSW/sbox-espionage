@@ -10,6 +10,13 @@ namespace Woosh.Espionage;
 
 public sealed class App : GameManager, IObservable
 {
+	protected override void OnCallRemoteProcedure( int id, NetRead read )
+	{
+		base.OnCallRemoteProcedure( id, read );
+		
+		Networking
+	}
+
 	public new static App Current
 	{
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
