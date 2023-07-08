@@ -52,12 +52,13 @@ public sealed partial class PawnLeaning : ObservableEntityComponent<Pawn>, IMuta
 	{
 		m_Distance = m_Distance.Approach( Direction * NormalFromEyes( Direction, Entity.CollisionBounds.Translate( Entity.Position ) ), 3.5f * Time.Delta );
 		var multi = 1 - setup.Hands.Aim;
+
 		var normal = m_Distance * Easing.ExpoOut( Easing.EaseIn( m_Distance.Abs() ) );
 
 		setup.Position += setup.Rotation.Right * Distance * normal;
 		setup.Rotation *= Rotation.From( 0, 0, Angle * normal );
 
-		setup.Hands.Angles *= Rotation.From( 0, 0, -Angle * normal );
+		setup.Hands.Angles *= Rotation.From( 0, 0, Angle * normal );
 
 		setup.Hands.Offset += (setup.Rotation.Right * (normal * 0.05f * Distance)) * multi;
 		setup.Hands.Offset += (setup.Rotation.Down * (normal * 0.02f * Distance)) * multi;
