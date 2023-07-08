@@ -73,6 +73,12 @@ public abstract partial class Pawn : ObservableAnimatedEntity
 		}
 	}
 
+	public override void FrameSimulate( IClient cl )
+	{
+		base.FrameSimulate( cl );
+		Rotation = ViewAngles.WithPitch( 0f ).ToRotation();
+	}
+
 	public virtual BBox Hull => new BBox( new Vector3( -10, -10, 0 ), new Vector3( 10, 10, 64 ) );
 
 	// Eyes

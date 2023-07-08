@@ -1,11 +1,11 @@
 ﻿namespace Woosh.Espionage;
 
-public sealed class FirstPersonEntityCamera : EntityCameraController
+public sealed class FirstPersonEntityCamera : EntityCameraController<Pawn>
 {
-	public override void Update( ref CameraSetup setup )
+	protected override void OnUpdate( ref CameraSetup setup, in InputContext input )
 	{
 		setup.Viewer = Entity;
-		setup.Rotation = Rotation.LookAt( Entity.AimRay.Forward );
-		setup.Position = Entity.AimRay.Position;
+		setup.Rotation = input.ViewAngles.ToRotation();
+		setup.Position = Entity.EyePosition;
 	}
 }

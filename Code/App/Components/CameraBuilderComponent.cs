@@ -16,10 +16,22 @@ public sealed partial class CameraBuilderComponent : ObservableEntityComponent<A
 	}
 
 	[Listen]
-	private void Update( Event<FrameUpdate> evt )
+	private void Update( Event<PostCameraSetup> evt )
 	{
 		Game.AssertClient();
-		using ( var mutator = m_Helper.Update( Active ) )
+		InputContext context = default;
+
+		if ( Game.LocalPawn is Pawn pawn )
+		{
+			context = new InputContext()
+			{
+				Muzzle = pawn.Muzzle,
+				InputDirection = pawn.InputDirection,
+				ViewAngles = pawn.ViewAngles
+			};
+		}
+
+		using ( var mutator = m_Helper.Update( context, Active ) )
 		{
 			// Mutate Pawn
 			mutator.Mutate( Game.LocalPawn as IMutate<CameraSetup> );

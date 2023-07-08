@@ -27,10 +27,10 @@ public sealed class App : GameManager, IObservable
 	[ConCmd.Admin( "esp_ent_create" )]
 	public static void CreateEntity( string className )
 	{
-		var caller = ConsoleSystem.Caller;
-		var forward = caller.Pawn.AimRay.Forward;
-		var start = caller.Pawn.AimRay.Position;
-		var ray = Trace.Ray( start, start + forward * 128 ).Ignore( caller.Pawn ).Run();
+		var pawn = ConsoleSystem.Caller.Pawn;
+		var forward = pawn.AimRay.Forward;
+		var start = pawn.AimRay.Position;
+		var ray = Trace.Ray( start, start + forward * 128 ).Ignore( pawn ).Run();
 		TypeLibrary.GetType( className ).Create<Entity>().Position = ray.EndPosition + -forward * 4;
 	}
 
@@ -40,19 +40,16 @@ public sealed class App : GameManager, IObservable
 	{
 		var package = await Package.FetchAsync( url, true );
 		if ( package.PackageType == Package.Type.Map )
-		{
-			Game.ChangeLevel(package.FullIdent);
-		}
+			Game.ChangeLevel( package.FullIdent );
 	}
 
 	public override bool OnDragDropped( string text, Ray ray, string action )
 	{
-		if ( action == "drop" )
-		{
-			_ = LoadMapFromDragDrop( text );
-		}
+		if ( action != "drop" )
+			return base.OnDragDropped( text, ray, action );
 
-		return base.OnDragDropped( text, ray, action );
+		_ = LoadMapFromDragDrop( text );
+		return true;
 	}
 
 	public IDispatcher Events { get; }
@@ -80,6 +77,12 @@ public sealed class App : GameManager, IObservable
 	{
 		Components.Each<ISimulated, IClient>( cl, ( client, simulated ) => simulated.Simulate( client ) );
 		base.Simulate( cl );
+	}
+
+	[GameEvent.Client.PostCamera]
+	private void OnPostCamera()
+	{
+		Events.Run<PostCameraSetup>();
 	}
 
 	public override void ClientJoined( IClient client )

@@ -79,7 +79,6 @@ public sealed class EntityInventoryContainer : ObservableEntityComponent, IEntit
 
 		m_NetHash++;
 		WriteNetworkData();
-
 	}
 
 	public bool Contains( Entity entity )
@@ -105,14 +104,20 @@ public sealed class EntityInventoryContainer : ObservableEntityComponent, IEntit
 			return;
 
 		var hash = read.Read<uint>();
-		if ( m_NetHash == hash )
-			return;
-
-		m_NetHash = hash;
-
 		var length = read.Read<int>();
 		if ( length <= 0 )
 			return;
+
+		if ( m_NetHash == hash )
+		{
+			// Skip over the entities, as we don't need to refresh
+			for ( var i = 0; i < length; i++ )
+				read.Read<int>();
+
+			return;
+		}
+
+		m_NetHash = hash;
 
 		var oldEntities = n_Entities;
 		var received = new HashSet<int>();

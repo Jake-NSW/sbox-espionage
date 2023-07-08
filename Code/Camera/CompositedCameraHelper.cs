@@ -15,10 +15,10 @@ public sealed class CompositedCameraHelper
 
 	// Setup
 
-	public CameraMutateScope Update( ICameraController controller = null )
+	public CameraMutateScope Update( InputContext input, ICameraController controller = null )
 	{
 		var setup = new CameraSetup( Target ) { FieldOfView = Screen.CreateVerticalFieldOfView( Game.Preferences.FieldOfView ) };
-		Build( ref setup, controller );
+		Build( ref setup, input, controller );
 		return new CameraMutateScope( Target, setup );
 	}
 
@@ -27,7 +27,7 @@ public sealed class CompositedCameraHelper
 	public ICameraController Active => m_Last;
 	private ICameraController m_Last;
 
-	private void Build( ref CameraSetup setup, ICameraController controller )
+	private void Build( ref CameraSetup setup, in InputContext input, ICameraController controller )
 	{
 		var maybe = controller ?? Find();
 		if ( m_Last != maybe )
@@ -37,7 +37,7 @@ public sealed class CompositedCameraHelper
 			m_Last?.Enabled( ref setup );
 		}
 
-		m_Last?.Update( ref setup );
+		m_Last?.Update( ref setup, input );
 	}
 
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]

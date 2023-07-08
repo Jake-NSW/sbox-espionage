@@ -43,6 +43,9 @@ public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity, IMu
 
 	void IMutate<CameraSetup>.OnPostSetup( ref CameraSetup setup )
 	{
+		if ( setup.Viewer == null )
+			return;
+
 		var initialPos = setup.Hands.Offset;
 		var initialRot = setup.Hands.Angles;
 

@@ -5,10 +5,11 @@ namespace Woosh.Espionage;
 
 public sealed class AppliedViewModelEntityEffects : ObservableEntityComponent, IEntityEffects
 {
-	public AppliedViewModelEntityEffects( AnimatedEntity target )
-	{
-		Target = target;
+	public AnimatedEntity ViewModel { get; }
+
+	public AppliedViewModelEntityEffects( AnimatedEntity viewModel ) {
+		ViewModel = viewModel;
 	}
 
-	public AnimatedEntity Target { get; }
+	AnimatedEntity IEntityEffects.Target => Entity.IsFirstPersonMode ? ViewModel : null;
 }
