@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using Woosh.Common;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
@@ -21,15 +22,8 @@ public sealed partial class CameraBuilderComponent : ObservableEntityComponent<A
 		Game.AssertClient();
 		InputContext context = default;
 
-		if ( Game.LocalPawn is Pawn pawn )
-		{
-			context = new InputContext()
-			{
-				Muzzle = pawn.Muzzle,
-				InputDirection = pawn.InputDirection,
-				ViewAngles = pawn.ViewAngles
-			};
-		}
+		if ( Game.LocalPawn is IHave<InputContext> pawn )
+			context = pawn.Item;
 
 		using ( var mutator = m_Helper.Update( context, Active ) )
 		{

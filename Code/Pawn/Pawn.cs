@@ -5,7 +5,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public abstract partial class Pawn : ObservableAnimatedEntity
+public abstract partial class Pawn : ObservableAnimatedEntity, IHave<InputContext>
 {
 	public EntityStateMachine<Pawn> Machine { get; }
 
@@ -26,6 +26,13 @@ public abstract partial class Pawn : ObservableAnimatedEntity
 	}
 
 	// Input
+	
+	InputContext IHave<InputContext>.Item => new InputContext()
+	{
+		InputDirection = InputDirection,
+		ViewAngles = ViewAngles,
+		Muzzle = Muzzle
+	};
 
 	[ClientInput] public Vector3 InputDirection { get; protected set; }
 	[ClientInput] public Angles ViewAngles { get; set; }
