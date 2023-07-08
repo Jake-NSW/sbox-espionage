@@ -8,7 +8,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class App : GameManager, IObservable
+public sealed partial class App : GameManager, IObservable
 {
 	public new static App Current
 	{
@@ -22,45 +22,13 @@ public sealed class App : GameManager, IObservable
 		return Current.Components.Get<T>();
 	}
 
-	public static class Actions
-	{
-		public const string Interact = "interact";
-	}
-
-	// Commands
-
-	[ConCmd.Admin( "esp_ent_create" )]
-	public static void CreateEntity( string className )
-	{
-		var pawn = ConsoleSystem.Caller.Pawn;
-		var forward = pawn.AimRay.Forward;
-		var start = pawn.AimRay.Position;
-		var ray = Trace.Ray( start, start + forward * 128 ).Ignore( pawn ).Run();
-		TypeLibrary.GetType( className ).Create<Entity>().Position = ray.EndPosition + -forward * 4;
-	}
-
 	// Instance
-
-	private async static Task LoadMapFromDragDrop( string url )
-	{
-		var package = await Package.FetchAsync( url, true );
-		if ( package.PackageType == Package.Type.Map )
-			Game.ChangeLevel( package.FullIdent );
-	}
-
-	public override bool OnDragDropped( string text, Ray ray, string action )
-	{
-		if ( action == "drop" )
-			_ = LoadMapFromDragDrop( text );
-
-		return base.OnDragDropped( text, ray, action );
-	}
 
 	public IDispatcher Events { get; }
 
 	public App()
 	{
-		Events = new Dispatcher();
+		Events = new Dispatcher( this, _ => GlobalEventDispatcher.Instance, _ => null );
 
 		// Setup Components
 		if ( Game.IsServer )
@@ -91,17 +59,38 @@ public sealed class App : GameManager, IObservable
 
 	public override void ClientJoined( IClient client )
 	{
+		Events.Run( new ClientJoined( client ) );
 		base.ClientJoined( client );
 
 		var spawn = All.OfType<SpawnPoint>().MinBy( _ => Guid.NewGuid() ).Transform;
-		spawn.Position += Vector3.Up * 2;
+		spawn.Position += Vector3.Up * 4;
 
 		var pistol = new Mk23Firearm();
 		var smg = new Smg2Firearm();
-
+		
 		var pawn = client.Possess<Operator>( spawn );
-
 		pawn.Inventory.Add( pistol, smg );
 		pawn.Slots.Deploy( CarrySlot.Front );
+	}
+
+	public override void ClientDisconnect( IClient cl, NetworkDisconnectionReason reason )
+	{
+		Events.Run( new ClientDisconnected( cl, reason ) );
+		base.ClientDisconnect( cl, reason );
+	}
+
+	private async static Task LoadMapFromDragDrop( string url )
+	{
+		var package = await Package.FetchAsync( url, true );
+		if ( package.PackageType == Package.Type.Map )
+			Game.ChangeLevel( package.FullIdent );
+	}
+
+	public override bool OnDragDropped( string text, Ray ray, string action )
+	{
+		if ( action == "drop" )
+			_ = LoadMapFromDragDrop( text );
+
+		return base.OnDragDropped( text, ray, action );
 	}
 }

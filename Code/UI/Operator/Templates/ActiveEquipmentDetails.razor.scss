@@ -3,7 +3,7 @@ $desaturate-glow-color: desaturate($glow-color, 30%);
 $saturate-glow-color: saturate($glow-color, 60%);
 $glow-shadow: -6px -2px 8px rgba($glow-color, 0.7), 0 0 6px rgba($glow-color, 0.8), 0 0 4px rgba($saturate-glow-color, 1), 0 0 2px rgba($glow-color, 0.4);
 
-ActiveEquipmentDetails {
+.bar-bottom {
   flex-direction: row-reverse;
   align-items: flex-end;
   flex-grow: 1;

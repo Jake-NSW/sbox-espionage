@@ -20,8 +20,8 @@ public sealed partial class CameraBuilderComponent : ObservableEntityComponent<A
 	private void Update( Event<PostCameraSetup> evt )
 	{
 		Game.AssertClient();
-		InputContext context = default;
 
+		InputContext context = default;
 		if ( Game.LocalPawn is IHave<InputContext> pawn )
 			context = pawn.Item;
 

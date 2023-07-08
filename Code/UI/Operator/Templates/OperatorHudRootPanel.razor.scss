@@ -6,12 +6,13 @@
   justify-content: flex-end;
   align-items: flex-end;
 
-  padding: 32px;
+  padding: 48px 32px;
 }
 
 .equipment-panel {
   flex-direction: column;
   width: 550px;
+  //transform: skew(-3deg, 1deg);
 }
 
 .notification-container {

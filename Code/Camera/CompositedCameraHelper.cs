@@ -24,7 +24,6 @@ public sealed class CompositedCameraHelper
 
 	// Active
 
-	public ICameraController Active => m_Last;
 	private ICameraController m_Last;
 
 	private void Build( ref CameraSetup setup, in InputContext input, ICameraController controller )
