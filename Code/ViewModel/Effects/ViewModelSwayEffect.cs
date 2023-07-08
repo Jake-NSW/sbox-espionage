@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using Sandbox;
 using Woosh.Common;
 using Woosh.Signals;
@@ -10,7 +11,9 @@ public sealed class ViewModelSwayEffect : ObservableEntityComponent<CompositedVi
 	private readonly float m_Multiplier;
 	private readonly float m_AimMultiplier;
 
-	public float Damping { get; set; } = 6;
+	private float Influence { get; init; } = 0.05f;
+	private float ReturnSpeed { get; init; } = 5.0f;
+	private float MaxOffsetLength { get; init; } = 16.0f;
 
 	public ViewModelSwayEffect( float multiplier = 1, float aimMultiplier = 0.2f )
 	{
@@ -18,41 +21,45 @@ public sealed class ViewModelSwayEffect : ObservableEntityComponent<CompositedVi
 		m_AimMultiplier = aimMultiplier;
 	}
 
-	private Angles m_LastAngles;
-	private Angles m_CurrentAngles;
+	private Angles m_Angles;
+	private Angles m_View;
 
-	private Rotation m_LastSwayRot = Rotation.Identity;
-
-	private Vector3 m_LastSwayPos;
-	// private Vector3 m_SwayPosVelocity;
+	private Vector2 m_Velocity;
 
 	void IMutate<CameraSetup>.OnPostSetup( ref CameraSetup setup )
 	{
 		var rot = setup.Rotation.WithRoll( 0 );
 
 		// Workout how much we've moved since last frame
-		var angles = (m_LastAngles - m_CurrentAngles).Normal * 4;
-		var mouse = new Vector2( angles.yaw, -angles.pitch );
-		mouse *= MathX.Lerp( m_Multiplier, m_AimMultiplier, setup.Hands.Aim );
-		mouse = mouse.ClampMagnitude( 14 );
+		var angles = (m_Angles - m_View).Normal * 1.5f;
+		var vel = m_Velocity = Swing( m_Velocity, new Vector2( angles.yaw, -angles.pitch ), ReturnSpeed, Influence, MaxOffsetLength );
+		vel *= MathX.Lerp( m_Multiplier, m_AimMultiplier, setup.Hands.Aim );
 
-		m_LastAngles = m_CurrentAngles;
+		m_Angles = m_View;
 
 		// Rotate and lerp the viewmodel
-		var targetRot = Rotation.From( mouse.y, -mouse.x, mouse.x * 0.6f );
-		m_LastSwayRot = m_LastSwayRot.Damp( targetRot, Damping, Time.Delta );
+		setup.Hands.Angles *= Rotation.From( vel.y, -vel.x, vel.x * 0.6f );
 
 		// Move the viewmodel to a nice new position
-		var targetPos = new Vector3( -MathF.Abs( mouse.x ) * 0.3f, mouse.x * 0.5f, mouse.y * 0.5f );
-		m_LastSwayPos = m_LastSwayPos.Damp( targetPos, Damping, Time.Delta );
-		// m_LastSwayPos = m_LastSwayPos.SmoothDamp( targetPos, ref m_SwayPosVelocity, 0.5f, Time.Delta );
+		setup.Hands.Offset += rot * new Vector3( -MathF.Abs( vel.x ) * 0.3f, vel.x * 0.5f, vel.y * 0.5f );
+	}
 
-		setup.Hands.Angles *= m_LastSwayRot;
-		setup.Hands.Offset += rot * m_LastSwayPos;
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	private static Vector2 Swing( Vector2 vel, Vector2 angles, float returnSpeed, float influence, float length )
+	{
+		var swingVelocity = new Vector2( angles.x, angles.y );
+
+		vel -= vel * returnSpeed * Time.Delta;
+		vel += swingVelocity * influence;
+
+		if ( vel.Length > length )
+			vel = vel.Normal * length;
+
+		return vel;
 	}
 
 	void IMutate<InputContext>.OnPostSetup( ref InputContext setup )
 	{
-		m_CurrentAngles = setup.ViewAngles;
+		m_View = setup.ViewAngles;
 	}
 }
