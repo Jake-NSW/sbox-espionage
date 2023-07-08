@@ -16,7 +16,7 @@ public sealed class ControllableSimulatedEntityState : ObservableEntityComponent
 
 	public bool TryEnter()
 	{
-		return Input.Pressed( "use" ) && m_Target is IControllable;
+		return Input.Pressed( App.Actions.Interact ) && m_Target is IControllable;
 	}
 
 	public bool Simulate( IClient cl )

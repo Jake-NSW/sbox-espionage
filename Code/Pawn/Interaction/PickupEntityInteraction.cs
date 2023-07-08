@@ -4,9 +4,7 @@ namespace Woosh.Espionage;
 
 public sealed class PickupEntityInteraction : EntityComponent<Pawn>, IEntityInteraction
 {
-	public InteractionIndicator Indicator => new InteractionIndicator( "Pickup", $"{Input.GetButtonOrigin( KEYCODE )}", 0 );
-
-	private const string KEYCODE = "use";
+	public InteractionIndicator Indicator => new InteractionIndicator( "Pickup", $"{Input.GetButtonOrigin( App.Actions.Interact )}", 0 );
 
 	public bool IsInteractable( Entity entity )
 	{
@@ -22,12 +20,12 @@ public sealed class PickupEntityInteraction : EntityComponent<Pawn>, IEntityInte
 
 		using var _ = Prediction.Off();
 
-		if ( Input.Pressed( KEYCODE ) )
+		if ( Input.Pressed( App.Actions.Interact ) )
 		{
 			m_HeldTime = 0;
 		}
 
-		if ( Input.Released( KEYCODE ) && m_HeldTime <= 0.2f )
+		if ( Input.Released( App.Actions.Interact ) && m_HeldTime <= 0.2f )
 		{
 			Entity.Components.Get<IEntityInventory>().Add( hovering.Entity );
 		}

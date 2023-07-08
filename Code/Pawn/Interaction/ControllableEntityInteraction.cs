@@ -14,7 +14,7 @@ public interface IControllable : IEntity
 
 public sealed class ControllableEntityInteraction : EntityComponent<Pawn>, IEntityInteraction, ISingletonComponent
 {
-	public InteractionIndicator Indicator => new InteractionIndicator( "Use", Input.GetButtonOrigin( "use" ), 0 );
+	public InteractionIndicator Indicator => new InteractionIndicator( App.Actions.Interact, Input.GetButtonOrigin( App.Actions.Interact ), 0 );
 
 	public bool IsInteractable( Entity entity )
 	{

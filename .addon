@@ -8,7 +8,7 @@
   "HasAssets": true,
   "AssetsPath": "",
   "Resources": null,
-  "MenuResources": null,
+  "MenuResources": "\nMenu/Main/GameMenu.razor.scss\nMenu/Elements/TerminalHoverButton.razor.scss\nFonts/*",
   "HasCode": true,
   "CodePath": "/Code/",
   "PackageReferences": [
@@ -102,9 +102,9 @@
           "GroupName": "Actions"
         },
         {
-          "Name": "Use",
+          "Name": "Interact",
           "KeyboardCode": "f",
-          "GamepadCode": "Y",
+          "GamepadCode": "X",
           "GroupName": "Actions"
         },
         {
@@ -170,6 +170,7 @@
         {
           "Name": "Ragdoll",
           "KeyboardCode": "K",
+          "GamepadCode": "DpadEast",
           "GroupName": "Other"
         }
       ]

@@ -5,7 +5,7 @@ using Woosh.Signals;
 namespace Woosh.Espionage;
 
 [Library, Title( "Hands" ), Icon( "pan_tool" )]
-public sealed partial class PlayerHands : MeleeWeapon, ISlotted<CarrySlot>, IHave<EntityInfo>, INetworkSerializer
+public sealed partial class PlayerHands : MeleeWeapon, ISlotted<CarrySlot>, IHave<EntityInfo>
 {
 	public PlayerHands()
 	{
@@ -24,26 +24,10 @@ public sealed partial class PlayerHands : MeleeWeapon, ISlotted<CarrySlot>, IHav
 	{
 		base.Simulate( cl );
 
-		if ( Game.IsServer && Input.Pressed( "shoot" ) )
+		if ( Input.Pressed( "shoot" ) && Game.IsClient )
 		{
-			Log.Info( "penis" );
-			using ( var writer = NetWrite.StartRpc2( 951950591 ) )
-			{
-				writer.Write( "Hello World!" );
-				writer.SendRpc2( To.Single( Owner ), this );
-			}
+			Components.Get<AppliedViewModelEntityEffects>()?.ViewModel?.SetAnimParameter( "bAttackHit", true );
 		}
-	}
-
-	protected override void OnCallRemoteProcedure( int id, NetRead read )
-	{
-		Log.Info( "recieved rpc" );
-		if ( id == 951950591 )
-		{
-			Log.Info( read.ReadString() );
-		}
-
-		base.OnCallRemoteProcedure( id, read );
 	}
 
 	public override void Spawn()
@@ -53,7 +37,4 @@ public sealed partial class PlayerHands : MeleeWeapon, ISlotted<CarrySlot>, IHav
 
 	public CarrySlot Slot => CarrySlot.Utility;
 	public EntityInfo Item { get; } = new EntityInfo() { Nickname = "Hands", Display = "Hands" };
-	
-	public void Read( ref NetRead read ) { }
-	public void Write( NetWrite write ) { }
 }

@@ -4,7 +4,7 @@ namespace Woosh.Espionage;
 
 public sealed class UseEntityInteraction : EntityComponent<Pawn>, IEntityInteraction, ISingletonComponent
 {
-	public InteractionIndicator Indicator => new InteractionIndicator( "Use", Input.GetButtonOrigin( "use" ), 0 );
+	public InteractionIndicator Indicator => new InteractionIndicator( App.Actions.Interact, Input.GetButtonOrigin( App.Actions.Interact ), 0 );
 
 	public bool IsInteractable( Entity entity )
 	{
@@ -18,13 +18,13 @@ public sealed class UseEntityInteraction : EntityComponent<Pawn>, IEntityInterac
 
 		using var _ = Prediction.Off();
 
-		if ( Input.Pressed( "use" ) )
+		if ( Input.Pressed( App.Actions.Interact ) )
 			Start( context );
 
 		if ( Using == null )
 			return;
 
-		if ( !Input.Down( "use" ) )
+		if ( !Input.Down( App.Actions.Interact ) )
 			Stop();
 
 		if ( Vector3.Dot( Entity.Rotation.Forward, m_UsedPosition - Entity.Position ) < 0.3f || m_UsedPosition.Distance( Entity.Position ) > 64f )

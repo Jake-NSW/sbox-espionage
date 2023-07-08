@@ -22,6 +22,11 @@ public sealed class App : GameManager, IObservable
 		return Current.Components.Get<T>();
 	}
 
+	public static class Actions
+	{
+		public const string Interact = "interact";
+	}
+
 	// Commands
 
 	[ConCmd.Admin( "esp_ent_create" )]
@@ -45,11 +50,10 @@ public sealed class App : GameManager, IObservable
 
 	public override bool OnDragDropped( string text, Ray ray, string action )
 	{
-		if ( action != "drop" )
-			return base.OnDragDropped( text, ray, action );
+		if ( action == "drop" )
+			_ = LoadMapFromDragDrop( text );
 
-		_ = LoadMapFromDragDrop( text );
-		return true;
+		return base.OnDragDropped( text, ray, action );
 	}
 
 	public IDispatcher Events { get; }

@@ -1,4 +1,5 @@
-﻿@using System.Text
+﻿@using System
+@using System.Text
 @using Sandbox.UI;
 
 @namespace Woosh.Espionage.UI
@@ -11,7 +12,7 @@
     {
         <div class="@GetSlotClass(i)">
             <img class="slot-icon" src="@(GetSlotImage(i))" alt="Icon"/>
-            <label class="slot-item" text="@(Infos[i].Display ?? "Unknown")"></label>
+            <label class="slot-item" text="@(Infos[i].Display ?? "Unknown")" ></label>
             <label class="slot-name" text="@(GetSlotName(i))"></label>
             <DivOutline></DivOutline>
         </div>
@@ -24,10 +25,30 @@
     {
         Infos = new EntityInfo[5];
     }
-
+    
     private string GetSlotImage(int slot)
     {
-        return "Icons/pistol.png";
+        return (CarrySlot)slot switch
+        {
+            CarrySlot.Front => "icons/smg2/base.png",
+            CarrySlot.Back => "icons/smg2/base.png",
+            CarrySlot.Holster => "icons/mk23/base.png",
+            CarrySlot.Grenade => "icons/mk23/base.png",
+            CarrySlot.Utility => "icons/mk23/base.png",
+            _ => throw new ArgumentOutOfRangeException(nameof(slot), slot, null)
+        };
+    }
+
+    private int AssignedSlots()
+    {
+        int count = 0;
+        for (int i = 0; i < Infos.Length; i++)
+        {
+            if (Infos[i].IsValid)
+                count++;
+        }
+
+        return count;
     }
 
     private string GetSlotName(int slot)
@@ -58,7 +79,7 @@
             stringBuilder.Append(" hidden");
         }
 
-        if (slot >= 2 && (ValidSlot(0) || ValidSlot(1)))
+        if (slot >= 2 && AssignedSlots() > 3)
         {
             stringBuilder.Append(" small");
         }
@@ -95,5 +116,4 @@
         Infos[slot - 1] = info;
         StateHasChanged();
     }
-
 }

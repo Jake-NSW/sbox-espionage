@@ -50,7 +50,7 @@ public sealed class Smg2Firearm : Firearm, ISlotted<CarrySlot>, IHave<EntityInfo
 		IsSilenced = true,
 		RateOfFire = 700,
 		Force = 250,
-		Spread = 2,
+		Spread = 0.2f,
 		Draw = new DrawTime( 1.5f, 1.3f )
 	};
 

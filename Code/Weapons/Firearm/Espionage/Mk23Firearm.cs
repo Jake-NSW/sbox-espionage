@@ -61,7 +61,7 @@ public sealed class Mk23Firearm : Firearm, ISlotted<CarrySlot>, IHave<EntityInfo
 		IsSilenced = false,
 		RateOfFire = 550,
 		Force = 400,
-		Spread = 2,
+		Spread = 0.2f,
 		Draw = new DrawTime( 1, 0.6f )
 	};
 

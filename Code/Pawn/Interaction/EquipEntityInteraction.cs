@@ -7,11 +7,10 @@ public sealed class EquipEntityInteraction : EntityComponent<Pawn>, IEntityInter
 {
 	public InteractionIndicator Indicator => new InteractionIndicator(
 		"Equip",
-		$"{Input.GetButtonOrigin( KEYCODE )} Hold",
+		$"{Input.GetButtonOrigin( App.Actions.Interact )} Hold",
 		MathF.Min( m_IsActive ? m_SincePressed / EQUIP_DELAY : 0, 1 )
 	);
 
-	private const string KEYCODE = "use";
 	private const float EQUIP_DELAY = 0.55f;
 
 	public bool IsInteractable( Entity entity )
@@ -35,14 +34,14 @@ public sealed class EquipEntityInteraction : EntityComponent<Pawn>, IEntityInter
 	{
 		using var _ = Prediction.Off();
 
-		if ( Input.Pressed( KEYCODE ) )
+		if ( Input.Pressed( App.Actions.Interact ) )
 		{
 			// Start Hold
 			m_SincePressed = 0;
 			m_IsActive = true;
 		}
 
-		if ( m_SincePressed >= EQUIP_DELAY && Input.Down( KEYCODE ) )
+		if ( m_SincePressed >= EQUIP_DELAY && Input.Down( App.Actions.Interact ) )
 		{
 			if ( Game.IsServer )
 			{
@@ -55,7 +54,7 @@ public sealed class EquipEntityInteraction : EntityComponent<Pawn>, IEntityInter
 			return;
 		}
 
-		if ( Input.Released( KEYCODE ) )
+		if ( Input.Released( App.Actions.Interact ) )
 		{
 			// Failed!
 			m_SincePressed = default;

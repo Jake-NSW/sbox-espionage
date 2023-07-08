@@ -39,7 +39,7 @@ public sealed partial class TerminalEntity : AnimatedEntity, IControllable, IHav
 
 	public bool Simulate( Entity pawn )
 	{
-		if ( Input.Pressed( "use" ) )
+		if ( Input.Pressed( App.Actions.Interact ) )
 		{
 			// We're Done
 			return true;
