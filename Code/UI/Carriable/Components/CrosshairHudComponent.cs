@@ -41,6 +41,9 @@ public sealed class CrosshairHudComponent : EntityHudComponent<Pawn>, IMutate<Ca
 	[Listen]
 	private void OnViewModelCreated( Event<CreatedViewModel> evt )
 	{
+		if ( !evt.Data.ViewModel.GetAttachment( "muzzle" ).HasValue )
+			return;
+
 		m_Entity = evt.Data.ViewModel;
 	}
 
@@ -52,6 +55,13 @@ public sealed class CrosshairHudComponent : EntityHudComponent<Pawn>, IMutate<Ca
 
 	public void OnPostSetup( ref CameraSetup setup )
 	{
+		if ( !m_Entity.IsValid() || !m_Entity.GetAttachment( "muzzle" ).HasValue )
+		{
+			m_Crosshair.Style.Opacity = 0;
+			return;
+		}
+
+
 		m_Crosshair.Style.Opacity = MathX.Lerp( 0.4f, 0, Easing.QuadraticInOut( setup.Hands.Aim ) );
 	}
 }
