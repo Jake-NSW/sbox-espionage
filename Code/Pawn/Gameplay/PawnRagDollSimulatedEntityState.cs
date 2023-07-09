@@ -22,4 +22,14 @@ public sealed class PawnRagDollSimulatedEntityState : ObservableEntityComponent<
 
 		return false;
 	}
+
+	public void OnStart()
+	{
+		Entity.Camera = new ThirdPersonCamera( Entity );
+	}
+
+	public void OnFinish()
+	{
+		Entity.Camera = null;
+	}
 }

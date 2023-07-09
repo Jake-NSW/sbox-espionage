@@ -1,5 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 using Sandbox;
+using Woosh.Common;
 
 namespace Woosh.Espionage;
 
@@ -42,12 +43,16 @@ public sealed class CompositedCameraHelper
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]
 	private static ICameraController Find()
 	{
-		// Only allow components to be used as cameras if none was found
-
-		if ( Game.LocalClient.Components.Get<EntityCameraController>() is { } clientCamera )
+		// Pull Camera from Client if it exists
+		if ( Game.LocalClient.Components.Get<IEntityCameraController>() is { } clientCamera )
 			return clientCamera;
 
-		if ( Game.LocalPawn?.Components.Get<EntityCameraController>() is { } pawnCamera )
+		// Pull camera from Pawn if it exists
+		if ( Game.LocalPawn is IHave<ICameraController> { Item: not null } pawn )
+			return pawn.Item;
+
+		// Pull from Pawn if camera exists
+		if ( Game.LocalPawn?.Components.Get<IEntityCameraController>() is { } pawnCamera )
 			return pawnCamera;
 
 		return null;

@@ -6,7 +6,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class ViewModelSwayEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect, IMutate<InputContext>
+public sealed class ViewModelSwayEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect
 {
 	private readonly float m_Multiplier;
 	private readonly float m_AimMultiplier;
@@ -22,8 +22,6 @@ public sealed class ViewModelSwayEffect : ObservableEntityComponent<CompositedVi
 	}
 
 	private Angles m_Angles;
-	private Angles m_View;
-
 	private Vector2 m_Velocity;
 
 	void IMutate<CameraSetup>.OnPostSetup( ref CameraSetup setup )
@@ -31,11 +29,12 @@ public sealed class ViewModelSwayEffect : ObservableEntityComponent<CompositedVi
 		var rot = setup.Rotation.WithRoll( 0 );
 
 		// Workout how much we've moved since last frame
-		var angles = (m_Angles - m_View).Normal * 1.5f;
+		var camera = setup.Rotation.Angles();
+		var angles = (m_Angles - camera).Normal * 1.5f;
 		var vel = m_Velocity = Swing( m_Velocity, new Vector2( angles.yaw, -angles.pitch ), ReturnSpeed, Influence, MaxOffsetLength );
 		vel *= MathX.Lerp( m_Multiplier, m_AimMultiplier, setup.Hands.Aim );
 
-		m_Angles = m_View;
+		m_Angles = camera;
 
 		// Rotate and lerp the viewmodel
 		setup.Hands.Angles *= Rotation.From( vel.y, -vel.x, vel.x * 0.6f );
@@ -56,10 +55,5 @@ public sealed class ViewModelSwayEffect : ObservableEntityComponent<CompositedVi
 			vel = vel.Normal * length;
 
 		return vel;
-	}
-
-	void IMutate<InputContext>.OnPostSetup( ref InputContext setup )
-	{
-		m_View = setup.ViewAngles;
 	}
 }

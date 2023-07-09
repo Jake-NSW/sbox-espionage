@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Sandbox;
 using Woosh.Common;
-using Woosh.Espionage.Data;
 
 namespace Woosh.Espionage;
 
@@ -30,24 +29,7 @@ public static class EntityUtility
 	{
 		m_TypeInfo = new Dictionary<(Type, int), DisplayInfo>();
 	}
-
-	private static DisplayInfo? GetOrCreateInfoFromModel( Model model )
-	{
-		if ( model == null )
-			return null;
-
-		var key = (typeof(ModelEntity), model.GetHashCode());
-		if ( m_TypeInfo.TryGetValue( key, out var info ) )
-			return info;
-
-		var maybe = model?.GetData<ModelDisplayInfo>()?.Info;
-
-		if ( maybe != null )
-			m_TypeInfo.Add( key, maybe.Value );
-
-		return maybe;
-	}
-
+	
 	private static DisplayInfo GetOrCreateInfoFromType( Type type )
 	{
 		if ( m_TypeInfo.TryGetValue( (type, 0), out var info ) )

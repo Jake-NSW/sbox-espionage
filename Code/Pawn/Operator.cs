@@ -1,30 +1,18 @@
 ﻿using Sandbox;
 using Woosh.Common;
-using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class Operator : Pawn, IMutate<CameraSetup>, IMutate<InputContext>
+public sealed class Operator : Pawn, IMutate<CameraSetup>
 {
 	public Entity Active => Components.Get<CarriableHandler>().Active;
 	public IEntityInventory Inventory => Components.Get<IEntityInventory>();
 	public DeployableSlotHandler Slots => Components.Get<DeployableSlotHandler>();
 	public CarriableHandler Carriable => Components.Get<CarriableHandler>();
 
-	private PlayerHands m_Hands;
-
 	public override void Spawn()
 	{
 		base.Spawn();
-
-		m_Hands = new PlayerHands { Owner = this };
-		Events.Register<HolsteredEntity>(
-			e =>
-			{
-				if ( e.Data.Deploying == null && e.Data.Deploying is not PlayerHands )
-					Carriable.Deploy( m_Hands );
-			}
-		);
 
 		// UI
 		Components.Create<InteractionHudComponent>();
@@ -39,6 +27,7 @@ public sealed class Operator : Pawn, IMutate<CameraSetup>, IMutate<InputContext>
 		Components.Create<WalkController>();
 		Components.Create<ViewModelHandlerComponent>();
 		Components.Create<PawnRagDollSimulatedEntityState>();
+		Components.Create<OperatorHandsHandler>();
 
 		// Camera
 		Components.Create<FirstPersonEntityCamera>();
@@ -71,7 +60,7 @@ public sealed class Operator : Pawn, IMutate<CameraSetup>, IMutate<InputContext>
 		}
 	}
 
-	void IMutate<InputContext>.OnPostSetup( ref InputContext setup )
+	protected override void OnBuildInputContext( ref InputContext setup )
 	{
 		setup.ViewAngles.pitch = setup.ViewAngles.pitch.Clamp( -75, 70 );
 		(Active as IMutate<InputContext>)?.OnPostSetup( ref setup );
@@ -95,6 +84,7 @@ public sealed class Operator : Pawn, IMutate<CameraSetup>, IMutate<InputContext>
 			var value = EnumValues<CarrySlot>.ValueOf( i + 1 );
 			if ( Input.Pressed( value.ToInputAction() ) )
 			{
+				// If item is active, holster and deploy arms
 				if ( Slots.Active - 1 == i )
 					Carriable.Holster( false );
 				else

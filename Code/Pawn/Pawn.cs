@@ -5,7 +5,8 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public abstract partial class Pawn : ObservableAnimatedEntity, IHave<InputContext>
+public abstract partial class Pawn : ObservableAnimatedEntity,
+	IHave<InputContext>, IHave<ICameraController>
 {
 	public EntityStateMachine<Pawn> Machine { get; }
 
@@ -25,8 +26,13 @@ public abstract partial class Pawn : ObservableAnimatedEntity, IHave<InputContex
 		EnableShadowInFirstPerson = true;
 	}
 
+	// Camera
+
+	public ICameraController Camera { get; set; }
+	ICameraController IHave<ICameraController>.Item => Camera;
+
 	// Input
-	
+
 	InputContext IHave<InputContext>.Item => new InputContext()
 	{
 		InputDirection = InputDirection,
@@ -43,7 +49,7 @@ public abstract partial class Pawn : ObservableAnimatedEntity, IHave<InputContex
 		var context = new InputContext() { InputDirection = Input.AnalogMove, ViewAngles = (ViewAngles + Input.AnalogLook).Normal };
 
 		// This is incredibly dumb...
-		(this as IMutate<InputContext>)?.OnPostSetup( ref context );
+		OnBuildInputContext(ref context);
 
 		foreach ( var input in Components.All().OfType<IMutate<InputContext>>() )
 		{
@@ -55,6 +61,8 @@ public abstract partial class Pawn : ObservableAnimatedEntity, IHave<InputContex
 		ViewAngles = context.ViewAngles;
 		Muzzle = context.Muzzle;
 	}
+
+	protected virtual void OnBuildInputContext( ref InputContext context ) { }
 
 	// Simulate
 
@@ -107,4 +115,5 @@ public abstract partial class Pawn : ObservableAnimatedEntity, IHave<InputContex
 	}
 
 	[Net, Predicted] public Rotation EyeLocalRotation { get; set; }
+
 }

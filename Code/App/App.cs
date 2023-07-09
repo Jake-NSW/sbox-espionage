@@ -65,11 +65,9 @@ public sealed partial class App : GameManager, IObservable
 		var spawn = All.OfType<SpawnPoint>().MinBy( _ => Guid.NewGuid() ).Transform;
 		spawn.Position += Vector3.Up * 4;
 
-		var pistol = new Mk23Firearm();
-		var smg = new Smg2Firearm();
-		
 		var pawn = client.Possess<Operator>( spawn );
-		pawn.Inventory.Add( pistol, smg );
+		pawn.Inventory.Create<Mk23Firearm>();
+		pawn.Inventory.Create<Smg2Firearm>();
 		pawn.Slots.Deploy( CarrySlot.Front );
 	}
 

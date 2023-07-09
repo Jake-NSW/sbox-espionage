@@ -2,9 +2,20 @@
 
 namespace Woosh.Espionage;
 
-public sealed class ThirdPersonEntityCamera : EntityCameraController<Pawn>
+public sealed class ThirdPersonCamera : ICameraController
 {
-	protected override void OnUpdate( ref CameraSetup setup, in InputContext input )
+	public Pawn Entity { get; }
+
+	public ThirdPersonCamera( Pawn entity )
+	{
+		Entity = entity;
+	}
+
+	void ICameraController.Enabled( ref CameraSetup setup ) { }
+
+	void ICameraController.Disabled() { }
+
+	void ICameraController.Update( ref CameraSetup setup, in InputContext input )
 	{
 		var center = Entity.Position + Vector3.Up * 64;
 		var rot = input.ViewAngles.ToRotation() * Rotation.FromAxis( Vector3.Up, -16 );

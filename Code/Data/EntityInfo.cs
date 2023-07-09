@@ -1,8 +1,10 @@
 ﻿using Sandbox;
+using Sandbox.ModelEditor;
 using Woosh.Common;
 
 namespace Woosh.Espionage;
 
+[GameData( "esp_entity_info" )]
 public readonly struct EntityInfo
 {
 	public static EntityInfo FromDisplayInfo( DisplayInfo info )
@@ -21,9 +23,12 @@ public readonly struct EntityInfo
 		if ( ent is IHave<EntityInfo> info )
 			return info.Item;
 
+		if ( ent is ModelEntity mdl && mdl.Model?.HasData<EntityInfo>() == true )
+			return mdl.Model.GetData<EntityInfo>();
+
 		return FromDisplayInfo( ent.Info() );
 	}
-	
+
 	public bool IsValid => Nickname != null || Display != null || Brief != null || Icon != null || Description != null || Group != null;
 
 	public string Nickname { get; init; }
