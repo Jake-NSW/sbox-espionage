@@ -21,6 +21,12 @@ public sealed class OperatorEquipmentHudComponent : EntityHudComponent<UI.Operat
 		return root;
 	}
 
+	[GameEvent.Client.Frame]
+	private void Frame()
+	{
+		Panel.Parent.Style.Opacity = Entity.Machine.Active == null ? 1 : 0;
+	}
+
 	// Active
 
 	private UI.ActiveEquipmentDetails m_EquipmentDetails;

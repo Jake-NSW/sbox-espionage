@@ -25,7 +25,7 @@ public sealed class PawnRagDollSimulatedEntityState : ObservableEntityComponent<
 
 	public void OnStart()
 	{
-		Entity.Camera = new ThirdPersonCamera( Entity );
+		Entity.Camera = new RagDollCamera( Entity );
 	}
 
 	public void OnFinish()
