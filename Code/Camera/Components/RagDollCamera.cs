@@ -18,8 +18,21 @@ public sealed class RagDollCamera : ICameraController
 
 	public void Update( ref CameraSetup setup, in InputContext input )
 	{
-		setup.Position = setup.Position.RotateAround( Entity.Position, Rotation.FromYaw( -input.AnalogLook.yaw * 2 ) );
-		setup.Rotation = Rotation.LookAt( Entity.WorldSpaceBounds.Center - setup.Position );
+		var center = Entity.WorldSpaceBounds.Center;
+		var rot = input.ViewAngles.ToRotation();
+
+		var distance = 130.0f * Entity.Scale;
+		var targetPos = center + Entity.Scale;
+		targetPos += rot.Forward * -distance;
+
+		var tr = Trace.Ray( center, targetPos )
+			.WithAnyTags( "solid" )
+			.Ignore( Entity )
+			.Radius( 8 )
+			.Run();
+
+		setup.Position = tr.EndPosition;
+		setup.Rotation = rot;
 	}
 
 	public void Disabled() { }

@@ -26,8 +26,9 @@ public sealed class SandboxPistolFirearm : Firearm, ISlotted<CarrySlot>, IHave<E
 				.WithModel( Cloud.Model( "facepunch.v_usp" ) )
 				.WithComponent<SandboxFirearmViewModelAnimator>()
 				.WithAspect<ViewModelEffectsAspect>()
-				.WithBodyGroup( "barrel", 2 )
-				.WithBodyGroup( "sights", 2 )
+				.MutateComponent<ViewModelOffsetEffect>( e => e.Aim = new Vector3( -3f, 4.8f, 1f ) )
+				.WithBodyGroup( "barrel", 1 )
+				.WithBodyGroup( "sights", 1 )
 				.WithChild( new AnimatedEntity( "models/first_person/first_person_arms.vmdl" ) { EnableViewmodelRendering = true }, true )
 		);
 
@@ -48,7 +49,7 @@ public sealed class SandboxPistolFirearm : Firearm, ISlotted<CarrySlot>, IHave<E
 
 		Model = Cloud.Model( "facepunch.w_usp" );
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
-		Components.RemoveAny<CarriableAimComponent>();
+		// Components.RemoveAny<CarriableAimComponent>();
 	}
 
 	public CarrySlot Slot => CarrySlot.Holster;

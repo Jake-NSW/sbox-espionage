@@ -21,8 +21,8 @@ public sealed class WalkController : PawnController
 	public override void Simulate( IClient cl )
 	{
 		var movement = Entity.InputDirection.Normal;
-		var angles = Entity.ViewAngles.WithPitch( 0 );
-		var moveVector = Rotation.From( angles ) * movement * 320f;
+		var angles = Entity.ViewAngles.WithPitch( 0 ).ToRotation();
+		var moveVector = angles * movement * 320f;
 		var groundEntity = CheckForGround();
 
 		if ( groundEntity.IsValid() )
@@ -36,6 +36,13 @@ public sealed class WalkController : PawnController
 			Entity.Velocity = Accelerate( Entity.Velocity, moveVector.Normal, moveVector.Length, WishSpeed, 8.75f );
 			Entity.Velocity = ApplyFriction( Entity.Velocity, 8.0f );
 
+			/* Cap out strafe speed
+			var vel = angles.Inverse * Entity.Velocity;
+			vel.y *= 0.92f;
+			Entity.Velocity = angles * vel;
+			*/
+
+
 			// Cap our Velocity after we've jumped
 			Entity.Velocity *= Easing.Linear( (m_SinceLanded / 1 + 0.35f).Min( 1 ) );
 		}
@@ -45,7 +52,7 @@ public sealed class WalkController : PawnController
 			Entity.Velocity += Vector3.Down * Gravity * Time.Delta;
 		}
 
-		if ( Input.Pressed( "jump" ) && IsGrounded && m_SinceLanded > 0.4f )
+		if ( Input.Pressed( App.Actions.Jump ) && IsGrounded && m_SinceLanded > 0.4f )
 		{
 			Velocity = (Entity.Velocity + Vector3.Up * JumpSpeed) * (m_SinceLanded / 0.8f).Min( 1 );
 			m_Jumped = true;
@@ -58,7 +65,7 @@ public sealed class WalkController : PawnController
 		{
 			Entity.Position = mh.Position;
 		}
-		
+
 		if ( mh.TryMoveWithStep( Time.Delta, StepSize ) > 0 )
 		{
 			if ( IsGrounded )

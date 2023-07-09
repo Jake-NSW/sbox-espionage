@@ -16,7 +16,7 @@ public readonly struct EntityBuilder<T> where T : Entity
 
 	public EntityBuilder<TNew> WithChild<TNew>( TNew value, bool boneMerge = false ) where TNew : Entity
 	{
-		value.SetParent(Entity, true);
+		value.SetParent( Entity, true );
 		return new EntityBuilder<TNew>( value );
 	}
 
@@ -62,6 +62,13 @@ public readonly struct EntityBuilder<T> where T : Entity
 	public EntityBuilder<T> WithAspect<TAspect>( TAspect aspect = default ) where TAspect : struct, IEntityAspect<T>
 	{
 		Entity.Import( aspect );
+		return this;
+	}
+
+	public EntityBuilder<T> MutateComponent<TComponent>( Action<TComponent> mutator ) where TComponent : class, IComponent
+	{
+		var comp = Entity.Components.Get<TComponent>();
+		mutator( comp );
 		return this;
 	}
 }

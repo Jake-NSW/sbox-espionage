@@ -6,16 +6,16 @@ namespace Woosh.Espionage;
 
 public sealed class PawnRagDollSimulatedEntityState : ObservableEntityComponent<Pawn>, ISimulatedEntityState<Pawn>
 {
-	private const string INPUT_ACTION = "ragdoll";
-
 	public bool TryEnter()
 	{
-		return Input.Pressed( INPUT_ACTION );
+		return Input.Pressed( App.Actions.RagDoll );
 	}
+
+	private TimeSince m_SinceEntered;
 
 	public bool Simulate( IClient cl )
 	{
-		if ( Input.Pressed( "jump" ) )
+		if ( Input.Pressed( "jump" ) && m_SinceEntered > 1.9f )
 		{
 			return true;
 		}
@@ -25,6 +25,7 @@ public sealed class PawnRagDollSimulatedEntityState : ObservableEntityComponent<
 
 	public void OnStart()
 	{
+		m_SinceEntered = 0;
 		Entity.Camera = new RagDollCamera( Entity );
 	}
 
