@@ -43,18 +43,13 @@ public sealed partial class App : GameManager, IObservable
 	{
 		base.FrameSimulate( cl );
 		Events.Run<FrameUpdate>();
+		Events.Run<PostCameraSetup>();
 	}
 
 	public override void Simulate( IClient cl )
 	{
 		Components.Each<ISimulated, IClient>( cl, ( client, simulated ) => simulated.Simulate( client ) );
 		base.Simulate( cl );
-	}
-
-	[GameEvent.Client.PostCamera]
-	private void OnPostCamera()
-	{
-		Events.Run<PostCameraSetup>();
 	}
 
 	public override void ClientJoined( IClient client )
