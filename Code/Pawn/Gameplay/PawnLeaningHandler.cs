@@ -5,18 +5,47 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed partial class PawnLeaning : ObservableEntityComponent<Pawn>, IMutate<CameraSetup>, ISimulated
+public sealed partial class PawnLeaningHandler : ObservableEntityComponent<Pawn>, IMutate<CameraSetup>, ISimulated
 {
+	[ConVar.ClientData( "esp_lean_toggle" )]
+	private static bool LeanToggle { get; set; }
+
+	[ConVar.ClientData( "esp_middle_lean" )]
+	private static bool FullLean { get; set; }
+
 	public void Simulate( IClient cl )
 	{
-		if ( Input.Pressed( "lean_left" ) )
-			Lean( -1 );
-
-		if ( Input.Pressed( "lean_right" ) )
-			Lean( 1 );
-
+		// Don't lean if we have no ground
 		if ( Entity.GroundEntity == null && Direction != 0 )
+		{
 			n_Direction = 0;
+			return;
+		}
+
+		var toggleLean = cl.GetClientData( "esp_lean_toggle", true );
+
+		// Toggle Lean
+		if ( toggleLean )
+		{
+			var middleLean = cl.GetClientData( "esp_middle_lean", false );
+
+			if ( Input.Pressed( "lean_left" ) )
+				Lean( middleLean ? -2 : -1, true );
+
+			if ( Input.Pressed( "lean_right" ) )
+				Lean( middleLean ? 2 : 1, true );
+
+			return;
+		}
+
+		// Normal Lean
+		n_Direction = n_Direction.Approach( 0, 1 );
+
+		if ( Input.Down( "lean_left" ) )
+			Lean( -1, false );
+
+		if ( Input.Down( "lean_right" ) )
+			Lean( 1, false );
 	}
 
 	// Lean
@@ -24,21 +53,24 @@ public sealed partial class PawnLeaning : ObservableEntityComponent<Pawn>, IMuta
 	public int Direction => n_Direction;
 	[Net] private int n_Direction { get; set; }
 
-	public void Lean( int direction )
+	public void Lean( int direction, bool bounce )
 	{
 		if ( Entity.GroundEntity == null )
 		{
 			return;
 		}
 
-		if ( Direction == direction )
+		if ( bounce && direction.Clamp( -1, 1 ) == Direction )
 		{
 			n_Direction = 0;
 			return;
 		}
 
-		n_Direction = (n_Direction + direction).Clamp( -1, 1 );
-		Run( new LeanDirectionChanged( n_Direction ), Propagation.Trickle );
+		var newDirection = (n_Direction + direction).Clamp( -1, 1 );
+		if ( newDirection != n_Direction )
+			Run( new LeanDirectionChanged( n_Direction ), Propagation.Trickle );
+
+		n_Direction = newDirection;
 	}
 
 	// Camera

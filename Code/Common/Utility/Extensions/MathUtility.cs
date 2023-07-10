@@ -8,7 +8,7 @@ public static class MathUtility
 {
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]
 	public static void Damp( ref float value, float to, float smoothing, float delta ) => value = Damp( value, to, smoothing, delta );
-	
+
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]
 	public static float Damp( this float value, float to, float smoothing, float delta )
 	{
@@ -20,7 +20,7 @@ public static class MathUtility
 
 		// return MathX.Lerp( value, to, 1 - MathF.Exp( -smoothing * delta ) );
 	}
-	
+
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]
 	public static void Damp( ref Vector3 value, Vector3 to, float smoothing, float delta ) => value = Damp( value, to, smoothing, delta );
 
@@ -186,4 +186,24 @@ public static class MathUtility
 		return new Vector3( x, y, z );
 	}
 
+	// Int
+
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public static int Approach( this int f, int target, int delta )
+	{
+		if ( f > target )
+		{
+			f -= delta;
+			if ( f < target )
+				return target;
+		}
+		else
+		{
+			f += delta;
+			if ( f > target )
+				return target;
+		}
+
+		return f;
+	}
 }

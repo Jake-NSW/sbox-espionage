@@ -7,6 +7,7 @@ public sealed partial class App
 {
 	public static class Commands
 	{
+
 		[ConCmd.Admin( "noclip" )]
 		public static void PawnNoclip()
 		{

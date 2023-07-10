@@ -23,7 +23,7 @@ public sealed class Operator : Pawn, IMutate<CameraSetup>
 		Components.Create<CrosshairHudComponent>();
 
 		// Gameplay
-		Components.Create<PawnLeaning>();
+		Components.Create<PawnLeaningHandler>();
 		Components.Create<WalkController>();
 		Components.Create<ViewModelHandlerComponent>();
 		Components.Create<PawnRagDollSimulatedEntityState>();
