@@ -3,7 +3,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class ViewModelHandlerComponent : ObservableEntityComponent<Pawn>, IMutate<CameraSetup>, IMutate<InputContext>
+public sealed class ViewModelHandlerComponent : ObservableEntityComponent<PawnEntity>, IMutate<CameraSetup>, IMutate<InputContext>
 {
 	protected override void OnDeactivate()
 	{

@@ -4,7 +4,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class ControllableSimulatedEntityState : ObservableEntityComponent<Pawn>, ISimulatedEntityState<Pawn>,
+public sealed class ControllableSimulatedEntityState : ObservableEntityComponent<PawnEntity>, ISimulatedEntityState<PawnEntity>,
 	ISingletonComponent, IMutate<CameraSetup>
 {
 	protected override void OnAutoRegister()

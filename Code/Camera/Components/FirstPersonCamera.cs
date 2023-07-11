@@ -4,9 +4,9 @@ namespace Woosh.Espionage;
 
 public sealed class FirstPersonCamera : ICameraController
 {
-	public Pawn Entity { get; }
+	public PawnEntity Entity { get; }
 
-	public FirstPersonCamera( Pawn entity )
+	public FirstPersonCamera( PawnEntity entity )
 	{
 		Entity = entity;
 	}
@@ -22,7 +22,7 @@ public sealed class FirstPersonCamera : ICameraController
 	}
 }
 
-public sealed class FirstPersonEntityCamera : EntityComponent<Pawn>, IEntityCameraController
+public sealed class FirstPersonEntityCamera : EntityComponent<PawnEntity>, IEntityCameraController
 {
 	private ICameraController m_Impl;
 

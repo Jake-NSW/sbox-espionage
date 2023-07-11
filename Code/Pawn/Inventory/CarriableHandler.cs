@@ -6,7 +6,8 @@ namespace Woosh.Espionage;
 
 public delegate void EntityComponentCallback( Entity from );
 
-public partial class CarriableHandler : ObservableEntityComponent<Pawn>, IActive<Entity>, IActive<ICarriable>, ISingletonComponent, ISimulated
+public partial class CarriableHandler : ObservableEntityComponent<PawnEntity>,
+	IActive<Entity>, IActive<ICarriable>, ISingletonComponent, ISimulated, IMutate<CameraSetup>, IMutate<InputContext>
 {
 	[Net, Local] public Entity Active { get; set; }
 	ICarriable IActive<ICarriable>.Active => Active as ICarriable;
@@ -52,7 +53,7 @@ public partial class CarriableHandler : ObservableEntityComponent<Pawn>, IActive
 	{
 		(m_LastActive as ICarriable)?.Holstering( n_IsDropping );
 		Run( new HolsteringEntity( m_LastActive, n_IsDropping ) );
-		
+
 		// We only want to propagate to the active entity, so do this for now.
 		(m_LastActive as IObservableEntity)?.Events.Run( new HolsteringEntity( m_LastActive, n_IsDropping ), from: this );
 	}
@@ -61,7 +62,7 @@ public partial class CarriableHandler : ObservableEntityComponent<Pawn>, IActive
 	{
 		(m_LastActive as ICarriable)?.Deploying();
 		Run( new DeployingEntity( m_LastActive ) );
-		
+
 		// We only want to propagate to the active entity, so do this for now.
 		(m_LastActive as IObservableEntity)?.Events.Run( new DeployingEntity( m_LastActive ), from: this );
 	}
@@ -182,7 +183,7 @@ public partial class CarriableHandler : ObservableEntityComponent<Pawn>, IActive
 	{
 		// Unsure about moving this here.
 		Run( new HolsteredEntity( Active, n_ToDeploy ) );
-		
+
 		n_IsHolstering = false;
 
 		(Active as ICarriable)?.OnHolstered();
@@ -199,5 +200,17 @@ public partial class CarriableHandler : ObservableEntityComponent<Pawn>, IActive
 		{
 			OnReadyToDeploy();
 		}
+	}
+
+	// Mutator
+	
+	void IMutate<CameraSetup>.OnPostSetup( ref CameraSetup setup )
+	{
+		(Active as IMutate<CameraSetup>)?.OnPostSetup( ref setup );
+	}
+
+	void IMutate<InputContext>.OnPostSetup( ref InputContext setup )
+	{
+		(Active as IMutate<InputContext>)?.OnPostSetup( ref setup );
 	}
 }

@@ -55,7 +55,7 @@ public sealed partial class FirearmShootSimulatedEntityState : ObservableEntityC
 		n_SinceLastShot = 0;
 
 		Run( ApplyRecoilFromSetup( Setup ), Propagation.Both );
-		var muzzle = (Entity.Owner as Pawn)?.Muzzle ?? (Entity.GetAttachment( "muzzle" ) ?? Entity.Transform).ToRay();
+		var muzzle = (Entity.Owner as PawnEntity)?.Muzzle ?? (Entity.GetAttachment( "muzzle" ) ?? Entity.Transform).ToRay();
 
 		// Play Effects
 		if ( Game.IsServer )

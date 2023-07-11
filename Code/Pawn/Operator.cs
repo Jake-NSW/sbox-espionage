@@ -3,11 +3,11 @@ using Woosh.Common;
 
 namespace Woosh.Espionage;
 
-public sealed class Operator : Pawn, IMutate<CameraSetup>
+public sealed class Operator : PawnEntity
 {
 	public Entity Active => Components.Get<CarriableHandler>().Active;
 	public IEntityInventory Inventory => Components.Get<IEntityInventory>();
-	public DeployableSlotHandler Slots => Components.Get<DeployableSlotHandler>();
+	public InventorySlotHandler Slots => Components.Get<InventorySlotHandler>();
 	public CarriableHandler Carriable => Components.Get<CarriableHandler>();
 
 	public override void Spawn()
@@ -28,6 +28,7 @@ public sealed class Operator : Pawn, IMutate<CameraSetup>
 		Components.Create<ViewModelHandlerComponent>();
 		Components.Create<PawnRagDollSimulatedEntityState>();
 		Components.Create<OperatorHandsHandler>();
+		Components.Add( new ViewAnglesPitchLimiter( 70, 75 ) );
 
 		// Camera
 		Components.Create<FirstPersonEntityCamera>();
@@ -44,32 +45,9 @@ public sealed class Operator : Pawn, IMutate<CameraSetup>
 		// Inventory
 		Components.Create<CarriableHandler>();
 		Components.Create<EntityInventoryContainer>();
-		Components.Add( new DeployableSlotHandler( 5 ) );
+		Components.Add( new InventorySlotHandler( EnumUtility<CarrySlot>.Length ) );
 		Components.Create<PickupEntityInteraction>();
 		Components.Create<EquipEntityInteraction>();
-	}
-
-	void IMutate<CameraSetup>.OnPostSetup( ref CameraSetup setup )
-	{
-		(Active as IMutate<CameraSetup>)?.OnPostSetup( ref setup );
-
-		foreach ( var component in Components.All() )
-		{
-			if ( component is IMutate<CameraSetup> cast )
-				cast.OnPostSetup( ref setup );
-		}
-	}
-
-	protected override void OnBuildInputContext( ref InputContext setup )
-	{
-		setup.ViewAngles.pitch = setup.ViewAngles.pitch.Clamp( -75, 70 );
-		(Active as IMutate<InputContext>)?.OnPostSetup( ref setup );
-
-		foreach ( var component in Components.All() )
-		{
-			if ( component is IMutate<InputContext> cast )
-				cast.OnPostSetup( ref setup );
-		}
 	}
 
 	public override void Simulate( IClient cl )
@@ -79,9 +57,9 @@ public sealed class Operator : Pawn, IMutate<CameraSetup>
 		if ( Machine.Active != null )
 			return;
 
-		for ( var i = 0; i < EnumValues<CarrySlot>.Length; i++ )
+		for ( var i = 0; i < EnumUtility<CarrySlot>.Length; i++ )
 		{
-			var value = EnumValues<CarrySlot>.ValueOf( i + 1 );
+			var value = EnumUtility<CarrySlot>.ValueOf( i + 1 );
 			if ( Input.Pressed( value.ToInputAction() ) )
 			{
 				// If item is active, holster and deploy arms

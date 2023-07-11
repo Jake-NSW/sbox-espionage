@@ -151,7 +151,7 @@ public sealed partial class PushableHingedDoorEntity : AnimatedEntity, IPushable
 			PlayClientEffect( DoorStates.Closed, absForce / 1.4f );
 			Closed.Fire( LastAttacker );
 
-			if ( LastAttackerWeapon == null && LastAttacker is Pawn )
+			if ( LastAttackerWeapon == null && LastAttacker is PawnEntity )
 				SetAnimParameter( "open", true );
 
 			return;
@@ -178,7 +178,7 @@ public sealed partial class PushableHingedDoorEntity : AnimatedEntity, IPushable
 		{
 			if ( m_State == DoorStates.Closed )
 			{
-				if ( LastAttackerWeapon == null && LastAttacker is Pawn )
+				if ( LastAttackerWeapon == null && LastAttacker is PawnEntity )
 					SetAnimParameter( "open", true );
 
 				PlayClientEffect( DoorStates.Open, 1 );
@@ -242,7 +242,7 @@ public sealed partial class PushableHingedDoorEntity : AnimatedEntity, IPushable
 		// Don't do anything if its closed
 		{
 			var force = info.Force.Length / 500;
-			Push( info.Position, info.Attacker as Pawn, force );
+			Push( info.Position, info.Attacker as PawnEntity, force );
 			LastAttackerWeapon = info.Weapon;
 		}
 	}

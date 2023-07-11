@@ -6,11 +6,11 @@ using Sandbox;
 namespace Woosh.Common;
 
 [SkipHotload]
-public static class EnumValues<T> where T : Enum
+public static class EnumUtility<T> where T : Enum
 {
 	[SkipHotload] private readonly static T[] s_Values;
 
-	static EnumValues()
+	static EnumUtility()
 	{
 		s_Values = (T[])typeof(T).GetEnumValues();
 	}

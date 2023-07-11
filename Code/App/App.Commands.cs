@@ -7,18 +7,17 @@ public sealed partial class App
 {
 	public static class Commands
 	{
-
 		[ConCmd.Admin( "noclip" )]
 		public static void PawnNoclip()
 		{
-			var pawn = ConsoleSystem.Caller.Pawn as Pawn;
+			var pawn = ConsoleSystem.Caller.Pawn as PawnEntity;
 			if ( pawn.Components.HasAny<WalkController>() )
 				pawn.Components.Replace<WalkController, NoclipController>();
 			else
 				pawn.Components.Replace<NoclipController, WalkController>();
 		}
 
-		[ConCmd.Admin( "esp_ent_create" )]
+		[ConCmd.Admin( "ent_create" )]
 		public static void CreateEntity( string className )
 		{
 			var pawn = ConsoleSystem.Caller.Pawn;

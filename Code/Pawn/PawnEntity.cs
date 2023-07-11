@@ -5,14 +5,13 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public abstract partial class Pawn : ObservableAnimatedEntity,
-	IHave<InputContext>, IHave<ICameraController>
+public abstract partial class PawnEntity : ObservableAnimatedEntity, IHave<InputContext>, IHave<ICameraController>, IMutate<CameraSetup>
 {
-	public EntityStateMachine<Pawn> Machine { get; }
+	public EntityStateMachine<PawnEntity> Machine { get; }
 
-	protected Pawn()
+	protected PawnEntity()
 	{
-		Machine = new EntityStateMachine<Pawn>( this );
+		Machine = new EntityStateMachine<PawnEntity>( this );
 	}
 
 	public override void Spawn()
@@ -30,6 +29,15 @@ public abstract partial class Pawn : ObservableAnimatedEntity,
 
 	public ICameraController Camera { get; set; }
 	ICameraController IHave<ICameraController>.Item => Camera;
+
+	void IMutate<CameraSetup>.OnPostSetup( ref CameraSetup setup )
+	{
+		foreach ( var component in Components.All() )
+		{
+			if ( component is IMutate<CameraSetup> cast )
+				cast.OnPostSetup( ref setup );
+		}
+	}
 
 	// Input
 
@@ -49,13 +57,14 @@ public abstract partial class Pawn : ObservableAnimatedEntity,
 		var context = new InputContext() { InputDirection = Input.AnalogMove, ViewAngles = (ViewAngles + Input.AnalogLook).Normal };
 
 		// This is incredibly dumb...
-		OnBuildInputContext(ref context);
+		OnBuildInputContext( ref context );
 
-		foreach ( var input in Components.All().OfType<IMutate<InputContext>>() )
+		foreach ( var component in Components.All() )
 		{
-			// Post Build Input
-			input.OnPostSetup( ref context );
+			if ( component is IMutate<InputContext> cast )
+				cast.OnPostSetup( ref context );
 		}
+
 
 		InputDirection = context.InputDirection;
 		ViewAngles = context.ViewAngles;

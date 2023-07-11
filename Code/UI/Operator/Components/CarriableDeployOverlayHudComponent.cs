@@ -3,7 +3,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class CarriableDeployOverlayHudComponent : EntityHudComponent<Pawn>
+public sealed class CarriableDeployOverlayHudComponent : EntityHudComponent<PawnEntity>
 {
 	[Listen]
 	private void OnDeployed( Event<DeployedEntity> evt )

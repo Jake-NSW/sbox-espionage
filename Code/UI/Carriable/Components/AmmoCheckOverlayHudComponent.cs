@@ -3,7 +3,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class AmmoCheckOverlayHudComponent : EntityHudComponent<Pawn>
+public sealed class AmmoCheckOverlayHudComponent : EntityHudComponent<PawnEntity>
 {
 	protected override Panel OnCreateUI()
 	{

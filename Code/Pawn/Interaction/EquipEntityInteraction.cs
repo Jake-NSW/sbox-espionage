@@ -3,7 +3,7 @@ using Sandbox;
 
 namespace Woosh.Espionage;
 
-public sealed class EquipEntityInteraction : EntityComponent<Pawn>, IEntityInteraction, ISingletonComponent
+public sealed class EquipEntityInteraction : EntityComponent<PawnEntity>, IEntityInteraction, ISingletonComponent
 {
 	public InteractionIndicator Indicator => new InteractionIndicator(
 		"Equip",
@@ -27,7 +27,7 @@ public sealed class EquipEntityInteraction : EntityComponent<Pawn>, IEntityInter
 	private RealTimeSince m_SincePressed;
 	private bool m_IsActive;
 
-	private DeployableSlotHandler Handler => Entity.Components.Get<DeployableSlotHandler>();
+	private InventorySlotHandler Handler => Entity.Components.Get<InventorySlotHandler>();
 	private IEntityInventory Inventory => Entity.Components.Get<IEntityInventory>();
 
 	public void Simulate( in TraceResult result, IClient client )

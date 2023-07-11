@@ -8,7 +8,7 @@ public interface IPushable
 	void Push( Entity entity, float force );
 }
 
-public sealed class PushEntityInteraction : EntityComponent<Pawn>, IEntityInteraction, ISingletonComponent
+public sealed class PushEntityInteraction : EntityComponent<PawnEntity>, IEntityInteraction, ISingletonComponent
 {
 	public InteractionIndicator Indicator => new InteractionIndicator(
 		"Push & Pull",

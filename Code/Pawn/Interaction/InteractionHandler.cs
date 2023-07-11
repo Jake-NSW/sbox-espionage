@@ -7,7 +7,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class InteractionHandler : ObservableEntityComponent<Pawn>, ISingletonComponent, ISimulated
+public sealed class InteractionHandler : ObservableEntityComponent<PawnEntity>, ISingletonComponent, ISimulated
 {
 	public InteractionHandler()
 	{

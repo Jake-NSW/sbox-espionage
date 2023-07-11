@@ -6,14 +6,14 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISingletonComponent, INetworkSerializer
+public sealed class InventorySlotHandler : ObservableEntityComponent<PawnEntity>, ISingletonComponent, INetworkSerializer
 {
-	public DeployableSlotHandler()
+	public InventorySlotHandler()
 	{
 		Game.AssertClient();
 	}
 
-	public DeployableSlotHandler( int slots )
+	public InventorySlotHandler( int slots )
 	{
 		Game.AssertServer();
 		n_Slots = new Entity[slots];
@@ -226,23 +226,23 @@ public sealed class DeployableSlotHandler : ObservableEntityComponent<Pawn>, ISi
 
 public static class DeployableSlotHandlerUtility
 {
-	public static void Assign<TEntity>( this DeployableSlotHandler handler, TEntity ent ) where TEntity : Entity, ISlotted
+	public static void Assign<TEntity>( this InventorySlotHandler handler, TEntity ent ) where TEntity : Entity, ISlotted
 	{
 		handler.Assign( ent.Slot, ent );
 	}
 
-	public static void Assign<TSlot>( this DeployableSlotHandler handler, TSlot slot, Entity ent ) where TSlot : Enum
+	public static void Assign<TSlot>( this InventorySlotHandler handler, TSlot slot, Entity ent ) where TSlot : Enum
 	{
-		handler.Assign( EnumValues<TSlot>.IndexOf( slot ), ent );
+		handler.Assign( EnumUtility<TSlot>.IndexOf( slot ), ent );
 	}
 
-	public static void Deploy<TSlot>( this DeployableSlotHandler handler, TSlot slot, DrawTime? time = null ) where TSlot : Enum
+	public static void Deploy<TSlot>( this InventorySlotHandler handler, TSlot slot, DrawTime? time = null ) where TSlot : Enum
 	{
-		handler.Deploy( EnumValues<TSlot>.IndexOf( slot ), time );
+		handler.Deploy( EnumUtility<TSlot>.IndexOf( slot ), time );
 	}
 
-	public static void Drop<TSlot>( this DeployableSlotHandler handler, TSlot slot ) where TSlot : Enum
+	public static void Drop<TSlot>( this InventorySlotHandler handler, TSlot slot ) where TSlot : Enum
 	{
-		handler.Drop( EnumValues<TSlot>.IndexOf( slot ) );
+		handler.Drop( EnumUtility<TSlot>.IndexOf( slot ) );
 	}
 }

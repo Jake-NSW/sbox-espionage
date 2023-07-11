@@ -12,7 +12,7 @@ public interface IControllable : IEntity
 	bool Simulate( Entity pawn );
 }
 
-public sealed class ControllableEntityInteraction : EntityComponent<Pawn>, IEntityInteraction, ISingletonComponent
+public sealed class ControllableEntityInteraction : EntityComponent<PawnEntity>, IEntityInteraction, ISingletonComponent
 {
 	public InteractionIndicator Indicator => new InteractionIndicator( App.Actions.Interact, Input.GetButtonOrigin( App.Actions.Interact ), 0 );
 

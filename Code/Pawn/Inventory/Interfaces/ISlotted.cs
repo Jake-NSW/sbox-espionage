@@ -15,7 +15,7 @@ public interface ISlotted<out T> : ISlotted where T : Enum
 	int ISlotted.Slot
 	{
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		get => EnumValues<T>.IndexOf( Slot );
+		get => EnumUtility<T>.IndexOf( Slot );
 	}
 
 	new T Slot { get; }

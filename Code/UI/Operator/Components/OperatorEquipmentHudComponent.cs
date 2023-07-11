@@ -7,7 +7,7 @@ namespace Woosh.Espionage;
 
 public sealed class OperatorEquipmentHudComponent : EntityHudComponent<UI.OperatorHudRootPanel, Operator>
 {
-	public DeployableSlotHandler Slots => this.Get<DeployableSlotHandler>();
+	public InventorySlotHandler Slots => this.Get<InventorySlotHandler>();
 	public Entity Active => Entity.Active;
 
 	protected override Panel OnCreateUI()

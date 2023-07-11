@@ -5,13 +5,13 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed partial class PawnLeaningHandler : ObservableEntityComponent<Pawn>, IMutate<CameraSetup>, ISimulated
+public sealed partial class PawnLeaningHandler : ObservableEntityComponent<PawnEntity>, IMutate<CameraSetup>, ISimulated
 {
 	[ConVar.ClientData( "esp_lean_toggle" )]
 	private static bool LeanToggle { get; set; }
 
-	[ConVar.ClientData( "esp_middle_lean" )]
-	private static bool FullLean { get; set; }
+	[ConVar.ClientData( "esp_half_lean" )]
+	private static bool HalfLean { get; set; }
 
 	public void Simulate( IClient cl )
 	{
@@ -27,7 +27,7 @@ public sealed partial class PawnLeaningHandler : ObservableEntityComponent<Pawn>
 		// Toggle Lean
 		if ( toggleLean )
 		{
-			var middleLean = cl.GetClientData( "esp_middle_lean", false );
+			var middleLean = cl.GetClientData( "esp_half_lean", false );
 
 			if ( Input.Pressed( "lean_left" ) )
 				Lean( middleLean ? -2 : -1, true );
@@ -82,9 +82,8 @@ public sealed partial class PawnLeaningHandler : ObservableEntityComponent<Pawn>
 
 	public void OnPostSetup( ref CameraSetup setup )
 	{
-		m_Distance = m_Distance.Approach( Direction * NormalFromEyes( Direction, Entity.CollisionBounds.Translate( Entity.Position ) ), 3.5f * Time.Delta );
+		m_Distance = m_Distance.Approach( Direction * NormalFromEyes( Direction, Entity.CollisionBounds.Translate( Entity.Position ) ), 3.25f * Time.Delta );
 		var multi = 1 - setup.Hands.Aim;
-
 		var normal = m_Distance * Easing.ExpoOut( Easing.EaseIn( m_Distance.Abs() ) );
 
 		setup.Position += setup.Rotation.Right * Distance * normal;
