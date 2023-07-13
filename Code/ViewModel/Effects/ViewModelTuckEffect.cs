@@ -13,7 +13,7 @@ public enum TuckType
 	Hug,
 }
 
-public sealed class ViewModelTuckEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect, IMutate<InputContext>
+public sealed class ViewModelTuckEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect, IPostMutate<InputContext>
 {
 	public float Damping { get; set; } = 14;
 	public TuckType AimVariant { get; init; }
@@ -25,7 +25,7 @@ public sealed class ViewModelTuckEffect : ObservableEntityComponent<CompositedVi
 	private float m_Offset;
 	private float m_Normal;
 
-	public void OnPostSetup( ref CameraSetup setup )
+	public void OnPostMutate( ref CameraSetup setup )
 	{
 		const string name = "muzzle";
 
@@ -84,7 +84,7 @@ public sealed class ViewModelTuckEffect : ObservableEntityComponent<CompositedVi
 		}
 	}
 
-	public void OnPostSetup( ref InputContext setup )
+	public void OnPostMutate( ref InputContext setup )
 	{
 		// We can't shoot if we're to close to the wall
 		if ( m_Normal > MaxNormal )

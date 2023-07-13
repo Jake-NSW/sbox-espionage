@@ -29,7 +29,7 @@ public sealed class ViewModelKickbackEffect : ObservableEntityComponent<Composit
 	private Vector3 m_Current;
 	private Vector3 m_Target;
 
-	public void OnPostSetup( ref CameraSetup setup )
+	public void OnPostMutate( ref CameraSetup setup )
 	{
 		var rot = setup.Rotation.WithRoll( 0 );
 

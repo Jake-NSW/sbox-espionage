@@ -6,8 +6,8 @@ namespace Woosh.Espionage;
 
 public delegate void EntityComponentCallback( Entity from );
 
-public partial class CarriableHandler : ObservableEntityComponent<PawnEntity>,
-	IActive<Entity>, IActive<ICarriable>, ISingletonComponent, ISimulated, IMutate<CameraSetup>, IMutate<InputContext>
+public partial class CarriableHandler : ObservableEntityComponent<Pawn>,
+	IActive<Entity>, IActive<ICarriable>, ISingletonComponent, ISimulated, IPostMutate<CameraSetup>, IPostMutate<InputContext>
 {
 	[Net, Local] public Entity Active { get; set; }
 	ICarriable IActive<ICarriable>.Active => Active as ICarriable;
@@ -204,13 +204,13 @@ public partial class CarriableHandler : ObservableEntityComponent<PawnEntity>,
 
 	// Mutator
 	
-	void IMutate<CameraSetup>.OnPostSetup( ref CameraSetup setup )
+	void IPostMutate<CameraSetup>.OnPostMutate( ref CameraSetup setup )
 	{
-		(Active as IMutate<CameraSetup>)?.OnPostSetup( ref setup );
+		(Active as IPostMutate<CameraSetup>)?.OnPostMutate( ref setup );
 	}
 
-	void IMutate<InputContext>.OnPostSetup( ref InputContext setup )
+	void IPostMutate<InputContext>.OnPostMutate( ref InputContext setup )
 	{
-		(Active as IMutate<InputContext>)?.OnPostSetup( ref setup );
+		(Active as IPostMutate<InputContext>)?.OnPostMutate( ref setup );
 	}
 }

@@ -21,9 +21,9 @@ public sealed class ViewModelPitchOffsetEffect : ObservableEntityComponent<Compo
 	private Rotation m_LastOffsetRot = Rotation.Identity;
 	private Vector3 m_LastOffsetPos;
 
-	public void OnPostSetup( ref CameraSetup setup )
+	public void OnPostMutate( ref CameraSetup setup )
 	{
-		var offset = Camera.Rotation.Pitch().Remap( -90, 90, -1, 1 );
+		var offset = Sandbox.Camera.Rotation.Pitch().Remap( -90, 90, -1, 1 );
 		var rot = setup.Rotation;
 
 		m_LastOffsetRot = m_LastOffsetRot.Damp( Rotation.Lerp( Rotation.From( offset * PitchOffset, 0, 0 ), Rotation.Identity, setup.Hands.Aim ), Damping, Time.Delta );

@@ -33,7 +33,7 @@ public struct FirearmSetup
 }
 
 [Category( "Weapon" ), Icon( "gavel" )]
-public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IPickup, IMutate<CameraSetup>, IMutate<InputContext>
+public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IPickup, IPostMutate<CameraSetup>, IPostMutate<InputContext>
 {
 	public EntityStateMachine<Firearm> Machine { get; }
 
@@ -105,9 +105,9 @@ public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IP
 		Game.AssertServer();
 		var setup = Default;
 
-		foreach ( var mutate in Components.All().OfType<IMutate<FirearmSetup>>() )
+		foreach ( var mutate in Components.All().OfType<IPostMutate<FirearmSetup>>() )
 		{
-			mutate.OnPostSetup( ref setup );
+			mutate.OnPostMutate( ref setup );
 		}
 
 		n_Setup = setup;
@@ -159,19 +159,19 @@ public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IP
 
 	// IMutate
 
-	void IMutate<CameraSetup>.OnPostSetup( ref CameraSetup setup )
+	void IPostMutate<CameraSetup>.OnPostMutate( ref CameraSetup setup )
 	{
-		foreach ( var component in Components.All().OfType<IMutate<CameraSetup>>() )
+		foreach ( var component in Components.All().OfType<IPostMutate<CameraSetup>>() )
 		{
-			component.OnPostSetup( ref setup );
+			component.OnPostMutate( ref setup );
 		}
 	}
 
-	void IMutate<InputContext>.OnPostSetup( ref InputContext setup )
+	void IPostMutate<InputContext>.OnPostMutate( ref InputContext setup )
 	{
-		foreach ( var component in Components.All().OfType<IMutate<InputContext>>() )
+		foreach ( var component in Components.All().OfType<IPostMutate<InputContext>>() )
 		{
-			component.OnPostSetup( ref setup );
+			component.OnPostMutate( ref setup );
 		}
 	}
 }

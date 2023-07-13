@@ -1,10 +1,6 @@
-﻿using Sandbox;
-
-namespace Woosh.Espionage;
+﻿namespace Woosh.Espionage;
 
 // Controller
-
-public interface IEntityCameraController : IComponent, ICameraController { }
 
 public interface ICameraController
 {

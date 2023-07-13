@@ -5,7 +5,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public abstract class PawnController : ObservableEntityComponent<PawnEntity>, ISingletonComponent, ISimulated
+public abstract class PawnController : ObservableEntityComponent<Pawn>, ISingletonComponent, ISimulated
 {
 	protected Vector3 Position
 	{

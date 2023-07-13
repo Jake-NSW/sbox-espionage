@@ -3,7 +3,7 @@ using Sandbox;
 
 namespace Woosh.Espionage;
 
-public sealed class EquipEntityInteraction : EntityComponent<PawnEntity>, IEntityInteraction, ISingletonComponent
+public sealed class EquipEntityInteraction : EntityComponent<Pawn>, IEntityInteraction, ISingletonComponent
 {
 	public InteractionIndicator Indicator => new InteractionIndicator(
 		"Equip",

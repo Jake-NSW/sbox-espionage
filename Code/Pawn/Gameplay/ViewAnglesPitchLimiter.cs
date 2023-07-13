@@ -2,7 +2,7 @@
 
 namespace Woosh.Espionage;
 
-public sealed partial class ViewAnglesPitchLimiter : EntityComponent, IMutate<InputContext>
+public sealed partial class ViewAnglesPitchLimiter : EntityComponent, IPostMutate<InputContext>
 {
 	[Net] public int Up { get; set; }
 	[Net] public int Down { get; set; }
@@ -15,7 +15,7 @@ public sealed partial class ViewAnglesPitchLimiter : EntityComponent, IMutate<In
 		Up = up;
 	}
 
-	void IMutate<InputContext>.OnPostSetup( ref InputContext setup )
+	void IPostMutate<InputContext>.OnPostMutate( ref InputContext setup )
 	{
 		setup.ViewAngles.pitch = setup.ViewAngles.pitch.Clamp( -Up, Down );
 	}

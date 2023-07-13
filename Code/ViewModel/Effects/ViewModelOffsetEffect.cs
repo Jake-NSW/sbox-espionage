@@ -16,7 +16,7 @@ public sealed class ViewModelOffsetEffect : ObservableEntityComponent<Composited
 		Angles = angles;
 	}
 
-	public void OnPostSetup( ref CameraSetup setup )
+	public void OnPostMutate( ref CameraSetup setup )
 	{
 		var target = Vector3.Lerp( Hip, Aim, setup.Hands.Aim );
 		var rot = setup.Rotation.WithRoll( 0 );

@@ -54,7 +54,7 @@ public sealed class GenericFirearmViewModelAnimator : ObservableEntityComponent<
 		Entity.SetAnimParameter( "bReload", true );
 	}
 	
-	public void OnPostSetup( ref CameraSetup setup )
+	public void OnPostMutate( ref CameraSetup setup )
 	{
 		Entity.SetAnimParameter( "fAimBlend", setup.Hands.Aim );
 	}

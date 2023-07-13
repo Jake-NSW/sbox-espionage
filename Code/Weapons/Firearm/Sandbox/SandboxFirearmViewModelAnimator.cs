@@ -14,5 +14,5 @@ public sealed class SandboxFirearmViewModelAnimator : ObservableEntityComponent<
 		Register<DeployingEntity>( () => Entity.SetAnimParameter( "b_deploy", true ) );
 	}
 
-	void IMutate<CameraSetup>.OnPostSetup( ref CameraSetup setup ) { }
+	void IPostMutate<CameraSetup>.OnPostMutate( ref CameraSetup setup ) { }
 }

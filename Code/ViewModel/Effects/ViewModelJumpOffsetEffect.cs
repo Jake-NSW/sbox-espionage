@@ -25,7 +25,7 @@ public sealed class ViewModelJumpOffsetEffect : ObservableEntityComponent<Compos
 
 	private float m_Offset;
 
-	public void OnPostSetup( ref CameraSetup setup )
+	public void OnPostMutate( ref CameraSetup setup )
 	{
 		var rot = setup.Rotation.WithRoll(0);
 		

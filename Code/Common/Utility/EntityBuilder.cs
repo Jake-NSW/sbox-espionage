@@ -4,6 +4,21 @@ using Sandbox;
 
 namespace Woosh.Common;
 
+public static class EntityBuilder
+{
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public static EntityBuilder<T> Create<T>() where T : Entity, new()
+	{
+		return new EntityBuilder<T>( new T() );
+	}
+
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public static EntityBuilder<T> Create<T>( T entity ) where T : Entity
+	{
+		return new EntityBuilder<T>( entity );
+	}
+}
+
 public readonly struct EntityBuilder<T> where T : Entity
 {
 	public T Entity { get; }

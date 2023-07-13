@@ -17,7 +17,7 @@ public sealed class ViewModelRampOffsetEffect : ObservableEntityComponent<Compos
 		m_DampedHeight = 0;
 	}
 
-	public void OnPostSetup( ref CameraSetup setup )
+	public void OnPostMutate( ref CameraSetup setup )
 	{
 		m_DampedHeight = m_DampedHeight.LerpTo( Entity.Owner.GroundEntity == null ? 0 : m_Height - Entity.Owner.Position.z, 3 * Time.Delta );
 		m_Height = Entity.Owner.Position.z;

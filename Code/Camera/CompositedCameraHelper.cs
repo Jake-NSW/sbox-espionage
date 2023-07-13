@@ -40,20 +40,19 @@ public sealed class CompositedCameraHelper
 		m_Last?.Update( ref setup, input );
 	}
 
-	[MethodImpl( MethodImplOptions.AggressiveInlining )]
 	private static ICameraController Find()
 	{
 		// Pull Camera from Client if it exists
-		if ( Game.LocalClient.Components.Get<IEntityCameraController>() is { } clientCamera )
-			return clientCamera;
-
+		if ( Game.LocalClient.Components.Get<CameraHolderComponent>() is { } clientHolder )
+			return clientHolder.Camera;
+		
 		// Pull camera from Pawn if it exists
 		if ( Game.LocalPawn is IHave<ICameraController> { Item: not null } pawn )
 			return pawn.Item;
 
 		// Pull from Pawn if camera exists
-		if ( Game.LocalPawn?.Components.Get<IEntityCameraController>() is { } pawnCamera )
-			return pawnCamera;
+		if ( Game.LocalPawn?.Components.Get<CameraHolderComponent>() is { } pawnHolder )
+			return pawnHolder.Camera;
 
 		return null;
 	}

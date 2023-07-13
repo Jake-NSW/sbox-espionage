@@ -2,9 +2,9 @@
 
 namespace Woosh.Espionage;
 
-public abstract class PlayerControllerMechanic : EntityComponent<PawnEntity>, IMutate<CameraSetup>
+public abstract class PlayerControllerMechanic : EntityComponent<Pawn>, IPostMutate<CameraSetup>
 {
-	void IMutate<CameraSetup>.OnPostSetup( ref CameraSetup setup ) => OnCameraSetup( ref setup );
+	void IPostMutate<CameraSetup>.OnPostMutate( ref CameraSetup setup ) => OnCameraSetup( ref setup );
 	protected virtual void OnCameraSetup( ref CameraSetup setup ) { }
 }
 

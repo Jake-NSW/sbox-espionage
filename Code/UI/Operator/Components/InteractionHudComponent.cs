@@ -3,7 +3,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class InteractionHudComponent : EntityHudComponent<PawnEntity>
+public sealed class InteractionHudComponent : EntityHudComponent<Pawn>
 {
 	[Listen]
 	private void OnInteractionChanged( Event<InteractionTargetChanged> evt )

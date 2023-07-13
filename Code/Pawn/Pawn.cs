@@ -5,13 +5,13 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public abstract partial class PawnEntity : ObservableAnimatedEntity, IHave<InputContext>, IHave<ICameraController>, IMutate<CameraSetup>
+public abstract partial class Pawn : ObservableAnimatedEntity, IHave<InputContext>, IHave<ICameraController>, IPostMutate<CameraSetup>
 {
-	public EntityStateMachine<PawnEntity> Machine { get; }
+	public EntityStateMachine<Pawn> Machine { get; }
 
-	protected PawnEntity()
+	protected Pawn()
 	{
-		Machine = new EntityStateMachine<PawnEntity>( this );
+		Machine = new EntityStateMachine<Pawn>( this );
 	}
 
 	public override void Spawn()
@@ -30,12 +30,20 @@ public abstract partial class PawnEntity : ObservableAnimatedEntity, IHave<Input
 	public ICameraController Camera { get; set; }
 	ICameraController IHave<ICameraController>.Item => Camera;
 
-	void IMutate<CameraSetup>.OnPostSetup( ref CameraSetup setup )
+	void IPostMutate<CameraSetup>.OnPostMutate( ref CameraSetup setup )
 	{
-		foreach ( var component in Components.All() )
+		var components = Components.All().ToArray();
+		
+		foreach ( var component in components )
 		{
-			if ( component is IMutate<CameraSetup> cast )
-				cast.OnPostSetup( ref setup );
+			if ( component is IPreMutate<CameraSetup> cast )
+				cast.OnPreMutate( ref setup );
+		}
+
+		foreach ( var component in components )
+		{
+			if ( component is IPostMutate<CameraSetup> cast )
+				cast.OnPostMutate( ref setup );
 		}
 	}
 
@@ -54,24 +62,27 @@ public abstract partial class PawnEntity : ObservableAnimatedEntity, IHave<Input
 
 	public override sealed void BuildInput()
 	{
-		var context = new InputContext() { InputDirection = Input.AnalogMove, ViewAngles = (ViewAngles + Input.AnalogLook).Normal };
+		var context = InputContext.FromViewAngles( ViewAngles );
+		var components = Components.All().ToArray();
 
-		// This is incredibly dumb...
-		OnBuildInputContext( ref context );
-
-		foreach ( var component in Components.All() )
+		// Pre-Mutate Input Context
+		foreach ( var component in components )
 		{
-			if ( component is IMutate<InputContext> cast )
-				cast.OnPostSetup( ref context );
+			if ( component is IPreMutate<InputContext> cast )
+				cast.OnPreMutate( ref context );
 		}
 
+		// Post-Mutate Input Context
+		foreach ( var component in components )
+		{
+			if ( component is IPostMutate<InputContext> cast )
+				cast.OnPostMutate( ref context );
+		}
 
 		InputDirection = context.InputDirection;
 		ViewAngles = context.ViewAngles;
 		Muzzle = context.Muzzle;
 	}
-
-	protected virtual void OnBuildInputContext( ref InputContext context ) { }
 
 	// Simulate
 

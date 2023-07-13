@@ -3,7 +3,7 @@ using Woosh.Common;
 
 namespace Woosh.Espionage;
 
-public sealed class Operator : PawnEntity
+public sealed class Operator : Pawn
 {
 	public Entity Active => Components.Get<CarriableHandler>().Active;
 	public IEntityInventory Inventory => Components.Get<IEntityInventory>();
@@ -13,7 +13,7 @@ public sealed class Operator : PawnEntity
 	public override void Spawn()
 	{
 		base.Spawn();
-
+		
 		// UI
 		Components.Create<InteractionHudComponent>();
 		Components.Create<InventoryNotificationHudComponent>();
@@ -31,7 +31,8 @@ public sealed class Operator : PawnEntity
 		Components.Add( new ViewAnglesPitchLimiter( 70, 75 ) );
 
 		// Camera
-		Components.Create<FirstPersonEntityCamera>();
+		var camera = new FirstPersonCamera();
+		camera.AttachTo( this );
 
 		// Interaction
 		Components.Create<InteractionHandler>();

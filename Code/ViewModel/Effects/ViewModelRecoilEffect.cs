@@ -4,7 +4,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class ViewModelRecoilEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect, IMutate<InputContext>
+public sealed class ViewModelRecoilEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect, IPostMutate<InputContext>
 {
 	public float Snap { get; }
 	public float Return { get; }
@@ -31,7 +31,7 @@ public sealed class ViewModelRecoilEffect : ObservableEntityComponent<Composited
 	private Rotation m_Current = Rotation.Identity;
 	private Vector3 m_Target;
 
-	void IMutate<CameraSetup>.OnPostSetup( ref CameraSetup setup )
+	void IPostMutate<CameraSetup>.OnPostMutate( ref CameraSetup setup )
 	{
 		var rot = setup.Rotation.WithRoll( 0 );
 
@@ -58,7 +58,7 @@ public sealed class ViewModelRecoilEffect : ObservableEntityComponent<Composited
 		);
 	}
 
-	public void OnPostSetup( ref InputContext setup )
+	public void OnPostMutate( ref InputContext setup )
 	{
 		setup.ViewAngles.pitch += m_Current.Pitch() * 0.004f;
 		setup.ViewAngles.yaw += m_Current.Yaw() * 0.006f;

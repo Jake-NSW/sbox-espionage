@@ -12,7 +12,7 @@ public sealed class ViewModelMoveBobEffect : ObservableEntityComponent<Composite
 	private float m_Speed;
 	private Vector3 m_Bob;
 
-	public void OnPostSetup( ref CameraSetup setup )
+	public void OnPostMutate( ref CameraSetup setup )
 	{
 		var rot = setup.Rotation.WithRoll( 0 );
 		

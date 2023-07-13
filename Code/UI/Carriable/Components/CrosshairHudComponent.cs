@@ -6,7 +6,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class CrosshairHudComponent : EntityHudComponent<PawnEntity>, IMutate<CameraSetup>
+public sealed class CrosshairHudComponent : EntityHudComponent<Pawn>, IPostMutate<CameraSetup>
 {
 	protected override Panel OnCreateUI()
 	{
@@ -53,7 +53,7 @@ public sealed class CrosshairHudComponent : EntityHudComponent<PawnEntity>, IMut
 		m_Crosshair.Fired( evt );
 	}
 
-	public void OnPostSetup( ref CameraSetup setup )
+	public void OnPostMutate( ref CameraSetup setup )
 	{
 		if ( !m_Entity.IsValid() || !m_Entity.GetAttachment( "muzzle" ).HasValue )
 		{

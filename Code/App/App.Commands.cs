@@ -10,7 +10,7 @@ public sealed partial class App
 		[ConCmd.Admin( "noclip" )]
 		public static void PawnNoclip()
 		{
-			var pawn = ConsoleSystem.Caller.Pawn as PawnEntity;
+			var pawn = ConsoleSystem.Caller.Pawn as Pawn;
 			if ( pawn.Components.HasAny<WalkController>() )
 				pawn.Components.Replace<WalkController, NoclipController>();
 			else

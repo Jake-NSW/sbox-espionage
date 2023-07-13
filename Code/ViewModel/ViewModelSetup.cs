@@ -24,7 +24,6 @@ public struct ViewModelSetup
 	// Mutable
 
 	public float Aim;
-
 	public Vector3 Offset;
 	public Rotation Angles;
 }

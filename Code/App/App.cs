@@ -43,7 +43,6 @@ public sealed partial class App : GameManager, IObservable
 	{
 		base.FrameSimulate( cl );
 		Events.Run<FrameUpdate>();
-		Events.Run<PostCameraSetup>();
 	}
 
 	public override void Simulate( IClient cl )

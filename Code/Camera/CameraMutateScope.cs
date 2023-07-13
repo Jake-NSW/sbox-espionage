@@ -15,14 +15,14 @@ public struct CameraMutateScope : IDisposable
 
 	private CameraSetup m_Setup;
 
-	public void Mutate( IMutate<CameraSetup> mutate )
+	public void Mutate( IPostMutate<CameraSetup> mutate )
 	{
-		mutate?.OnPostSetup( ref m_Setup );
+		mutate?.OnPostMutate( ref m_Setup );
 	}
 
 	public void Dispose()
 	{
-		m_Camera.Attributes.Set( "viewModelFov", m_Setup.FieldOfView - 4 );
+		m_Camera.Attributes.Set( "viewModelFov", m_Setup.FieldOfView );
 		m_Camera.Position = m_Setup.Position;
 		m_Camera.Rotation = m_Setup.Rotation;
 		m_Camera.FirstPersonViewer = m_Setup.Viewer;

@@ -3,7 +3,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class ViewModelHandlerComponent : ObservableEntityComponent<PawnEntity>, IMutate<CameraSetup>, IMutate<InputContext>
+public sealed class ViewModelHandlerComponent : ObservableEntityComponent<Pawn>, IPostMutate<CameraSetup>, IPostMutate<InputContext>
 {
 	protected override void OnDeactivate()
 	{
@@ -18,14 +18,14 @@ public sealed class ViewModelHandlerComponent : ObservableEntityComponent<PawnEn
 		m_Effects = null;
 	}
 
-	public void OnPostSetup( ref CameraSetup setup )
+	public void OnPostMutate( ref CameraSetup setup )
 	{
-		(m_Model as IMutate<CameraSetup>)?.OnPostSetup( ref setup );
+		(m_Model as IPostMutate<CameraSetup>)?.OnPostMutate( ref setup );
 	}
 
-	public void OnPostSetup( ref InputContext setup )
+	public void OnPostMutate( ref InputContext setup )
 	{
-		(m_Model as IMutate<InputContext>)?.OnPostSetup( ref setup );
+		(m_Model as IPostMutate<InputContext>)?.OnPostMutate( ref setup );
 	}
 
 	private AnimatedEntity m_Model;
@@ -34,10 +34,10 @@ public sealed class ViewModelHandlerComponent : ObservableEntityComponent<PawnEn
 	private CompositedViewModel OnRequestViewmodel( Entity target )
 	{
 		var view = new CompositedViewModel( (IObservable)target ) { Owner = Entity };
-		
+
 		((IObservable)target).Events.Run( new CreatedViewModel( view, target ) );
 		Events.Run( new CreatedViewModel( view, target ) );
-		
+
 		return view;
 	}
 

@@ -24,7 +24,7 @@ public sealed class ViewModelSwayEffect : ObservableEntityComponent<CompositedVi
 	private Angles m_Angles;
 	private Vector2 m_Velocity;
 
-	void IMutate<CameraSetup>.OnPostSetup( ref CameraSetup setup )
+	void IPostMutate<CameraSetup>.OnPostMutate( ref CameraSetup setup )
 	{
 		var rot = setup.Rotation.WithRoll( 0 );
 

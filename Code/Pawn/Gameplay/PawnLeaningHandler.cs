@@ -5,7 +5,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed partial class PawnLeaningHandler : ObservableEntityComponent<PawnEntity>, IMutate<CameraSetup>, ISimulated
+public sealed partial class PawnLeaningHandler : ObservableEntityComponent<Pawn>, IPostMutate<CameraSetup>, ISimulated
 {
 	[ConVar.ClientData( "esp_lean_toggle" )]
 	private static bool LeanToggle { get; set; }
@@ -80,7 +80,7 @@ public sealed partial class PawnLeaningHandler : ObservableEntityComponent<PawnE
 	public float Distance { get; set; } = 10f;
 	public float Angle { get; set; } = 10;
 
-	public void OnPostSetup( ref CameraSetup setup )
+	public void OnPostMutate( ref CameraSetup setup )
 	{
 		m_Distance = m_Distance.Approach( Direction * NormalFromEyes( Direction, Entity.CollisionBounds.Translate( Entity.Position ) ), 3.25f * Time.Delta );
 		var multi = 1 - setup.Hands.Aim;

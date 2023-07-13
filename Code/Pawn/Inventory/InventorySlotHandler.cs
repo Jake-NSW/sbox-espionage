@@ -6,7 +6,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class InventorySlotHandler : ObservableEntityComponent<PawnEntity>, ISingletonComponent, INetworkSerializer
+public sealed class InventorySlotHandler : ObservableEntityComponent<Pawn>, ISingletonComponent, INetworkSerializer
 {
 	public InventorySlotHandler()
 	{

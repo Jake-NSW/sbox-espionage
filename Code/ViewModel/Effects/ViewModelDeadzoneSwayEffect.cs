@@ -22,7 +22,7 @@ public sealed class ViewModelDeadzoneSwayEffect : ObservableEntityComponent<Comp
 	private Vector2 m_SavedDeadzoneAxis;
 	private Rotation m_LastDeadzoneRotation = Rotation.Identity;
 
-	public void OnPostSetup( ref CameraSetup setup )
+	public void OnPostMutate( ref CameraSetup setup )
 	{
 		var isAiming = setup.Hands.Aim > 0.1f;
 		DeadzoneAxis( in setup.Hands, m_Deadzone );

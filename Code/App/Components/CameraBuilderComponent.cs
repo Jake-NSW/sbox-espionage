@@ -6,18 +6,18 @@ namespace Woosh.Espionage;
 
 public sealed partial class CameraBuilderComponent : ObservableEntityComponent<App>
 {
-	private readonly CompositedCameraHelper m_Helper;
-
 	public CameraBuilderComponent()
 	{
 		if ( Game.IsClient )
 		{
-			m_Helper = new CompositedCameraHelper( Camera.Main );
+			m_Helper = new CompositedCameraHelper( Sandbox.Camera.Main );
 		}
 	}
 
+	private readonly CompositedCameraHelper m_Helper;
+
 	[Listen]
-	private void Update( Event<PostCameraSetup> evt )
+	private void Update( Event<FrameUpdate> evt )
 	{
 		Game.AssertClient();
 
@@ -28,9 +28,9 @@ public sealed partial class CameraBuilderComponent : ObservableEntityComponent<A
 		using ( var mutator = m_Helper.Update( context, Active ) )
 		{
 			// Mutate Pawn
-			mutator.Mutate( Game.LocalPawn as IMutate<CameraSetup> );
+			mutator.Mutate( Game.LocalPawn as IPostMutate<CameraSetup> );
 
-			// Mutate Viewmodels
+			// Mutate Other Stuff?
 		}
 	}
 
@@ -39,8 +39,13 @@ public sealed partial class CameraBuilderComponent : ObservableEntityComponent<A
 	public ICameraController Active => (ICameraController)n_Camera;
 	[Net] private BaseNetworkable n_Camera { get; set; }
 
-	public void Set<T>( T camera ) where T : BaseNetworkable, ICameraController
+	public void Apply<T>( T camera ) where T : BaseNetworkable, ICameraController
 	{
 		n_Camera = camera;
+	}
+
+	public void Reset()
+	{
+		n_Camera = null;
 	}
 }
