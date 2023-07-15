@@ -5,7 +5,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public abstract partial class Pawn : ObservableAnimatedEntity, IHave<InputContext>, IHave<ICameraController>, IPostMutate<CameraSetup>
+public partial class Pawn : ObservableAnimatedEntity, IHave<InputContext>, IPostMutate<CameraSetup>
 {
 	public EntityStateMachine<Pawn> Machine { get; }
 
@@ -27,13 +27,39 @@ public abstract partial class Pawn : ObservableAnimatedEntity, IHave<InputContex
 
 	// Camera
 
-	public ICameraController Camera { get; set; }
-	ICameraController IHave<ICameraController>.Item => Camera;
+	private IController<CameraSetup> m_Camera;
+
+	public IController<CameraSetup> Camera
+	{
+		get
+		{
+			if ( m_Camera != null )
+				return m_Camera;
+
+			return Components.GetAny<IController<CameraSetup>>();
+		}
+		set
+		{
+			if ( m_Camera != value && m_Camera is IComponent oldComponent )
+			{
+				// Remove camera from component list?
+				Components.Remove( oldComponent );
+			}
+
+			m_Camera = value;
+
+			if ( m_Camera is IComponent newComponent )
+			{
+				// Add camera to component list?
+				Components.Add( newComponent );
+			}
+		}
+	}
 
 	void IPostMutate<CameraSetup>.OnPostMutate( ref CameraSetup setup )
 	{
 		var components = Components.All().ToArray();
-		
+
 		foreach ( var component in components )
 		{
 			if ( component is IPreMutate<CameraSetup> cast )

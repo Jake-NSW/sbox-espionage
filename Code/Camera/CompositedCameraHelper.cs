@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using Sandbox;
-using Woosh.Common;
+﻿using Sandbox;
 
 namespace Woosh.Espionage;
 
@@ -16,7 +14,7 @@ public sealed class CompositedCameraHelper
 
 	// Setup
 
-	public CameraMutateScope Update( InputContext input, ICameraController controller = null )
+	public CameraMutateScope Update( InputContext input, IController<CameraSetup> controller = null )
 	{
 		var setup = new CameraSetup( Target ) { FieldOfView = Screen.CreateVerticalFieldOfView( Game.Preferences.FieldOfView ) };
 		Build( ref setup, input, controller );
@@ -25,9 +23,9 @@ public sealed class CompositedCameraHelper
 
 	// Active
 
-	private ICameraController m_Last;
+	private IController<CameraSetup> m_Last;
 
-	private void Build( ref CameraSetup setup, in InputContext input, ICameraController controller )
+	private void Build( ref CameraSetup setup, in InputContext input, IController<CameraSetup> controller )
 	{
 		var maybe = controller ?? Find();
 		if ( m_Last != maybe )
@@ -40,19 +38,11 @@ public sealed class CompositedCameraHelper
 		m_Last?.Update( ref setup, input );
 	}
 
-	private static ICameraController Find()
+	private static IController<CameraSetup> Find()
 	{
-		// Pull Camera from Client if it exists
-		if ( Game.LocalClient.Components.Get<CameraHolderComponent>() is { } clientHolder )
-			return clientHolder.Camera;
-		
 		// Pull camera from Pawn if it exists
-		if ( Game.LocalPawn is IHave<ICameraController> { Item: not null } pawn )
-			return pawn.Item;
-
-		// Pull from Pawn if camera exists
-		if ( Game.LocalPawn?.Components.Get<CameraHolderComponent>() is { } pawnHolder )
-			return pawnHolder.Camera;
+		if ( Game.LocalPawn is Pawn pawn )
+			return pawn.Camera;
 
 		return null;
 	}

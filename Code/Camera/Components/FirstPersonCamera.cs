@@ -1,11 +1,10 @@
-﻿namespace Woosh.Espionage;
+﻿using Sandbox;
 
-public sealed class FirstPersonCamera : CameraController<Pawn>
+namespace Woosh.Espionage;
+
+public sealed class FirstPersonCamera : EntityComponent<Pawn>, IController<CameraSetup>
 {
-	public FirstPersonCamera() { }
-	public FirstPersonCamera( Pawn entity ) : base( entity ) { }
-
-	protected override void Update( ref CameraSetup setup, in InputContext input )
+	public void Update( ref CameraSetup setup, in InputContext input )
 	{
 		setup.Viewer = Entity;
 		setup.Rotation = input.ViewAngles.ToRotation();

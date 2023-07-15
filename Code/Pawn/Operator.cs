@@ -31,8 +31,7 @@ public sealed class Operator : Pawn
 		Components.Add( new ViewAnglesPitchLimiter( 70, 75 ) );
 
 		// Camera
-		var camera = new FirstPersonCamera();
-		camera.AttachTo( this );
+		Components.Create<FirstPersonCamera>();
 
 		// Interaction
 		Components.Create<InteractionHandler>();

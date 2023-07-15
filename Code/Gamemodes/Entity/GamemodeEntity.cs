@@ -12,10 +12,11 @@ public abstract class GamemodeEntity : Entity, IGamemode, IObservable
 	bool IGamemode.Requesting() => OnRequesting();
 	protected virtual bool OnRequesting() { return true; }
 
-
-	void IGamemode.Started() { OnStarted(); }
+	// State
+	
+	void IGamemode.Started() => OnStarted();
 	protected virtual void OnStarted() { }
 
-	void IGamemode.Finished() { OnFinished(); }
+	void IGamemode.Finished() => OnFinished();
 	protected virtual void OnFinished() { }
 }

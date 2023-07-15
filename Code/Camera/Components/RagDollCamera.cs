@@ -2,21 +2,21 @@
 
 namespace Woosh.Espionage;
 
-public sealed class RagDollCamera : CameraController
+public sealed class RagDollCamera : EntityComponent<Pawn>, IController<CameraSetup>
 {
-	public RagDollCamera( Entity entity ) : base( entity ) { }
+	public int Distance { get; set; } = 130;
 
-	protected override void Enabled( ref CameraSetup setup )
+	void IController<CameraSetup>.Enabled( ref CameraSetup setup )
 	{
 		setup.Position = Entity.Position + Vector3.Up * 72 + Vector3.Backward * 96;
 	}
 
-	protected override void Update( ref CameraSetup setup, in InputContext input )
+	void IController<CameraSetup>.Update( ref CameraSetup setup, in InputContext input )
 	{
 		var center = Entity.WorldSpaceBounds.Center;
 		var rot = input.ViewAngles.ToRotation();
 
-		var distance = 130.0f * Entity.Scale;
+		var distance = Distance * Entity.Scale;
 		var targetPos = center + Entity.Scale;
 		targetPos += rot.Forward * -distance;
 

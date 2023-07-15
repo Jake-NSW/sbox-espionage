@@ -36,10 +36,10 @@ public sealed partial class CameraBuilderComponent : ObservableEntityComponent<A
 
 	// Active Camera Controller
 
-	public ICameraController Active => (ICameraController)n_Camera;
+	public IController<CameraSetup> Active => (IController<CameraSetup>)n_Camera;
 	[Net] private BaseNetworkable n_Camera { get; set; }
 
-	public void Apply<T>( T camera ) where T : BaseNetworkable, ICameraController
+	public void Apply<T>( T camera ) where T : BaseNetworkable, IController<CameraSetup>
 	{
 		n_Camera = camera;
 	}

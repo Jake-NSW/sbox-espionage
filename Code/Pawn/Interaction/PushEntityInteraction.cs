@@ -10,11 +10,7 @@ public interface IPushable
 
 public sealed class PushEntityInteraction : EntityComponent<Pawn>, IEntityInteraction, ISingletonComponent
 {
-	public InteractionIndicator Indicator => new InteractionIndicator(
-		"Push & Pull",
-		"Scroll",
-		0
-	);
+	public InteractionIndicator Indicator => new InteractionIndicator( "Push & Pull", "Scroll", 0 );
 
 	public bool IsInteractable( Entity entity )
 	{

@@ -65,6 +65,12 @@ public sealed partial class App : GameManager, IObservable
 		pawn.Slots.Deploy( CarrySlot.Front );
 	}
 
+	public override void PostLevelLoaded()
+	{
+		base.PostLevelLoaded();
+		Events.Run<PostLevelLoaded>();
+	}
+
 	public override void ClientDisconnect( IClient cl, NetworkDisconnectionReason reason )
 	{
 		Events.Run( new ClientDisconnected( cl, reason ) );
