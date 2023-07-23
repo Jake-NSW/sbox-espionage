@@ -65,6 +65,8 @@ public sealed partial class ShootFirearmState : ObservableEntityComponent<Firear
 
 		PlayClientEffects( effects );
 		Game.SetRandomSeed( Time.Tick );
+		
+		DebugOverlay.Sphere(muzzle.Position, 5, Color.Red, 2);
 
 		// Owner, Shoot from View Model
 		App.Get<ProjectileSimulator>().Add(

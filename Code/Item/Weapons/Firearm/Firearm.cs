@@ -32,7 +32,7 @@ public struct FirearmSetup
 }
 
 [Category( "Weapon" ), Icon( "gavel" )]
-public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IPickup
+public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IPickup, IMutate<InputContext>
 {
 	public EntityStateMachine<Firearm> Machine { get; }
 
@@ -149,5 +149,14 @@ public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IP
 	{
 		if ( Game.IsServer )
 			EnableDrawing = false;
+	}
+
+	public void OnMutate( ref InputContext setup )
+	{
+		// Post-Mutate Input Context
+		foreach ( var component in Components.All().OfType<IMutate<InputContext>>() )
+		{
+			component.OnMutate( ref setup );
+		}
 	}
 }
