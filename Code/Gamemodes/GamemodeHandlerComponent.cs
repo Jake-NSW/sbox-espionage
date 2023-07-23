@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Sandbox;
-using Woosh.Common;
+using Woosh.Espionage;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class GamemodeHandlerComponent : ObservableEntityComponent<App>, INetworkSerializer, ISimulated
+public sealed class GamemodeHandlerComponent : ObservableEntityComponent<App>, INetworkSerializer
 {
 	public IGamemode Active => (IGamemode)n_Active;
 	private Entity n_Active { get; set; }
@@ -40,10 +40,11 @@ public sealed class GamemodeHandlerComponent : ObservableEntityComponent<App>, I
 
 		return gamemode;
 	}
-	
-	public void Simulate( IClient client )
+
+	[Listen]
+	private void OnSimulate( Event<SimulateSnapshot> evt )
 	{
-		n_Active?.Simulate( client );
+		n_Active?.Simulate( evt.Signal.Client );
 	}
 
 	private IEnumerable<IGamemode> m_Gamemodes;

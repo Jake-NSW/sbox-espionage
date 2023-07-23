@@ -1,6 +1,6 @@
 ﻿using Editor;
 using Sandbox;
-using Woosh.Common;
+using Woosh.Espionage;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
@@ -22,7 +22,7 @@ public sealed class RustSmgFirearm : Firearm, ISlotted<CarrySlot>, IHave<EntityI
 			return;
 
 		Events.Register<CreatedViewModel>(
-			static evt => evt.Data.ViewModel.Build()
+			static evt => evt.Signal.ViewModel.Build()
 				.WithModel( Model.Load( VIEW_MODEL ) )
 				.WithComponent( new RustFirearmViewModelAnimator() )
 				.WithComponent( new SandboxViewModelEffect() )
@@ -30,10 +30,10 @@ public sealed class RustSmgFirearm : Firearm, ISlotted<CarrySlot>, IHave<EntityI
 				.WithComponent( new ViewModelPitchOffsetEffect() )
 		);
 
-		Events.Register<PlayClientEffects<WeaponClientEffects>>(
+		Events.Register<PlayClientEffects<FirearmClientEffects>>(
 			evt =>
 			{
-				if ( evt.Data.Effects == WeaponClientEffects.Attack )
+				if ( evt.Signal.Effects == FirearmClientEffects.Attack )
 					PlaySound( "rust_smg.shoot" );
 			}
 		);

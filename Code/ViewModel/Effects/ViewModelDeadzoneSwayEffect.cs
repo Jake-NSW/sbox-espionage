@@ -1,5 +1,5 @@
 ﻿using Sandbox;
-using Woosh.Common;
+using Woosh.Espionage;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
@@ -22,7 +22,7 @@ public sealed class ViewModelDeadzoneSwayEffect : ObservableEntityComponent<Comp
 	private Vector2 m_SavedDeadzoneAxis;
 	private Rotation m_LastDeadzoneRotation = Rotation.Identity;
 
-	public void OnPostMutate( ref CameraSetup setup )
+	public void OnMutate( ref CameraSetup setup )
 	{
 		var isAiming = setup.Hands.Aim > 0.1f;
 		DeadzoneAxis( in setup.Hands, m_Deadzone );

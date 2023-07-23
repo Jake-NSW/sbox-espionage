@@ -6,40 +6,10 @@ using Sandbox;
 using Woosh.Signals;
 using IComponent = Sandbox.IComponent;
 
-namespace Woosh.Common;
+namespace Woosh.Espionage;
 
 public static class ComponentUtility
 {
-	[MethodImpl( MethodImplOptions.AggressiveInlining )]
-	public static void Each<TComponent, TValue>( this IComponentSystem system, TValue value, Action<TValue, TComponent> loop )
-	{
-		foreach ( var component in system.All() )
-		{
-			if ( component is TComponent cast )
-				loop.Invoke( value, cast );
-		}
-	}
-
-	[MethodImpl( MethodImplOptions.AggressiveInlining )]
-	public static void Each<TComponent, TValue>( this IComponentSystem system, ref TValue value, RefStructInputAction<TValue, TComponent> loop )
-	{
-		foreach ( var component in system.All() )
-		{
-			if ( component is TComponent cast )
-				loop.Invoke( ref value, cast );
-		}
-	}
-
-	[MethodImpl( MethodImplOptions.AggressiveInlining )]
-	public static void Each<TComponent>( this IComponentSystem system, Action<TComponent> loop )
-	{
-		foreach ( var component in system.All() )
-		{
-			if ( component is TComponent cast )
-				loop.Invoke( cast );
-		}
-	}
-
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]
 	public static TComponent Get<TComponent>( this EntityComponent component ) where TComponent : class, IComponent => component.Entity.Components.Get<TComponent>();
 
@@ -47,25 +17,6 @@ public static class ComponentUtility
 	public static IEnumerable<IComponent> All( this IComponentSystem system )
 	{
 		return system.GetAll<IComponent>();
-	}
-
-	[MethodImpl( MethodImplOptions.AggressiveInlining )]
-	public static IComponent GetAny( this IComponentSystem components, Type type )
-	{
-		return components.GetAll<IComponent>().FirstOrDefault( e => e.GetType() == type );
-	}
-
-	public static IComponent GetOrCreateAny( this IComponentSystem system, Type type )
-	{
-		if ( system.GetAny( type ) is { } component )
-			return component;
-
-		if ( TypeLibrary.GetType( type ).IsInterface )
-			return null;
-
-		component = TypeLibrary.Create<IComponent>( type );
-		system.Add( component );
-		return component;
 	}
 
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]

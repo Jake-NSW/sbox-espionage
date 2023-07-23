@@ -1,15 +1,11 @@
 ﻿using Sandbox;
 using Sandbox.UI;
-using Woosh.Common;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
 public sealed class OperatorEquipmentHudComponent : EntityHudComponent<UI.OperatorHudRootPanel, Operator>
 {
-	public InventorySlotHandler Slots => this.Get<InventorySlotHandler>();
-	public Entity Active => Entity.Active;
-
 	protected override Panel OnCreateUI()
 	{
 		var root = new Panel();
@@ -24,7 +20,8 @@ public sealed class OperatorEquipmentHudComponent : EntityHudComponent<UI.Operat
 	[GameEvent.Client.Frame]
 	private void Frame()
 	{
-		Panel.Parent.Style.Opacity = Entity.Machine.Active == null ? 1 : 0;
+		// Hide UI if the pawn is in a state
+		Panel.Parent.Style.Opacity = Entity.Machine.InState ? 0 : 1;
 	}
 
 	// Active
@@ -40,11 +37,11 @@ public sealed class OperatorEquipmentHudComponent : EntityHudComponent<UI.Operat
 	[Listen]
 	private void OnDeploying( Event<DeployingEntity> evt )
 	{
-		if ( evt.Data.Entity == null )
+		if ( evt.Signal.Entity == null )
 			return;
 
 		// Update the overlay to show the deploying entity
-		m_EquipmentDetails.Assign( EntityInfo.FromEntity( evt.Data.Entity ) );
+		m_EquipmentDetails.Assign( EntityInfo.FromEntity( evt.Signal.Entity ) );
 	}
 
 	// Slots
@@ -54,15 +51,15 @@ public sealed class OperatorEquipmentHudComponent : EntityHudComponent<UI.Operat
 	[Listen]
 	private void OnSlotAssigned( Event<SlotAssigned> evt )
 	{
-		if ( evt.Data.Entity == null )
+		if ( evt.Signal.Entity == null )
 		{
-			m_Hotbar.Remove( evt.Data.Slot );
+			m_Hotbar.Remove( evt.Signal.Slot );
 			return;
 		}
 
-		m_Hotbar.Assign( evt.Data.Slot, EntityInfo.FromEntity( evt.Data.Entity ) );
+		m_Hotbar.Assign( evt.Signal.Slot, EntityInfo.FromEntity( evt.Signal.Entity ) );
 	}
-	
+
 	[Listen]
 	private void OnSlotHolstered( Event<SlotHolstered> evt )
 	{
@@ -72,6 +69,6 @@ public sealed class OperatorEquipmentHudComponent : EntityHudComponent<UI.Operat
 	[Listen]
 	private void OnSlotDeploying( Event<SlotDeploying> evt )
 	{
-		m_Hotbar.Deploying( evt.Data.Slot );
+		m_Hotbar.Deploying( evt.Signal.Slot );
 	}
 }

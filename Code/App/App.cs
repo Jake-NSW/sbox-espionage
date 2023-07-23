@@ -3,24 +3,23 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Sandbox;
-using Woosh.Common;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed partial class App : GameManager, IObservable
+[Title( "App" ), Category("Global"), Icon( "sports_esports" )]
+public sealed partial class App : BaseGameManager, IObservable
 {
-	public new static App Current
+	public static App Current
 	{
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
-		get => GameManager.Current as App;
+		get => s_App;
 	}
 
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]
-	public static T Get<T>() where T : EntityComponent
-	{
-		return Current.Components.Get<T>();
-	}
+	public static T Get<T>() where T : EntityComponent => Current.Components.Get<T>();
+
+	private static App s_App;
 
 	// Instance
 
@@ -28,15 +27,22 @@ public sealed partial class App : GameManager, IObservable
 
 	public App()
 	{
-		Events = new Dispatcher( this, _ => GlobalEventDispatcher.Instance, _ => null );
+		Events = new Dispatcher( this, _ => null, _ => null );
+		s_App = this;
 
 		// Setup Components
 		if ( Game.IsServer )
 		{
-			Components.Create<CameraBuilderComponent>();
+			Components.Create<CameraBuilder>();
 			Components.Create<GamemodeHandlerComponent>();
 			Components.Create<ProjectileSimulator>();
 		}
+	}
+
+	public override void Shutdown()
+	{
+		if ( s_App == this )
+			s_App = null;
 	}
 
 	public override void FrameSimulate( IClient cl )
@@ -47,15 +53,15 @@ public sealed partial class App : GameManager, IObservable
 
 	public override void Simulate( IClient cl )
 	{
-		Components.Each<ISimulated, IClient>( cl, ( client, simulated ) => simulated.Simulate( client ) );
 		base.Simulate( cl );
+		Events.Run( new SimulateSnapshot( cl ) );
 	}
 
 	public override void ClientJoined( IClient client )
 	{
-		Events.Run( new ClientJoined( client ) );
 		base.ClientJoined( client );
 
+		Events.Run( new ClientJoined( client ) );
 		var spawn = All.OfType<SpawnPoint>().MinBy( _ => Guid.NewGuid() ).Transform;
 		spawn.Position += Vector3.Up * 4;
 
@@ -76,6 +82,8 @@ public sealed partial class App : GameManager, IObservable
 		Events.Run( new ClientDisconnected( cl, reason ) );
 		base.ClientDisconnect( cl, reason );
 	}
+
+	// Drag and Drop
 
 	private async static Task LoadMapFromDragDrop( string url )
 	{

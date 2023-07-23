@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Sandbox;
-using Woosh.Common;
+using Woosh.Espionage;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
 [Title( "View Model" ), Category( "ViewModel" ), Icon( "pan_tool" )]
-public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity, IPostMutate<CameraSetup>, IPostMutate<InputContext>
+public sealed class CompositedViewModel : AnimatedEntity, IObservable, IMutate<CameraSetup>, IMutate<InputContext>
 {
 	public IDispatcher Events { get; }
 
@@ -41,7 +41,7 @@ public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity, IPo
 
 	private readonly List<IViewModelEffect> m_Effects;
 
-	void IPostMutate<CameraSetup>.OnPostMutate( ref CameraSetup setup )
+	void IMutate<CameraSetup>.OnMutate( ref CameraSetup setup )
 	{
 		if ( setup.Viewer == null )
 			return;
@@ -56,7 +56,7 @@ public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity, IPo
 
 		foreach ( var effect in m_Effects )
 		{
-			effect.OnPostMutate( ref setup );
+			effect.OnMutate( ref setup );
 		}
 
 		// Append Effects
@@ -66,11 +66,11 @@ public sealed class CompositedViewModel : AnimatedEntity, IObservableEntity, IPo
 		setup.Hands = hands;
 	}
 
-	void IPostMutate<InputContext>.OnPostMutate( ref InputContext setup )
+	void IMutate<InputContext>.OnMutate( ref InputContext setup )
 	{
-		foreach ( var input in Components.All().OfType<IPostMutate<InputContext>>() )
+		foreach ( var input in Components.All().OfType<IMutate<InputContext>>() )
 		{
-			input.OnPostMutate( ref setup );
+			input.OnMutate( ref setup );
 		}
 	}
 }

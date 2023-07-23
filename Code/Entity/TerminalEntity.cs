@@ -1,12 +1,12 @@
 ﻿using Editor;
 using Sandbox;
-using Woosh.Common;
+using Woosh.Espionage;
 
 namespace Woosh.Espionage;
 
 [Library( "esp_terminal" ), Icon( "terminal" ), Category( "Gameplay" )]
 [HammerEntity, Model]
-public sealed partial class TerminalEntity : AnimatedEntity, IControllable, IHave<EntityInfo>, IPostMutate<CameraSetup>
+public sealed partial class TerminalEntity : AnimatedEntity, IControllable, IHave<EntityInfo>, IMutate<CameraSetup>
 {
 	[Net] [Property] public string Display { get; set; }
 
@@ -48,7 +48,7 @@ public sealed partial class TerminalEntity : AnimatedEntity, IControllable, IHav
 		return false;
 	}
 
-	public void OnPostMutate( ref CameraSetup setup )
+	public void OnMutate( ref CameraSetup setup )
 	{
 		// var target = WorldSpaceBounds.Center + (Rotation.Backward * 64);
 		setup.Position = setup.Position.WithZ(WorldSpaceBounds.Center.z);

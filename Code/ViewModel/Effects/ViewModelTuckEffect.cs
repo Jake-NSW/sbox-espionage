@@ -1,7 +1,7 @@
 ﻿using System;
 using Sandbox;
 using Sandbox.Utility;
-using Woosh.Common;
+using Woosh.Espionage;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
@@ -13,7 +13,7 @@ public enum TuckType
 	Hug,
 }
 
-public sealed class ViewModelTuckEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect, IPostMutate<InputContext>
+public sealed class ViewModelTuckEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect, IMutate<InputContext>
 {
 	public float Damping { get; set; } = 14;
 	public TuckType AimVariant { get; init; }
@@ -25,7 +25,7 @@ public sealed class ViewModelTuckEffect : ObservableEntityComponent<CompositedVi
 	private float m_Offset;
 	private float m_Normal;
 
-	public void OnPostMutate( ref CameraSetup setup )
+	public void OnMutate( ref CameraSetup setup )
 	{
 		const string name = "muzzle";
 
@@ -49,9 +49,9 @@ public sealed class ViewModelTuckEffect : ObservableEntityComponent<CompositedVi
 		m_Offset = m_Offset.Damp( range, Damping, Time.Delta );
 		m_Normal = MathF.Abs( m_Offset / distance );
 
-		CameraSetup hip = new CameraSetup( setup );
+		var hip = setup;
 		Calculate( HipVariant, m_Normal, ref hip );
-		CameraSetup aim = new CameraSetup( setup );
+		var aim = setup;
 		Calculate( AimVariant, m_Normal, ref aim );
 
 		var last = setup;
@@ -84,7 +84,7 @@ public sealed class ViewModelTuckEffect : ObservableEntityComponent<CompositedVi
 		}
 	}
 
-	public void OnPostMutate( ref InputContext setup )
+	public void OnMutate( ref InputContext setup )
 	{
 		// We can't shoot if we're to close to the wall
 		if ( m_Normal > MaxNormal )

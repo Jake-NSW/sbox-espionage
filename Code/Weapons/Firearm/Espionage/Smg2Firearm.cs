@@ -1,6 +1,6 @@
 ﻿using Editor;
 using Sandbox;
-using Woosh.Common;
+using Woosh.Espionage;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
@@ -25,15 +25,15 @@ public sealed class Smg2Firearm : Firearm, ISlotted<CarrySlot>, IHave<EntityInfo
 			return;
 
 		Events.Register<CreatedViewModel>(
-			static evt => evt.Data.ViewModel.Build()
+			static evt => evt.Signal.ViewModel.Build()
 				.WithModel( Cloud.Model( "woosh.mdl_esp_vsmg2" ) )
 				.WithAspect( new ViewModelEffectsAspect() )
-				.WithComponent( new GenericFirearmViewModelAnimator() )
+				.WithComponent( new EspionageFirearmViewModelAnimator() )
 				.WithBodyGroup( "muzzle", 1 )
 		);
 
-		Events.Register<PlayClientEffects<WeaponClientEffects>>(
-			static evt => Sounds.Play( evt.Data.Effects, Game.LocalPawn.AimRay.Position )
+		Events.Register<PlayClientEffects<FirearmClientEffects>>(
+			static evt => Sounds.Play( evt.Signal.Effects, Game.LocalPawn.AimRay.Position )
 		);
 	}
 
@@ -56,8 +56,8 @@ public sealed class Smg2Firearm : Firearm, ISlotted<CarrySlot>, IHave<EntityInfo
 
 	public CarrySlot Slot => CarrySlot.Front;
 
-	private static SoundBank<WeaponClientEffects> Sounds { get; } = new SoundBank<WeaponClientEffects>()
+	private static SoundBank<FirearmClientEffects> Sounds { get; } = new SoundBank<FirearmClientEffects>()
 	{
-		[WeaponClientEffects.Attack] = "mk23_firing_sound", [WeaponClientEffects.Attack | WeaponClientEffects.Silenced] = "smg2_firing_suppressed_sound",
+		[FirearmClientEffects.Attack] = "mk23_firing_sound", [FirearmClientEffects.Attack | FirearmClientEffects.Silenced] = "smg2_firing_suppressed_sound",
 	};
 }

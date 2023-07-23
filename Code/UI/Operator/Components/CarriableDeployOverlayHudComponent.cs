@@ -14,14 +14,14 @@ public sealed class CarriableDeployOverlayHudComponent : EntityHudComponent<Pawn
 	[Listen]
 	private void OnViewModelCreated( Event<CreatedViewModel> evt )
 	{
-		var ent = evt.Data.Target;
+		var ent = evt.Signal.Target;
 
 		// Don't worry about it...
 		if ( ent == null )
 			return;
 
 		var info = EntityInfo.FromEntity( ent );
-		m_Overlay.Override( info, evt.Data.ViewModel );
+		m_Overlay.Override( info, evt.Signal.ViewModel );
 	}
 
 	private UI.CarriableDeployOverlay m_Overlay;

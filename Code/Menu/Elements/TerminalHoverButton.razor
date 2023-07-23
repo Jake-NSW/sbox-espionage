@@ -7,10 +7,10 @@
     <div class="ridge"></div>
     <div class="text">
         @Text
-        @if (Tooltip != null)
+        @if (Ghost != null)
         {
             <div class="terminal-hover-button__tooltip">
-                @Tooltip
+                <label text="@(Ghost)"></label>
             </div>
         }
     </div>
@@ -18,5 +18,5 @@
 
 @code {
     public string Text { get; set; }
-    public string Tooltip { get; set; }
+    public string Ghost { get; set; }
 }

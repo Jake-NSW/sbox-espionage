@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using Sandbox;
-using Woosh.Common;
+using Woosh.Espionage;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class ProjectileSimulator : ObservableEntityComponent<App>, ISimulated, INetworkSerializer
+public sealed class ProjectileSimulator : ObservableEntityComponent<App>, INetworkSerializer
 {
 	public ProjectileSimulator()
 	{
@@ -31,7 +31,8 @@ public sealed class ProjectileSimulator : ObservableEntityComponent<App>, ISimul
 		WriteNetworkData();
 	}
 
-	public void Simulate( IClient client )
+	[Listen]
+	private void OnSimulate( Event<SimulateSnapshot> evt )
 	{
 		if ( !Prediction.FirstTime )
 			return;
@@ -63,6 +64,7 @@ public sealed class ProjectileSimulator : ObservableEntityComponent<App>, ISimul
 				.Size( 1 )
 				.Run();
 
+			DebugOverlay.TraceResult(ray, 2);
 			if ( !ray.Hit )
 			{
 				continue;

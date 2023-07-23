@@ -3,6 +3,8 @@ using Sandbox;
 
 namespace Woosh.Espionage;
 
+public delegate void CameraMutateDelegate( ref CameraSetup setup );
+
 public struct CameraMutateScope : IDisposable
 {
 	private readonly SceneCamera m_Camera;
@@ -15,9 +17,14 @@ public struct CameraMutateScope : IDisposable
 
 	private CameraSetup m_Setup;
 
-	public void Mutate( IPostMutate<CameraSetup> mutate )
+	public void Mutate( IMutate<CameraSetup> mutate )
 	{
-		mutate?.OnPostMutate( ref m_Setup );
+		mutate?.OnMutate( ref m_Setup );
+	}
+
+	public void Mutate( CameraMutateDelegate mutate )
+	{
+		mutate?.Invoke( ref m_Setup );
 	}
 
 	public void Dispose()

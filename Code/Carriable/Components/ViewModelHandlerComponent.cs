@@ -3,7 +3,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class ViewModelHandlerComponent : ObservableEntityComponent<Pawn>, IPostMutate<CameraSetup>, IPostMutate<InputContext>
+public sealed class ViewModelHandlerComponent : ObservableEntityComponent<Pawn>, IMutate<CameraSetup>, IMutate<InputContext>
 {
 	protected override void OnDeactivate()
 	{
@@ -18,14 +18,14 @@ public sealed class ViewModelHandlerComponent : ObservableEntityComponent<Pawn>,
 		m_Effects = null;
 	}
 
-	public void OnPostMutate( ref CameraSetup setup )
+	public void OnMutate( ref CameraSetup setup )
 	{
-		(m_Model as IPostMutate<CameraSetup>)?.OnPostMutate( ref setup );
+		(m_Model as IMutate<CameraSetup>)?.OnMutate( ref setup );
 	}
 
-	public void OnPostMutate( ref InputContext setup )
+	public void OnMutate( ref InputContext setup )
 	{
-		(m_Model as IPostMutate<InputContext>)?.OnPostMutate( ref setup );
+		(m_Model as IMutate<InputContext>)?.OnMutate( ref setup );
 	}
 
 	private AnimatedEntity m_Model;
@@ -40,7 +40,7 @@ public sealed class ViewModelHandlerComponent : ObservableEntityComponent<Pawn>,
 
 		return view;
 	}
-
+	
 	// Deploying
 
 	[Listen]
@@ -48,8 +48,8 @@ public sealed class ViewModelHandlerComponent : ObservableEntityComponent<Pawn>,
 	{
 		if ( Entity.IsLocalPawn && m_Model == null )
 		{
-			m_Model = OnRequestViewmodel( evt.Data.Entity );
-			evt.Data.Entity.Components.Add( m_Effects = new AppliedViewModelEntityEffects( m_Model ) );
+			m_Model = OnRequestViewmodel( evt.Signal.Entity );
+			evt.Signal.Entity.Components.Add( m_Effects = new AppliedViewModelEntityEffects( m_Model ) );
 		}
 	}
 

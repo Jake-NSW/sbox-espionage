@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using Sandbox;
-using Woosh.Common;
+using Woosh.Espionage;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
@@ -24,7 +24,7 @@ public sealed class ViewModelSwayEffect : ObservableEntityComponent<CompositedVi
 	private Angles m_Angles;
 	private Vector2 m_Velocity;
 
-	void IPostMutate<CameraSetup>.OnPostMutate( ref CameraSetup setup )
+	void IMutate<CameraSetup>.OnMutate( ref CameraSetup setup )
 	{
 		var rot = setup.Rotation.WithRoll( 0 );
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using Sandbox;
 using Sandbox.Utility;
-using Woosh.Common;
+using Woosh.Espionage;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
@@ -16,7 +16,7 @@ public sealed class ViewModelJumpOffsetEffect : ObservableEntityComponent<Compos
 	{
 		m_SinceLanded = 0;
 		m_Random = Vector3.Random;
-		m_LandVelocity = evt.Data.Velocity;
+		m_LandVelocity = evt.Signal.Velocity;
 	}
 
 	private TimeSince m_SinceLanded;
@@ -25,7 +25,7 @@ public sealed class ViewModelJumpOffsetEffect : ObservableEntityComponent<Compos
 
 	private float m_Offset;
 
-	public void OnPostMutate( ref CameraSetup setup )
+	public void OnMutate( ref CameraSetup setup )
 	{
 		var rot = setup.Rotation.WithRoll(0);
 		

@@ -28,7 +28,7 @@ public sealed class Crosshair : Panel
 			m_FireCount--;
 	}
 
-	public void Fired( Event<WeaponFired> evt )
+	public void Fired( Event<FirearmFired> evt )
 	{
 		m_FireCount += 2;
 	}

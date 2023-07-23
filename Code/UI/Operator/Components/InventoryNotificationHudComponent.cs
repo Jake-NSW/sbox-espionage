@@ -22,7 +22,7 @@ public sealed class InventoryNotificationHudComponent : EntityHudComponent<UI.Op
 	[Listen]
 	private void OnInventoryAdded( Event<InventoryAdded> evt )
 	{
-		Add( EntityInfo.FromEntity( evt.Data.Item ), false );
+		Add( EntityInfo.FromEntity( evt.Signal.Item ), false );
 	}
 
 	private async void Add( EntityInfo info, bool removed )
@@ -38,6 +38,6 @@ public sealed class InventoryNotificationHudComponent : EntityHudComponent<UI.Op
 	[Listen]
 	private void OnInventoryRemoved( Event<InventoryRemoved> evt )
 	{
-		Add( EntityInfo.FromEntity( evt.Data.Item ), true );
+		Add( EntityInfo.FromEntity( evt.Signal.Item ), true );
 	}
 }

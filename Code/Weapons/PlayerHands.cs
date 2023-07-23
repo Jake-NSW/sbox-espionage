@@ -1,5 +1,5 @@
 ﻿using Sandbox;
-using Woosh.Common;
+using Woosh.Espionage;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
@@ -12,9 +12,9 @@ public sealed partial class PlayerHands : MeleeWeapon, ISlotted<CarrySlot>, IHav
 		Events.Register<CreatedViewModel>(
 			evt =>
 			{
-				var view = evt.Data.ViewModel;
+				var view = evt.Signal.ViewModel;
 				view.Model = Model.Load( "weapons/hands/v_espionage_hands.vmdl" );
-				view.Components.Create<GenericFirearmViewModelAnimator>();
+				view.Components.Create<EspionageFirearmViewModelAnimator>();
 				view.Build().WithAspect( new ViewModelEffectsAspect() ).WithoutAnyComponent<ViewModelPitchOffsetEffect>();
 			}
 		);

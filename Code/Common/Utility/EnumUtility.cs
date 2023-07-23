@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Sandbox;
 
-namespace Woosh.Common;
+namespace Woosh.Espionage;
 
 [SkipHotload]
 public static class EnumUtility<T> where T : Enum

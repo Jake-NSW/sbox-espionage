@@ -1,5 +1,5 @@
 ﻿using Sandbox;
-using Woosh.Common;
+using Woosh.Espionage;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
@@ -21,7 +21,7 @@ public sealed class ViewModelPitchOffsetEffect : ObservableEntityComponent<Compo
 	private Rotation m_LastOffsetRot = Rotation.Identity;
 	private Vector3 m_LastOffsetPos;
 
-	public void OnPostMutate( ref CameraSetup setup )
+	public void OnMutate( ref CameraSetup setup )
 	{
 		var offset = Sandbox.Camera.Rotation.Pitch().Remap( -90, 90, -1, 1 );
 		var rot = setup.Rotation;

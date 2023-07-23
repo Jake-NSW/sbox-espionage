@@ -7,7 +7,8 @@ public sealed class AppliedViewModelEntityEffects : ObservableEntityComponent, I
 {
 	public AnimatedEntity ViewModel { get; }
 
-	public AppliedViewModelEntityEffects( AnimatedEntity viewModel ) {
+	public AppliedViewModelEntityEffects( AnimatedEntity viewModel )
+	{
 		ViewModel = viewModel;
 	}
 

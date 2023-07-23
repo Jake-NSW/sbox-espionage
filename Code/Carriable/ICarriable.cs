@@ -1,8 +1,9 @@
-﻿using Woosh.Signals;
+﻿using Sandbox;
+using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public interface ICarriable : IObservableEntity
+public interface ICarriable : IEntity, IObservable
 {
 	DrawTime Draw { get; }
 

@@ -1,6 +1,6 @@
 ﻿using Editor;
 using Sandbox;
-using Woosh.Common;
+using Woosh.Espionage;
 
 namespace Woosh.Espionage;
 

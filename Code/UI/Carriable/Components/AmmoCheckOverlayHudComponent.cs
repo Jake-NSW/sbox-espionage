@@ -17,7 +17,7 @@ public sealed class AmmoCheckOverlayHudComponent : EntityHudComponent<Pawn>
 	[Listen]
 	private void ViewModelCreated( Event<CreatedViewModel> evt )
 	{
-		m_Overlay.Target = evt.Data.ViewModel;
+		m_Overlay.Target = evt.Signal.ViewModel;
 	}
 
 	[Listen]

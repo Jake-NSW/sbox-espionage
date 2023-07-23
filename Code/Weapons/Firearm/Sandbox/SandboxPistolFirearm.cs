@@ -1,6 +1,6 @@
 ﻿using Editor;
 using Sandbox;
-using Woosh.Common;
+using Woosh.Espionage;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
@@ -22,7 +22,7 @@ public sealed class SandboxPistolFirearm : Firearm, ISlotted<CarrySlot>, IHave<E
 			return;
 
 		Events.Register<CreatedViewModel>(
-			static evt => evt.Data.ViewModel.Build()
+			static evt => evt.Signal.ViewModel.Build()
 				.WithModel( Cloud.Model( "facepunch.v_usp" ) )
 				.WithComponent<SandboxFirearmViewModelAnimator>()
 				.WithAspect<ViewModelEffectsAspect>()
@@ -32,10 +32,10 @@ public sealed class SandboxPistolFirearm : Firearm, ISlotted<CarrySlot>, IHave<E
 				.WithChild( new AnimatedEntity( "models/first_person/first_person_arms.vmdl" ) { EnableViewmodelRendering = true }, true )
 		);
 
-		Events.Register<PlayClientEffects<WeaponClientEffects>>(
+		Events.Register<PlayClientEffects<FirearmClientEffects>>(
 			evt =>
 			{
-				if ( evt.Data.Effects == WeaponClientEffects.Attack )
+				if ( evt.Signal.Effects == FirearmClientEffects.Attack )
 					PlaySound( "rust_pistol.shoot" );
 			}
 		);

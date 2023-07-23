@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using Sandbox;
 using Sandbox.Diagnostics;
 
-namespace Woosh.Common;
+namespace Woosh.Espionage;
 
 public static class LogUtility
 {

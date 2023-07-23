@@ -6,12 +6,12 @@ public sealed class RagDollCamera : EntityComponent<Pawn>, IController<CameraSet
 {
 	public int Distance { get; set; } = 130;
 
-	void IController<CameraSetup>.Enabled( ref CameraSetup setup )
+	public void Activate( ref CameraSetup setup )
 	{
 		setup.Position = Entity.Position + Vector3.Up * 72 + Vector3.Backward * 96;
 	}
 
-	void IController<CameraSetup>.Update( ref CameraSetup setup, in InputContext input )
+	public void Update( ref CameraSetup setup, in InputContext input )
 	{
 		var center = Entity.WorldSpaceBounds.Center;
 		var rot = input.ViewAngles.ToRotation();

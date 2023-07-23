@@ -1,6 +1,5 @@
 ﻿using System;
 using Sandbox;
-using Woosh.Common;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
@@ -18,7 +17,7 @@ public sealed class ViewModelRotateTowardsEffect : ObservableEntityComponent<Com
 
 	private Rotation m_LookAt = Rotation.Identity;
 
-	public void OnPostMutate( ref CameraSetup setup )
+	public void OnMutate( ref CameraSetup setup )
 	{
 		var trans = m_Towards.Invoke();
 

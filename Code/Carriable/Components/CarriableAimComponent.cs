@@ -1,17 +1,17 @@
 ﻿using Sandbox;
 using Sandbox.Utility;
-using Woosh.Common;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed partial class CarriableAimComponent : ObservableEntityComponent<ICarriable>, IPostMutate<CameraSetup>, ISimulated
+public sealed partial class CarriableAimComponent : ObservableEntityComponent<ICarriable>, IMutate<CameraSetup>
 {
 	public bool IsAiming => n_IsAiming;
 	[Net, Predicted, Local] private bool n_IsAiming { get; set; }
 	private float AimSpeed => 2.70f;
 
-	public void Simulate( IClient cl )
+	[Listen]
+	private void OnSimulate( Event<SimulateSnapshot> evt )
 	{
 		if ( CanAim( false ) )
 		{
@@ -49,7 +49,7 @@ public sealed partial class CarriableAimComponent : ObservableEntityComponent<IC
 
 	private float m_Delta;
 
-	public void OnPostMutate( ref CameraSetup setup )
+	public void OnMutate( ref CameraSetup setup )
 	{
 		m_Delta += IsAiming ? Time.Delta * AimSpeed : -Time.Delta * AimSpeed;
 		m_Delta = m_Delta.Min( 1 ).Max( 0 );

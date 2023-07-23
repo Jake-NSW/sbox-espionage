@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Sandbox;
 
-namespace Woosh.Common;
+namespace Woosh.Espionage;
 
 public readonly struct SoundBank<T> where T : Enum
 {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Woosh.Common;
+namespace Woosh.Espionage;
 
 public static class DictionaryUtility
 {

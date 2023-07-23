@@ -1,12 +1,12 @@
 ﻿using Sandbox;
 using Sandbox.UI;
 using Sandbox.Utility;
-using Woosh.Common;
+using Woosh.Espionage;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class CrosshairHudComponent : EntityHudComponent<Pawn>, IPostMutate<CameraSetup>
+public sealed class CrosshairHudComponent : EntityHudComponent<Pawn>, IMutate<CameraSetup>
 {
 	protected override Panel OnCreateUI()
 	{
@@ -41,19 +41,19 @@ public sealed class CrosshairHudComponent : EntityHudComponent<Pawn>, IPostMutat
 	[Listen]
 	private void OnViewModelCreated( Event<CreatedViewModel> evt )
 	{
-		if ( !evt.Data.ViewModel.GetAttachment( "muzzle" ).HasValue )
+		if ( !evt.Signal.ViewModel.GetAttachment( "muzzle" ).HasValue )
 			return;
 
-		m_Entity = evt.Data.ViewModel;
+		m_Entity = evt.Signal.ViewModel;
 	}
 
 	[Listen]
-	private void OnWeaponAttack( Event<WeaponFired> evt )
+	private void OnWeaponAttack( Event<FirearmFired> evt )
 	{
 		m_Crosshair.Fired( evt );
 	}
 
-	public void OnPostMutate( ref CameraSetup setup )
+	public void OnMutate( ref CameraSetup setup )
 	{
 		if ( !m_Entity.IsValid() || !m_Entity.GetAttachment( "muzzle" ).HasValue )
 		{

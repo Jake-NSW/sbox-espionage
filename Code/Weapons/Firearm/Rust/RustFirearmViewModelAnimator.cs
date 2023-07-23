@@ -6,9 +6,9 @@ public sealed class RustFirearmViewModelAnimator : ObservableEntityComponent<Com
 {
 	protected override void OnAutoRegister()
 	{
-		Register<WeaponFired>( () => Entity.SetAnimParameter( "fire", true ) );
+		Register<FirearmFired>( () => Entity.SetAnimParameter( "fire", true ) );
 		Register<DeployingEntity>( () => Entity.SetAnimParameter( "deploy", true ) );
 	}
 
-	void IPostMutate<CameraSetup>.OnPostMutate( ref CameraSetup setup ) { }
+	void IMutate<CameraSetup>.OnMutate( ref CameraSetup setup ) { }
 }

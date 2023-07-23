@@ -7,17 +7,8 @@
 @namespace Espionage.UI.Menu
 
 <root class="menu__start-menu">
+    @* <VideoPanel Source="/Videos/background_footage.mp4" style="position: absolute; width: 100%; filter: brightness(0.8%) blur(12px); "> </videopanel> *@
     <div class="terminal-back">
-        <div class="header" style="display: none">
-            <div>
-                <label text="menu"></label>
-            </div>
-            <div style="flex-grow: 1"></div>
-            <div style="font-size: 14px; align-items: flex-end">
-                <label text="User: "></label>
-                @Game.UserName
-            </div>
-        </div>
         <div class="terminal-output">
             <label @ref="Panel" id="terminal-output__text"></label>
         </div>
@@ -33,21 +24,29 @@
     </div>
 
     <div class="terminal-front">
-        <div class="title">
-            @Game.Menu.Package.Title
+        <div class="navigator-container">
+            <div class="title">
+                <label text="@Game.Menu.Package.Title"></label>
+            </div>
+            <div class="navigator">
+                @foreach (var item in Details)
+                {
+                    <TerminalHoverButton
+                        onclick="@(item.OnClicked)"
+                        onmousemove="@(() => OnButtonMouseEnter(item))"
+                        onmouseout="@(() => Panel.Text = string.Empty)"
+                        Text="@(item.Title)"
+                        Ghost="@(item.Tooltip)"
+                        style="align-self: stretch">
+                    </TerminalHoverButton>
+                }
+            </div>
         </div>
-        <div class="navigator">
-            @foreach (var item in Details)
-            {
-                <TerminalHoverButton
-                    onclick="@(item.OnClicked)"
-                    onmousemove="@(() => OnButtonMouseEnter(item))"
-                    onmouseout="@(() => Panel.Text = string.Empty)"
-                    Text="@(item.Title)"
-                    Tooltip="@(item.Tooltip)"
-                    style="max-width: 512px; align-self: stretch">
-                </TerminalHoverButton>
-            }
+        <div class="content-container">
+            <div>
+                <label text="Label"></label>
+            </div>
+
         </div>
     </div>
 </root>

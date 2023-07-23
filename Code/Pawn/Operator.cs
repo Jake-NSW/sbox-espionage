@@ -1,5 +1,5 @@
 ﻿using Sandbox;
-using Woosh.Common;
+using Woosh.Espionage;
 
 namespace Woosh.Espionage;
 
@@ -13,7 +13,7 @@ public sealed class Operator : Pawn
 	public override void Spawn()
 	{
 		base.Spawn();
-		
+
 		// UI
 		Components.Create<InteractionHudComponent>();
 		Components.Create<InventoryNotificationHudComponent>();
@@ -26,7 +26,7 @@ public sealed class Operator : Pawn
 		Components.Create<PawnLeaningHandler>();
 		Components.Create<WalkController>();
 		Components.Create<ViewModelHandlerComponent>();
-		Components.Create<PawnRagDollSimulatedEntityState>();
+		Components.Create<PawnRagDollEntityState>();
 		Components.Create<OperatorHandsHandler>();
 		Components.Add( new ViewAnglesPitchLimiter( 70, 75 ) );
 
@@ -40,7 +40,7 @@ public sealed class Operator : Pawn
 
 		// Controllable
 		Components.Create<ControllableEntityInteraction>();
-		Components.Create<ControllableSimulatedEntityState>();
+		Components.Create<ControllableEntityState>();
 
 		// Inventory
 		Components.Create<CarriableHandler>();
@@ -54,7 +54,7 @@ public sealed class Operator : Pawn
 	{
 		base.Simulate( cl );
 
-		if ( Machine.Active != null )
+		if ( Machine.InState )
 			return;
 
 		for ( var i = 0; i < EnumUtility<CarrySlot>.Length; i++ )
@@ -70,7 +70,7 @@ public sealed class Operator : Pawn
 			}
 		}
 
-		if ( Input.Pressed( "drop" ) )
+		if ( Input.Pressed( App.Actions.Drop ) )
 		{
 			Slots.Drop( Slots.Active );
 		}

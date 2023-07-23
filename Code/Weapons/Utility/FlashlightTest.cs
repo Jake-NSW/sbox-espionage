@@ -1,6 +1,6 @@
 ﻿using Editor;
 using Sandbox;
-using Woosh.Common;
+using Woosh.Espionage;
 using Woosh.Signals;
 
 namespace Woosh.Espionage.Utility;
@@ -16,7 +16,7 @@ public sealed class FlashlightTest : ObservableAnimatedEntity, ICarriable, IPick
 			return;
 
 		Events.Register<CreatedViewModel>(
-			static evt => evt.Data.ViewModel.Build()
+			static evt => evt.Signal.ViewModel.Build()
 				.WithModel( Model.Load( "weapons/rust_flashlight/v_rust_flashlight.vmdl" ) )
 				.WithAspect( new ViewModelEffectsAspect() )
 				.WithComponent( new RustFirearmViewModelAnimator() )

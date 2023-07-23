@@ -8,6 +8,6 @@ public sealed class FirstPersonCamera : EntityComponent<Pawn>, IController<Camer
 	{
 		setup.Viewer = Entity;
 		setup.Rotation = input.ViewAngles.ToRotation();
-		setup.Position = Entity.EyePosition;
+		setup.Position = Entity.Eyes.ToWorld( Entity.Transform ).Position;
 	}
 }

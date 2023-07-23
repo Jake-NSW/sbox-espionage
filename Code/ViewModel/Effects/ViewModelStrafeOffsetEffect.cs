@@ -1,5 +1,5 @@
 ﻿using Sandbox;
-using Woosh.Common;
+using Woosh.Espionage;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
@@ -12,7 +12,7 @@ public sealed class ViewModelStrafeOffsetEffect : ObservableEntityComponent<Comp
 
 	private float m_Offset;
 
-	public void OnPostMutate( ref CameraSetup setup )
+	public void OnMutate( ref CameraSetup setup )
 	{
 		var rot = setup.Rotation.WithRoll( 0 );
 		var velocity = Entity.Owner.Velocity;

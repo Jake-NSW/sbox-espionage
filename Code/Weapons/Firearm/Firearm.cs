@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Linq;
 using Sandbox;
-using Woosh.Common;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
 [Flags]
-public enum WeaponClientEffects
+public enum FirearmClientEffects
 {
 	Attack,
 	Silenced,
@@ -33,7 +32,7 @@ public struct FirearmSetup
 }
 
 [Category( "Weapon" ), Icon( "gavel" )]
-public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IPickup, IPostMutate<CameraSetup>, IPostMutate<InputContext>
+public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IPickup
 {
 	public EntityStateMachine<Firearm> Machine { get; }
 
@@ -42,18 +41,13 @@ public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IP
 		Machine = new EntityStateMachine<Firearm>( this );
 
 		if ( Game.IsClient )
-			Events.Register<CreatedViewModel>( static evt => evt.Data.ViewModel.Components.Create<WeaponClientEffectsHandler>() );
+			Events.Register<CreatedViewModel>( static evt => evt.Signal.ViewModel.Components.Create<FirearmEffectsHandler>() );
 
 		if ( Game.IsServer )
 			Events.Register<FirearmRebuildRequest>( Rebuild );
 	}
 
 	public AnimatedEntity Effects => Components.Get<IEntityEffects>()?.Target ?? this;
-
-	public bool IsAiming => Components.Get<CarriableAimComponent>()?.IsAiming == true;
-	public bool IsReloading => Machine.Active is FirearmReloadSimulatedEntityState;
-	public bool IsShooting => Machine.Active is FirearmShootSimulatedEntityState;
-	public IFirearmAmmoProvider Ammo => Components.Get<FirearmReloadSimulatedEntityState>().Active;
 
 	public override void Spawn()
 	{
@@ -66,15 +60,15 @@ public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IP
 		EnableShadowInFirstPerson = true;
 
 		Components.Create<CarriableAimComponent>();
-		Components.Create<WeaponClientEffectsHandler>();
+		Components.Create<FirearmEffectsHandler>();
 
-		Components.Create<FirearmCheckAmmoSimulatedEntityState>();
-		Components.Create<FirearmShootSimulatedEntityState>();
-		Components.Create<FirearmReloadSimulatedEntityState>();
+		Components.Create<FirearmCheckAmmoEntityState>();
+		Components.Create<FirearmShootEntityState>();
+		Components.Create<FirearmReloadEntityState>();
 
 		Rebuild();
 	}
-	
+
 	protected override void OnDestroy()
 	{
 		Events.Dispose();
@@ -82,7 +76,7 @@ public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IP
 
 	public override void Simulate( IClient cl )
 	{
-		Components.Each<ISimulated, IClient>( cl, ( client, e ) => e.Simulate( client ) );
+		base.Simulate( cl );
 		Machine.Simulate( cl );
 	}
 
@@ -105,9 +99,9 @@ public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IP
 		Game.AssertServer();
 		var setup = Default;
 
-		foreach ( var mutate in Components.All().OfType<IPostMutate<FirearmSetup>>() )
+		foreach ( var mutate in Components.All().OfType<IMutate<FirearmSetup>>() )
 		{
-			mutate.OnPostMutate( ref setup );
+			mutate.OnMutate( ref setup );
 		}
 
 		n_Setup = setup;
@@ -123,7 +117,7 @@ public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IP
 
 	// Pickup
 
-	public bool Holsterable => Machine.Active == null;
+	public bool Holsterable => !Machine.InState;
 
 	void IPickup.OnPickup( Entity carrier )
 	{
@@ -155,23 +149,5 @@ public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IP
 	{
 		if ( Game.IsServer )
 			EnableDrawing = false;
-	}
-
-	// IMutate
-
-	void IPostMutate<CameraSetup>.OnPostMutate( ref CameraSetup setup )
-	{
-		foreach ( var component in Components.All().OfType<IPostMutate<CameraSetup>>() )
-		{
-			component.OnPostMutate( ref setup );
-		}
-	}
-
-	void IPostMutate<InputContext>.OnPostMutate( ref InputContext setup )
-	{
-		foreach ( var component in Components.All().OfType<IPostMutate<InputContext>>() )
-		{
-			component.OnPostMutate( ref setup );
-		}
 	}
 }

@@ -1,5 +1,5 @@
 ﻿using Sandbox;
-using Woosh.Common;
+using Woosh.Espionage;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
@@ -17,10 +17,10 @@ public sealed class ViewModelKickbackEffect : ObservableEntityComponent<Composit
 
 	protected override void OnAutoRegister()
 	{
-		Register<WeaponFired>(
+		Register<FirearmFired>(
 			e =>
 			{
-				var kick = e.Data.Kickback;
+				var kick = e.Signal.Kickback;
 				m_Target += new Vector3( kick.x, kick.y.Range(), kick.z.Range() ) * Time.Delta;
 			}
 		);
@@ -29,7 +29,7 @@ public sealed class ViewModelKickbackEffect : ObservableEntityComponent<Composit
 	private Vector3 m_Current;
 	private Vector3 m_Target;
 
-	public void OnPostMutate( ref CameraSetup setup )
+	public void OnMutate( ref CameraSetup setup )
 	{
 		var rot = setup.Rotation.WithRoll( 0 );
 

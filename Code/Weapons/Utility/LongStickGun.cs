@@ -1,6 +1,6 @@
 ﻿using Editor;
 using Sandbox;
-using Woosh.Common;
+using Woosh.Espionage;
 using Woosh.Signals;
 
 namespace Woosh.Espionage.Utility;
@@ -16,10 +16,10 @@ public sealed class LongStickGun : ObservableAnimatedEntity, ICarriable, IPickup
 			return;
 
 		Events.Register<CreatedViewModel>(
-			static evt => evt.Data.ViewModel.Build()
+			static evt => evt.Signal.ViewModel.Build()
 				.WithModel( Model.Load( "weapons/debug/v_long_gun.vmdl" ) )
 				.WithAspect( new ViewModelEffectsAspect() )
-				.WithComponent( new GenericFirearmViewModelAnimator() )
+				.WithComponent( new EspionageFirearmViewModelAnimator() )
 				.WithMaterialGroup( "chrome" )
 				.WithBodyGroup( "muzzle", 0 )
 				.WithBodyGroup( "module", 1 )
