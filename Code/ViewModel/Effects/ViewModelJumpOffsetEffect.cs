@@ -6,7 +6,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class ViewModelJumpOffsetEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect
+public sealed class ViewModelJumpOffsetEffect : ObservableEntityComponent<ViewModel>, IViewModelEffect
 {
 	public float RotMulti { get; set; } = 2;
 	public float PosMulti { get; set; } = 1;

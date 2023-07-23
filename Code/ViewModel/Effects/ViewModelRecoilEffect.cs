@@ -4,7 +4,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class ViewModelRecoilEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect, IMutate<InputContext>
+public sealed class ViewModelRecoilEffect : ObservableEntityComponent<ViewModel>, IViewModelEffect, IMutate<InputContext>
 {
 	public float Snap { get; }
 	public float Return { get; }

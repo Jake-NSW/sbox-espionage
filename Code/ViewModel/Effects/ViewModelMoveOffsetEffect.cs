@@ -4,7 +4,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class ViewModelMoveOffsetEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect
+public sealed class ViewModelMoveOffsetEffect : ObservableEntityComponent<ViewModel>, IViewModelEffect
 {
 	private readonly Vector3 m_Multiplier;
 	private readonly float m_Damping;

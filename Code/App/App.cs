@@ -62,7 +62,7 @@ public sealed partial class App : BaseGameManager, IObservable
 		base.ClientJoined( client );
 
 		Events.Run( new ClientJoined( client ) );
-		var spawn = All.OfType<SpawnPoint>().MinBy( _ => Guid.NewGuid() ).Transform;
+		var spawn = All.OfType<SpawnPoint>().MinBy( _ => Guid.NewGuid() )?.Transform ?? Transform.Zero.WithPosition( Vector3.Up * 4 ); 
 		spawn.Position += Vector3.Up * 4;
 
 		var pawn = client.Possess<Operator>( spawn );

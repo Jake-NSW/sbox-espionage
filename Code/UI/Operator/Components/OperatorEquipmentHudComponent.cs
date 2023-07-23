@@ -4,7 +4,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class OperatorEquipmentHudComponent : EntityHudComponent<UI.OperatorHudRootPanel, Operator>
+public sealed class OperatorEquipmentHudComponent : EntityHudComponent<UI.OperatorHudRootPanel, Pawn>
 {
 	protected override Panel OnCreateUI()
 	{

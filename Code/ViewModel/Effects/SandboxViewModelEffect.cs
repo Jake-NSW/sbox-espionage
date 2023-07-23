@@ -5,7 +5,7 @@ namespace Woosh.Espionage;
 
 // Copied from https://github.com/Facepunch/sandbox/blob/master/code/ViewModel.cs
 
-public sealed class SandboxViewModelEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect
+public sealed class SandboxViewModelEffect : ObservableEntityComponent<ViewModel>, IViewModelEffect
 {
 	private float SwingInfluence => 0.05f;
 	private float ReturnSpeed => 5.0f;

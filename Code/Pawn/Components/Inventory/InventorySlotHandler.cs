@@ -1,26 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Sandbox;
-using Woosh.Espionage;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class InventorySlotHandler : ObservableEntityComponent<Pawn>, ISingletonComponent, INetworkSerializer
+public sealed class CarrySlotHandler : InventorySlotHandler<CarrySlot>
 {
-	public InventorySlotHandler()
+	[Listen]
+	private void Simulate( Event<SimulateSnapshot> evt )
 	{
-		Game.AssertClient();
-	}
+		for ( var i = 0; i < EnumUtility<CarrySlot>.Length; i++ )
+		{
+			var value = EnumUtility<CarrySlot>.ValueOf( i + 1 );
+			if ( Input.Pressed( value.ToInputAction() ) )
+			{
+				// If item is active, holster and deploy arms
+				if ( Active - 1 == i )
+					Handler.Holster( false );
+				else
+					Deploy( value );
+			}
+		}
 
-	public InventorySlotHandler( int slots )
+		if ( Input.Pressed( App.Actions.Drop ) )
+		{
+			Drop( Active );
+		}
+	}
+}
+
+public abstract class InventorySlotHandler<T> : ObservableEntityComponent<Pawn>, ISingletonComponent, INetworkSerializer where T : Enum
+{
+	protected InventorySlotHandler()
 	{
-		Game.AssertServer();
-		n_Slots = new Entity[slots];
+		n_Slots = new Entity[EnumUtility<T>.Length];
 	}
 
 	protected override void OnAutoRegister()
 	{
+		base.OnAutoRegister();
+
 		if ( Game.IsServer )
 		{
 			Register<InventoryAdded>( OnInventoryAdded );
@@ -32,7 +53,6 @@ public sealed class InventorySlotHandler : ObservableEntityComponent<Pawn>, ISin
 			{
 				var ent = evt.Signal.Entity;
 				var slot = SlotOfEntity( ent );
-
 				if ( slot != -1 )
 					Run( new SlotDeploying( slot, ent ) );
 			}
@@ -50,8 +70,10 @@ public sealed class InventorySlotHandler : ObservableEntityComponent<Pawn>, ISin
 		);
 	}
 
-	private IEntityInventory Inventory => this.Get<IEntityInventory>();
-	private CarriableHandler Handler => this.Get<CarriableHandler>();
+	protected IEntityInventory Inventory => this.Get<IEntityInventory>();
+	protected CarriableHandler Handler => this.Get<CarriableHandler>();
+
+	// Injected Inventory Logic
 
 	private void OnInventoryRemoved( Event<InventoryRemoved> evt )
 	{
@@ -95,6 +117,12 @@ public sealed class InventorySlotHandler : ObservableEntityComponent<Pawn>, ISin
 	public IReadOnlyList<Entity> Slots => n_Slots;
 	private Entity[] n_Slots;
 
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public void Assign<TEntity>( TEntity ent ) where TEntity : Entity, ISlotted => Assign( ent.Slot, ent );
+
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public void Assign<TSlot>( TSlot slot, Entity ent ) where TSlot : Enum => Assign( EnumUtility<TSlot>.IndexOf( slot ), ent );
+
 	public void Assign( int slot, Entity ent )
 	{
 		Game.AssertServer();
@@ -111,7 +139,7 @@ public sealed class InventorySlotHandler : ObservableEntityComponent<Pawn>, ISin
 		if ( entity == null )
 			return -1;
 
-		for ( int i = 0; i < n_Slots.Length; i++ )
+		for ( var i = 0; i < n_Slots.Length; i++ )
 		{
 			if ( entity == n_Slots[i] )
 			{
@@ -121,6 +149,9 @@ public sealed class InventorySlotHandler : ObservableEntityComponent<Pawn>, ISin
 
 		return -1;
 	}
+
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public void Deploy( T slot, DrawTime? time = null ) => Deploy( EnumUtility<T>.IndexOf( slot ), time );
 
 	public void Deploy( int slot, DrawTime? timing = null )
 	{
@@ -137,21 +168,11 @@ public sealed class InventorySlotHandler : ObservableEntityComponent<Pawn>, ISin
 			return;
 
 		var ent = n_Slots[slot];
-
-		/* Jake : Can't remember why this was here, feel like
-				  its not needed after me adding the inventory
-				  added signal...
-				  
-		if ( !Inventory.Contains( ent ) )
-		{
-			Assign( slot + 1, null );
-			Handler.Deploy( null );
-			return;
-		}
-		*/
-
 		Handler.Deploy( ent, timing );
 	}
+
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public void Drop( T slot ) => Drop( EnumUtility<T>.IndexOf( slot ) );
 
 	public void Drop( int slot )
 	{
@@ -194,8 +215,6 @@ public sealed class InventorySlotHandler : ObservableEntityComponent<Pawn>, ISin
 		if ( length <= 0 || Entity == null )
 			return;
 
-		n_Slots ??= new Entity[length];
-
 		for ( var i = 0; i < length; i++ )
 		{
 			var id = read.Read<int>();
@@ -221,28 +240,5 @@ public sealed class InventorySlotHandler : ObservableEntityComponent<Pawn>, ISin
 		{
 			write.Write( ent?.NetworkIdent ?? 0 );
 		}
-	}
-}
-
-public static class DeployableSlotHandlerUtility
-{
-	public static void Assign<TEntity>( this InventorySlotHandler handler, TEntity ent ) where TEntity : Entity, ISlotted
-	{
-		handler.Assign( ent.Slot, ent );
-	}
-
-	public static void Assign<TSlot>( this InventorySlotHandler handler, TSlot slot, Entity ent ) where TSlot : Enum
-	{
-		handler.Assign( EnumUtility<TSlot>.IndexOf( slot ), ent );
-	}
-
-	public static void Deploy<TSlot>( this InventorySlotHandler handler, TSlot slot, DrawTime? time = null ) where TSlot : Enum
-	{
-		handler.Deploy( EnumUtility<TSlot>.IndexOf( slot ), time );
-	}
-
-	public static void Drop<TSlot>( this InventorySlotHandler handler, TSlot slot ) where TSlot : Enum
-	{
-		handler.Drop( EnumUtility<TSlot>.IndexOf( slot ) );
 	}
 }

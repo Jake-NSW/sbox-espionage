@@ -5,7 +5,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage.Utility;
 
-[Library( "esp_long_stick_gun" ), HammerEntity, EditorModel( WORLD_MODEL )]
+[Library( "esp_long_stick_gun" ), Category("Utility"), HammerEntity, EditorModel( WORLD_MODEL )]
 public sealed class LongStickGun : ObservableAnimatedEntity, ICarriable, IPickup, ISlotted<CarrySlot>, IHave<EntityInfo>
 {
 	private const string WORLD_MODEL = "weapons/mk23/espionage_mk23.vmdl";

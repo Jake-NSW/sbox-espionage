@@ -3,7 +3,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class ViewModelOffsetEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect
+public sealed class ViewModelOffsetEffect : ObservableEntityComponent<ViewModel>, IViewModelEffect
 {
 	public Vector3 Hip { get; set; }
 	public Vector3 Aim { get; set; }

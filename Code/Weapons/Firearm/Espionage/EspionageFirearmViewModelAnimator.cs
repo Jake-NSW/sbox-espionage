@@ -2,7 +2,7 @@
 
 namespace Woosh.Espionage;
 
-public sealed class EspionageFirearmViewModelAnimator : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect
+public sealed class EspionageFirearmViewModelAnimator : ObservableEntityComponent<ViewModel>, IViewModelEffect
 {
 	// Check Ammo
 

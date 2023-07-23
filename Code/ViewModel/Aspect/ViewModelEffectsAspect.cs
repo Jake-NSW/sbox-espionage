@@ -3,7 +3,7 @@ using Woosh.Espionage;
 
 namespace Woosh.Espionage;
 
-public readonly struct ViewModelEffectsAspect : IEntityAspect<CompositedViewModel>
+public readonly struct ViewModelEffectsAspect : IEntityAspect<ViewModel>
 {
 	public ViewModelEffectsAspect() { }
 
@@ -11,12 +11,12 @@ public readonly struct ViewModelEffectsAspect : IEntityAspect<CompositedViewMode
 	public TuckType AimTuck { get; init; } = TuckType.Push;
 
 
-	void IEntityAspect<CompositedViewModel>.ImportFrom( CompositedViewModel value, IComponentSystem system )
+	void IEntityAspect<ViewModel>.ImportFrom( ViewModel value, IComponentSystem system )
 	{
 		// Nothing to Import
 	}
 
-	void IEntityAspect<CompositedViewModel>.ExportTo( CompositedViewModel view, IComponentSystem system )
+	void IEntityAspect<ViewModel>.ExportTo( ViewModel view, IComponentSystem system )
 	{
 		system.Add( new ViewModelCameraAnimationEffect() );
 

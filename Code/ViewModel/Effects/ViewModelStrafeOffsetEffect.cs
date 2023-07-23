@@ -4,7 +4,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class ViewModelStrafeOffsetEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect
+public sealed class ViewModelStrafeOffsetEffect : ObservableEntityComponent<ViewModel>, IViewModelEffect
 {
 	public float Damping { get; set; } = 6;
 	public float Axis { get; set; } = 10;

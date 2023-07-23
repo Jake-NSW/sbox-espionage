@@ -5,10 +5,10 @@ namespace Woosh.Espionage;
 
 public sealed class EquipEntityInteraction : EntityComponent<Pawn>, IEntityInteraction, ISingletonComponent
 {
+	private readonly static string s_Bind = $"{Input.GetButtonOrigin( App.Actions.Interact )} Hold";
+
 	public InteractionIndicator Indicator => new InteractionIndicator(
-		"Equip",
-		$"{Input.GetButtonOrigin( App.Actions.Interact )} Hold",
-		MathF.Min( m_IsActive ? m_SincePressed / EQUIP_DELAY : 0, 1 )
+		"Equip", s_Bind, MathF.Min( m_IsActive ? m_SincePressed / EQUIP_DELAY : 0, 1 )
 	);
 
 	private const float EQUIP_DELAY = 0.55f;
@@ -24,10 +24,10 @@ public sealed class EquipEntityInteraction : EntityComponent<Pawn>, IEntityInter
 		return false;
 	}
 
-	private RealTimeSince m_SincePressed;
+	private TimeSince m_SincePressed;
 	private bool m_IsActive;
 
-	private InventorySlotHandler Handler => Entity.Components.Get<InventorySlotHandler>();
+	private CarrySlotHandler Handler => Entity.Components.Get<CarrySlotHandler>();
 	private IEntityInventory Inventory => Entity.Components.Get<IEntityInventory>();
 
 	public void Simulate( in TraceResult result, IClient client )

@@ -6,7 +6,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class ViewModelSwayEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect
+public sealed class ViewModelSwayEffect : ObservableEntityComponent<ViewModel>, IViewModelEffect
 {
 	private readonly float m_Multiplier;
 	private readonly float m_AimMultiplier;

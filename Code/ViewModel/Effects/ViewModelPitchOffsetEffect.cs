@@ -4,7 +4,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class ViewModelPitchOffsetEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect
+public sealed class ViewModelPitchOffsetEffect : ObservableEntityComponent<ViewModel>, IViewModelEffect
 {
 	public float PitchOffset { get; set; }
 	public float YawOffset { get; set; }

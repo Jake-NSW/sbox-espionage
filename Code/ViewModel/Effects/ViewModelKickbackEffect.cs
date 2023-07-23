@@ -4,7 +4,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class ViewModelKickbackEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect
+public sealed class ViewModelKickbackEffect : ObservableEntityComponent<ViewModel>, IViewModelEffect
 {
 	public float Snap { get; }
 	public float Return { get; }

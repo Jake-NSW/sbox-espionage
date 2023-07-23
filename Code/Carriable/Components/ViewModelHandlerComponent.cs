@@ -31,9 +31,9 @@ public sealed class ViewModelHandlerComponent : ObservableEntityComponent<Pawn>,
 	private AnimatedEntity m_Model;
 	private AppliedViewModelEntityEffects m_Effects;
 
-	private CompositedViewModel OnRequestViewmodel( Entity target )
+	private ViewModel OnRequestViewmodel( Entity target )
 	{
-		var view = new CompositedViewModel( (IObservable)target ) { Owner = Entity };
+		var view = new ViewModel( (IObservable)target ) { Owner = Entity };
 
 		((IObservable)target).Events.Run( new CreatedViewModel( view, target ) );
 		Events.Run( new CreatedViewModel( view, target ) );

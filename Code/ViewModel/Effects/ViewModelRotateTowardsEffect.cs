@@ -4,7 +4,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class ViewModelRotateTowardsEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect
+public sealed class ViewModelRotateTowardsEffect : ObservableEntityComponent<ViewModel>, IViewModelEffect
 {
 	public float Damping { get; set; } = 12;
 	

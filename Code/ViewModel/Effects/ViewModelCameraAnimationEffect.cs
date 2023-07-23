@@ -2,7 +2,7 @@
 
 namespace Woosh.Espionage;
 
-public sealed class ViewModelCameraAnimationEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect
+public sealed class ViewModelCameraAnimationEffect : ObservableEntityComponent<ViewModel>, IViewModelEffect
 {
 	public float Scale { get; set; } = 1;
 	

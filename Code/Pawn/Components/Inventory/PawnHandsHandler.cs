@@ -3,16 +3,22 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed partial class OperatorHandsHandler : ObservableEntityComponent<Operator>
+public sealed partial class PawnHandsHandler : ObservableEntityComponent<Pawn>
 {
 	[Net] public PlayerHands Hands { get; set; }
 
 	protected override void OnActivate()
 	{
 		base.OnActivate();
-		
+
 		if ( Game.IsServer )
-			Hands ??= new PlayerHands { Owner = Entity, Parent = Entity };
+		{
+			Hands ??= new PlayerHands
+			{
+				Owner = Entity,
+				Parent = Entity
+			};
+		}
 	}
 
 	[Listen]
@@ -23,6 +29,6 @@ public sealed partial class OperatorHandsHandler : ObservableEntityComponent<Ope
 			return;
 
 		if ( evt.Signal.Deploying == null && evt.Signal.Deploying is not PlayerHands )
-			Entity.Carriable.Deploy( Hands );
+			Entity.Components.Get<CarriableHandler>().Deploy( Hands );
 	}
 }

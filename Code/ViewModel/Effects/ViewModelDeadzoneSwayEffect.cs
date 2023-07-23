@@ -4,7 +4,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class ViewModelDeadzoneSwayEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect
+public sealed class ViewModelDeadzoneSwayEffect : ObservableEntityComponent<ViewModel>, IViewModelEffect
 {
 	private readonly Vector2 m_Deadzone;
 

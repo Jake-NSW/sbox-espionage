@@ -4,22 +4,20 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public struct PawnEyes
-{
-	public Vector3 Position;
-	public Rotation Rotation;
-
-	public (Vector3 Position, Rotation Rotation) ToWorld( Transform transform )
-	{
-		return (transform.PointToWorld( Position ), transform.RotationToWorld( Rotation ));
-	}
-}
-
+/// <summary>
+/// A "Pawn Entity" is meant to represent a controllable character. It is used to represent the player, NPCs, and other controllable
+/// entities. Pawns are assigned to the client that controls them. They are given a camera controller, input and are simulated by
+/// default (when possessed). They are also given a state machine to control their state.
+/// </summary>
 public partial class Pawn : ObservableAnimatedEntity, IMutate<CameraSetup>, IHave<InputContext>, IHave<IController<CameraSetup>>
 {
+	/// <summary>
+	/// The state machine that controls the pawn's state. This is used to control the pawn's behavior. This does not control the pawn's
+	/// character controller. As that is active when there is no state. 
+	/// </summary>
 	public EntityStateMachine<Pawn> Machine { get; }
 
-	protected Pawn()
+	public Pawn()
 	{
 		Machine = new EntityStateMachine<Pawn>( this );
 	}
@@ -41,6 +39,10 @@ public partial class Pawn : ObservableAnimatedEntity, IMutate<CameraSetup>, IHav
 
 	private IController<CameraSetup> m_Camera;
 
+	/// <summary>
+	/// The camera controller that controls the pawn's camera. It is only used when the pawn is possessed by the local client, or is being
+	/// spectated. If the inputted camera is a component, it will be added to the pawn's component list.
+	/// </summary>
 	public IController<CameraSetup> Camera
 	{
 		get => m_Camera ?? Components.GetAny<IController<CameraSetup>>();
@@ -76,6 +78,10 @@ public partial class Pawn : ObservableAnimatedEntity, IMutate<CameraSetup>, IHav
 
 	InputContext IHave<InputContext>.Item => Input;
 
+	/// <summary>
+	/// The pawns current input context. This is used to control the pawn's character controller and the camera controller. This is meant
+	/// to be provided as a nice way to access pawn specific input. 
+	/// </summary>
 	public InputContext Input => new InputContext()
 	{
 		InputDirection = InputDirection,
@@ -125,9 +131,9 @@ public partial class Pawn : ObservableAnimatedEntity, IMutate<CameraSetup>, IHav
 			Events.Run( new EntityPossessed( cl ), Propagation.Trickle );
 		}
 
-		Eyes.Position = Vector3.Up * (64f * Scale);
-		Eyes.Rotation = ViewAngles.ToRotation();
+		EyeRotation = ViewAngles.ToRotation();
 		Rotation = ViewAngles.WithPitch( 0f ).ToRotation();
+		EyeLocalPosition = Vector3.Up * (64f * Scale);
 
 		if ( Machine.Simulate( cl ) )
 		{
@@ -146,15 +152,21 @@ public partial class Pawn : ObservableAnimatedEntity, IMutate<CameraSetup>, IHav
 
 	// Eyes
 
-	public PawnEyes Eyes;
+	public override Ray AimRay => new Ray( EyePosition, EyeRotation.Forward );
 
-	public override Ray AimRay
+	public Vector3 EyePosition
 	{
-		get
-		{
-			var eyes = Eyes.ToWorld( Transform );
-			return new Ray( eyes.Position, eyes.Rotation.Forward );
-		}
+		get => Transform.PointToWorld( EyeLocalPosition );
+		set => EyeLocalPosition = Transform.PointToLocal( value );
 	}
 
+	[Net, Predicted] public Vector3 EyeLocalPosition { get; set; }
+
+	public Rotation EyeRotation
+	{
+		get => Transform.RotationToWorld( EyeLocalRotation );
+		set => EyeLocalRotation = Transform.RotationToLocal( value );
+	}
+
+	[Net, Predicted] public Rotation EyeLocalRotation { get; set; }
 }

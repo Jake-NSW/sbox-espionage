@@ -4,7 +4,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class ViewModelRampOffsetEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect
+public sealed class ViewModelRampOffsetEffect : ObservableEntityComponent<ViewModel>, IViewModelEffect
 {
 	private float m_Height;
 	private float m_DampedHeight;

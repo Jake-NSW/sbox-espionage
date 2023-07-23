@@ -27,24 +27,13 @@ public sealed class UseEntityInteraction : EntityComponent<Pawn>, IEntityInterac
 		if ( !Input.Down( App.Actions.Interact ) )
 			Stop();
 
-		/* -- This sometimes just doesn't work, not bothered to figure it out
-		if ( Vector3.Dot( Entity.Rotation.Forward, m_UsedPosition - Entity.Position ) < 0.3f || m_UsedPosition.Distance( Entity.Position ) > 64f )
-		{
-			Stop();
-			return;
-		}
-		*/
-
 		if ( Using.OnUse( Entity ) )
-		{
 			return;
-		}
 
 		Stop();
 	}
 
 	public IUse Using { get; private set; }
-	private Vector3 m_UsedPosition;
 
 	private void Start( TraceResult context )
 	{
@@ -54,8 +43,7 @@ public sealed class UseEntityInteraction : EntityComponent<Pawn>, IEntityInterac
 			Failed();
 			return;
 		}
-
-		m_UsedPosition = context.EndPosition;
+		
 		Using = use;
 	}
 

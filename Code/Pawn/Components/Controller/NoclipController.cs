@@ -8,7 +8,7 @@ public sealed class NoclipController : PawnController
 	{
 		var fwd = Entity.Input.InputDirection.x.Clamp( -1f, 1f );
 		var left = Entity.Input.InputDirection.y.Clamp( -1f, 1f );
-		var rotation = Entity.Eyes.ToWorld( Entity.Transform ).Rotation;
+		var rotation = Entity.EyeRotation;
 
 		var vel = (rotation.Forward * fwd) + (rotation.Left * left);
 

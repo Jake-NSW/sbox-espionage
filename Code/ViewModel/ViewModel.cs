@@ -1,17 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Sandbox;
-using Woosh.Espionage;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
 [Title( "View Model" ), Category( "ViewModel" ), Icon( "pan_tool" )]
-public sealed class CompositedViewModel : AnimatedEntity, IObservable, IMutate<CameraSetup>, IMutate<InputContext>
+public sealed class ViewModel : AnimatedEntity, IObservable, IMutate<CameraSetup>, IMutate<InputContext>
 {
 	public IDispatcher Events { get; }
 
-	public CompositedViewModel( IObservable parent )
+	public ViewModel( IObservable parent )
 	{
 		Game.AssertClient();
 

@@ -18,6 +18,7 @@ public sealed class InteractionHandler : ObservableEntityComponent<Pawn>, ISingl
 	{
 		Register<DeployingEntity>( OnDeployed );
 		Register<DeployedEntity>( OnDeployed );
+		Register<SimulateSnapshot>( OnSimulate );
 	}
 
 	private void OnDeployed()
@@ -34,7 +35,6 @@ public sealed class InteractionHandler : ObservableEntityComponent<Pawn>, ISingl
 	public Entity Hovering => p_Hovering;
 	[Predicted] private Entity p_Hovering { get; set; }
 
-	[Listen]
 	private void OnSimulate( Event<SimulateSnapshot> evt )
 	{
 		var result = Scan();

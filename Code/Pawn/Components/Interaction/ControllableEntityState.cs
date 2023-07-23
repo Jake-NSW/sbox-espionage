@@ -1,5 +1,4 @@
 ﻿using Sandbox;
-using Woosh.Espionage;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;

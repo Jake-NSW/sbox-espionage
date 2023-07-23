@@ -2,7 +2,7 @@
 
 namespace Woosh.Espionage;
 
-public sealed class SandboxFirearmViewModelAnimator : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect
+public sealed class SandboxFirearmViewModelAnimator : ObservableEntityComponent<ViewModel>, IViewModelEffect
 {
 	protected override void OnAutoRegister()
 	{

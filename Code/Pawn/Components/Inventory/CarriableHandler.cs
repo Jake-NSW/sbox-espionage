@@ -139,6 +139,7 @@ public partial class CarriableHandler : ObservableEntityComponent<Pawn>, ISingle
 		m_OnDeployed?.Invoke( Active );
 
 		Run( new DeployedEntity( Active ) );
+		(Active as ICarriable)?.OnDeployed();
 		(Active as IObservable)?.Events.Run( new DeployedEntity( Active ) );
 
 		m_OnDeployed = null;

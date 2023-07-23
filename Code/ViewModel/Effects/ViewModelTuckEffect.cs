@@ -13,7 +13,7 @@ public enum TuckType
 	Hug,
 }
 
-public sealed class ViewModelTuckEffect : ObservableEntityComponent<CompositedViewModel>, IViewModelEffect, IMutate<InputContext>
+public sealed class ViewModelTuckEffect : ObservableEntityComponent<ViewModel>, IViewModelEffect, IMutate<InputContext>
 {
 	public float Damping { get; set; } = 14;
 	public TuckType AimVariant { get; init; }
