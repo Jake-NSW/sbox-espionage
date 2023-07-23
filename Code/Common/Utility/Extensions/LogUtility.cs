@@ -7,7 +7,6 @@ namespace Woosh.Espionage;
 
 public static class LogUtility
 {
-
 	public static TimedScope Measure( this Logger logger, [CallerMemberName] string message = null )
 	{
 		return new TimedScope( message );

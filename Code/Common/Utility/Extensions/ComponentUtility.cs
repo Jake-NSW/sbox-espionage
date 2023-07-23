@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Sandbox;
-using Woosh.Signals;
 using IComponent = Sandbox.IComponent;
 
 namespace Woosh.Espionage;

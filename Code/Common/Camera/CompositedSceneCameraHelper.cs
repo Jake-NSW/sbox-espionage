@@ -42,8 +42,8 @@ public sealed class CompositedSceneCameraHelper
 	private static IController<CameraSetup> Find()
 	{
 		// Pull camera from Pawn if it exists
-		if ( Game.LocalPawn is Pawn pawn )
-			return pawn.Camera;
+		if ( Game.LocalPawn is IHave<IController<CameraSetup>> pawn )
+			return pawn.Item;
 
 		return null;
 	}
