@@ -1,7 +1,10 @@
-﻿namespace Woosh.Espionage;
+﻿using Sandbox;
+
+namespace Woosh.Espionage;
 
 public sealed class Operator : Pawn
 {
+	public Entity Holding => Components.Get<CarriableHandler>().Active;
 	public IEntityInventory Inventory => Components.Get<IEntityInventory>();
 	public CarrySlotHandler Slots => Components.Get<CarrySlotHandler>();
 
@@ -19,26 +22,25 @@ public sealed class Operator : Pawn
 		Components.Create<PawnLeaningHandler>();
 		Components.Create<WalkController>();
 		Components.Create<ViewModelHandlerComponent>();
-		Components.Create<PawnFallEntityState>();
-		Components.Create<PawnHandsHandler>();
 		Components.Add( new ViewAnglesPitchLimiter( 70, 75 ) );
 
 		// Camera
 		Components.Create<FirstPersonCamera>();
 
+		// States
+		Components.Create<ControllablePawnState>();
+		Components.Create<FallPawnState>();
+
+		// Inventory
+		Components.Create<EntityInventoryContainer>();
+		Components.Create<CarriableHandler>();
+		Components.Create<CarrySlotHandler>();
+		Components.Create<PawnHandsHandler>();
+
 		// Interaction
 		Components.Create<InteractionHandler>();
 		Components.Create<PushEntityInteraction>();
 		Components.Create<UseEntityInteraction>();
-
-		// Controllable
-		Components.Create<ControllableEntityInteraction>();
-		Components.Create<ControllableEntityState>();
-
-		// Inventory
-		Components.Create<CarriableHandler>();
-		Components.Create<EntityInventoryContainer>();
-		Components.Create<CarrySlotHandler>();
 		Components.Create<PickupEntityInteraction>();
 		Components.Create<EquipEntityInteraction>();
 	}

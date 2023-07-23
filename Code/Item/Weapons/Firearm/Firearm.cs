@@ -62,9 +62,9 @@ public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IP
 		Components.Create<CarriableAimComponent>();
 		Components.Create<FirearmEffectsHandler>();
 
-		Components.Create<FirearmCheckAmmoEntityState>();
-		Components.Create<FirearmShootEntityState>();
-		Components.Create<FirearmReloadEntityState>();
+		Components.Create<CheckAmmoFirearmState>();
+		Components.Create<ShootFirearmState>();
+		Components.Create<ReloadFirearmState>();
 
 		Rebuild();
 	}

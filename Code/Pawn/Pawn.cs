@@ -97,6 +97,9 @@ public partial class Pawn : ObservableAnimatedEntity, IMutate<CameraSetup>, IHav
 
 	public override sealed void BuildInput()
 	{
+		if ( Machine.InState )
+			return;
+
 		var context = new InputContext
 		{
 			InputDirection = Sandbox.Input.AnalogMove,

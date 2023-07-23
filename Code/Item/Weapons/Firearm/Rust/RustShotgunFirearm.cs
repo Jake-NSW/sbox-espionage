@@ -1,6 +1,5 @@
 ﻿using Editor;
 using Sandbox;
-using Woosh.Espionage;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
@@ -52,7 +51,7 @@ public sealed class RustShotgunFirearm : Firearm, ISlotted<CarrySlot>, IHave<Ent
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
 
 		// Use Shotgun Simulated Reload State (Continuous reloading)
-		Components.Replace<FirearmReloadEntityState, ShotgunReloadEntityState>();
+		Components.Replace<ReloadFirearmState, ReloadShotgunState>();
 		Components.RemoveAny<CarriableAimComponent>();
 	}
 

@@ -4,7 +4,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed partial class FirearmReloadEntityState : ObservableEntityComponent<Firearm>, IEntityState<Firearm>, ISingletonComponent
+public sealed partial class ReloadFirearmState : ObservableEntityComponent<Firearm>, IEntityState<Firearm>, ISingletonComponent
 {
 	public IFirearmAmmoProvider Active { get; }
 	

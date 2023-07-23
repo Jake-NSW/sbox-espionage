@@ -11,8 +11,8 @@ public sealed class ViewModelHandlerComponent : ObservableEntityComponent<Pawn>,
 
 		// Remove Viewmodel
 
-		m_Model?.Delete();
-		m_Model = null;
+		m_ViewModel?.Delete();
+		m_ViewModel = null;
 
 		m_Effects?.Remove();
 		m_Effects = null;
@@ -20,44 +20,47 @@ public sealed class ViewModelHandlerComponent : ObservableEntityComponent<Pawn>,
 
 	public void OnMutate( ref CameraSetup setup )
 	{
-		(m_Model as IMutate<CameraSetup>)?.OnMutate( ref setup );
+		(m_ViewModel as IMutate<CameraSetup>)?.OnMutate( ref setup );
 	}
 
 	public void OnMutate( ref InputContext setup )
 	{
-		(m_Model as IMutate<InputContext>)?.OnMutate( ref setup );
+		(m_ViewModel as IMutate<InputContext>)?.OnMutate( ref setup );
 	}
 
-	private AnimatedEntity m_Model;
+	private ViewModel m_ViewModel;
 	private AppliedViewModelEntityEffects m_Effects;
 
 	private ViewModel OnRequestViewmodel( Entity target )
 	{
-		var view = new ViewModel( (IObservable)target ) { Owner = Entity };
+		var view = new ViewModel( (IObservable)target )
+		{
+			Owner = Entity
+		};
 
 		((IObservable)target).Events.Run( new CreatedViewModel( view, target ) );
 		Events.Run( new CreatedViewModel( view, target ) );
 
 		return view;
 	}
-	
+
 	// Deploying
 
 	[Listen]
 	private void OnDeploying( Event<DeployingEntity> evt )
 	{
-		if ( Entity.IsLocalPawn && m_Model == null )
+		if ( Entity.IsLocalPawn && m_ViewModel == null )
 		{
-			m_Model = OnRequestViewmodel( evt.Signal.Entity );
-			evt.Signal.Entity.Components.Add( m_Effects = new AppliedViewModelEntityEffects( m_Model ) );
+			m_ViewModel = OnRequestViewmodel( evt.Signal.Entity );
+			evt.Signal.Entity.Components.Add( m_Effects = new AppliedViewModelEntityEffects( m_ViewModel ) );
 		}
 	}
 
 	[Listen]
 	private void OnHolstered( Event<HolsteredEntity> evt )
 	{
-		m_Model?.Delete();
-		m_Model = null;
+		m_ViewModel?.Delete();
+		m_ViewModel = null;
 
 		m_Effects?.Remove();
 		m_Effects = null;

@@ -4,7 +4,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class PawnFallEntityState : ObservableEntityComponent<Pawn>, IEntityState<Pawn>
+public sealed class FallPawnState : ObservableEntityComponent<Pawn>, IEntityState<Pawn>
 {
 	public bool TryEnter()
 	{

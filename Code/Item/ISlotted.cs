@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using Sandbox;
-using Woosh.Espionage;
 
 namespace Woosh.Espionage;
 

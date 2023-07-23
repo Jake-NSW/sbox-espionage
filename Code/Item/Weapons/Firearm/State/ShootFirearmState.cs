@@ -4,7 +4,7 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed partial class FirearmShootEntityState : ObservableEntityComponent<Firearm>, IEntityState<Firearm>, ISingletonComponent, IMutate<InputContext>
+public sealed partial class ShootFirearmState : ObservableEntityComponent<Firearm>, IEntityState<Firearm>, ISingletonComponent, IMutate<InputContext>
 {
 	public FirearmSetup Setup => Entity.Setup;
 
