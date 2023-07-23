@@ -16,7 +16,17 @@ public sealed class CompositedSceneCameraHelper
 
 	public CameraMutateScope Update( InputContext input, IController<CameraSetup> controller = null )
 	{
-		var setup = new CameraSetup( Target ) { FieldOfView = Screen.CreateVerticalFieldOfView( Game.Preferences.FieldOfView ) };
+		var setup = new CameraSetup( Target )
+		{
+			FieldOfView = Screen.CreateVerticalFieldOfView( Game.Preferences.FieldOfView ),
+			Hands = new ViewModelSetup()
+			{
+				Aim = 0,
+				Angles = Rotation.Identity,
+				Offset = Vector3.Zero,
+			}
+		};
+		
 		Build( ref setup, input, controller );
 		return new CameraMutateScope( Target, setup );
 	}

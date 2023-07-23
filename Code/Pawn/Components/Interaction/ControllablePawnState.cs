@@ -7,6 +7,11 @@ public sealed class ControllablePawnState : ObservableEntityComponent<Pawn>, IEn
 {
 	private Entity m_Target;
 
+	protected override void OnAutoRegister()
+	{
+		Register<InteractionTargetChanged>( e => m_Target = e.Signal.Hovering );
+	}
+
 	// State
 
 	bool IEntityState<Pawn>.TryEnter()
@@ -50,6 +55,6 @@ public sealed class ControllablePawnState : ObservableEntityComponent<Pawn>, IEn
 
 	void IEntityInteraction.Simulate( in TraceResult result, IClient client )
 	{
-		m_Target = result.Entity;
+		// Used only for UI
 	}
 }

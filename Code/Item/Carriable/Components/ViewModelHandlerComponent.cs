@@ -65,5 +65,4 @@ public sealed class ViewModelHandlerComponent : ObservableEntityComponent<Pawn>,
 		m_Effects?.Remove();
 		m_Effects = null;
 	}
-
 }

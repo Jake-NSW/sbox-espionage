@@ -37,10 +37,21 @@ public readonly struct ViewModelEffectsAspect : IEntityAspect<ViewModel>
 				Axis = 10
 			}
 		);
-		system.Add( new ViewModelPitchOffsetEffect( 5, 4 ) { Damping = 15 } );
+		system.Add(
+			new ViewModelPitchOffsetEffect( 5, 4 )
+			{
+				Damping = 15
+			}
+		);
 
 		system.Add( new ViewModelRecoilEffect() );
 		system.Add( new ViewModelKickbackEffect() );
-		system.Add( new ViewModelTuckEffect() { HipVariant = HipTuck, AimVariant = AimTuck } );
+		system.Add(
+			new ViewModelTuckEffect()
+			{
+				HipVariant = HipTuck,
+				AimVariant = AimTuck
+			}
+		);
 	}
 }
