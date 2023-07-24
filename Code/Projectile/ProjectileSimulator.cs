@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Sandbox;
-using Woosh.Espionage;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
@@ -9,15 +8,14 @@ public sealed class ProjectileSimulator : ObservableEntityComponent<App>, INetwo
 {
 	public ProjectileSimulator()
 	{
-		m_InMotion = new List<ProjectileDetails>( 32 );
+		m_InMotion = new List<ProjectileSnapshot>( 32 );
 	}
 
-	private readonly List<ProjectileDetails> m_InMotion;
+	private readonly List<ProjectileSnapshot> m_InMotion;
 
-	public void Add( ProjectileDetails details )
+	public void Add( ProjectileSnapshot snapshot )
 	{
-		m_InMotion.Add( details );
-		// WriteNetworkData();
+		m_InMotion.Add( snapshot );
 	}
 
 	public void Remove( int index )
@@ -25,7 +23,7 @@ public sealed class ProjectileSimulator : ObservableEntityComponent<App>, INetwo
 		m_InMotion.RemoveAt( index );
 	}
 
-	public void Clear( ProjectileDetails details )
+	public void Clear( ProjectileSnapshot snapshot )
 	{
 		m_InMotion.Clear();
 		WriteNetworkData();
@@ -40,42 +38,46 @@ public sealed class ProjectileSimulator : ObservableEntityComponent<App>, INetwo
 		for ( var i = 0; i < m_InMotion.Count; i++ )
 		{
 			var details = m_InMotion[i];
-			var helper = new ProjectileMovementHelper( details );
-			var pos = helper.AtTime( details.Since, details.Start, details.Forward );
-			var last = helper.AtTime( details.Since - Time.Delta, details.Start, details.Forward );
-			var direction = (pos - last).Normal;
 
 			if ( details.Since > 3 )
 			{
-				Log.Info( $"Faded Away! - {details.Since}" );
 				Remove( i );
-				return;
+				continue;
 			}
 
+			var helper = new ProjectileMovementHelper( details );
+
+			var pos = helper.AtTime( details.Since + Time.Delta, details.Start, details.Forward );
+			var last = helper.AtTime( details.Since, details.Start, details.Forward );
+			var direction = (pos - last).Normal;
+
 			var attacker = Sandbox.Entity.FindByIndex( details.Attacker );
-			var weapon = Sandbox.Entity.FindByIndex( details.Weapon );
 
 			// Play Trace
 			var ray = Trace.Ray( last, pos )
 				.UseHitboxes()
 				.WithAnyTags( "solid", "player", "npc", "glass", "prop" )
 				.Ignore( attacker )
-				.Ignore( weapon )
 				.Size( 1 )
 				.Run();
 
-			DebugOverlay.TraceResult(ray, 2);
 			if ( !ray.Hit )
-			{
 				continue;
-			}
+
+			/*
+			Log.Info( "Hit!" );
+			DebugOverlay.TraceResult( ray, 5 );
+			DebugOverlay.Sphere( details.Start, 2, Color.Green, 5 );
+			DebugOverlay.Line( details.Start, details.Start + details.Forward * 12, Color.Orange, 5 );
+			*/
 
 			ray.Surface.DoBulletImpact( ray );
 			Remove( i );
 
 			if ( Game.IsServer )
 			{
-				var info = DamageInfo.FromBullet( ray.EndPosition, direction * details.Force * 4, 100 )
+				var weapon = Sandbox.Entity.FindByIndex( details.Weapon );
+				var info = DamageInfo.FromBullet( ray.EndPosition, direction * details.Force, 100 )
 					.WithAttacker( attacker )
 					.WithWeapon( weapon )
 					.WithHitBody( ray.Body )
@@ -95,7 +97,7 @@ public sealed class ProjectileSimulator : ObservableEntityComponent<App>, INetwo
 
 		for ( var i = 0; i < length; i++ )
 		{
-			var details = read.Read<ProjectileDetails>();
+			var details = read.Read<ProjectileSnapshot>();
 			m_InMotion.Add( details );
 		}
 	}

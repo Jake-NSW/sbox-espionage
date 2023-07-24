@@ -2,7 +2,7 @@
 
 namespace Woosh.Espionage;
 
-public struct ProjectileDetails
+public struct ProjectileSnapshot
 {
 	public TimeSince Since;
 

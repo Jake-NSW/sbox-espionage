@@ -8,16 +8,10 @@ public readonly ref struct ProjectileMovementHelper
 	public float Force { get; }
 	public float Mass { get; }
 
-	public ProjectileMovementHelper( ProjectileDetails details )
+	public ProjectileMovementHelper( ProjectileSnapshot snapshot )
 	{
-		Force = details.Force;
-		Mass = details.Mass;
-	}
-
-	public ProjectileMovementHelper( float force, float mass )
-	{
-		Force = force;
-		Mass = mass;
+		Force = snapshot.Force;
+		Mass = snapshot.Mass;
 	}
 
 	public Vector3 AtTime( TimeSince since, Vector3 start, Vector3 direction )

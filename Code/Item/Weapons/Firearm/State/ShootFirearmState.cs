@@ -59,18 +59,17 @@ public sealed partial class ShootFirearmState : ObservableEntityComponent<Firear
 		if ( Setup.IsSilenced )
 			effects |= FirearmClientEffects.Silenced;
 
+		Game.SetRandomSeed( Time.Tick );
+
 		// Apply impulse, as we are not in inventory
 		if ( Game.IsServer && Entity.Owner == null )
 			Entity.ApplyAbsoluteImpulse( -muzzle.Forward * 500 + Vector3.Random * 25 );
 
 		PlayClientEffects( effects );
-		Game.SetRandomSeed( Time.Tick );
-		
-		DebugOverlay.Sphere(muzzle.Position, 5, Color.Red, 2);
 
 		// Owner, Shoot from View Model
 		App.Get<ProjectileSimulator>().Add(
-			new ProjectileDetails
+			new ProjectileSnapshot
 			{
 				Force = Setup.Force,
 				Mass = 0.0009f,
