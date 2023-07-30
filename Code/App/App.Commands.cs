@@ -26,26 +26,5 @@ public sealed partial class App
 			var ray = Trace.Ray( start, start + forward * 128 ).Ignore( pawn ).Run();
 			TypeLibrary.GetType( className ).Create<Entity>().Position = ray.EndPosition + -forward * 4;
 		}
-
-		[ConCmd.Server( "devcam" )]
-		private static void DevCamCommand()
-		{
-			if ( ConsoleSystem.Caller == null ) 
-				return;
-
-			var client = ConsoleSystem.Caller;
-			Game.AssertServer();
-
-			var camera = client.Components.Get<DevCamera>( true );
-
-			if ( camera == null )
-			{
-				camera = new DevCamera();
-				client.Components.Add( camera );
-				return;
-			}
-
-			camera.Enabled = !camera.Enabled;
-		}
 	}
 }

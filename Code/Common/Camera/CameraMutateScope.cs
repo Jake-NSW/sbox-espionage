@@ -33,6 +33,10 @@ public struct CameraMutateScope : IDisposable
 		m_Camera.Rotation = m_Setup.Rotation;
 		m_Camera.FirstPersonViewer = m_Setup.Viewer;
 		m_Camera.FieldOfView = m_Setup.FieldOfView;
-		m_Camera.Attributes.Set( "viewModelFov", Screen.CreateVerticalFieldOfView( 60 ) );
+
+		var originalFov = Screen.CreateVerticalFieldOfView( Game.Preferences.FieldOfView );
+		var offset = originalFov - m_Camera.FieldOfView;
+		
+		m_Camera.Attributes.Set( "viewModelFov", Screen.CreateVerticalFieldOfView( 60 ) - offset );
 	}
 }

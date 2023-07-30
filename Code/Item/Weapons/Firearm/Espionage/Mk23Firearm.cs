@@ -22,11 +22,17 @@ public sealed class Mk23Firearm : Firearm, ISlotted<CarrySlot>, IHave<EntityInfo
 
 	public Mk23Firearm()
 	{
+		Events.Register<ValidAmmoProviderCheck>(
+			static evt => evt.Signal.AddType<Mk23StandardMagazine>()
+		);
+
 		if ( !Game.IsClient )
 			return;
 
-		Events.Register<ValidAmmoProviderCheck>( static evt => evt.Signal.AddType<Mk23StandardMagazine>() );
-		Events.Register<PlayClientEffects<FirearmClientEffects>>( static evt => Sounds.Play( evt.Signal.Effects, Game.LocalPawn.AimRay.Position ) );
+		Events.Register<PlayClientEffects<FirearmEffects>>(
+			static evt => Sounds.Play( evt.Signal.Effects, Game.LocalPawn.AimRay.Position )
+		);
+
 		Events.Register<CreatedViewModel>(
 			static evt => evt.Signal.ViewModel.Build()
 				.WithModel( Cloud.Model( "woosh.mdl_esp_vmk23" ) )
@@ -51,16 +57,18 @@ public sealed class Mk23Firearm : Firearm, ISlotted<CarrySlot>, IHave<EntityInfo
 		IsAutomatic = false,
 		IsSilenced = false,
 		RateOfFire = 550,
-		Force = 400,
-		Spread = 0.2f,
-		Draw = new DrawTime( 1, 0.6f )
+		Force = 260,
+		Spread = 0.1f,
+		Weight = 2.3f,
+		Draw = new DrawTime( 1, 0.6f ),
+		
 	};
 
 	public CarrySlot Slot => CarrySlot.Holster;
 
-	private static SoundBank<FirearmClientEffects> Sounds { get; } = new SoundBank<FirearmClientEffects>()
+	private static SoundBank<FirearmEffects> Sounds { get; } = new SoundBank<FirearmEffects>()
 	{
-		[FirearmClientEffects.Attack] = "mk23_firing_sound", 
-		[FirearmClientEffects.Attack | FirearmClientEffects.Silenced] = "mk23_firing_suppressed_sound",
+		[FirearmEffects.Attack] = "mk23_firing_sound",
+		[FirearmEffects.Attack | FirearmEffects.Silenced] = "mk23_firing_suppressed_sound",
 	};
 }

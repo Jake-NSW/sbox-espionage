@@ -23,9 +23,13 @@ public sealed class RagDollCamera : EntityComponent<Pawn>, IController<CameraSet
 		var tr = Trace.Ray( center, targetPos )
 			.WithAnyTags( "solid" )
 			.Ignore( Entity )
+			.StaticOnly()
 			.Radius( 8 )
 			.Run();
 
+		setup.Viewer = null;
+		setup.FieldOfView = Screen.CreateVerticalFieldOfView( 70 );
+			
 		setup.Position = tr.EndPosition;
 		setup.Rotation = rot;
 	}

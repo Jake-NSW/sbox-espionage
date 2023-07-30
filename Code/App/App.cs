@@ -7,10 +7,10 @@ using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-[Title( "App" ), Category("Global"), Icon( "sports_esports" )]
-public sealed partial class App : BaseGameManager, IObservable
+[Title( "App" ), Category( "Global" ), Icon( "sports_esports" )]
+public sealed partial class App : GameManager, IObservable
 {
-	public static App Current
+	public new static App Current
 	{
 		[MethodImpl( MethodImplOptions.AggressiveInlining )]
 		get => s_App;
@@ -25,10 +25,18 @@ public sealed partial class App : BaseGameManager, IObservable
 
 	public IDispatcher Events { get; }
 
+	private readonly record struct Test : ISignal;
+
 	public App()
 	{
 		Events = new Dispatcher( this, _ => null, _ => null );
 		s_App = this;
+
+		Events.Register<Test>(
+			( ref Event<Test> e ) => e.Consume()
+		);
+
+		Log.Info( Events.Run<Test>() );
 
 		// Setup Components
 		if ( Game.IsServer )
@@ -53,7 +61,10 @@ public sealed partial class App : BaseGameManager, IObservable
 
 	public override void Simulate( IClient cl )
 	{
-		base.Simulate( cl );
+		if ( cl.Pawn is not Entity pawn || !pawn.IsValid() )
+			return;
+
+		pawn.Simulate( cl );
 		Events.Run( new SimulateSnapshot( cl ) );
 	}
 
@@ -62,7 +73,7 @@ public sealed partial class App : BaseGameManager, IObservable
 		base.ClientJoined( client );
 
 		Events.Run( new ClientJoined( client ) );
-		var spawn = All.OfType<SpawnPoint>().MinBy( _ => Guid.NewGuid() )?.Transform ?? Transform.Zero.WithPosition( Vector3.Up * 4 ); 
+		var spawn = All.OfType<SpawnPoint>().MinBy( _ => Guid.NewGuid() )?.Transform ?? Transform.Zero.WithPosition( Vector3.Up * 4 );
 		spawn.Position += Vector3.Up * 4;
 
 		var pawn = client.Possess<Operator>( spawn );

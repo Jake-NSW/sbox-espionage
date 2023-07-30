@@ -10,6 +10,8 @@ public sealed class Operator : Pawn
 
 	public override void Spawn()
 	{
+		base.Spawn();
+		
 		// UI
 		Components.Create<InteractionHudComponent>();
 		Components.Create<InventoryNotificationHudComponent>();
@@ -43,5 +45,17 @@ public sealed class Operator : Pawn
 		Components.Create<UseEntityInteraction>();
 		Components.Create<PickupEntityInteraction>();
 		Components.Create<EquipEntityInteraction>();
+	}
+
+	// Camera Setup
+
+	protected override void PreCameraSetup( ref CameraSetup setup )
+	{
+		
+	}
+
+	protected override void PostCameraSetup( ref CameraSetup setup )
+	{
+		Components.Get<ViewModelHandlerComponent>().OnMutate( ref setup );
 	}
 }

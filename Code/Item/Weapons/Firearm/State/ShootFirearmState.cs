@@ -21,9 +21,6 @@ public sealed partial class ShootFirearmState : ObservableEntityComponent<Firear
 		return !Setup.IsAutomatic || !Input.Down( "shoot" );
 	}
 
-	public void OnStart() { }
-	public void OnFinish() { }
-
 	// Logic
 
 	protected override void OnActivate()
@@ -54,10 +51,10 @@ public sealed partial class ShootFirearmState : ObservableEntityComponent<Firear
 		Run( ApplyRecoilFromSetup( Setup ), Propagation.Both );
 		var muzzle = (Entity.Owner as Pawn)?.Muzzle ?? (Entity.GetAttachment( "muzzle" ) ?? Entity.Transform).ToRay();
 
-		var effects = FirearmClientEffects.Attack;
+		var effects = FirearmEffects.Attack;
 
 		if ( Setup.IsSilenced )
-			effects |= FirearmClientEffects.Silenced;
+			effects |= FirearmEffects.Silenced;
 
 		Game.SetRandomSeed( Time.Tick );
 
@@ -85,14 +82,14 @@ public sealed partial class ShootFirearmState : ObservableEntityComponent<Firear
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]
 	public static FirearmFired ApplyRecoilFromSetup( in FirearmSetup setup )
 	{
-		// Do Later...
-		return new FirearmFired( new Vector3( -65, 10f, 10f ), new Vector3( -35, 10f, 10f ) );
+		// Do math based on the weight, force, control, spread and accuracy to determine the recoil
+		return new FirearmFired( Recoil: new Vector3( -65, 20f, 20f ), Kickback: new Vector3( -55f, 10f, 10f ) );
 	}
 
 	[ClientRpc]
-	private void PlayClientEffects( FirearmClientEffects effects )
+	private void PlayClientEffects( FirearmEffects effects )
 	{
-		Run( new PlayClientEffects<FirearmClientEffects>( effects ) );
+		Run( new PlayClientEffects<FirearmEffects>( effects ) );
 	}
 
 	public void OnMutate( ref InputContext setup )

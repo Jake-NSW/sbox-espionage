@@ -6,7 +6,7 @@ namespace Woosh.Espionage;
 public sealed class FirearmEffectsHandler : ObservableEntityComponent
 {
 	[Listen]
-	private void OnClientEffects( Event<PlayClientEffects<FirearmClientEffects>> evt )
+	private void OnClientEffects( Event<PlayClientEffects<FirearmEffects>> evt )
 	{
 		if ( Entity.IsFirstPersonMode )
 			return;

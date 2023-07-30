@@ -241,7 +241,7 @@ public sealed partial class PushableHingedDoorEntity : AnimatedEntity, IPushable
 
 		// Don't do anything if its closed
 		{
-			var force = info.Force.Length / 500;
+			var force = info.Force.Length / 100;
 			Push( info.Position, info.Attacker as Pawn, force );
 			LastAttackerWeapon = info.Weapon;
 		}

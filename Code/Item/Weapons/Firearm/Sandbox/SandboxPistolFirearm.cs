@@ -32,10 +32,10 @@ public sealed class SandboxPistolFirearm : Firearm, ISlotted<CarrySlot>, IHave<E
 				.WithChild( new AnimatedEntity( "models/first_person/first_person_arms.vmdl" ) { EnableViewmodelRendering = true }, true )
 		);
 
-		Events.Register<PlayClientEffects<FirearmClientEffects>>(
+		Events.Register<PlayClientEffects<FirearmEffects>>(
 			evt =>
 			{
-				if ( evt.Signal.Effects == FirearmClientEffects.Attack )
+				if ( evt.Signal.Effects == FirearmEffects.Attack )
 					PlaySound( "rust_pistol.shoot" );
 			}
 		);

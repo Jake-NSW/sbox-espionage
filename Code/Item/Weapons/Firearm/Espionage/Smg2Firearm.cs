@@ -32,7 +32,7 @@ public sealed class Smg2Firearm : Firearm, ISlotted<CarrySlot>, IHave<EntityInfo
 				.WithBodyGroup( "muzzle", 1 )
 		);
 
-		Events.Register<PlayClientEffects<FirearmClientEffects>>(
+		Events.Register<PlayClientEffects<FirearmEffects>>(
 			static evt => Sounds.Play( evt.Signal.Effects, Game.LocalPawn.AimRay.Position )
 		);
 	}
@@ -56,8 +56,8 @@ public sealed class Smg2Firearm : Firearm, ISlotted<CarrySlot>, IHave<EntityInfo
 
 	public CarrySlot Slot => CarrySlot.Front;
 
-	private static SoundBank<FirearmClientEffects> Sounds { get; } = new SoundBank<FirearmClientEffects>()
+	private static SoundBank<FirearmEffects> Sounds { get; } = new SoundBank<FirearmEffects>()
 	{
-		[FirearmClientEffects.Attack] = "mk23_firing_sound", [FirearmClientEffects.Attack | FirearmClientEffects.Silenced] = "smg2_firing_suppressed_sound",
+		[FirearmEffects.Attack] = "mk23_firing_sound", [FirearmEffects.Attack | FirearmEffects.Silenced] = "smg2_firing_suppressed_sound",
 	};
 }

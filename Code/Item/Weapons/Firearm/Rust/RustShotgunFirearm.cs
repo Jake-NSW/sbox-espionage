@@ -29,10 +29,10 @@ public sealed class RustShotgunFirearm : Firearm, ISlotted<CarrySlot>, IHave<Ent
 				.WithComponent( new ViewModelPitchOffsetEffect() )
 		);
 
-		Events.Register<PlayClientEffects<FirearmClientEffects>>(
+		Events.Register<PlayClientEffects<FirearmEffects>>(
 			evt =>
 			{
-				if ( evt.Signal.Effects == FirearmClientEffects.Attack )
+				if ( evt.Signal.Effects == FirearmEffects.Attack )
 					PlaySound( "rust_pumpshotgun.shoot" );
 			}
 		);

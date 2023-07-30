@@ -24,11 +24,13 @@ public partial class Pawn : ObservableAnimatedEntity, IMutate<CameraSetup>, IHav
 
 	public override void Spawn()
 	{
-		Model = Model.Load( "models/sbox_props/watermelon/watermelon.vmdl" );
+		Model = Model.Load( "models/citizen/citizen.vmdl" );
 
 		Tags.Add( "pawn" );
 
 		EnableDrawing = true;
+		EnableHitboxes = true;
+		EnableLagCompensation = true;
 		EnableHideInFirstPerson = true;
 		EnableShadowInFirstPerson = true;
 	}
@@ -37,7 +39,7 @@ public partial class Pawn : ObservableAnimatedEntity, IMutate<CameraSetup>, IHav
 
 	IController<CameraSetup> IHave<IController<CameraSetup>>.Item => Camera;
 
-	private IController<CameraSetup> m_Camera;
+	private IController<CameraSetup> n_Camera { get; set; }
 
 	/// <summary>
 	/// The camera controller that controls the pawn's camera. It is only used when the pawn is possessed by the local client, or is being
@@ -45,18 +47,18 @@ public partial class Pawn : ObservableAnimatedEntity, IMutate<CameraSetup>, IHav
 	/// </summary>
 	public IController<CameraSetup> Camera
 	{
-		get => m_Camera ?? Components.GetAny<IController<CameraSetup>>();
+		get => n_Camera ?? Components.GetAny<IController<CameraSetup>>();
 		set
 		{
-			if ( m_Camera != value && m_Camera is IComponent oldComponent )
+			if ( n_Camera != value && n_Camera is IComponent oldComponent )
 			{
 				// Remove camera from component list?
 				Components.Remove( oldComponent );
 			}
 
-			m_Camera = value;
+			n_Camera = value;
 
-			if ( m_Camera is IComponent newComponent )
+			if ( n_Camera is IComponent newComponent )
 			{
 				// Add camera to component list?
 				Components.Add( newComponent );
@@ -66,13 +68,27 @@ public partial class Pawn : ObservableAnimatedEntity, IMutate<CameraSetup>, IHav
 
 	void IMutate<CameraSetup>.OnMutate( ref CameraSetup setup )
 	{
+		PreCameraSetup( ref setup );
+
 		var components = Components.All().ToArray();
 		foreach ( var component in components )
 		{
 			if ( component is IMutate<CameraSetup> cast )
 				cast.OnMutate( ref setup );
 		}
+
+		PostCameraSetup( ref setup );
 	}
+
+	/// <summary>
+	/// Used to mutate the camera setup before it is used. This is called before any components mutators are called.
+	/// </summary>
+	protected virtual void PreCameraSetup( ref CameraSetup setup ) { }
+
+	/// <summary>
+	/// Used to mutate the camera setup after it is used. This is called after all components mutators are called.
+	/// </summary>
+	protected virtual void PostCameraSetup( ref CameraSetup setup ) { }
 
 	// Input
 
@@ -97,14 +113,13 @@ public partial class Pawn : ObservableAnimatedEntity, IMutate<CameraSetup>, IHav
 
 	public override sealed void BuildInput()
 	{
-		if ( Machine.InState )
-			return;
-
 		var context = new InputContext
 		{
 			InputDirection = Sandbox.Input.AnalogMove,
 			ViewAngles = (ViewAngles + Sandbox.Input.AnalogLook).Normal
 		};
+
+		PreInputContext( ref context );
 
 		var components = Components.All().ToArray();
 
@@ -115,10 +130,15 @@ public partial class Pawn : ObservableAnimatedEntity, IMutate<CameraSetup>, IHav
 				cast.OnMutate( ref context );
 		}
 
+		PostInputContext( ref context );
+
 		InputDirection = context.InputDirection;
 		ViewAngles = context.ViewAngles;
 		Muzzle = context.Muzzle;
 	}
+
+	protected virtual void PreInputContext( ref InputContext context ) { }
+	protected virtual void PostInputContext( ref InputContext context ) { }
 
 	// Simulate
 
@@ -134,12 +154,12 @@ public partial class Pawn : ObservableAnimatedEntity, IMutate<CameraSetup>, IHav
 			Events.Run( new EntityPossessed( cl ), Propagation.Trickle );
 		}
 
-		EyeRotation = ViewAngles.ToRotation();
-		Rotation = ViewAngles.WithPitch( 0f ).ToRotation();
-		EyeLocalPosition = Vector3.Up * (64f * Scale);
-
-		if ( Machine.Simulate( cl ) )
+		if ( Machine.Simulate( cl ) && IsAuthority )
 		{
+			EyeRotation = ViewAngles.ToRotation();
+			EyeLocalPosition = Vector3.Up * (64f * Scale);
+			Rotation = ViewAngles.WithPitch( 0f ).ToRotation();
+
 			Components.Get<PawnController>().Simulate( cl );
 			base.Simulate( cl );
 		}

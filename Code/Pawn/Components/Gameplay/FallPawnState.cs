@@ -1,21 +1,20 @@
 ﻿using Sandbox;
-using Woosh.Espionage;
 using Woosh.Signals;
 
 namespace Woosh.Espionage;
 
-public sealed class FallPawnState : ObservableEntityComponent<Pawn>, IEntityState<Pawn>
+public sealed partial class FallPawnState : ObservableEntityComponent<Pawn>, IEntityState<Pawn>
 {
 	public bool TryEnter()
 	{
 		return Input.Pressed( App.Actions.Fall );
 	}
 
-	private TimeSince m_SinceEntered;
+	[Net, Predicted] private TimeSince n_SinceEntered { get; set; }
 
 	public bool Simulate( IClient cl )
 	{
-		if ( Input.Pressed( "jump" ) && m_SinceEntered > 1.9f )
+		if ( Input.Pressed( App.Actions.Jump ) && n_SinceEntered > 1.9f )
 		{
 			return true;
 		}
@@ -25,12 +24,27 @@ public sealed class FallPawnState : ObservableEntityComponent<Pawn>, IEntityStat
 
 	public void OnStart()
 	{
-		m_SinceEntered = 0;
+		Log.Info( "Entering" );
+
+		n_SinceEntered = 0;
 		Entity.Camera = new RagDollCamera();
+
+		{
+			Entity.UsePhysicsCollision = true;
+			Entity.PhysicsEnabled = true;
+			Entity.SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
+		}
 	}
 
 	public void OnFinish()
 	{
+		Log.Info( "Leaving!!!!" );
 		Entity.Camera = null;
+
+		{
+			Entity.PhysicsEnabled = false;
+			Entity.UsePhysicsCollision = false;
+			Entity.PhysicsClear();
+		}
 	}
 }

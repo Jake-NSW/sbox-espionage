@@ -6,7 +6,7 @@ using Woosh.Signals;
 namespace Woosh.Espionage;
 
 [Flags]
-public enum FirearmClientEffects
+public enum FirearmEffects
 {
 	Attack,
 	Silenced,
@@ -32,7 +32,7 @@ public struct FirearmSetup
 }
 
 [Category( "Weapon" ), Icon( "gavel" )]
-public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IPickup, IMutate<InputContext>
+public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IPickup, IMutate<InputContext>, IMutate<CameraSetup>
 {
 	public EntityStateMachine<Firearm> Machine { get; }
 
@@ -122,11 +122,13 @@ public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IP
 	void IPickup.OnPickup( Entity carrier )
 	{
 		EnableAllCollisions = false;
+		PhysicsEnabled = false;
 	}
 
 	void IPickup.OnDrop()
 	{
 		EnableAllCollisions = true;
+		PhysicsEnabled = true;
 
 		var down = Rotation.LookAt( Owner.AimRay.Forward ).Down;
 		Position = Owner.AimRay.Position + down * 24;
@@ -155,6 +157,15 @@ public abstract partial class Firearm : ObservableAnimatedEntity, ICarriable, IP
 	{
 		// Post-Mutate Input Context
 		foreach ( var component in Components.All().OfType<IMutate<InputContext>>() )
+		{
+			component.OnMutate( ref setup );
+		}
+	}
+
+	public void OnMutate( ref CameraSetup setup )
+	{
+		// Post-Mutate Camera Setup
+		foreach ( var component in Components.All().OfType<IMutate<CameraSetup>>() )
 		{
 			component.OnMutate( ref setup );
 		}

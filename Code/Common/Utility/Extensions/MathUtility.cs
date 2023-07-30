@@ -7,6 +7,18 @@ namespace Woosh.Espionage;
 public static class MathUtility
 {
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]
+	public static bool IsWithin<T>( this T value, T minimum, T maximum ) where T : IComparable<T>
+	{
+		if ( value.CompareTo( minimum ) < 0 )
+			return false;
+
+		if ( value.CompareTo( maximum ) > 0 )
+			return false;
+
+		return true;
+	}
+
+	[MethodImpl( MethodImplOptions.AggressiveInlining )]
 	public static void Damp( ref float value, float to, float smoothing, float delta ) => value = Damp( value, to, smoothing, delta );
 
 	[MethodImpl( MethodImplOptions.AggressiveInlining )]

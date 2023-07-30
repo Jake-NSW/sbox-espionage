@@ -29,6 +29,9 @@ public sealed class ProjectileSimulator : ObservableEntityComponent<App>, INetwo
 		WriteNetworkData();
 	}
 
+	[ConVar.Server( "esp_projectile_debug" )]
+	private static bool EnableProjectileDebug { get; set; }
+
 	[Listen]
 	private void OnSimulate( Event<SimulateSnapshot> evt )
 	{
@@ -61,15 +64,20 @@ public sealed class ProjectileSimulator : ObservableEntityComponent<App>, INetwo
 				.Size( 1 )
 				.Run();
 
+			const float debugTime = 5;
+			if ( EnableProjectileDebug )
+			{
+				DebugOverlay.Line( last, pos, Game.Color.WithAlpha( 0.7f ), debugTime );
+			}
+
 			if ( !ray.Hit )
 				continue;
 
-			/*
-			Log.Info( "Hit!" );
-			DebugOverlay.TraceResult( ray, 5 );
-			DebugOverlay.Sphere( details.Start, 2, Color.Green, 5 );
-			DebugOverlay.Line( details.Start, details.Start + details.Forward * 12, Color.Orange, 5 );
-			*/
+			if ( EnableProjectileDebug )
+			{
+				var meters = ray.EndPosition.Distance( details.Start ) / 39.37f;
+				DebugOverlay.Text( $"{meters}m", ray.HitPosition, debugTime, 99999999999 );
+			}
 
 			ray.Surface.DoBulletImpact( ray );
 			Remove( i );
